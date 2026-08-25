@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orbit Analytics</title>
+    <style>
+      * { box-sizing: border-box; }
+      :root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #f8fafc; background: #070b18; }
+      body { margin: 0; min-height: 100vh; background: radial-gradient(circle at 72% 4%, #312e8155, transparent 35%), #070b18; }
+      .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+      aside { padding: 28px 22px; border-right: 1px solid #ffffff12; background: #090d1ddd; }
+      .logo { font-weight: 850; letter-spacing: -.4px; } .logo span { color: #8b5cf6; }
+      nav { display: grid; gap: 8px; margin-top: 40px; } nav a { padding: 11px 12px; border-radius: 9px; color: #8f98b2; font-size: 13px; }
+      nav a.active { color: white; background: #8b5cf622; }
+      main { padding: 34px 42px; }
+      header { display: flex; align-items: center; justify-content: space-between; }
+      h1 { margin: 5px 0 0; font-size: 30px; letter-spacing: -1px; }
+      .muted { color: #8a94ad; font-size: 12px; }
+      button { border: 0; border-radius: 10px; color: white; background: linear-gradient(110deg, #8b5cf6, #4f46e5); padding: 11px 17px; font-weight: 750; cursor: pointer; box-shadow: 0 12px 28px #6d28d933; }
+      .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 34px; }
+      .card { padding: 20px; border: 1px solid #ffffff13; border-radius: 15px; background: #10162a99; box-shadow: 0 20px 50px #0003; }
+      .metric b { display: block; margin-top: 12px; font-size: 30px; } .up { color: #34d399; font-size: 11px; }
+      .chart-card { margin-top: 18px; } .chart { display: flex; align-items: end; gap: 9px; height: 250px; padding-top: 32px; }
+      .bar { flex: 1; border-radius: 8px 8px 2px 2px; background: linear-gradient(#8b5cf6, #4f46e566); }
+      dialog { width: 430px; padding: 0; border: 1px solid #ffffff1d; border-radius: 18px; color: white; background: #10152a; box-shadow: 0 40px 100px #0009; }
+      dialog::backdrop { background: #02040bbb; backdrop-filter: blur(5px); }
+      form { padding: 26px; } form h2 { margin: 0 0 8px; } label { display: block; margin-top: 20px; color: #9ca6c0; font-size: 12px; }
+      input { width: 100%; margin-top: 8px; padding: 12px; border: 1px solid #ffffff18; border-radius: 9px; outline: none; color: white; background: #070b18; }
+      input:focus { border-color: #8b5cf6; }
+      .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+      .secondary { background: #ffffff0e; box-shadow: none; color: #aab2c9; }
+      .toast { position: fixed; right: 34px; bottom: 34px; padding: 15px 18px; border: 1px solid #34d39944; border-radius: 12px; background: #0c1f1acc; color: #a7f3d0; transform: translateY(100px); opacity: 0; transition: .35s ease; }
+      .toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside><div class="logo"><span>◈</span> Orbit Analytics</div><nav><a class="active">Overview</a><a>Reports</a><a>Customers</a><a>Automations</a><a>Settings</a></nav></aside>
+      <main>
+        <header><div><span class="muted">WORKSPACE OVERVIEW</span><h1>Good morning, Alex</h1></div><button id="create-report">＋ Create report</button></header>
+        <section class="metrics">
+          <div class="card metric"><span class="muted">Active users</span><b>24,892</b><span class="up">↑ 18.4% this month</span></div>
+          <div class="card metric"><span class="muted">Conversion rate</span><b>8.72%</b><span class="up">↑ 2.1% this month</span></div>
+          <div class="card metric"><span class="muted">Revenue</span><b>$184.2k</b><span class="up">↑ 12.8% this month</span></div>
+        </section>
+        <section class="card chart-card"><span class="muted">GROWTH OVER TIME</span><div class="chart"><div class="bar" style="height:32%"></div><div class="bar" style="height:41%"></div><div class="bar" style="height:38%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:61%"></div><div class="bar" style="height:58%"></div><div class="bar" style="height:72%"></div><div class="bar" style="height:84%"></div><div class="bar" style="height:92%"></div></div></section>
+      </main>
+    </div>
+    <dialog id="report-dialog"><form method="dialog"><span class="muted">NEW ANALYTICS REPORT</span><h2>Create a report</h2><label>Report name<input id="report-name" placeholder="e.g. Q3 Growth" /></label><label>Audience<input id="audience" placeholder="e.g. Leadership" /></label><div class="form-actions"><button class="secondary" value="cancel">Cancel</button><button id="generate" value="default">Generate report</button></div></form></dialog>
+    <div id="toast" class="toast">✓ Report generated and shared</div>
+    <script>
+      const dialog = document.querySelector('#report-dialog');
+      document.querySelector('#create-report').addEventListener('click', () => dialog.showModal());
+      document.querySelector('#generate').addEventListener('click', (event) => {
+        event.preventDefault(); dialog.close(); const toast = document.querySelector('#toast'); toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 4000);
+      });
+    </script>
+  </body>
+</html>

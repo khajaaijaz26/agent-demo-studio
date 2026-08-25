@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+.agent-demo-studio/
+AgentDemoStudio/
+test-output/
+playwright-report/
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example

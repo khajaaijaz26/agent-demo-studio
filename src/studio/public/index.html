@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>Agent Demo Studio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark"><span></span></div>
+          <div>
+            <strong>Agent Demo</strong>
+            <small>STUDIO</small>
+          </div>
+        </div>
+        <div class="section-label">PROJECTS</div>
+        <nav id="project-list" class="project-list" aria-label="Demo projects"></nav>
+        <div class="sidebar-footer">
+          <div class="agent-state"><i></i> MCP engine online</div>
+          <p>Codex and Claude Code can create, record, edit, and render from their terminals.</p>
+        </div>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div>
+            <span class="eyebrow">BROWSER DEMO WORKSPACE</span>
+            <h1 id="project-title">Your demo projects</h1>
+          </div>
+          <div class="top-actions">
+            <button id="refresh-button" class="button ghost">Refresh</button>
+            <span id="status-pill" class="status-pill">READY</span>
+          </div>
+        </header>
+
+        <div id="empty-state" class="empty-state hidden">
+          <div class="empty-icon">▶</div>
+          <h2>Create your first agent-powered demo</h2>
+          <p>Ask Codex or Claude Code to record a website, or run:</p>
+          <code>agent-demo quick https://example.com --title "Product tour"</code>
+        </div>
+
+        <div id="workspace" class="workspace hidden">
+          <section class="preview-column">
+            <div class="stage-card">
+              <div class="stage-toolbar">
+                <div class="traffic"><i></i><i></i><i></i></div>
+                <span id="browser-url">product.local</span>
+                <span class="resolution">1080P · H.264</span>
+              </div>
+              <div class="video-wrap">
+                <video id="preview-video" controls preload="metadata"></video>
+                <div id="video-placeholder" class="video-placeholder">
+                  <span>Rendering preview</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-card">
+              <div class="card-heading">
+                <div><span class="eyebrow">SEMANTIC TIMELINE</span><h2>Recorded actions</h2></div>
+                <span id="event-count" class="muted">0 actions</span>
+              </div>
+              <div id="timeline" class="timeline"></div>
+            </div>
+          </section>
+
+          <aside class="inspector">
+            <div class="inspector-tabs"><button class="active">Design</button><button>Audio</button><button>Export</button></div>
+
+            <section class="panel-section">
+              <div class="section-title"><span>Brand design</span><small>LIVE</small></div>
+              <label>Title<input id="title-input" type="text" /></label>
+              <label>Subtitle<input id="subtitle-input" type="text" /></label>
+              <div class="color-grid">
+                <label>Background A<input id="background-start" type="color" /></label>
+                <label>Background B<input id="background-end" type="color" /></label>
+                <label>Accent<input id="accent" type="color" /></label>
+                <label>Highlight<input id="highlight" type="color" /></label>
+              </div>
+            </section>
+
+            <section class="panel-section">
+              <div class="section-title"><span>Voice-over</span><small>LOCAL</small></div>
+              <label>Narration<textarea id="narration" rows="6" placeholder="Write or paste the voice-over script..."></textarea></label>
+              <button id="voice-button" class="button secondary full">Generate local voice</button>
+            </section>
+
+            <section class="panel-section compact">
+              <label class="switch-row"><span><b>Ambient music</b><small>Generated and royalty-free</small></span><input id="generated-music" type="checkbox" checked /></label>
+              <label class="switch-row"><span><b>Burned-in captions</b><small>Matched to narration</small></span><input id="captions" type="checkbox" checked /></label>
+            </section>
+
+            <button id="render-button" class="button primary full"><span>Render 1080p demo</span><b>→</b></button>
+            <p id="feedback" class="feedback">Changes are stored in the portable project file.</p>
+          </aside>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+name: Feature request
+description: Suggest an agent, recording, editing, audio, or export improvement.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What demo-production problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed experience
+      description: Include the ideal CLI, MCP, or Studio workflow.
+    validations:
+      required: true

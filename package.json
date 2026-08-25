@@ -1,0 +1,66 @@
+{
+  "name": "agent-demo-studio",
+  "version": "0.1.0",
+  "description": "Open-source MCP and CLI studio that lets AI agents record, edit, narrate, and render polished browser product demos.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Agent Demo Studio contributors",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khajaaijaz26/agent-demo-studio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/khajaaijaz26/agent-demo-studio/issues"
+  },
+  "homepage": "https://github.com/khajaaijaz26/agent-demo-studio#readme",
+  "keywords": [
+    "mcp",
+    "codex",
+    "claude-code",
+    "screen-recorder",
+    "product-demo",
+    "playwright",
+    "video-editing",
+    "ai-agent"
+  ],
+  "engines": {
+    "node": ">=20.12"
+  },
+  "bin": {
+    "agent-demo": "dist/cli.js",
+    "agent-demo-mcp": "dist/mcp/entry.js"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md"
+  ],
+  "scripts": {
+    "build": "tsc && node scripts/copy-static.mjs",
+    "dev": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:smoke": "npm run build && node scripts/smoke.mjs",
+    "check": "npm run typecheck && npm run test && npm run build",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run check"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
+    "commander": "^15.0.0",
+    "playwright": "^1.62.1",
+    "sharp": "^0.35.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
+  }
+}

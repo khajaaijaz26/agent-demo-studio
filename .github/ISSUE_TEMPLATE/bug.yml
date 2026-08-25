@@ -1,0 +1,38 @@
+name: Bug report
+description: Report reproducible recording, editing, MCP, or rendering behavior.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened and what did you expect?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options: [Windows, macOS, Linux]
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Remove credentials and private URLs before posting.
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: agent-demo doctor output
+      render: shell

@@ -1,0 +1,46 @@
+{
+  "title": "Orbit Analytics in action",
+  "subtitle": "Turn live product workflows into polished demos",
+  "url": "http://127.0.0.1:4173",
+  "narration": "Meet Orbit Analytics, the fastest way to understand product growth. Create a report, choose the audience, and share clear insights in seconds.",
+  "actions": [
+    {
+      "type": "chapter",
+      "label": "Live product insights",
+      "description": "Everything your team needs in one workspace",
+      "milliseconds": 1200
+    },
+    {
+      "type": "click",
+      "role": "button",
+      "name": "Create report",
+      "label": "Start a new report"
+    },
+    {
+      "type": "fill",
+      "selector": "#report-name",
+      "value": "Q3 Growth Brief",
+      "label": "Name the report"
+    },
+    {
+      "type": "fill",
+      "selector": "#audience",
+      "value": "Leadership team",
+      "label": "Choose the audience"
+    },
+    {
+      "type": "click",
+      "role": "button",
+      "name": "Generate report",
+      "label": "Generate the report"
+    },
+    {
+      "type": "wait",
+      "milliseconds": 1800,
+      "label": "Show the result"
+    }
+  ],
+  "headless": false,
+  "generateVoice": true,
+  "autoRender": true
+}
