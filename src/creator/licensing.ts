@@ -1,17 +1,25 @@
 import path from "node:path";
 import { writeFile } from "node:fs/promises";
+import { bundledAssetLicense } from "./assets.js";
 import type { CreatorManifest } from "./types.js";
 
 export async function writeLicenseReport(manifest: CreatorManifest, outputDirectory: string): Promise<string> {
   const reportPath = path.join(outputDirectory, "ASSET-LICENSES.md");
-  const declared = manifest.licenses ?? [];
   const used = [
     ...manifest.clips.map((clip) => ({ role: `clip:${clip.id}`, source: clip.source, licenseId: clip.licenseId })),
     ...(manifest.brand?.logo ? [{ role: "brand:logo", source: manifest.brand.logo, licenseId: manifest.brand.logoLicenseId }] : []),
     ...(manifest.overlays ?? []).filter((item) => item.source).map((item) => ({ role: `overlay:${item.id}`, source: item.source!, licenseId: item.licenseId })),
     ...(manifest.audio?.voice ? [{ role: "audio:voice", source: manifest.audio.voice.source, licenseId: manifest.audio.voice.licenseId }] : []),
+    ...(manifest.audio?.voices ?? []).map((item, index) => ({ role: `audio:voice-${index + 1}`, source: item.source, licenseId: item.licenseId })),
     ...(manifest.audio?.music ? [{ role: "audio:music", source: manifest.audio.music.source, licenseId: manifest.audio.music.licenseId }] : []),
+    ...(manifest.audio?.ambience ? [{ role: "audio:ambience", source: manifest.audio.ambience.source, licenseId: manifest.audio.ambience.licenseId }] : []),
+    ...(manifest.audio?.soundEffects ?? []).map((item, index) => ({ role: `audio:sfx-${index + 1}`, source: item.source, licenseId: item.licenseId })),
   ];
+  const declared = [...(manifest.licenses ?? [])];
+  for (const asset of used) {
+    const bundled = bundledAssetLicense(asset.source);
+    if (bundled && !declared.some((item) => item.id === bundled.id)) declared.push(bundled);
+  }
   const lines = [
     "# Asset license report",
     "",
@@ -21,7 +29,7 @@ export async function writeLicenseReport(manifest: CreatorManifest, outputDirect
     "",
     "| Role | Source | License record |",
     "|---|---|---|",
-    ...used.map((asset) => `| ${asset.role.replaceAll("|", "\\|")} | ${asset.source.replaceAll("|", "\\|")} | ${asset.licenseId ?? "Not declared — review before publishing"} |`),
+    ...used.map((asset) => `| ${asset.role.replaceAll("|", "\\|")} | ${asset.source.replaceAll("|", "\\|")} | ${asset.licenseId ?? bundledAssetLicense(asset.source)?.id ?? "Not declared — review before publishing"} |`),
     "",
     "## Declared licenses",
     "",

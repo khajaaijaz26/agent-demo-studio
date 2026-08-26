@@ -41,17 +41,17 @@
   </g>
   <text x="78" y="190" fill="#8B95B2" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" letter-spacing="4">OPEN SOURCE · MCP-NATIVE · LOCAL FIRST</text>
   <text x="78" y="254" fill="#F8FAFC" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="800">Agent Demo Studio</text>
-  <text x="78" y="304" fill="#C4B5FD" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700">Record products. Create every format.</text>
-  <text x="78" y="347" fill="#9199B2" font-family="Arial, Helvetica, sans-serif" font-size="18">A complete video production engine for Codex, Claude Code,</text>
-  <text x="78" y="376" fill="#9199B2" font-family="Arial, Helvetica, sans-serif" font-size="18">and any MCP-compatible AI agent.</text>
+  <text x="78" y="304" fill="#C4B5FD" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700">Plan first. Create every format.</text>
+  <text x="78" y="347" fill="#9199B2" font-family="Arial, Helvetica, sans-serif" font-size="18">Launches, demos, cartoons, stories, ASMR, and VFX</text>
+  <text x="78" y="376" fill="#9199B2" font-family="Arial, Helvetica, sans-serif" font-size="18">for Codex, Claude Code, and every MCP-compatible agent.</text>
 
   <g transform="translate(78 426)">
     <rect width="192" height="42" rx="21" fill="#8B5CF6" fill-opacity="0.16" stroke="#8B5CF6" stroke-opacity="0.5"/>
-    <text x="96" y="27" text-anchor="middle" fill="#DDD6FE" font-family="Arial" font-size="13" font-weight="700">YouTube + 4K</text>
+    <text x="96" y="27" text-anchor="middle" fill="#DDD6FE" font-family="Arial" font-size="13" font-weight="700">Plan + launch</text>
     <rect x="205" width="176" height="42" rx="21" fill="#22D3EE" fill-opacity="0.1" stroke="#22D3EE" stroke-opacity="0.4"/>
-    <text x="293" y="27" text-anchor="middle" fill="#A5F3FC" font-family="Arial" font-size="13" font-weight="700">Shorts + Reels</text>
+    <text x="293" y="27" text-anchor="middle" fill="#A5F3FC" font-family="Arial" font-size="13" font-weight="700">Cartoon + story</text>
     <rect x="394" width="142" height="42" rx="21" fill="#FFFFFF" fill-opacity="0.05" stroke="white" stroke-opacity="0.13"/>
-    <text x="465" y="27" text-anchor="middle" fill="#D5D9E8" font-family="Arial" font-size="13" font-weight="700">TikTok</text>
+    <text x="465" y="27" text-anchor="middle" fill="#D5D9E8" font-family="Arial" font-size="13" font-weight="700">ASMR + VFX</text>
   </g>
 
   <g transform="translate(730 66)" filter="url(#shadow)">
@@ -70,14 +70,14 @@
     <text x="438" y="106" fill="#F8FAFC" font-family="Arial" font-size="12" font-weight="700">Creator controls</text>
     <text x="438" y="131" fill="#747D98" font-family="Arial" font-size="9">TEMPLATE</text>
     <rect x="438" y="142" width="150" height="32" rx="8" fill="#080A16" stroke="white" stroke-opacity="0.08"/>
-    <text x="451" y="162" fill="#DDE1EF" font-family="Arial" font-size="9">Feature reel</text>
+    <text x="451" y="162" fill="#DDE1EF" font-family="Arial" font-size="9">Prompt production brief</text>
     <text x="438" y="196" fill="#747D98" font-family="Arial" font-size="9">AUTOMATION</text>
     <rect x="438" y="208" width="150" height="30" rx="8" fill="#8B5CF6" fill-opacity="0.1" stroke="#8B5CF6" stroke-opacity="0.3"/>
-    <text x="451" y="227" fill="#C4B5FD" font-family="Arial" font-size="9" font-weight="700">✓ Validate timeline</text>
+    <text x="451" y="227" fill="#C4B5FD" font-family="Arial" font-size="9" font-weight="700">✓ Review production plan</text>
     <rect x="438" y="246" width="150" height="30" rx="8" fill="#FFFFFF" fill-opacity="0.025" stroke="white" stroke-opacity="0.08"/>
-    <text x="451" y="265" fill="#B6BDD1" font-family="Arial" font-size="9" font-weight="700">⌁ Detect highlights</text>
+    <text x="451" y="265" fill="#B6BDD1" font-family="Arial" font-size="9" font-weight="700">✦ Characters + VFX</text>
     <rect x="438" y="286" width="150" height="24" rx="7" fill="url(#brand)"/>
-    <text x="513" y="302" text-anchor="middle" fill="white" font-family="Arial" font-size="9" font-weight="700">Render formats →</text>
+    <text x="513" y="302" text-anchor="middle" fill="white" font-family="Arial" font-size="9" font-weight="700">Build + render →</text>
 
     <text x="20" y="365" fill="#747D98" font-family="Arial" font-size="10" font-weight="700" letter-spacing="1.5">OUTPUT PROFILES</text>
     <g transform="translate(20 384)">

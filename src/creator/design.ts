@@ -2,14 +2,26 @@ import path from "node:path";
 import { mkdir } from "node:fs/promises";
 import sharp from "sharp";
 import { escapeXml, wrapText } from "../utils/text.js";
-import type { CaptionCue, CreatorBrand, CreatorCaptionStyle, CreatorOverlay, CreatorPreset } from "./types.js";
+import type { CaptionCue, CreatorBrand, CreatorCaptionStyle, CreatorChromaKey, CreatorOverlay, CreatorOverlayAnimation, CreatorPreset } from "./types.js";
 
-export interface TimedRasterAsset {
+export interface TimedVisualAsset {
   id: string;
+  kind: "raster" | "video";
   path: string;
   startSeconds: number;
   endSeconds: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  opacity: number;
+  animation?: CreatorOverlayAnimation;
+  flipHorizontal?: boolean;
+  loop?: boolean;
+  chromaKey?: CreatorChromaKey;
 }
+
+export type TimedRasterAsset = TimedVisualAsset;
 
 function textElements(lines: string[], x: number, startY: number, lineHeight: number, options: {
   size: number;
@@ -26,11 +38,26 @@ function safeFileId(value: string): string {
 }
 
 function elementBox(overlay: CreatorOverlay, preset: CreatorPreset): { x: number; y: number; width: number; height: number } {
-  const width = Math.min(preset.width * 0.9, overlay.width ?? (overlay.type === "cta" ? preset.width * 0.46 : overlay.type === "lower-third" ? preset.width * 0.54 : preset.width * 0.82));
-  const defaultHeight = overlay.type === "text" ? preset.height * 0.17 : overlay.subtitle ? preset.height * 0.13 : preset.height * 0.1;
-  const height = Math.min(preset.height * 0.45, overlay.height ?? defaultHeight);
+  const visualCharacter = overlay.type === "presenter" || overlay.type === "character";
+  const defaultWidth = visualCharacter
+    ? preset.width * (preset.height > preset.width ? 0.58 : 0.32)
+    : overlay.type === "video"
+      ? preset.width * (preset.height > preset.width ? 0.82 : 0.42)
+      : overlay.type === "cta"
+        ? preset.width * 0.46
+        : overlay.type === "lower-third" || overlay.type === "speech-bubble"
+          ? preset.width * 0.54
+          : preset.width * 0.82;
+  const width = Math.min(preset.width * 0.92, overlay.width ?? defaultWidth);
+  const defaultHeight = visualCharacter
+    ? preset.height * (preset.height > preset.width ? 0.54 : 0.72)
+    : overlay.type === "video"
+      ? width * 9 / 16
+      : overlay.type === "text" ? preset.height * 0.17 : overlay.subtitle ? preset.height * 0.13 : preset.height * 0.1;
+  const height = Math.min(preset.height * 0.82, overlay.height ?? defaultHeight);
   const centerX = (overlay.x ?? 0.5) * preset.width;
-  const centerY = (overlay.y ?? (overlay.type === "lower-third" ? 0.8 : 0.2)) * preset.height;
+  const defaultY = visualCharacter ? 0.64 : overlay.type === "lower-third" ? 0.8 : 0.2;
+  const centerY = (overlay.y ?? defaultY) * preset.height;
   return {
     x: Math.round(Math.max(0, Math.min(preset.width - width, centerX - width / 2))),
     y: Math.round(Math.max(0, Math.min(preset.height - height, centerY - height / 2))),
@@ -39,22 +66,37 @@ function elementBox(overlay: CreatorOverlay, preset: CreatorPreset): { x: number
   };
 }
 
-async function renderImageOverlay(overlay: CreatorOverlay, preset: CreatorPreset, sourcePath: string, outputPath: string): Promise<void> {
-  const width = Math.round(Math.min(preset.width * 0.9, overlay.width ?? (overlay.type === "watermark" ? preset.width * 0.16 : preset.width * 0.38)));
+async function renderImageOverlay(overlay: CreatorOverlay, preset: CreatorPreset, sourcePath: string, outputPath: string): Promise<{ x: number; y: number; width: number; height: number }> {
+  const character = overlay.type === "presenter" || overlay.type === "character";
+  const defaultWidth = overlay.type === "watermark"
+    ? preset.width * 0.16
+    : character
+      ? preset.width * (preset.height > preset.width ? 0.58 : 0.32)
+      : preset.width * 0.38;
+  const targetWidth = Math.round(Math.min(preset.width * 0.92, overlay.width ?? defaultWidth));
   const metadata = await sharp(sourcePath).metadata();
   const ratio = metadata.width && metadata.height ? metadata.height / metadata.width : 1;
-  const height = Math.round(Math.min(preset.height * 0.5, overlay.height ?? width * ratio));
-  const watermarkX = (preset.width - preset.safeZone.right - width / 2) / preset.width;
-  const watermarkY = (preset.safeZone.top + height / 2) / preset.height;
-  const x = Math.round(Math.max(0, Math.min(preset.width - width, (overlay.x ?? (overlay.type === "watermark" ? watermarkX : 0.5)) * preset.width - width / 2)));
-  const y = Math.round(Math.max(0, Math.min(preset.height - height, (overlay.y ?? (overlay.type === "watermark" ? watermarkY : 0.5)) * preset.height - height / 2)));
+  const targetHeight = Math.round(Math.min(preset.height * (character ? 0.78 : 0.62), overlay.height ?? targetWidth * ratio));
   const opacity = overlay.opacity ?? (overlay.type === "watermark" ? 0.78 : 1);
-  const prepared = await sharp(sourcePath).resize({ width, height, fit: "contain" }).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  // `inside` avoids adding transparent padding. FFmpeg alpha fades can expose the
+  // RGB values of padded pixels as black bands, while natural image bounds keep
+  // the original cutout alpha intact throughout animation.
+  let pipeline = sharp(sourcePath).resize({ width: targetWidth, height: targetHeight, fit: "inside" }).ensureAlpha();
+  if (overlay.flipHorizontal) pipeline = pipeline.flop();
+  const prepared = await pipeline.raw().toBuffer({ resolveWithObject: true });
   if (opacity < 1) {
     for (let index = 3; index < prepared.data.length; index += 4) prepared.data[index] = Math.round(prepared.data[index]! * opacity);
   }
-  const image = await sharp(prepared.data, { raw: prepared.info }).png().toBuffer();
-  await sharp({ create: { width: preset.width, height: preset.height, channels: 4, background: "#00000000" } }).composite([{ input: image, left: x, top: y }]).png().toFile(outputPath);
+  await sharp(prepared.data, { raw: prepared.info }).png().toFile(outputPath);
+  const width = prepared.info.width;
+  const height = prepared.info.height;
+  const watermarkX = (preset.width - preset.safeZone.right - width / 2) / preset.width;
+  const watermarkY = (preset.safeZone.top + height / 2) / preset.height;
+  const defaultX = overlay.type === "watermark" ? watermarkX : character ? (preset.height > preset.width ? 0.7 : 0.82) : 0.5;
+  const defaultY = overlay.type === "watermark" ? watermarkY : character ? 0.64 : 0.5;
+  const x = Math.round(Math.max(0, Math.min(preset.width - width, (overlay.x ?? defaultX) * preset.width - width / 2)));
+  const y = Math.round(Math.max(0, Math.min(preset.height - height, (overlay.y ?? defaultY) * preset.height - height / 2)));
+  return { x, y, width: prepared.info.width, height: prepared.info.height };
 }
 
 function fittedText(value: string, availableWidth: number, availableHeight: number, preferredSize: number, maxLines: number): { lines: string[]; fontSize: number; lineHeight: number } {
@@ -84,8 +126,9 @@ function fittedSingleLine(value: string, availableWidth: number, preferredSize: 
   return { text: value.length > maxCharacters ? `${value.slice(0, Math.max(1, maxCharacters - 1)).trimEnd()}…` : value, fontSize };
 }
 
-async function renderTextOverlay(overlay: CreatorOverlay, preset: CreatorPreset, brand: CreatorBrand | undefined, outputPath: string): Promise<void> {
-  const box = elementBox(overlay, preset);
+async function renderTextOverlay(overlay: CreatorOverlay, preset: CreatorPreset, brand: CreatorBrand | undefined, outputPath: string): Promise<{ x: number; y: number; width: number; height: number }> {
+  const placement = elementBox(overlay, preset);
+  const box = { ...placement, x: 0, y: 0 };
   const preferredFontSize = Math.round(overlay.fontSize ?? Math.max(28, Math.min(76, preset.width / 20)));
   const horizontalPadding = Math.max(36, Math.round(preferredFontSize * 1.4));
   const textAreaHeight = overlay.subtitle ? box.height * 0.58 : box.height * 0.74;
@@ -103,31 +146,63 @@ async function renderTextOverlay(overlay: CreatorOverlay, preset: CreatorPreset,
   const textStart = textRegionTop + fontSize;
   const subtitle = overlay.subtitle ? fittedSingleLine(overlay.subtitle, box.width - horizontalPadding, fontSize * 0.48) : undefined;
   const subtitleY = box.y + box.height - Math.max(16, Math.round((subtitle?.fontSize ?? fontSize * 0.48) * 0.72));
-  const svg = `<svg width="${preset.width}" height="${preset.height}" xmlns="http://www.w3.org/2000/svg">
+  const speechTail = overlay.type === "speech-bubble" ? `<path d="M ${Math.round(box.width * 0.22)} ${box.height - 2} L ${Math.round(box.width * 0.31)} ${box.height - 2} L ${Math.round(box.width * 0.24)} ${box.height + Math.min(34, Math.round(box.height * 0.28))} Z" fill="${background}"/>` : "";
+  const svgHeight = box.height + (overlay.type === "speech-bubble" ? Math.min(36, Math.round(box.height * 0.3)) : 0);
+  const svg = `<svg width="${box.width}" height="${svgHeight}" xmlns="http://www.w3.org/2000/svg">
     <defs><filter id="shadow" x="-40%" y="-60%" width="180%" height="220%"><feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000000" flood-opacity="0.46"/></filter></defs>
     <g opacity="${overlay.opacity ?? 1}" filter="url(#shadow)">
       <rect x="${box.x}" y="${box.y}" width="${box.width}" height="${box.height}" rx="${radius}" fill="${background}" stroke="#FFFFFF20" stroke-width="2"/>
+      ${speechTail}
       <rect x="${box.x}" y="${box.y}" width="${alignMiddle ? box.width : Math.max(8, Math.round(box.width * 0.016))}" height="${alignMiddle ? Math.max(8, Math.round(box.height * 0.08)) : box.height}" rx="${Math.max(4, Math.round(radius / 2))}" fill="${accent}"/>
       ${textElements(lines, anchorX, textStart, lineHeight, { size: fontSize, color: foreground, weight: 800, anchor: alignMiddle ? "middle" : "start", family: brand?.fontFamily })}
       ${subtitle ? `<text x="${alignMiddle ? box.x + box.width / 2 : textX}" y="${subtitleY}" text-anchor="${alignMiddle ? "middle" : "start"}" fill="#CBD5E1" font-family="${escapeXml(brand?.fontFamily ?? "Arial, Helvetica, sans-serif")}" font-size="${subtitle.fontSize}" font-weight="500">${escapeXml(subtitle.text)}</text>` : ""}
     </g>
   </svg>`;
   await sharp(Buffer.from(svg)).png().toFile(outputPath);
+  return { ...placement, height: svgHeight };
 }
 
-export async function renderOverlayAssets(overlays: CreatorOverlay[], preset: CreatorPreset, outputDirectory: string, brand?: CreatorBrand, resolveSource: (source: string) => string = (source) => source): Promise<TimedRasterAsset[]> {
+export async function renderOverlayAssets(overlays: CreatorOverlay[], preset: CreatorPreset, outputDirectory: string, brand?: CreatorBrand, resolveSource: (source: string) => string = (source) => source): Promise<TimedVisualAsset[]> {
   await mkdir(outputDirectory, { recursive: true });
-  const assets: TimedRasterAsset[] = [];
+  const assets: TimedVisualAsset[] = [];
   for (const [index, overlay] of overlays.entries()) {
+    if (overlay.type === "video") {
+      const placement = elementBox(overlay, preset);
+      assets.push({
+        id: overlay.id,
+        kind: "video",
+        path: resolveSource(overlay.source!),
+        startSeconds: overlay.startSeconds,
+        endSeconds: overlay.endSeconds,
+        ...placement,
+        opacity: overlay.opacity ?? 1,
+        animation: overlay.animation,
+        flipHorizontal: overlay.flipHorizontal,
+        loop: overlay.loop,
+        chromaKey: overlay.chromaKey,
+      });
+      continue;
+    }
     const outputPath = path.join(outputDirectory, `${String(index + 1).padStart(3, "0")}-${safeFileId(overlay.id)}.png`);
-    if (overlay.type === "image" || overlay.type === "watermark") await renderImageOverlay(overlay, preset, resolveSource(overlay.source!), outputPath);
-    else await renderTextOverlay(overlay, preset, brand, outputPath);
-    assets.push({ id: overlay.id, path: outputPath, startSeconds: overlay.startSeconds, endSeconds: overlay.endSeconds });
+    const placement = ["image", "watermark", "presenter", "character"].includes(overlay.type)
+      ? await renderImageOverlay(overlay, preset, resolveSource(overlay.source!), outputPath)
+      : await renderTextOverlay(overlay, preset, brand, outputPath);
+    assets.push({
+      id: overlay.id,
+      kind: "raster",
+      path: outputPath,
+      startSeconds: overlay.startSeconds,
+      endSeconds: overlay.endSeconds,
+      ...placement,
+      opacity: 1,
+      animation: overlay.animation,
+      loop: true,
+    });
   }
   return assets;
 }
 
-export async function renderCaptionOverlayAssets(cues: CaptionCue[], preset: CreatorPreset, style: CreatorCaptionStyle | undefined, outputDirectory: string): Promise<TimedRasterAsset[]> {
+export async function renderCaptionOverlayAssets(cues: CaptionCue[], preset: CreatorPreset, style: CreatorCaptionStyle | undefined, outputDirectory: string): Promise<TimedVisualAsset[]> {
   await mkdir(outputDirectory, { recursive: true });
   const fontSize = Math.round(style?.fontSize ?? (preset.height > preset.width ? 54 : 44));
   const maxChars = style?.maxCharactersPerLine ?? (preset.height > preset.width ? 30 : 54);
@@ -150,7 +225,7 @@ export async function renderCaptionOverlayAssets(cues: CaptionCue[], preset: Cre
     </svg>`;
     const outputPath = path.join(outputDirectory, `${String(index + 1).padStart(4, "0")}.png`);
     await sharp(Buffer.from(svg)).png().toFile(outputPath);
-    assets.push({ id: `caption-${cue.index}`, path: outputPath, startSeconds: cue.startSeconds, endSeconds: cue.endSeconds });
+    assets.push({ id: `caption-${cue.index}`, kind: "raster", path: outputPath, startSeconds: cue.startSeconds, endSeconds: cue.endSeconds, x: 0, y: 0, width: preset.width, height: preset.height, opacity: 1, loop: true });
   }
   return assets;
 }

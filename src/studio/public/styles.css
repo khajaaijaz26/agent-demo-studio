@@ -120,8 +120,8 @@ video { display: block; width: 100%; height: 100%; object-fit: contain; backgrou
 .section-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; font-size: 11px; font-weight: 800; }
 .section-title small { color: var(--cyan); font-size: 7px; letter-spacing: 1.1px; }
 label { display: block; margin-top: 11px; color: #929ab2; font-size: 9px; font-weight: 700; }
-input[type="text"], textarea, select { width: 100%; margin-top: 6px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 9px; outline: 0; color: var(--text); background: rgba(3,5,13,.5); font-size: 10px; transition: border .2s, background .2s; }
-input[type="text"]:focus, textarea:focus, select:focus { border-color: rgba(139,92,246,.65); background: rgba(5,7,17,.72); }
+input[type="text"], input[type="number"], textarea, select { width: 100%; margin-top: 6px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 9px; outline: 0; color: var(--text); background: rgba(3,5,13,.5); font-size: 10px; transition: border .2s, background .2s; }
+input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus { border-color: rgba(139,92,246,.65); background: rgba(5,7,17,.72); }
 select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, #848ca5 50%), linear-gradient(135deg, #848ca5 50%, transparent 50%); background-position: calc(100% - 15px) 14px, calc(100% - 11px) 14px; background-size: 4px 4px; background-repeat: no-repeat; }
 textarea { resize: vertical; line-height: 1.5; }
 .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 11px; }
@@ -184,12 +184,28 @@ input[type="color"] { width: 100%; height: 33px; margin-top: 6px; padding: 3px; 
 .preset-option small { margin-top: 4px; color: #737c95; font-size: 8px; }
 .preset-option > i { display: grid; margin-left: auto; place-items: center; width: 18px; height: 18px; border: 1px solid var(--line); border-radius: 6px; color: transparent; font-style: normal; font-size: 9px; }
 .preset-option.selected > i { border-color: var(--purple); color: white; background: var(--purple); }
-.ratio-icon { display: block; width: 27px; aspect-ratio: var(--ratio); max-height: 34px; border: 2px solid #8c95ae; border-radius: 4px; background: linear-gradient(145deg, rgba(139,92,246,.3), rgba(34,211,238,.15)); }
+.ratio-icon { display: block; width: 27px; max-height: 34px; border: 2px solid #8c95ae; border-radius: 4px; background: linear-gradient(145deg, rgba(139,92,246,.3), rgba(34,211,238,.15)); }
+.ratio-landscape { aspect-ratio: 16 / 9; }
+.ratio-vertical { aspect-ratio: 9 / 16; }
+.ratio-square { aspect-ratio: 1 / 1; }
+.ratio-portrait { aspect-ratio: 4 / 5; }
 .manifest-card textarea { height: 360px; min-height: 220px; margin: 0; padding: 16px; border-radius: 12px; color: #cdd6f4; background: #070914; font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; font-size: 10px; line-height: 1.65; tab-size: 2; }
 .inline-actions { display: flex; gap: 6px; }
 
 .creator-inspector { top: 18px; }
 .creator-inspector input[type="text"] { font-family: "Cascadia Code", Consolas, monospace; font-size: 9px; }
+.prompt-panel { background: linear-gradient(145deg, rgba(139,92,246,.09), rgba(34,211,238,.025)); }
+.prompt-panel textarea { min-height: 92px; }
+.prompt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+.prompt-switches { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 7px; }
+.prompt-switches .switch-row { gap: 6px; }
+.prompt-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 11px; }
+.prompt-actions .button { width: 100%; padding: 10px 7px; font-size: 9px; font-weight: 800; }
+.prompt-render { border-color: rgba(139,92,246,.52); color: white; background: linear-gradient(100deg, #7c3aed, #4f46e5); box-shadow: 0 10px 28px rgba(124,58,237,.18); }
+.prompt-plan-preview { margin-top: 11px; padding: 10px; border: 1px solid rgba(34,211,238,.18); border-radius: 10px; background: rgba(3,5,13,.46); }
+.prompt-plan-preview > div { display: flex; justify-content: space-between; gap: 10px; font-size: 8px; }
+.prompt-plan-preview > div span { color: #7dd3fc; text-align: right; }
+.prompt-plan-preview pre { max-height: 180px; margin: 9px 0 0; overflow: auto; color: #9ea7c0; font-family: "Cascadia Code", Consolas, monospace; font-size: 7px; line-height: 1.5; white-space: pre-wrap; }
 .action-stack { display: grid; gap: 6px; }
 .action-button { display: flex; align-items: center; justify-content: space-between; padding: 10px; border: 1px solid transparent; border-radius: 10px; text-align: left; background: transparent; cursor: pointer; }
 .action-button:hover { border-color: var(--line); background: rgba(255,255,255,.035); }
@@ -199,8 +215,10 @@ input[type="color"] { width: 100%; height: 33px; margin-top: 6px; padding: 3px; 
 .action-button small { color: #69718a; font-size: 7px; }
 .creator-render { margin-top: 18px !important; }
 .job-panel p { margin: 9px 0 0; color: #818aa2; font-size: 8px; }
-.progress-track { height: 5px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.07); }
-.progress-track i { display: block; width: 2%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--purple), var(--cyan)); transition: width .35s ease; box-shadow: 0 0 14px rgba(34,211,238,.5); }
+.progress-track { width: 100%; height: 5px; overflow: hidden; border: 0; border-radius: 999px; background: rgba(255,255,255,.07); appearance: none; }
+.progress-track::-webkit-progress-bar { border-radius: inherit; background: rgba(255,255,255,.07); }
+.progress-track::-webkit-progress-value { border-radius: inherit; background: linear-gradient(90deg, var(--purple), var(--cyan)); transition: width .35s ease; box-shadow: 0 0 14px rgba(34,211,238,.5); }
+.progress-track::-moz-progress-bar { border-radius: inherit; background: linear-gradient(90deg, var(--purple), var(--cyan)); box-shadow: 0 0 14px rgba(34,211,238,.5); }
 
 .output-list { display: grid; gap: 8px; }
 .output-item { display: grid; grid-template-columns: 92px minmax(0, 1fr) auto; align-items: center; gap: 12px; width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 12px; text-align: left; background: rgba(255,255,255,.02); cursor: pointer; }

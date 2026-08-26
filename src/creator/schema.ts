@@ -4,8 +4,12 @@ import { z } from "zod";
 import { AgentDemoError } from "../errors.js";
 import { CREATOR_PRESETS } from "./presets.js";
 import {
+  CREATOR_IMAGE_MOTIONS,
+  CREATOR_LOOP_ANIMATIONS,
+  CREATOR_OVERLAY_ANIMATIONS,
   CREATOR_SCHEMA_VERSION,
   CREATOR_TRANSITIONS,
+  CREATOR_VFX_PRESETS,
   type CreatorManifest,
   type CreatorValidationIssue,
   type CreatorValidationResult,
@@ -30,6 +34,7 @@ const effectsSchema = z.object({
   vignette: z.boolean().optional(),
   fadeInSeconds: finiteNumber.min(0).max(10).optional(),
   fadeOutSeconds: finiteNumber.min(0).max(10).optional(),
+  vfx: z.array(z.enum(CREATOR_VFX_PRESETS)).max(CREATOR_VFX_PRESETS.length).optional(),
 }).optional();
 
 const clipSchema = z.object({
@@ -51,6 +56,7 @@ const clipSchema = z.object({
   focusX: finiteNumber.min(0).max(1).optional(),
   focusY: finiteNumber.min(0).max(1).optional(),
   freezeAfterSeconds: finiteNumber.min(0).max(300).optional(),
+  motion: z.enum(CREATOR_IMAGE_MOTIONS).optional(),
   transition: transitionSchema.optional(),
   effects: effectsSchema,
   chapter: z.string().trim().min(1).optional(),
@@ -59,7 +65,7 @@ const clipSchema = z.object({
 
 const overlaySchema = z.object({
   id: z.string().trim().min(1),
-  type: z.enum(["text", "lower-third", "cta", "image", "watermark"]),
+  type: z.enum(["text", "lower-third", "cta", "speech-bubble", "image", "watermark", "presenter", "character", "video"]),
   text: z.string().optional(),
   subtitle: z.string().optional(),
   source: z.string().optional(),
@@ -75,6 +81,21 @@ const overlaySchema = z.object({
   accent: color.optional(),
   fontSize: finiteNumber.min(12).max(240).optional(),
   cornerRadius: finiteNumber.min(0).max(200).optional(),
+  animation: z.object({
+    enter: z.enum(CREATOR_OVERLAY_ANIMATIONS).optional(),
+    exit: z.enum(CREATOR_OVERLAY_ANIMATIONS).optional(),
+    loop: z.enum(CREATOR_LOOP_ANIMATIONS).optional(),
+    durationSeconds: finiteNumber.min(0.05).max(10).optional(),
+    exitDurationSeconds: finiteNumber.min(0.05).max(10).optional(),
+    intensity: finiteNumber.min(0).max(3).optional(),
+  }).optional(),
+  flipHorizontal: z.boolean().optional(),
+  loop: z.boolean().optional(),
+  chromaKey: z.object({
+    color: color.optional(),
+    similarity: finiteNumber.min(0.01).max(1).optional(),
+    blend: finiteNumber.min(0).max(1).optional(),
+  }).optional(),
   licenseId: z.string().optional(),
 });
 
@@ -87,6 +108,7 @@ const audioTrackSchema = z.object({
   loop: z.boolean().optional(),
   fadeInSeconds: finiteNumber.min(0).max(30).optional(),
   fadeOutSeconds: finiteNumber.min(0).max(30).optional(),
+  pan: finiteNumber.min(-1).max(1).optional(),
   licenseId: z.string().optional(),
 });
 
@@ -125,7 +147,11 @@ export const creatorManifestSchema = z.object({
   }).optional(),
   audio: z.object({
     voice: audioTrackSchema.optional(),
+    voices: z.array(audioTrackSchema).max(24).optional(),
     music: audioTrackSchema.optional(),
+    ambience: audioTrackSchema.optional(),
+    soundEffects: z.array(audioTrackSchema).max(64).optional(),
+    mode: z.enum(["standard", "voice", "cinematic", "asmr"]).optional(),
     keepClipAudio: z.boolean().optional(),
     clipVolume: finiteNumber.min(0).max(4).optional(),
     duckMusic: z.boolean().optional(),
@@ -190,9 +216,13 @@ function semanticIssues(manifest: CreatorManifest): CreatorValidationIssue[] {
     }
   }
   for (const [index, overlay] of (manifest.overlays ?? []).entries()) {
+    if (ids.has(overlay.id)) issues.push({ level: "error", code: "DUPLICATE_ID", path: `overlays.${index}.id`, message: `Duplicate overlay id '${overlay.id}'.` });
+    ids.add(overlay.id);
     if (overlay.endSeconds <= overlay.startSeconds) issues.push({ level: "error", code: "INVALID_OVERLAY_RANGE", path: `overlays.${index}`, message: `Overlay '${overlay.id}' must end after it starts.` });
-    if ((overlay.type === "image" || overlay.type === "watermark") && !overlay.source) issues.push({ level: "error", code: "OVERLAY_SOURCE_REQUIRED", path: `overlays.${index}.source`, message: `Overlay '${overlay.id}' needs a source image.` });
-    if (!["image", "watermark"].includes(overlay.type) && !overlay.text?.trim()) issues.push({ level: "error", code: "OVERLAY_TEXT_REQUIRED", path: `overlays.${index}.text`, message: `Overlay '${overlay.id}' needs text.` });
+    if (["image", "watermark", "presenter", "character", "video"].includes(overlay.type) && !overlay.source) issues.push({ level: "error", code: "OVERLAY_SOURCE_REQUIRED", path: `overlays.${index}.source`, message: `Overlay '${overlay.id}' needs a source asset.` });
+    if (["text", "lower-third", "cta", "speech-bubble"].includes(overlay.type) && !overlay.text?.trim()) issues.push({ level: "error", code: "OVERLAY_TEXT_REQUIRED", path: `overlays.${index}.text`, message: `Overlay '${overlay.id}' needs text.` });
+    const overlayDuration = overlay.endSeconds - overlay.startSeconds;
+    if ((overlay.animation?.durationSeconds ?? 0) + (overlay.animation?.exitDurationSeconds ?? 0) > overlayDuration) issues.push({ level: "warning", code: "ANIMATION_LONGER_THAN_OVERLAY", path: `overlays.${index}.animation`, message: `Overlay '${overlay.id}' animation durations overlap; they will be clamped during rendering.` });
   }
   const exportIds = new Set<string>();
   for (const [index, output] of (manifest.exports ?? []).entries()) {
@@ -204,11 +234,14 @@ function semanticIssues(manifest: CreatorManifest): CreatorValidationIssue[] {
     ...(manifest.brand?.logo ? [{ source: manifest.brand.logo, licenseId: manifest.brand.logoLicenseId }] : []),
     ...(manifest.overlays ?? []).filter((item) => item.source).map((item) => ({ source: item.source!, licenseId: item.licenseId })),
     ...(manifest.audio?.voice ? [manifest.audio.voice] : []),
+    ...(manifest.audio?.voices ?? []),
     ...(manifest.audio?.music ? [manifest.audio.music] : []),
+    ...(manifest.audio?.ambience ? [manifest.audio.ambience] : []),
+    ...(manifest.audio?.soundEffects ?? []),
   ];
   for (const asset of usedLicensedSources) {
-    if (!asset.licenseId) issues.push({ level: "info", code: "ASSET_LICENSE_UNDECLARED", message: `No license metadata is declared for '${asset.source}'. Confirm that you own or may use it.` });
-    else if (!licenseIds.has(asset.licenseId)) issues.push({ level: "warning", code: "LICENSE_REFERENCE_MISSING", message: `'${asset.source}' references unknown license entry '${asset.licenseId}'.` });
+    if (!asset.licenseId && !asset.source.startsWith("builtin:")) issues.push({ level: "info", code: "ASSET_LICENSE_UNDECLARED", message: `No license metadata is declared for '${asset.source}'. Confirm that you own or may use it.` });
+    else if (asset.licenseId && !licenseIds.has(asset.licenseId)) issues.push({ level: "warning", code: "LICENSE_REFERENCE_MISSING", message: `'${asset.source}' references unknown license entry '${asset.licenseId}'.` });
   }
   return issues;
 }

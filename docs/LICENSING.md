@@ -33,11 +33,31 @@ Use the manifest `licenses` array and each asset's `licenseId` to keep provenanc
 
 ## Generated ambient music
 
-The bundled ambient generator synthesizes waveform data locally from code in this repository and does not sample a recorded song. Its output is intended to be usable with the rendered project. Users remain responsible for checking whether a similar melody or local legal restriction affects their use.
+The bundled ambient-score and ASMR-soundscape generators synthesize waveform data
+locally from code in this repository and do not sample a recorded song or sound
+library. Their output is intended to be usable with the rendered project. Users
+remain responsible for checking whether a similar melody or local legal restriction
+affects their use.
+
+## Bundled synthetic artwork
+
+Version 0.3 includes two fictional photoreal presenter cutouts, two original
+fictional 3D-cartoon hosts, and four original scene backgrounds. They were created
+with Codex's built-in image-generation mode for this project and are redistributed
+under the repository's MIT License. Their source prompts, checksums, and explicit
+fictional/synthetic status are recorded in [`assets/README.md`](../assets/README.md).
+
+The project automatically writes license records when a `builtin:` asset is used.
+Preserve `syntheticCharacters` metadata and add platform-required disclosure. Do
+not describe a bundled presenter as a real customer, employee, expert, or endorser.
 
 ## Voice and likeness
 
-Only use a voice, voice model, or likeness when you have permission. Disclose synthetic media where a platform or jurisdiction requires it. Do not use this project to impersonate a person, mislead viewers, or bypass consent.
+Only use a voice, voice model, or likeness when you have permission. Disclose
+synthetic media where a platform or jurisdiction requires it. Do not use this
+project to impersonate a person, mislead viewers, or bypass consent. The bundled
+characters use animated still-image motion and do not include cloned voices or
+phoneme-level lip synchronization.
 
 ## Contributions
 

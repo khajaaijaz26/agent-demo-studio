@@ -1,11 +1,14 @@
 import { describe, expect, it } from "vitest";
+import { existsSync } from "node:fs";
 import { parseCaptions, serializeAss, serializeSrt, serializeVtt } from "../src/creator/captions.js";
+import { listCreatorAssets, resolveBundledCreatorAsset } from "../src/creator/assets.js";
 import { listCreatorPresets } from "../src/creator/presets.js";
+import { createPromptVideoManifest, createPromptVideoPlan } from "../src/creator/prompt.js";
 import { publishToYouTube, tiktokChunkPlan } from "../src/creator/publish.js";
 import { validateCreatorManifest } from "../src/creator/schema.js";
 import { buildPublishingPlan, validateSocialOutput } from "../src/creator/social.js";
 import { createTemplateManifest, listCreatorTemplates } from "../src/creator/templates.js";
-import type { CreatorRenderedOutput } from "../src/creator/types.js";
+import { CREATOR_IMAGE_MOTIONS, CREATOR_OVERLAY_ANIMATIONS, CREATOR_TRANSITIONS, CREATOR_VFX_PRESETS, type CreatorPromptMode, type CreatorRenderedOutput } from "../src/creator/types.js";
 
 describe("creator manifests", () => {
   it("applies a safe default export", () => {
@@ -37,11 +40,78 @@ describe("creator manifests", () => {
     ]));
   });
 
-  it("ships eight valid, editable templates", () => {
+  it("ships thirteen valid, editable templates", () => {
     const templates = listCreatorTemplates();
-    expect(templates).toHaveLength(8);
+    expect(templates).toHaveLength(13);
     for (const template of templates) expect(validateCreatorManifest(template.manifest).valid).toBe(true);
     expect(createTemplateManifest("before-after").clips).toHaveLength(2);
+    expect(createTemplateManifest("cartoon-story").overlays?.some((item) => item.type === "character")).toBe(true);
+    expect(createTemplateManifest("vfx-showcase").clips[0]?.effects?.vfx).toContain("neon");
+  });
+
+  it("creates valid launch, cartoon, story, ASMR, and VFX projects from prompts", () => {
+    const modes: CreatorPromptMode[] = ["product-launch", "cartoon", "story", "asmr", "vfx"];
+    for (const mode of modes) {
+      const manifest = createPromptVideoManifest({ prompt: `A complete ${mode} creative brief. Show the central idea. Finish with a memorable resolution.`, mode, presets: ["youtube-1080p"] });
+      expect(validateCreatorManifest(manifest).valid, mode).toBe(true);
+      expect(manifest.metadata).toMatchObject({ productionMode: mode, workflow: "prompt-to-video" });
+    }
+  });
+
+  it("plans requirements, scenes, resources, workflow, and QA before production", () => {
+    const plan = createPromptVideoPlan({
+      prompt: "Launch a classroom planning assistant for busy teachers with a clear final CTA.",
+      mode: "product-launch",
+      presenter: "aria",
+      presets: ["youtube-1080p", "reels"],
+    });
+    expect(plan.requirements).toMatchObject({ targetDurationSeconds: 24, outputPresets: ["youtube-1080p", "reels"] });
+    expect(plan.scenes).toHaveLength(3);
+    expect(plan.resources.map((resource) => resource.category)).toEqual(expect.arrayContaining(["scene", "character", "voice", "captions", "music", "vfx", "export"]));
+    expect(plan.workflow[0]?.stage).toBe("Requirements");
+    expect(plan.workflow.at(-1)?.stage).toBe("Delivery");
+    expect(plan.qualityChecklist.some((item) => item.includes("do not overlap"))).toBe(true);
+  });
+
+  it("keeps the plan, resource list, and cartoon cast consistent with user choices", () => {
+    const noHostPlan = createPromptVideoPlan({
+      prompt: "Tell a visual story about a seed becoming a rooftop garden.",
+      mode: "cartoon",
+      presenter: "none",
+      generateVoice: false,
+      generateMusic: false,
+    });
+    expect(noHostPlan.resources.some((resource) => resource.category === "character")).toBe(false);
+    expect(noHostPlan.scenes.every((scene) => scene.narration.startsWith("No narration"))).toBe(true);
+    expect(noHostPlan.creativeDirection.characterDirection).toContain("No host");
+
+    const noHostManifest = createPromptVideoManifest({
+      prompt: "Tell a visual story about a seed becoming a rooftop garden.",
+      mode: "cartoon",
+      presenter: "none",
+      generateVoice: false,
+      generateMusic: false,
+    });
+    expect(noHostManifest.overlays?.some((overlay) => overlay.type === "character" || overlay.type === "presenter")).toBe(false);
+
+    const miloManifest = createPromptVideoManifest({ prompt: "Milo explains a tiny invention.", mode: "cartoon", presenter: "milo" });
+    expect(miloManifest.overlays?.filter((overlay) => overlay.type === "character").map((overlay) => overlay.id)).toEqual(["milo", "nova"]);
+  });
+
+  it("ships resolvable fictional characters, presenters, scenes, and effect catalogs", () => {
+    const assets = listCreatorAssets();
+    expect(assets).toHaveLength(8);
+    expect(new Set(assets.map((item) => item.source)).size).toBe(8);
+    for (const asset of assets) {
+      expect(asset.synthetic).toBe(true);
+      const resolved = resolveBundledCreatorAsset(asset.source);
+      expect(resolved).toBeTruthy();
+      expect(existsSync(resolved!)).toBe(true);
+    }
+    expect(CREATOR_TRANSITIONS).toHaveLength(28);
+    expect(CREATOR_OVERLAY_ANIMATIONS).toContain("pop");
+    expect(CREATOR_IMAGE_MOTIONS).toContain("ken-burns-in");
+    expect(CREATOR_VFX_PRESETS).toEqual(expect.arrayContaining(["cinematic", "glitch", "asmr-soft"]));
   });
 });
 

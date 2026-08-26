@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "title": "Agent Demo Studio launch",
   "description": "One editable timeline rendered for YouTube, Shorts, Reels, and TikTok.",
   "outputDirectory": "./creator-output",

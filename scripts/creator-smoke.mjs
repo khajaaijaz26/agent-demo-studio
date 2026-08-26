@@ -1,6 +1,6 @@
 import os from "node:os";
 import path from "node:path";
-import { mkdtemp, rm, stat, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { renderCreatorManifest } from "../dist/creator/renderer.js";
 import { analyzeMedia } from "../dist/creator/media.js";
 import { createSocialPackage } from "../dist/creator/social.js";
@@ -45,19 +45,30 @@ try {
   if (!analysis.hasVideo || !analysis.hasAudio || analysis.durationSeconds < 1) throw new Error(`Unexpected media analysis: ${JSON.stringify(analysis)}`);
 
   const manifest = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     title: "Creator engine smoke test",
     outputDirectory,
     brand: { name: "Agent Demo Studio", logo, logoLicenseId: "generated-logo", primary: "#7C3AED", secondary: "#22D3EE", text: "#FFFFFF" },
     clips: [
-      { id: "landscape", source: first, speedRamp: { from: 1, to: 1.35, steps: 3 }, reframe: "blur-background", effects: { saturation: 1.08 }, chapter: "Landscape source", licenseId: "generated-fixture" },
-      { id: "portrait", source: second, reframe: "fill", transition: { type: "slide-left", durationSeconds: 0.25 }, chapter: "Portrait source", licenseId: "generated-fixture-2" },
+      { id: "landscape", source: first, speedRamp: { from: 1, to: 1.35, steps: 3 }, reframe: "blur-background", effects: { saturation: 1.08, vfx: ["cinematic"] }, chapter: "Landscape source", licenseId: "generated-fixture" },
+      { id: "portrait", source: second, reframe: "fill", transition: { type: "blur", durationSeconds: 0.25 }, chapter: "Portrait source", licenseId: "generated-fixture-2" },
+      { id: "image-finale", source: logo, kind: "image", durationSeconds: 0.8, motion: "ken-burns-in", reframe: "blur-background", effects: { vfx: ["glow"] }, transition: { type: "zoom-in", durationSeconds: 0.2 }, chapter: "Animated image", licenseId: "generated-logo" },
     ],
     overlays: [
       { id: "cta", type: "cta", text: "Create everywhere", startSeconds: 0.2, endSeconds: 1.9, x: 0.5, y: 0.24 },
+      { id: "character", type: "character", source: "builtin:character/nova", startSeconds: 0.35, endSeconds: 2.25, x: 0.78, y: 0.58, width: 280, animation: { enter: "pop", exit: "fade", loop: "talk", durationSeconds: 0.25 } },
+      { id: "video-layer", type: "video", source: second, startSeconds: 0.55, endSeconds: 1.55, x: 0.23, y: 0.54, width: 250, height: 444, opacity: 0.85, loop: true, flipHorizontal: true, chromaKey: { color: "#00FF00", similarity: 0.08, blend: 0.03 }, animation: { enter: "rise", exit: "fade", durationSeconds: 0.2 }, licenseId: "generated-fixture-2" },
     ],
     captions: { source: captions, burn: true, sidecar: true, style: { position: "bottom", maxCharactersPerLine: 28 } },
-    audio: { keepClipAudio: true, music: { source: music, loop: true, volume: 0.08, licenseId: "generated-music" }, duckMusic: true, targetLufs: -14 },
+    audio: {
+      keepClipAudio: true,
+      music: { source: music, loop: true, volume: 0.08, licenseId: "generated-music" },
+      ambience: { source: music, loop: true, volume: 0.025, pan: -0.25, licenseId: "generated-music" },
+      soundEffects: [{ source: music, startSeconds: 0.75, trimEndSeconds: 0.25, volume: 0.04, pan: 0.35, licenseId: "generated-music" }],
+      mode: "cinematic",
+      duckMusic: true,
+      targetLufs: -14,
+    },
     exports: [{ id: "vertical", preset: "shorts", quality: 24, thumbnailAtSeconds: 0.7 }],
     licenses: [
       { id: "generated-fixture", source: first, license: "Generated test fixture" },
@@ -78,6 +89,8 @@ try {
   const packagedOutput = packaged.outputs[0];
   if (!packagedOutput?.captions || !packagedOutput.chapters) throw new Error(`Publishing package omitted sidecars: ${JSON.stringify(packagedOutput)}`);
   await Promise.all([packagedOutput.video, packagedOutput.thumbnail, packagedOutput.captions, packagedOutput.chapters, packagedOutput.publishingPlan].map((file) => stat(file)));
+  const licenseReport = await readFile(result.licenseReportPath, "utf8");
+  if (!licenseReport.includes("agent-demo-nova")) throw new Error("Bundled character provenance was omitted from the license report.");
 
   const probe = await runCommand("ffprobe", [
     "-v", "error", "-show_entries", "stream=codec_name,width,height:format=duration", "-of", "json", output.videoPath,

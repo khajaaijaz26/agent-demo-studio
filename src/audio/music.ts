@@ -74,3 +74,51 @@ export async function generateAmbientMusic(
   await writeFile(outputPath, Buffer.concat([wavHeader(dataLength), pcm]));
   return outputPath;
 }
+
+export async function generateAsmrSoundscape(
+  outputPath: string,
+  durationSeconds: number,
+): Promise<string> {
+  const safeDuration = Math.max(1, Math.min(durationSeconds, 600));
+  const frames = Math.ceil(safeDuration * SAMPLE_RATE);
+  const dataLength = frames * CHANNELS * (BITS_PER_SAMPLE / 8);
+  const pcm = Buffer.allocUnsafe(dataLength);
+  const drops = Array.from({ length: Math.max(3, Math.floor(safeDuration / 2.7)) }, (_, index) => ({
+    time: 1.2 + index * 2.7 + (index % 3) * 0.19,
+    pan: (index % 5) / 2 - 1,
+    frequency: 620 + (index % 4) * 115,
+  }));
+  let randomState = 0x51f15e;
+  let softNoise = 0;
+  const random = (): number => {
+    randomState = (Math.imul(randomState, 1_664_525) + 1_013_904_223) >>> 0;
+    return randomState / 0xffff_ffff;
+  };
+
+  for (let frame = 0; frame < frames; frame += 1) {
+    const time = frame / SAMPLE_RATE;
+    softNoise = softNoise * 0.997 + (random() * 2 - 1) * 0.003;
+    const breath = softNoise * 0.42 + Math.sin(2 * Math.PI * 83 * time) * 0.012;
+    let left = breath;
+    let right = breath * 0.98;
+    for (const drop of drops) {
+      const age = time - drop.time;
+      if (age < 0 || age > 0.42) continue;
+      const envelope = Math.exp(-age * 13) * (1 - Math.exp(-age * 90));
+      const chirp = Math.sin(2 * Math.PI * (drop.frequency - age * 240) * age) * envelope * 0.32;
+      left += chirp * (1 - Math.max(0, drop.pan)) * 0.75;
+      right += chirp * (1 + Math.min(0, drop.pan)) * 0.75;
+    }
+    const shimmer = Math.sin(2 * Math.PI * 1_760 * time + Math.sin(time * 0.31) * 2.1) * 0.004;
+    left += shimmer * (0.72 + Math.sin(time * 0.7) * 0.2);
+    right += shimmer * (0.72 + Math.cos(time * 0.63) * 0.2);
+    const fade = Math.max(0, Math.min(1, time / 1.6, (safeDuration - time) / 2));
+    const offset = frame * 4;
+    pcm.writeInt16LE(Math.round(Math.max(-1, Math.min(1, left * fade * 0.46)) * 32_767), offset);
+    pcm.writeInt16LE(Math.round(Math.max(-1, Math.min(1, right * fade * 0.46)) * 32_767), offset + 2);
+  }
+
+  await mkdir(path.dirname(outputPath), { recursive: true });
+  await writeFile(outputPath, Buffer.concat([wavHeader(dataLength), pcm]));
+  return outputPath;
+}

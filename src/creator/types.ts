@@ -1,4 +1,4 @@
-export const CREATOR_SCHEMA_VERSION = 1;
+export const CREATOR_SCHEMA_VERSION = 2;
 
 export type CreatorPresetId =
   | "youtube-1080p"
@@ -15,10 +15,42 @@ export type CreatorPresetId =
 export const CREATOR_TRANSITIONS = [
   "cut", "fade", "dissolve", "wipe-left", "wipe-right", "wipe-up", "wipe-down",
   "slide-left", "slide-right", "slide-up", "slide-down", "smooth-left", "smooth-right",
-  "circle-open", "circle-close", "radial", "pixelize",
+  "circle-open", "circle-close", "radial", "pixelize", "fade-black", "fade-white",
+  "zoom-in", "squeeze-horizontal", "squeeze-vertical", "diagonal", "blur",
+  "reveal-left", "reveal-right", "reveal-up", "reveal-down",
 ] as const;
 
 export type TransitionType = typeof CREATOR_TRANSITIONS[number];
+
+export const CREATOR_OVERLAY_ANIMATIONS = [
+  "none", "fade", "slide-left", "slide-right", "slide-up", "slide-down", "pop", "rise", "drop",
+] as const;
+
+export type CreatorOverlayAnimationPreset = typeof CREATOR_OVERLAY_ANIMATIONS[number];
+
+export const CREATOR_LOOP_ANIMATIONS = [
+  "none", "float", "bounce", "drift", "shake", "pulse", "talk",
+] as const;
+
+export type CreatorLoopAnimation = typeof CREATOR_LOOP_ANIMATIONS[number];
+
+export const CREATOR_IMAGE_MOTIONS = [
+  "none", "ken-burns-in", "ken-burns-out", "pan-left", "pan-right", "pan-up", "pan-down",
+] as const;
+
+export type CreatorImageMotion = typeof CREATOR_IMAGE_MOTIONS[number];
+
+export const CREATOR_VFX_PRESETS = [
+  "cinematic", "glow", "neon", "glitch", "vhs", "dream", "vintage", "noir", "comic", "asmr-soft",
+] as const;
+
+export type CreatorVfxPreset = typeof CREATOR_VFX_PRESETS[number];
+
+export const CREATOR_PROMPT_MODES = [
+  "product-launch", "cartoon", "story", "asmr", "vfx",
+] as const;
+
+export type CreatorPromptMode = typeof CREATOR_PROMPT_MODES[number];
 
 export type ReframeMode = "fit" | "fill" | "blur-background";
 
@@ -59,6 +91,7 @@ export interface CreatorEffects {
   vignette?: boolean;
   fadeInSeconds?: number;
   fadeOutSeconds?: number;
+  vfx?: CreatorVfxPreset[];
 }
 
 export interface CreatorSpeedRamp {
@@ -82,15 +115,31 @@ export interface CreatorClip {
   focusX?: number;
   focusY?: number;
   freezeAfterSeconds?: number;
+  motion?: CreatorImageMotion;
   transition?: CreatorTransition;
   effects?: CreatorEffects;
   chapter?: string;
   licenseId?: string;
 }
 
+export interface CreatorOverlayAnimation {
+  enter?: CreatorOverlayAnimationPreset;
+  exit?: CreatorOverlayAnimationPreset;
+  loop?: CreatorLoopAnimation;
+  durationSeconds?: number;
+  exitDurationSeconds?: number;
+  intensity?: number;
+}
+
+export interface CreatorChromaKey {
+  color?: string;
+  similarity?: number;
+  blend?: number;
+}
+
 export interface CreatorOverlay {
   id: string;
-  type: "text" | "lower-third" | "cta" | "image" | "watermark";
+  type: "text" | "lower-third" | "cta" | "speech-bubble" | "image" | "watermark" | "presenter" | "character" | "video";
   text?: string;
   subtitle?: string;
   source?: string;
@@ -106,6 +155,10 @@ export interface CreatorOverlay {
   accent?: string;
   fontSize?: number;
   cornerRadius?: number;
+  animation?: CreatorOverlayAnimation;
+  flipHorizontal?: boolean;
+  loop?: boolean;
+  chromaKey?: CreatorChromaKey;
   licenseId?: string;
 }
 
@@ -138,12 +191,17 @@ export interface CreatorAudioTrack {
   loop?: boolean;
   fadeInSeconds?: number;
   fadeOutSeconds?: number;
+  pan?: number;
   licenseId?: string;
 }
 
 export interface CreatorAudioMix {
   voice?: CreatorAudioTrack;
+  voices?: CreatorAudioTrack[];
   music?: CreatorAudioTrack;
+  ambience?: CreatorAudioTrack;
+  soundEffects?: CreatorAudioTrack[];
+  mode?: "standard" | "voice" | "cinematic" | "asmr";
   keepClipAudio?: boolean;
   clipVolume?: number;
   duckMusic?: boolean;
@@ -273,8 +331,13 @@ export interface MediaAnalysis {
 
 export type CreatorTemplateId =
   | "product-demo"
+  | "product-launch"
   | "feature-reel"
   | "launch-short"
+  | "cartoon-story"
+  | "narrated-story"
+  | "asmr"
+  | "vfx-showcase"
   | "tutorial"
   | "talking-head"
   | "podcast-clip"
@@ -287,4 +350,84 @@ export interface CreatorTemplate {
   description: string;
   recommendedPresets: CreatorPresetId[];
   manifest: CreatorManifest;
+}
+
+export interface CreatorPromptVideoInput {
+  prompt: string;
+  mode: CreatorPromptMode;
+  title?: string;
+  source?: string;
+  outputDirectory?: string;
+  narration?: string;
+  durationSeconds?: number;
+  presenter?: "none" | "aria" | "leo" | "nova" | "milo";
+  voice?: string;
+  voiceProvider?: "local" | "neural";
+  voiceRate?: number;
+  presets?: CreatorPresetId[];
+  generateVoice?: boolean;
+  generateMusic?: boolean;
+  render?: boolean;
+}
+
+export interface CreatorProductionPlanResource {
+  id: string;
+  category: "source-media" | "scene" | "character" | "voice" | "captions" | "music" | "sound" | "vfx" | "export";
+  requirement: string;
+  source: string;
+  status: "provided" | "bundled" | "generated" | "optional";
+  rights: string;
+}
+
+export interface CreatorProductionPlanScene {
+  id: string;
+  title: string;
+  purpose: string;
+  durationSeconds: number;
+  visual: string;
+  narration: string;
+  onScreenText?: string;
+  transition: TransitionType;
+}
+
+export interface CreatorProductionPlan {
+  planVersion: 1;
+  title: string;
+  originalPrompt: string;
+  mode: CreatorPromptMode;
+  requirements: {
+    objective: string;
+    audience: string;
+    targetDurationSeconds: number;
+    outputPresets: CreatorPresetId[];
+    sourceStrategy: string;
+    narration: boolean;
+    musicOrAmbience: boolean;
+  };
+  creativeDirection: {
+    visualStyle: string;
+    pacing: string;
+    composition: string;
+    characterDirection: string;
+    effects: CreatorVfxPreset[];
+  };
+  scenes: CreatorProductionPlanScene[];
+  resources: CreatorProductionPlanResource[];
+  workflow: Array<{ order: number; stage: string; action: string; output: string; qualityGate: string }>;
+  assumptions: string[];
+  qualityChecklist: string[];
+}
+
+export interface CreatorPromptVideoResult {
+  mode: CreatorPromptMode;
+  title: string;
+  prompt: string;
+  planPath: string;
+  plan: CreatorProductionPlan;
+  manifestPath: string;
+  manifest: CreatorManifest;
+  voicePath?: string;
+  captionsPath?: string;
+  musicPath?: string;
+  renderResult?: CreatorRenderResult;
 }

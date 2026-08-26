@@ -10,10 +10,10 @@
 </p>
 
 <p align="center">
-  <strong>Let Codex, Claude Code, or any MCP client record a real browser, then turn the footage into polished product demos, YouTube videos, Shorts, Reels, TikToks, tutorials, and social variants—all locally.</strong>
+  <strong>Let Codex, Claude Code, or any MCP client plan first, record a real browser, and create polished product launches, demos, cartoons, stories, ASMR videos, VFX edits, YouTube videos, Shorts, Reels, and TikToks—all locally.</strong>
 </p>
 
-Agent Demo Studio is an open-source MCP server, CLI, browser recorder, FFmpeg editing engine, and visual Studio. The same non-destructive project can produce landscape, vertical, square, portrait, and 4K exports with synchronized audio, captions, transitions, overlays, thumbnails, chapters, rights reports, and reviewed publishing packages.
+Agent Demo Studio is an open-source MCP server, CLI, browser recorder, plan-first video builder, FFmpeg editing/VFX engine, and visual Studio. The same non-destructive project can produce landscape, vertical, square, portrait, and 4K exports with synchronized audio, captions, animation, fictional presenters and characters, transitions, overlays, thumbnails, chapters, rights reports, and reviewed publishing packages.
 
 <p align="center">
   <img src="docs/assets/studio-creator.png" alt="Creator workspace in Agent Demo Studio" width="920" />
@@ -25,11 +25,13 @@ Agent Demo Studio is an open-source MCP server, CLI, browser recorder, FFmpeg ed
 |---|---|
 | Record | Visible or headless Chromium, semantic click/fill/scroll/press/hover actions, live snapshots, chapters, click highlights, smooth cursor, scripted or adaptive agent control |
 | Edit | Ordered clips, trims, image clips, constant speed, audio-synchronized stepped speed ramps, freeze frames, volume/mute, fit/fill/blur-background reframing, focus point, color/effect controls |
-| Transition | Cut, fade, dissolve, directional wipe/slide/smooth, circle open/close, radial, and pixelize—with matching audio crossfades |
-| Design | Brand palette, logo, text, lower thirds, calls to action, image overlays, watermarks, safe-zone-aware placement, thumbnails, classic cinematic browser frame |
-| Audio | Clip audio, separate narration, music, looping, trims, delays, fades, gain, automatic music ducking, 48 kHz stereo, loudness normalization, limiting |
+| Plan | Requirements, audience assumption, creative direction, timed storyboard, narration intent, complete resource/provenance list, eight-stage workflow, and QA gates before media creation |
+| Transition | 28 cut, fade, dissolve, wipe, slide, smooth, shape, zoom, squeeze, diagonal, blur, and reveal options—with matching audio crossfades |
+| Design | Brand palette, logo, text, lower thirds, calls to action, speech bubbles, image/video layers, chroma key, fictional presenters/cartoon characters, safe zones, and thumbnails |
+| Animate/VFX | Ken Burns and pan motion, 9 entrance/exit animations, 7 continuous loops, and 10 composable cinematic, glow, neon, glitch, VHS, dream, vintage, noir, comic, and ASMR looks |
+| Audio | Clip audio, multiple voices, music, ambience, SFX, pan, looping, trims, delays, fades, gain, automatic ducking, 48 kHz stereo, loudness normalization, and limiting |
 | Captions | SRT and WebVTT import, optional local Whisper transcription, scalable ASS burn-in, editable SRT sidecar, per-format safe zones |
-| Automate | Silence detection, scene-change detection, suggested highlight ranges, eight editable templates, manifest validation, background jobs |
+| Automate | Five prompt-video modes, silence/scene detection, suggested highlights, 13 editable templates, manifest validation, resource discovery, and background jobs |
 | Export | YouTube 1080p/4K, Shorts, Reels, TikTok, Stories, square, portrait, LinkedIn, and podcast-vertical presets |
 | Deliver | MP4, thumbnail, captions, chapters, metadata, profile checks, asset-rights report, self-contained publishing package, explicit credentialed publishing adapters |
 
@@ -66,14 +68,40 @@ The Studio binds to `127.0.0.1` and opens in the default browser.
 After setup, this is enough for Codex or Claude Code:
 
 ```text
-Create a complete product demo for https://my-product.example.
-Use a visible browser, show sign-in and the main workflow, add chapters,
-then render a 1080p master plus Shorts, Reels, and TikTok variants.
-Use natural narration, readable captions, quiet background music, and
-return the local output files. Do not publish anything externally.
+Plan and create a complete product demo for https://my-product.example.
+First write the requirements, visual direction, timed storyboard, resource list,
+assumptions, and QA checklist. Then use a visible browser, show sign-in and the
+main workflow, add chapters, and build the video scene by scene. Render a 1080p
+master plus Shorts, Reels, and TikTok variants with natural narration, readable
+captions, and quiet music. Return the plan and local output files. Do not publish.
 ```
 
-For an adaptive recording, the agent can inspect each browser snapshot and decide the next semantic action. For a known flow, it can submit the complete action list in one job. Media remains outside model context; MCP returns local file resources.
+For an adaptive recording, the agent can inspect each browser snapshot and decide the next semantic action. For a known flow, it can submit the complete action list in one job. Prompt-video jobs always persist `production-plan.json` before creating audio, a timeline, or renders. Media remains outside model context; MCP returns local file resources.
+
+## Create from a prompt—plan first
+
+Review the interpreted requirements, look, scenes, resources, workflow, assumptions, and quality gates without rendering anything:
+
+```bash
+agent-demo creator plan \
+  "Launch a privacy-first AI lesson planner for busy teachers" \
+  --mode product-launch --duration 45
+```
+
+Then create the editable project and its videos:
+
+```bash
+agent-demo creator prompt \
+  "Launch a privacy-first AI lesson planner for busy teachers" \
+  --mode product-launch --presenter aria \
+  --presets youtube-1080p,shorts,reels --render
+```
+
+Modes are `product-launch`, `cartoon`, `story`, `asmr`, and `vfx`. Every job writes the plan first, resolves a rights-aware resource list, generates enabled audio/captions, builds the schema-v2 timeline, and only then renders. Bundled fictional presenters Aria and Leo, original cartoon hosts Nova and Milo, and four original scene environments provide an offline starting point. See the [plan-first prompt-video guide](docs/PROMPT-VIDEO-AND-VFX.md) and [asset provenance](assets/README.md).
+
+Repository-native Codex and Claude Code instructions in [AGENTS.md](AGENTS.md) and
+[CLAUDE.md](CLAUDE.md) enforce the same plan-first contract when an agent works from
+a source checkout.
 
 ## Turn any recording into social variants
 
@@ -87,7 +115,7 @@ agent-demo creator remix ./recording.mp4 \
   --title "Launch day"
 ```
 
-For a reusable timeline, start from one of the eight templates:
+For a reusable timeline, start from one of the 13 templates:
 
 ```bash
 agent-demo creator templates
@@ -96,13 +124,13 @@ agent-demo creator validate creator-project.json
 agent-demo creator render creator-project.json
 ```
 
-Templates include `product-demo`, `feature-reel`, `launch-short`, `tutorial`, `talking-head`, `podcast-clip`, `testimonial`, and `before-after`.
+Templates include `product-demo`, `product-launch`, `feature-reel`, `launch-short`, `cartoon-story`, `narrated-story`, `asmr`, `vfx-showcase`, `tutorial`, `talking-head`, `podcast-clip`, `testimonial`, and `before-after`.
 
 The manifest stays editable JSON. A single project can hold clip timing, effects, captions, voice, music, brand design, licensing, metadata, and many export targets. See the [complete example](examples/creator-project.json) and [manifest reference](docs/CREATOR-MANIFEST.md).
 
 ```json
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "title": "Feature launch",
   "clips": [
     {
@@ -166,9 +194,10 @@ For scene-synchronized neural narration, install `edge-tts`, describe each recor
 
 ```mermaid
 flowchart LR
-  A[Codex / Claude Code / MCP] --> E[Shared TypeScript engine]
-  C[Terminal CLI] --> E
-  S[Local visual Studio] --> E
+  A[Codex / Claude Code / MCP] --> P[Requirements + production plan]
+  C[Terminal CLI] --> P
+  S[Local visual Studio] --> P
+  P --> E[Shared TypeScript engine]
   E --> R[Playwright browser recorder]
   E --> T[Non-destructive creator timeline]
   R --> F[FFmpeg + Sharp]
@@ -176,9 +205,9 @@ flowchart LR
   F --> O[Local videos and packages]
 ```
 
-- **MCP** gives agents structured recording, editing, analysis, rendering, packaging, and publishing tools.
+- **MCP** gives agents structured planning, resource discovery, recording, editing, analysis, rendering, packaging, and publishing tools.
 - **CLI** makes every workflow scriptable in a terminal or CI environment.
-- **Studio** provides project browsing, live preview, template/preset selection, a manifest editor, validation, analysis, background render progress, and output playback.
+- **Studio** provides prompt planning and resource review, project browsing, live preview, character/voice controls, template/preset selection, a manifest editor, validation, analysis, background render progress, and output playback.
 
 The architectural boundaries and render stages are documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
@@ -189,7 +218,8 @@ The architectural boundaries and render stages are documented in [docs/ARCHITECT
 | Projects | `demo_create_project`, `demo_get_project`, `demo_list_projects` |
 | Live browser | `demo_browser_start`, `demo_browser_snapshot`, `demo_browser_act`, `demo_browser_finish` |
 | Product demos | `demo_record_flow`, `demo_generate_voice`, `demo_render`, `demo_render_synchronized` |
-| Creator discovery | `demo_creator_presets`, `demo_creator_templates`, `demo_creator_validate` |
+| Creator discovery | `demo_creator_presets`, `demo_creator_assets`, `demo_creator_templates`, `demo_creator_validate` |
+| Plan-first creation | `demo_creator_plan`, `demo_creator_from_prompt` |
 | Creator production | `demo_creator_render`, `demo_creator_remix`, `demo_creator_analyze`, `demo_creator_transcribe` |
 | Delivery | `demo_creator_package`, `demo_creator_publish` |
 | Operations | `demo_job_status`, `demo_open_studio`, `demo_doctor` |
@@ -241,7 +271,8 @@ YouTube, TikTok, and Instagram publishing adapters are included, but every exter
 - Review every recording before sharing it externally.
 - Source files are never overwritten; render intermediates are isolated and removed after the job.
 - Every referenced media asset can carry license, attribution, creator, and proof metadata.
-- Local generated ambient music is an original procedural asset; imported media remains the creator's responsibility.
+- Bundled presenters and characters are original fictional synthetic assets, not real spokespeople; preserve disclosure metadata.
+- Local generated ambient music and ASMR soundscapes are original procedural assets; imported media remains the creator's responsibility.
 
 Read [SECURITY.md](SECURITY.md), [the media-rights guide](docs/LICENSING.md), and [third-party notices](THIRD_PARTY_NOTICES.md).
 
@@ -283,7 +314,7 @@ CI runs the unit/build matrix on Windows and Linux plus separate real creator-en
 
 ## Project status and contribution
 
-Version 0.2 is a local-first browser and creator production toolkit. It is not a cloud collaboration service or a full native-desktop capture system. The manifest, renderer, and provider boundaries are designed for extension without coupling agents to one hosted vendor.
+Version 0.3 is a local-first browser, plan-first prompt-video, animation, VFX, and creator production toolkit. It is not a generative foundation video model, cloud collaboration service, identity-cloning tool, or full native-desktop capture system. Still characters use 2D/2.5D cutout motion rather than phoneme lip sync. The [roadmap](TODO.md) tracks provider-neutral script intelligence, stock/generated media, richer speech, lip-sync adapters, batch production, and deployment work without coupling the core renderer to one hosted vendor.
 
 Issues and pull requests are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), use the repository templates, and include a small fixture or screenshot for visible behavior changes.
 

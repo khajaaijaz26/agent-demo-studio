@@ -18,3 +18,5 @@ export * from "./creator/media.js";
 export * from "./creator/renderer.js";
 export * from "./creator/social.js";
 export * from "./creator/publish.js";
+export * from "./creator/assets.js";
+export * from "./creator/prompt.js";

@@ -1,4 +1,5 @@
 import { CREATOR_SCHEMA_VERSION, type CreatorManifest, type CreatorTemplate, type CreatorTemplateId } from "./types.js";
+import { createPromptVideoManifest } from "./prompt.js";
 
 interface TemplateOptions {
   title?: string;
@@ -33,6 +34,61 @@ export function createTemplateManifest(id: CreatorTemplateId, options: TemplateO
         { id: "cta", type: "cta", text: "Try it today", startSeconds: 20, endSeconds: 25, x: 0.5, y: 0.82 },
       ];
       return manifest;
+    case "product-launch": {
+      const launch = createPromptVideoManifest({
+        prompt: "Introduce the product, reveal the core benefit, show proof, and close with a clear call to action.",
+        mode: "product-launch",
+        title,
+        source: options.source,
+        presenter: "aria",
+      });
+      launch.outputDirectory = output;
+      return launch;
+    }
+    case "cartoon-story": {
+      const cartoon = createPromptVideoManifest({
+        prompt: "Nova discovers a creative idea, Milo helps test it, and together they share what they learned.",
+        mode: "cartoon",
+        title,
+        source: options.source,
+        presenter: "nova",
+      });
+      cartoon.outputDirectory = output;
+      return cartoon;
+    }
+    case "narrated-story": {
+      const story = createPromptVideoManifest({
+        prompt: "A curious traveler follows a glowing path, overcomes a challenge, and returns with a hopeful lesson.",
+        mode: "story",
+        title,
+        source: options.source,
+        presenter: "nova",
+      });
+      story.outputDirectory = output;
+      return story;
+    }
+    case "asmr": {
+      const asmr = createPromptVideoManifest({
+        prompt: "A calming glass-and-water sensory sequence with gentle movement, spacious sound, and no narration.",
+        mode: "asmr",
+        title,
+        source: options.source,
+        presenter: "none",
+      });
+      asmr.outputDirectory = output;
+      return asmr;
+    }
+    case "vfx-showcase": {
+      const vfx = createPromptVideoManifest({
+        prompt: "Transform the footage through cinematic color, neon energy, analog texture, and a glitch finale.",
+        mode: "vfx",
+        title,
+        source: options.source,
+        presenter: "none",
+      });
+      vfx.outputDirectory = output;
+      return vfx;
+    }
     case "feature-reel":
       manifest.description = "A fast feature montage designed for several social outputs.";
       manifest.clips = [0, 1, 2].map((index) => ({ id: `feature-${index + 1}`, source: index ? `./media/feature-${index + 1}.mp4` : source, speed: 1.08, reframe: "fill", transition: { type: index % 2 ? "slide-left" : "dissolve", durationSeconds: 0.3 }, chapter: `Feature ${index + 1}` }));
@@ -88,6 +144,11 @@ export function listCreatorTemplates(): CreatorTemplate[] {
     "podcast-clip": "Caption-led vertical or square podcast excerpt.",
     testimonial: "Customer story with speaker attribution.",
     "before-after": "Two-state comparison with a wipe reveal.",
+    "product-launch": "Cinematic launch narrative with a synthetic presenter, reveal, proof, and CTA.",
+    "cartoon-story": "Animated character story with speech bubbles, motion, narration, and music.",
+    "narrated-story": "Illustrated story video with narration, captions, and atmospheric motion.",
+    asmr: "Calm sensory video with original local soundscape generation and soft visual treatment.",
+    "vfx-showcase": "Multi-look VFX sequence with glow, neon, glitch, VHS, grading, and transitions.",
   };
   const presets: Record<CreatorTemplateId, CreatorTemplate["recommendedPresets"]> = {
     "product-demo": ["youtube-1080p", "shorts"],
@@ -98,6 +159,11 @@ export function listCreatorTemplates(): CreatorTemplate[] {
     "podcast-clip": ["podcast-vertical", "square"],
     testimonial: ["portrait", "reels"],
     "before-after": ["reels", "shorts", "square"],
+    "product-launch": ["youtube-1080p", "reels", "shorts"],
+    "cartoon-story": ["youtube-1080p", "shorts"],
+    "narrated-story": ["youtube-1080p", "reels"],
+    asmr: ["youtube-1080p", "reels"],
+    "vfx-showcase": ["youtube-1080p", "reels", "shorts"],
   };
   return (Object.keys(descriptions) as CreatorTemplateId[]).map((id) => ({
     id,

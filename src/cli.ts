@@ -27,7 +27,16 @@ import { CREATOR_PRESETS, listCreatorPresets } from "./creator/presets.js";
 import { loadCreatorManifest, validateCreatorManifest } from "./creator/schema.js";
 import { remixMedia, renderCreatorManifest } from "./creator/renderer.js";
 import { createSocialPackage } from "./creator/social.js";
-import { CREATOR_TRANSITIONS } from "./creator/types.js";
+import { listCreatorAssets } from "./creator/assets.js";
+import { createPromptVideoPlan, createPromptVideoProject } from "./creator/prompt.js";
+import {
+  CREATOR_IMAGE_MOTIONS,
+  CREATOR_LOOP_ANIMATIONS,
+  CREATOR_OVERLAY_ANIMATIONS,
+  CREATOR_PROMPT_MODES,
+  CREATOR_TRANSITIONS,
+  CREATOR_VFX_PRESETS,
+} from "./creator/types.js";
 import {
   publishMetadataFromOutput,
   publishToInstagram,
@@ -36,6 +45,7 @@ import {
 } from "./creator/publish.js";
 import type {
   CreatorManifest,
+  CreatorPromptMode,
   CreatorPresetId,
   CreatorRenderResult,
   CreatorRenderedOutput,
@@ -63,8 +73,8 @@ function targetsFromOptions(options: { codex?: boolean; claude?: boolean }): Age
 
 program
   .name("agent-demo")
-  .description("Record, edit, narrate, and render polished browser demos from Codex or Claude Code.")
-  .version("0.2.0");
+  .description("Record, animate, narrate, apply VFX, and render polished videos from Codex, Claude Code, or another MCP agent.")
+  .version("0.3.0");
 
 function presetList(value: string): CreatorPresetId[] {
   const values = value.split(",").map((item) => item.trim()).filter(Boolean);
@@ -324,7 +334,27 @@ const creator = program
 creator
   .command("presets")
   .description("List every built-in video and social export profile.")
-  .action(() => output({ presets: listCreatorPresets(), transitions: CREATOR_TRANSITIONS }));
+  .action(() => output({
+    presets: listCreatorPresets(),
+    transitions: CREATOR_TRANSITIONS,
+    overlayAnimations: CREATOR_OVERLAY_ANIMATIONS,
+    loopAnimations: CREATOR_LOOP_ANIMATIONS,
+    imageMotions: CREATOR_IMAGE_MOTIONS,
+    vfx: CREATOR_VFX_PRESETS,
+    promptModes: CREATOR_PROMPT_MODES,
+  }));
+
+creator
+  .command("assets")
+  .description("List bundled fictional presenters, cartoon characters, and scene artwork.")
+  .action(() => output({
+    assets: listCreatorAssets(),
+    overlayAnimations: CREATOR_OVERLAY_ANIMATIONS,
+    loopAnimations: CREATOR_LOOP_ANIMATIONS,
+    imageMotions: CREATOR_IMAGE_MOTIONS,
+    vfx: CREATOR_VFX_PRESETS,
+    promptModes: CREATOR_PROMPT_MODES,
+  }));
 
 creator
   .command("templates")
@@ -335,15 +365,15 @@ creator
   .command("init")
   .description("Create an editable creator manifest from a template.")
   .argument("<template>", "Template id")
-  .requiredOption("--source <path>", "Primary video or image source")
+  .option("--source <path>", "Primary video or image source; prompt templates include bundled scenes")
   .option("--secondary-source <path>", "Second source for before/after projects")
   .option("--title <title>", "Project title")
   .option("--output-directory <path>", "Rendered output directory")
   .option("--out <path>", "Manifest path", "creator-project.json")
-  .action(async (template: CreatorTemplateId, options: { source: string; secondarySource?: string; title?: string; outputDirectory?: string; out: string }) => {
+  .action(async (template: CreatorTemplateId, options: { source?: string; secondarySource?: string; title?: string; outputDirectory?: string; out: string }) => {
     if (!listCreatorTemplates().some((item) => item.id === template)) throw new Error(`Unknown template '${template}'.`);
     const manifest = createTemplateManifest(template, {
-      source: path.resolve(options.source),
+      source: options.source ? path.resolve(options.source) : undefined,
       secondarySource: options.secondarySource ? path.resolve(options.secondarySource) : undefined,
       title: options.title,
       outputDirectory: options.outputDirectory,
@@ -351,6 +381,96 @@ creator
     const target = path.resolve(options.out);
     await writeFile(target, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
     output({ manifestPath: target, manifest });
+  });
+
+creator
+  .command("plan")
+  .description("Plan requirements, visual direction, storyboard, resources, workflow, and QA before creating a video.")
+  .argument("<prompt>", "Creative brief")
+  .option("--mode <mode>", "product-launch, cartoon, story, asmr, or vfx", "product-launch")
+  .option("--title <title>", "Project title")
+  .option("--source <path>", "Optional source image or video")
+  .option("--duration <seconds>", "Target duration in seconds")
+  .option("--presenter <id>", "none, aria, leo, nova, or milo")
+  .option("--presets <ids>", "Comma-separated export presets", "youtube-1080p")
+  .option("--no-voice", "Plan without narration")
+  .option("--no-music", "Plan without music or ambience")
+  .action((promptText: string, options: { mode: string; title?: string; source?: string; duration?: string; presenter?: string; presets: string; voice: boolean; music: boolean }) => {
+    if (!CREATOR_PROMPT_MODES.includes(options.mode as CreatorPromptMode)) throw new Error(`Unknown prompt mode '${options.mode}'. Available: ${CREATOR_PROMPT_MODES.join(", ")}.`);
+    if (options.presenter && !["none", "aria", "leo", "nova", "milo"].includes(options.presenter)) throw new Error(`Unknown presenter '${options.presenter}'. Run 'agent-demo creator assets'.`);
+    const durationSeconds = options.duration === undefined ? undefined : Number(options.duration);
+    if (durationSeconds !== undefined && !Number.isFinite(durationSeconds)) throw new Error("Duration must be a number of seconds.");
+    output(createPromptVideoPlan({
+      prompt: promptText,
+      mode: options.mode as CreatorPromptMode,
+      title: options.title,
+      source: options.source ? path.resolve(options.source) : undefined,
+      durationSeconds,
+      presenter: options.presenter as "none" | "aria" | "leo" | "nova" | "milo" | undefined,
+      presets: presetList(options.presets),
+      generateVoice: options.voice,
+      generateMusic: options.music,
+    }));
+  });
+
+creator
+  .command("prompt")
+  .description("Create a product launch, cartoon, narrated story, ASMR, or VFX project from one prompt.")
+  .argument("<prompt>", "Creative direction or narration")
+  .option("--mode <mode>", "product-launch, cartoon, story, asmr, or vfx", "product-launch")
+  .option("--title <title>", "Project title")
+  .option("--source <path>", "Optional source image or video")
+  .option("--output-directory <path>", "Project and render directory")
+  .option("--narration <text>", "Narration text; defaults to the prompt")
+  .option("--duration <seconds>", "Target duration in seconds")
+  .option("--presenter <id>", "none, aria, leo, nova, or milo")
+  .option("--voice-name <name>", "System or neural voice name")
+  .option("--voice-provider <provider>", "local or neural", "local")
+  .option("--voice-rate <number>", "Speech rate adjustment")
+  .option("--presets <ids>", "Comma-separated export presets", "youtube-1080p")
+  .option("--render", "Render the selected outputs immediately", false)
+  .option("--no-voice", "Skip narration synthesis")
+  .option("--no-music", "Skip generated score or ASMR soundscape")
+  .action(async (promptText: string, options: {
+    mode: string;
+    title?: string;
+    source?: string;
+    outputDirectory?: string;
+    narration?: string;
+    duration?: string;
+    presenter?: string;
+    voiceName?: string;
+    voiceProvider: string;
+    voiceRate?: string;
+    presets: string;
+    render: boolean;
+    voice: boolean;
+    music: boolean;
+  }) => {
+    if (!CREATOR_PROMPT_MODES.includes(options.mode as CreatorPromptMode)) throw new Error(`Unknown prompt mode '${options.mode}'. Available: ${CREATOR_PROMPT_MODES.join(", ")}.`);
+    if (options.presenter && !["none", "aria", "leo", "nova", "milo"].includes(options.presenter)) throw new Error(`Unknown presenter '${options.presenter}'. Run 'agent-demo creator assets'.`);
+    if (!(["local", "neural"] as const).includes(options.voiceProvider as "local" | "neural")) throw new Error("Voice provider must be 'local' or 'neural'.");
+    const durationSeconds = options.duration === undefined ? undefined : Number(options.duration);
+    const voiceRate = options.voiceRate === undefined ? undefined : Number(options.voiceRate);
+    if (durationSeconds !== undefined && !Number.isFinite(durationSeconds)) throw new Error("Duration must be a number of seconds.");
+    if (voiceRate !== undefined && !Number.isFinite(voiceRate)) throw new Error("Voice rate must be a number.");
+    output(await createPromptVideoProject({
+      prompt: promptText,
+      mode: options.mode as CreatorPromptMode,
+      title: options.title,
+      source: options.source ? path.resolve(options.source) : undefined,
+      outputDirectory: options.outputDirectory ? path.resolve(options.outputDirectory) : undefined,
+      narration: options.narration,
+      durationSeconds,
+      presenter: options.presenter as "none" | "aria" | "leo" | "nova" | "milo" | undefined,
+      voice: options.voiceName,
+      voiceProvider: options.voiceProvider as "local" | "neural",
+      voiceRate,
+      presets: presetList(options.presets),
+      generateVoice: options.voice,
+      generateMusic: options.music,
+      render: options.render,
+    }, progress));
   });
 
 creator

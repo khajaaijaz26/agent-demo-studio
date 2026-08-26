@@ -16,7 +16,17 @@ import { remixMedia, renderCreatorManifest } from "../creator/renderer.js";
 import { analyzeMedia } from "../creator/media.js";
 import { transcribeMedia } from "../creator/captions.js";
 import { createSocialPackage } from "../creator/social.js";
-import type { CreatorManifest, CreatorPresetId, CreatorRenderResult, CreatorTemplateId } from "../creator/types.js";
+import { listCreatorAssets } from "../creator/assets.js";
+import { createPromptVideoPlan, createPromptVideoProject } from "../creator/prompt.js";
+import {
+  CREATOR_IMAGE_MOTIONS,
+  CREATOR_LOOP_ANIMATIONS,
+  CREATOR_OVERLAY_ANIMATIONS,
+  CREATOR_PROMPT_MODES,
+  CREATOR_TRANSITIONS,
+  CREATOR_VFX_PRESETS,
+} from "../creator/types.js";
+import type { CreatorManifest, CreatorPresetId, CreatorPromptMode, CreatorRenderResult, CreatorTemplateId } from "../creator/types.js";
 
 export interface StudioServerOptions {
   root?: string;
@@ -114,7 +124,7 @@ export async function startStudioServer(
       const url = new URL(request.url || "/", "http://127.0.0.1");
 
       if (request.method === "GET" && url.pathname === "/api/health") {
-        sendJson(response, 200, { ok: true, product: "Agent Demo Studio", version: "0.2.0", creatorEngine: true });
+        sendJson(response, 200, { ok: true, product: "Agent Demo Studio", version: "0.3.0", creatorEngine: true, promptVideo: true, vfx: true });
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/jobs") {
@@ -135,11 +145,29 @@ export async function startStudioServer(
         sendJson(response, 200, listCreatorTemplates());
         return;
       }
+      if (request.method === "GET" && url.pathname === "/api/creator/assets") {
+        sendJson(response, 200, {
+          assets: listCreatorAssets(),
+          transitions: CREATOR_TRANSITIONS,
+          overlayAnimations: CREATOR_OVERLAY_ANIMATIONS,
+          loopAnimations: CREATOR_LOOP_ANIMATIONS,
+          imageMotions: CREATOR_IMAGE_MOTIONS,
+          vfx: CREATOR_VFX_PRESETS,
+          promptModes: CREATOR_PROMPT_MODES,
+        });
+        return;
+      }
       const creatorArtifactMatch = /^\/api\/creator\/jobs\/([a-f0-9-]+)\/outputs\/([^/]+)\/(video|thumbnail)$/.exec(url.pathname);
       if (request.method === "GET" && creatorArtifactMatch) {
-        const job = jobs.get<CreatorRenderResult>(creatorArtifactMatch[1]!);
+        const job = jobs.get<CreatorRenderResult | { renderResult?: CreatorRenderResult }>(creatorArtifactMatch[1]!);
         const outputId = decodeURIComponent(creatorArtifactMatch[2]!);
-        const artifact = job?.result?.outputs?.find((item) => item.id === outputId);
+        const jobResult = job?.result;
+        const renderResult: CreatorRenderResult | undefined = jobResult && "outputs" in jobResult
+          ? jobResult as CreatorRenderResult
+          : jobResult && "renderResult" in jobResult
+            ? jobResult.renderResult
+            : undefined;
+        const artifact = renderResult?.outputs?.find((item) => item.id === outputId);
         if (!artifact) throw new Error("Creator artifact was not found or is not ready.");
         const kind = creatorArtifactMatch[3];
         await serveFile(request, response, kind === "video" ? artifact.videoPath : artifact.thumbnailPath, kind === "video" ? "video/mp4" : "image/jpeg");
@@ -154,6 +182,48 @@ export async function startStudioServer(
           source: typeof body.source === "string" ? body.source : undefined,
           secondarySource: typeof body.secondarySource === "string" ? body.secondarySource : undefined,
           outputDirectory: typeof body.outputDirectory === "string" ? body.outputDirectory : undefined,
+        }));
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/creator/prompt") {
+        const body = await readJson(request);
+        const mode = String(body.mode || "product-launch") as CreatorPromptMode;
+        if (!CREATOR_PROMPT_MODES.includes(mode)) throw new Error(`Unknown prompt mode '${mode}'.`);
+        const presets = (Array.isArray(body.presets) ? body.presets : ["youtube-1080p"]) as CreatorPresetId[];
+        const job = jobs.start(`creator-prompt-${mode}`, (report) => createPromptVideoProject({
+          prompt: String(body.prompt || ""),
+          mode,
+          title: typeof body.title === "string" ? body.title : undefined,
+          source: typeof body.source === "string" && body.source.trim() ? body.source : undefined,
+          outputDirectory: typeof body.outputDirectory === "string" && body.outputDirectory.trim() ? body.outputDirectory : undefined,
+          narration: typeof body.narration === "string" ? body.narration : undefined,
+          durationSeconds: typeof body.durationSeconds === "number" ? body.durationSeconds : undefined,
+          presenter: ["none", "aria", "leo", "nova", "milo"].includes(String(body.presenter)) ? body.presenter as "none" | "aria" | "leo" | "nova" | "milo" : undefined,
+          voice: typeof body.voice === "string" ? body.voice : undefined,
+          voiceProvider: body.voiceProvider === "neural" ? "neural" : "local",
+          voiceRate: typeof body.voiceRate === "number" ? body.voiceRate : undefined,
+          presets,
+          generateVoice: body.generateVoice !== false,
+          generateMusic: body.generateMusic !== false,
+          render: body.render === true,
+        }, report));
+        sendJson(response, 202, job);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/creator/plan") {
+        const body = await readJson(request);
+        const mode = String(body.mode || "product-launch") as CreatorPromptMode;
+        if (!CREATOR_PROMPT_MODES.includes(mode)) throw new Error(`Unknown prompt mode '${mode}'.`);
+        sendJson(response, 200, createPromptVideoPlan({
+          prompt: String(body.prompt || ""),
+          mode,
+          title: typeof body.title === "string" ? body.title : undefined,
+          source: typeof body.source === "string" && body.source.trim() ? body.source : undefined,
+          durationSeconds: typeof body.durationSeconds === "number" ? body.durationSeconds : undefined,
+          presenter: ["none", "aria", "leo", "nova", "milo"].includes(String(body.presenter)) ? body.presenter as "none" | "aria" | "leo" | "nova" | "milo" : undefined,
+          presets: (Array.isArray(body.presets) ? body.presets : ["youtube-1080p"]) as CreatorPresetId[],
+          generateVoice: body.generateVoice !== false,
+          generateMusic: body.generateMusic !== false,
         }));
         return;
       }

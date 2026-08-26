@@ -4,6 +4,7 @@ const state = {
   selected: null,
   presets: [],
   templates: [],
+  creatorAssets: null,
   creatorManifest: null,
   creatorResult: null,
   creatorJobId: null,
@@ -44,6 +45,19 @@ const elements = {
   presetCount: $("#preset-count"),
   presetGrid: $("#preset-grid"),
   templateSelect: $("#template-select"),
+  promptText: $("#prompt-text"),
+  promptMode: $("#prompt-mode"),
+  promptPresenter: $("#prompt-presenter"),
+  promptVoiceProvider: $("#prompt-voice-provider"),
+  promptDuration: $("#prompt-duration"),
+  promptVoice: $("#prompt-voice"),
+  promptMusic: $("#prompt-music"),
+  promptPlanButton: $("#prompt-plan-button"),
+  promptButton: $("#prompt-button"),
+  promptRenderButton: $("#prompt-render-button"),
+  promptPlanPreview: $("#prompt-plan-preview"),
+  promptPlanSummary: $("#prompt-plan-summary"),
+  promptPlanResources: $("#prompt-plan-resources"),
   creatorTitle: $("#creator-title"),
   creatorSource: $("#creator-source"),
   creatorOutput: $("#creator-output"),
@@ -208,12 +222,15 @@ function syncSelectedPresets() {
 
 function renderPresetGrid() {
   const selected = new Set((state.creatorManifest?.exports || []).map((item) => item.preset));
-  elements.presetGrid.innerHTML = state.presets.map((preset) => `<label class="preset-option ${selected.has(preset.id) ? "selected" : ""}">
+  elements.presetGrid.innerHTML = state.presets.map((preset) => {
+    const ratioClass = preset.width === preset.height ? "square" : preset.width > preset.height ? "landscape" : preset.aspectRatio === "4:5" ? "portrait" : "vertical";
+    return `<label class="preset-option ${selected.has(preset.id) ? "selected" : ""}">
     <input type="checkbox" value="${escapeHtml(preset.id)}" ${selected.has(preset.id) ? "checked" : ""} />
-    <span class="ratio-icon" style="--ratio:${preset.width}/${preset.height}"></span>
+    <span class="ratio-icon ratio-${ratioClass}"></span>
     <span><b>${escapeHtml(preset.label)}</b><small>${preset.width}×${preset.height} · ${escapeHtml(preset.aspectRatio)}</small></span>
     <i>✓</i>
-  </label>`).join("");
+  </label>`;
+  }).join("");
   elements.presetGrid.querySelectorAll("input").forEach((input) => input.addEventListener("change", () => {
     input.closest("label").classList.toggle("selected", input.checked);
     if (!selectedPresetIds().length) {
@@ -230,7 +247,7 @@ async function loadTemplate() {
     body: JSON.stringify({
       templateId: elements.templateSelect.value,
       title: elements.creatorTitle.value || "My creator project",
-      source: elements.creatorSource.value || "./media/main.mp4",
+      source: elements.creatorSource.value || undefined,
       outputDirectory: elements.creatorOutput.value || "./creator-output",
     }),
   });
@@ -239,20 +256,94 @@ async function loadTemplate() {
 }
 
 async function initializeCreator() {
-  const [presets, templates] = await Promise.all([api("/api/creator/presets"), api("/api/creator/templates")]);
+  const [presets, templates, creatorAssets] = await Promise.all([api("/api/creator/presets"), api("/api/creator/templates"), api("/api/creator/assets")]);
   state.presets = presets;
   state.templates = templates;
+  state.creatorAssets = creatorAssets;
   elements.presetCount.textContent = String(presets.length);
   elements.templateSelect.innerHTML = templates.map((template) => `<option value="${escapeHtml(template.id)}">${escapeHtml(template.label)}</option>`).join("");
+  elements.promptMode.innerHTML = creatorAssets.promptModes.map((mode) => `<option value="${escapeHtml(mode)}">${escapeHtml(mode.split("-").map((part) => part[0].toUpperCase() + part.slice(1)).join(" "))}</option>`).join("");
+  const characters = creatorAssets.assets.filter((asset) => asset.kind === "presenter" || asset.kind === "character");
+  elements.promptPresenter.innerHTML = '<option value="none">No character</option>' + characters.map((asset) => `<option value="${escapeHtml(asset.id)}">${escapeHtml(asset.label)} · ${escapeHtml(asset.style)}</option>`).join("");
+  elements.promptPresenter.value = "aria";
   if (!state.creatorManifest) await loadTemplate();
   else renderPresetGrid();
+}
+
+function syncPromptCharacterToMode() {
+  const defaults = { "product-launch": "aria", cartoon: "nova", story: "nova", asmr: "none", vfx: "none" };
+  elements.promptPresenter.value = defaults[elements.promptMode.value] || "none";
+}
+
+async function createFromPrompt(render) {
+  const prompt = elements.promptText.value.trim();
+  if (!prompt) throw new Error("Describe the video you want to create first.");
+  const duration = elements.promptDuration.value ? Number(elements.promptDuration.value) : undefined;
+  const job = await api("/api/creator/prompt", {
+    method: "POST",
+    body: JSON.stringify({
+      prompt,
+      mode: elements.promptMode.value,
+      title: elements.creatorTitle.value || undefined,
+      source: elements.creatorSource.value || undefined,
+      outputDirectory: elements.creatorOutput.value || undefined,
+      presenter: elements.promptPresenter.value,
+      voiceProvider: elements.promptVoiceProvider.value,
+      durationSeconds: duration,
+      presets: selectedPresetIds().length ? selectedPresetIds() : ["youtube-1080p"],
+      generateVoice: elements.promptVoice.checked,
+      generateMusic: elements.promptMusic.checked,
+      render,
+    }),
+  });
+  state.creatorJobId = job.id;
+  const created = await waitForJob(job, render ? "Creating and rendering prompt video" : "Creating prompt video project");
+  showProductionPlan(created.plan);
+  writeManifest(created.manifest);
+  if (created.renderResult) {
+    state.creatorResult = created.renderResult;
+    renderCreatorResults();
+    creatorFeedback(`${created.renderResult.outputs.length} prompt-video export${created.renderResult.outputs.length === 1 ? " is" : "s are"} ready.`, "success");
+  } else creatorFeedback(`Editable ${created.mode} project created at ${created.manifestPath}.`, "success");
+}
+
+function promptRequest(render) {
+  const prompt = elements.promptText.value.trim();
+  if (!prompt) throw new Error("Describe the video you want to create first.");
+  return {
+    prompt,
+    mode: elements.promptMode.value,
+    title: elements.creatorTitle.value || undefined,
+    source: elements.creatorSource.value || undefined,
+    outputDirectory: elements.creatorOutput.value || undefined,
+    presenter: elements.promptPresenter.value,
+    voiceProvider: elements.promptVoiceProvider.value,
+    durationSeconds: elements.promptDuration.value ? Number(elements.promptDuration.value) : undefined,
+    presets: selectedPresetIds().length ? selectedPresetIds() : ["youtube-1080p"],
+    generateVoice: elements.promptVoice.checked,
+    generateMusic: elements.promptMusic.checked,
+    render,
+  };
+}
+
+function showProductionPlan(plan) {
+  if (!plan) return;
+  elements.promptPlanPreview.classList.remove("hidden");
+  elements.promptPlanSummary.textContent = `${plan.scenes.length} scenes · ${plan.requirements.targetDurationSeconds}s · ${plan.requirements.outputPresets.join(", ")}`;
+  elements.promptPlanResources.textContent = plan.resources.map((resource) => `${resource.status.toUpperCase()}  ${resource.category}\n${resource.requirement}\n${resource.source}`).join("\n\n");
+}
+
+async function reviewPromptPlan() {
+  const plan = await api("/api/creator/plan", { method: "POST", body: JSON.stringify(promptRequest(false)) });
+  showProductionPlan(plan);
+  creatorFeedback("Plan ready. Review the storyboard and resources, then build the editable timeline or render.", "success");
 }
 
 function updateJob(job, title) {
   elements.jobPanel.classList.remove("hidden");
   elements.jobTitle.textContent = title;
   elements.jobPercent.textContent = `${Math.round(job.progress || 0)}%`;
-  elements.jobProgress.style.width = `${Math.max(2, job.progress || 0)}%`;
+  elements.jobProgress.value = Math.max(2, job.progress || 0);
   elements.jobMessage.textContent = job.message || job.state;
 }
 
@@ -338,6 +429,25 @@ elements.render.addEventListener("click", async () => {
 });
 
 elements.templateButton.addEventListener("click", () => loadTemplate().catch((error) => creatorFeedback(error.message, "error")));
+elements.promptMode.addEventListener("change", syncPromptCharacterToMode);
+elements.promptPlanButton.addEventListener("click", async () => {
+  elements.promptPlanButton.disabled = true;
+  try { await reviewPromptPlan(); }
+  catch (error) { creatorFeedback(error.message, "error"); }
+  finally { elements.promptPlanButton.disabled = false; }
+});
+elements.promptButton.addEventListener("click", async () => {
+  elements.promptButton.disabled = true;
+  try { await createFromPrompt(false); }
+  catch (error) { creatorFeedback(error.message, "error"); }
+  finally { elements.promptButton.disabled = false; }
+});
+elements.promptRenderButton.addEventListener("click", async () => {
+  elements.promptRenderButton.disabled = true;
+  try { await createFromPrompt(true); }
+  catch (error) { creatorFeedback(error.message, "error"); }
+  finally { elements.promptRenderButton.disabled = false; }
+});
 elements.formatManifest.addEventListener("click", () => {
   try { writeManifest(readManifest()); creatorFeedback("Manifest formatted.", "success"); }
   catch (error) { creatorFeedback(error.message, "error"); }

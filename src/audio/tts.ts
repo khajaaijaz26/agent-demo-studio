@@ -1,5 +1,5 @@
 import path from "node:path";
-import { unlink } from "node:fs/promises";
+import { mkdir, unlink } from "node:fs/promises";
 import { commandExists, runCommand } from "../utils/process.js";
 import { AgentDemoError } from "../errors.js";
 import { projectDirectory, updateProject } from "../project-store.js";
@@ -7,6 +7,11 @@ import { ffmpegCommand } from "../config.js";
 
 export interface VoiceoverOptions {
   root?: string;
+  voice?: string;
+  rate?: number;
+}
+
+export interface LocalSpeechOptions {
   voice?: string;
   rate?: number;
 }
@@ -84,16 +89,7 @@ export async function generateVoiceover(
     throw new AgentDemoError("NARRATION_REQUIRED", "Narration cannot be empty.");
   }
   const outputPath = path.join(projectDirectory(projectId, options.root), "audio", "voiceover.wav");
-  const voice = options.voice ?? "";
-  const rate = options.rate ?? 0;
-
-  if (process.platform === "win32") {
-    await windowsTts(outputPath, narration, voice, rate);
-  } else if (process.platform === "darwin") {
-    await macTts(outputPath, narration, voice);
-  } else {
-    await linuxTts(outputPath, narration, voice, rate);
-  }
+  await generateLocalSpeech(narration, outputPath, options);
 
   await updateProject(
     projectId,
@@ -104,5 +100,20 @@ export async function generateVoiceover(
     },
     options.root,
   );
+  return outputPath;
+}
+
+export async function generateLocalSpeech(
+  narration: string,
+  outputPath: string,
+  options: LocalSpeechOptions = {},
+): Promise<string> {
+  if (!narration.trim()) throw new AgentDemoError("NARRATION_REQUIRED", "Narration cannot be empty.");
+  await mkdir(path.dirname(outputPath), { recursive: true });
+  const voice = options.voice ?? "";
+  const rate = options.rate ?? 0;
+  if (process.platform === "win32") await windowsTts(outputPath, narration, voice, rate);
+  else if (process.platform === "darwin") await macTts(outputPath, narration, voice);
+  else await linuxTts(outputPath, narration, voice, rate);
   return outputPath;
 }

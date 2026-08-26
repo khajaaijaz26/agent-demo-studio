@@ -1,7 +1,7 @@
 {
   "name": "agent-demo-studio",
-  "version": "0.2.0",
-  "description": "Local-first MCP, CLI, and visual studio for AI agents to record product demos and create YouTube, Shorts, Reels, and TikTok videos.",
+  "version": "0.3.0",
+  "description": "Local-first MCP, CLI, and visual studio for agents to plan, record, animate, apply VFX, and create product, social, cartoon, story, and ASMR videos.",
   "type": "module",
   "license": "MIT",
   "author": "Agent Demo Studio contributors",
@@ -26,7 +26,12 @@
     "instagram-reels",
     "tiktok",
     "ffmpeg",
-    "video-automation"
+    "video-automation",
+    "prompt-to-video",
+    "vfx",
+    "animation",
+    "cartoon-video",
+    "asmr-video"
   ],
   "engines": {
     "node": ">=20.12"
@@ -44,6 +49,9 @@
   },
   "files": [
     ".env.example",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "assets",
     "dist",
     "README.md",
     "LICENSE",
@@ -53,7 +61,8 @@
     "CHANGELOG.md",
     "CONTRIBUTING.md",
     "docs",
-    "examples"
+    "examples",
+    "TODO.md"
   ],
   "scripts": {
     "build": "tsc && node scripts/copy-static.mjs",

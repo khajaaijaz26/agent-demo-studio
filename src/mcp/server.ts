@@ -26,8 +26,17 @@ import { loadCreatorManifest, validateCreatorManifest } from "../creator/schema.
 import { remixMedia, renderCreatorManifest } from "../creator/renderer.js";
 import { createSocialPackage } from "../creator/social.js";
 import { publishMetadataFromOutput, publishToInstagram, publishToTikTok, publishToYouTube } from "../creator/publish.js";
-import { CREATOR_TRANSITIONS } from "../creator/types.js";
-import type { CreatorManifest, CreatorPresetId, CreatorRenderResult, CreatorRenderedOutput } from "../creator/types.js";
+import { listCreatorAssets } from "../creator/assets.js";
+import { createPromptVideoPlan, createPromptVideoProject } from "../creator/prompt.js";
+import {
+  CREATOR_IMAGE_MOTIONS,
+  CREATOR_LOOP_ANIMATIONS,
+  CREATOR_OVERLAY_ANIMATIONS,
+  CREATOR_PROMPT_MODES,
+  CREATOR_TRANSITIONS,
+  CREATOR_VFX_PRESETS,
+} from "../creator/types.js";
+import type { CreatorManifest, CreatorPresetId, CreatorPromptVideoResult, CreatorRenderResult, CreatorRenderedOutput } from "../creator/types.js";
 
 const themeSchema = z
   .object({
@@ -125,6 +134,18 @@ function isCreatorRenderResult(value: unknown): value is CreatorRenderResult {
   return Boolean(value && typeof value === "object" && Array.isArray((value as CreatorRenderResult).outputs) && typeof (value as CreatorRenderResult).outputDirectory === "string");
 }
 
+function isCreatorPromptVideoResult(value: unknown): value is CreatorPromptVideoResult {
+  return Boolean(value && typeof value === "object" && typeof (value as CreatorPromptVideoResult).manifestPath === "string" && typeof (value as CreatorPromptVideoResult).mode === "string");
+}
+
+function creatorPromptResult(value: CreatorPromptVideoResult) {
+  if (!value.renderResult) return result(value);
+  const rendered = creatorRenderResult(value.renderResult);
+  rendered.content[0] = { type: "text", text: JSON.stringify(jsonSafe(value), null, 2) };
+  rendered.structuredContent = jsonSafe(value) as unknown as Record<string, unknown>;
+  return rendered;
+}
+
 async function loadCreatorResult(filePath: string): Promise<CreatorRenderResult> {
   return JSON.parse(await readFile(filePath, "utf8")) as CreatorRenderResult;
 }
@@ -145,11 +166,11 @@ let studio: StudioServerHandle | undefined;
 
 export function createAgentDemoMcpServer(): McpServer {
   const server = new McpServer(
-    { name: "agent-demo-studio", version: "0.2.0" },
+    { name: "agent-demo-studio", version: "0.3.0" },
     {
       capabilities: { tools: {} },
       instructions:
-        "Agent Demo Studio records websites and produces long-form videos, YouTube Shorts, Instagram Reels, TikTok videos, square/portrait posts, and 4K masters. For browser capture use demo_create_project and the demo_browser_* tools. For editing and social variants use demo_creator_templates, demo_creator_validate, demo_creator_render, demo_creator_remix, demo_creator_analyze, demo_creator_transcribe, and demo_creator_package. Long jobs return job_id; poll demo_job_status. Never put passwords, access tokens, or secrets in tool arguments; publishing tools read tokens from environment variables and require confirmPublish=true.",
+        "Agent Demo Studio records websites and creates product launches, fictional presenter videos, cartoons, narrated stories, ASMR, VFX edits, long-form videos, Shorts, Reels, TikTok, square/portrait posts, and 4K masters. Before producing a requested video, use demo_creator_plan to define requirements, visual direction, storyboard, resources, workflow, assumptions, and quality gates; demo_creator_from_prompt also saves this plan automatically before generation. Use demo_creator_assets for bundled characters and effects, and demo_browser_* for live capture. Editing tools include templates, validate, render, remix, analyze, transcribe, and package. Long jobs return job_id; poll demo_job_status. Never put passwords, access tokens, or secrets in tool arguments; publishing tools read tokens from environment variables and require confirmPublish=true.",
     },
   );
 
@@ -371,16 +392,42 @@ export function createAgentDemoMcpServer(): McpServer {
       inputSchema: z.object({}),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
-    async () => result({ presets: listCreatorPresets(), transitions: CREATOR_TRANSITIONS }),
+    async () => result({
+      presets: listCreatorPresets(),
+      transitions: CREATOR_TRANSITIONS,
+      overlayAnimations: CREATOR_OVERLAY_ANIMATIONS,
+      loopAnimations: CREATOR_LOOP_ANIMATIONS,
+      imageMotions: CREATOR_IMAGE_MOTIONS,
+      vfx: CREATOR_VFX_PRESETS,
+      promptModes: CREATOR_PROMPT_MODES,
+    }),
+  );
+
+  server.registerTool(
+    "demo_creator_assets",
+    {
+      title: "List characters, scenes, animation, and VFX",
+      description: "List bundled fictional synthetic presenters, cartoon characters, backgrounds, overlay animation, image motion, and VFX presets.",
+      inputSchema: z.object({}),
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async () => result({
+      assets: listCreatorAssets(),
+      overlayAnimations: CREATOR_OVERLAY_ANIMATIONS,
+      loopAnimations: CREATOR_LOOP_ANIMATIONS,
+      imageMotions: CREATOR_IMAGE_MOTIONS,
+      vfx: CREATOR_VFX_PRESETS,
+      promptModes: CREATOR_PROMPT_MODES,
+    }),
   );
 
   server.registerTool(
     "demo_creator_templates",
     {
       title: "List or create video templates",
-      description: "Return reusable product demo, feature reel, launch short, tutorial, talking-head, podcast, testimonial, and before/after manifests.",
+      description: "Return reusable product demo, launch, cartoon, story, ASMR, VFX, tutorial, podcast, testimonial, and social video manifests.",
       inputSchema: z.object({
-        templateId: z.enum(["product-demo", "feature-reel", "launch-short", "tutorial", "talking-head", "podcast-clip", "testimonial", "before-after"]).optional(),
+        templateId: z.enum(["product-demo", "product-launch", "feature-reel", "launch-short", "cartoon-story", "narrated-story", "asmr", "vfx-showcase", "tutorial", "talking-head", "podcast-clip", "testimonial", "before-after"]).optional(),
         title: z.string().optional(),
         source: z.string().optional(),
         secondarySource: z.string().optional(),
@@ -389,6 +436,54 @@ export function createAgentDemoMcpServer(): McpServer {
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     async (input) => result(input.templateId ? { template: createTemplateManifest(input.templateId, input) } : { templates: listCreatorTemplates() }),
+  );
+
+  server.registerTool(
+    "demo_creator_plan",
+    {
+      title: "Plan a video before production",
+      description: "Turn a user request into a detailed requirements brief, creative direction, timed storyboard, resource/provenance list, staged workflow, assumptions, and quality checklist without generating media.",
+      inputSchema: z.object({
+        prompt: z.string().min(1),
+        mode: z.enum(["product-launch", "cartoon", "story", "asmr", "vfx"]).default("product-launch"),
+        title: z.string().optional(),
+        source: z.string().optional(),
+        durationSeconds: z.number().min(6).max(600).optional(),
+        presenter: z.enum(["none", "aria", "leo", "nova", "milo"]).optional(),
+        presets: z.array(z.enum(["youtube-1080p", "youtube-4k", "shorts", "reels", "tiktok", "story", "square", "portrait", "linkedin", "podcast-vertical"])).min(1).default(["youtube-1080p"]),
+        generateVoice: z.boolean().default(true),
+        generateMusic: z.boolean().default(true),
+      }),
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async (input) => result({ plan: createPromptVideoPlan({ ...input, presets: input.presets as CreatorPresetId[] }) }),
+  );
+
+  server.registerTool(
+    "demo_creator_from_prompt",
+    {
+      title: "Create a complete video project from a prompt",
+      description: "Plan first, then generate an editable product-launch, cartoon, narrated-story, ASMR, or VFX timeline with optional local/neural voice, captions, original score or soundscape, fictional characters, and immediate multi-format rendering. Saves production-plan.json before media generation.",
+      inputSchema: z.object({
+        prompt: z.string().min(1),
+        mode: z.enum(["product-launch", "cartoon", "story", "asmr", "vfx"]).default("product-launch"),
+        title: z.string().optional(),
+        source: z.string().optional(),
+        outputDirectory: z.string().optional(),
+        narration: z.string().optional(),
+        durationSeconds: z.number().min(6).max(600).optional(),
+        presenter: z.enum(["none", "aria", "leo", "nova", "milo"]).optional(),
+        voice: z.string().optional(),
+        voiceProvider: z.enum(["local", "neural"]).default("local"),
+        voiceRate: z.number().min(-10).max(10).optional(),
+        presets: z.array(z.enum(["youtube-1080p", "youtube-4k", "shorts", "reels", "tiktok", "story", "square", "portrait", "linkedin", "podcast-vertical"])).min(1).default(["youtube-1080p"]),
+        generateVoice: z.boolean().default(true),
+        generateMusic: z.boolean().default(true),
+        render: z.boolean().default(false),
+      }),
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true },
+    },
+    async (input) => result(jobs.start(`creator-prompt-${input.mode}`, (report) => createPromptVideoProject({ ...input, presets: input.presets as CreatorPresetId[] }, report))),
   );
 
   server.registerTool(
@@ -546,6 +641,7 @@ export function createAgentDemoMcpServer(): McpServer {
       const job = jobs.get(jobId);
       if (!job) return result({ error: "JOB_NOT_FOUND", jobId });
       if (job.state === "completed" && isCreatorRenderResult(job.result)) return creatorRenderResult(job.result);
+      if (job.state === "completed" && isCreatorPromptVideoResult(job.result)) return creatorPromptResult(job.result);
       return result(job);
     },
   );

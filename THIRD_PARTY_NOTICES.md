@@ -15,4 +15,9 @@ Agent Demo Studio is MIT-licensed. Its source distribution depends on open-sourc
 
 The npm package does not bundle FFmpeg, FFprobe, Whisper, edge-tts, or platform publishing credentials. A Playwright browser may be downloaded separately by `agent-demo setup` and is governed by its upstream terms.
 
+The npm package does bundle original fictional synthetic artwork created for Agent
+Demo Studio with Codex's built-in image-generation mode. It is project content, not
+a third-party runtime dependency. Prompt provenance and hashes are in
+[`assets/README.md`](assets/README.md).
+
 Creators remain responsible for the rights to source footage, fonts, logos, music, narration, and other media used in a project. Every creator render emits an asset-rights report; see [docs/LICENSING.md](docs/LICENSING.md).

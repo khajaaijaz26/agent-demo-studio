@@ -32,15 +32,15 @@
         <div id="creator-navigation" class="hidden">
           <div class="section-label">CREATOR CAPABILITIES</div>
           <div class="capability-list">
-            <span>Multi-format timeline</span><span>17 transitions</span><span>Auto captions</span>
-            <span>Audio ducking</span><span>Highlight detection</span><span>Publish packages</span>
+            <span>Prompt-to-video</span><span>28 transitions</span><span>10 VFX looks</span>
+            <span>Characters</span><span>Layered audio</span><span>Publish packages</span>
           </div>
         </div>
 
         <div class="sidebar-footer">
           <div class="agent-state"><i></i> MCP engine online</div>
           <p>Codex, Claude Code, and compatible agents share this local production engine.</p>
-          <div class="version">OPEN SOURCE · v0.2</div>
+          <div class="version">OPEN SOURCE · v0.3</div>
         </div>
       </aside>
 
@@ -114,8 +114,8 @@
 
         <section id="creator-view" class="creator-view hidden">
           <div class="creator-summary">
-            <div><span class="eyebrow">ONE TIMELINE · EVERY FORMAT</span><h2>Build once. Publish everywhere.</h2><p>Trim, reframe, transition, caption, mix, and render without uploading source media.</p></div>
-            <div class="summary-stats"><div><b id="preset-count">10</b><span>export profiles</span></div><div><b>17</b><span>transitions</span></div><div><b>4K</b><span>maximum canvas</span></div></div>
+            <div><span class="eyebrow">ONE PROMPT · ONE TIMELINE · EVERY FORMAT</span><h2>Imagine it. Edit it. Publish it.</h2><p>Create launches, cartoons, stories, ASMR, VFX edits, product demos, and social cuts locally.</p></div>
+            <div class="summary-stats"><div><b id="preset-count">10</b><span>export profiles</span></div><div><b>28</b><span>transitions</span></div><div><b>10</b><span>VFX looks</span></div></div>
           </div>
 
           <div class="creator-grid">
@@ -146,8 +146,24 @@
 
             <aside class="creator-inspector inspector">
               <div class="inspector-tabs"><button class="active">Create</button><button>Automate</button><button>Deliver</button></div>
+              <section class="panel-section prompt-panel">
+                <div class="section-title"><span>Create from one prompt</span><small>AGENT VIDEO</small></div>
+                <label>Describe the complete video<textarea id="prompt-text" rows="5" placeholder="Launch a collaborative lesson planner with a cinematic reveal, clear benefits, and a confident final CTA..."></textarea></label>
+                <div class="prompt-grid">
+                  <label>Mode<select id="prompt-mode"></select></label>
+                  <label>Character<select id="prompt-presenter"></select></label>
+                  <label>Voice<select id="prompt-voice-provider"><option value="local">Local voice</option><option value="neural">Neural voice</option></select></label>
+                  <label>Seconds<input id="prompt-duration" type="number" min="6" max="600" placeholder="Auto" /></label>
+                </div>
+                <div class="prompt-switches">
+                  <label class="switch-row"><span><b>Narration</b><small>Prompt-matched voice</small></span><input id="prompt-voice" type="checkbox" checked /></label>
+                  <label class="switch-row"><span><b>Score / ambience</b><small>Original local audio</small></span><input id="prompt-music" type="checkbox" checked /></label>
+                </div>
+                <div class="prompt-actions"><button id="prompt-plan-button" class="button secondary">Review plan</button><button id="prompt-button" class="button secondary">Build timeline</button><button id="prompt-render-button" class="button prompt-render">Build &amp; render</button></div>
+                <div id="prompt-plan-preview" class="prompt-plan-preview hidden"><div><b>Production plan</b><span id="prompt-plan-summary"></span></div><pre id="prompt-plan-resources"></pre></div>
+              </section>
               <section class="panel-section">
-                <div class="section-title"><span>Start from a template</span><small>8 TYPES</small></div>
+                <div class="section-title"><span>Or start from a template</span><small>13 TYPES</small></div>
                 <label>Template<select id="template-select"></select></label>
                 <label>Project title<input id="creator-title" type="text" value="My creator project" /></label>
                 <label>Primary media path<input id="creator-source" type="text" placeholder="C:\media\recording.mp4" /></label>
@@ -161,7 +177,7 @@
               </section>
               <section id="job-panel" class="panel-section job-panel hidden">
                 <div class="section-title"><span id="job-title">Creator job</span><small id="job-percent">0%</small></div>
-                <div class="progress-track"><i id="job-progress"></i></div>
+                <progress id="job-progress" class="progress-track" max="100" value="2" aria-label="Job progress"></progress>
                 <p id="job-message">Queued</p>
               </section>
               <button id="creator-render-button" class="button primary full creator-render"><span>Render selected formats</span><b>→</b></button>

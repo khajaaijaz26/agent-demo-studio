@@ -6,23 +6,26 @@ import { AgentDemoError } from "../errors.js";
 import { runCommand } from "../utils/process.js";
 import { slugify } from "../utils/text.js";
 import { loadCaptions, serializeAss, serializeSrt } from "./captions.js";
-import { renderOverlayAssets, type TimedRasterAsset } from "./design.js";
+import { resolveBundledCreatorAsset } from "./assets.js";
+import { renderOverlayAssets, type TimedVisualAsset } from "./design.js";
 import { writeLicenseReport } from "./licensing.js";
 import { probeMediaInfo } from "./media.js";
 import { getCreatorPreset } from "./presets.js";
 import { loadCreatorManifest, parseCreatorManifest } from "./schema.js";
 import { validateSocialOutput } from "./social.js";
-import type {
-  CreatorAudioTrack,
-  CreatorClip,
-  CreatorExport,
-  CreatorManifest,
-  CreatorPreset,
-  CreatorRenderResult,
-  CreatorRenderedOutput,
-  CreatorTransition,
-  CreatorValidationIssue,
-  TransitionType,
+import {
+  CREATOR_SCHEMA_VERSION,
+  type CreatorAudioTrack,
+  type CreatorClip,
+  type CreatorExport,
+  type CreatorManifest,
+  type CreatorPreset,
+  type CreatorRenderResult,
+  type CreatorRenderedOutput,
+  type CreatorTransition,
+  type CreatorValidationIssue,
+  type CreatorVfxPreset,
+  type TransitionType,
 } from "./types.js";
 
 type ProgressReporter = (progress: number, message: string) => void;
@@ -43,7 +46,7 @@ function ffNumber(value: number): string {
 }
 
 function resolveFrom(baseDirectory: string, filePath: string): string {
-  return path.isAbsolute(filePath) ? filePath : path.resolve(baseDirectory, filePath);
+  return resolveBundledCreatorAsset(filePath) ?? (path.isAbsolute(filePath) ? filePath : path.resolve(baseDirectory, filePath));
 }
 
 function safeOutputName(value: string): string {
@@ -89,6 +92,17 @@ function transitionName(type: TransitionType): string {
     "circle-close": "circleclose",
     radial: "radial",
     pixelize: "pixelize",
+    "fade-black": "fadeblack",
+    "fade-white": "fadewhite",
+    "zoom-in": "zoomin",
+    "squeeze-horizontal": "squeezeh",
+    "squeeze-vertical": "squeezev",
+    diagonal: "diagbr",
+    blur: "hblur",
+    "reveal-left": "revealleft",
+    "reveal-right": "revealright",
+    "reveal-up": "revealup",
+    "reveal-down": "revealdown",
   };
   return names[type];
 }
@@ -145,6 +159,38 @@ function timedSourceFilters(clip: CreatorClip, rawDuration: number, audioIndex: 
   return { video: "timedv", audio: "timeda", duration: rawDuration / speed };
 }
 
+function imageMotionFilter(clip: CreatorClip, preset: CreatorPreset, duration: number): string | undefined {
+  const motion = clip.motion ?? "none";
+  if (motion === "none") return undefined;
+  const frames = Math.max(2, Math.round(duration * preset.fps));
+  const zoomStep = 0.12 / frames;
+  const common = `d=1:s=${preset.width}x${preset.height}:fps=${preset.fps}`;
+  if (motion === "ken-burns-in") return `zoompan=z='min(max(zoom,pzoom)+${ffNumber(zoomStep)},1.12)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':${common}`;
+  if (motion === "ken-burns-out") return `zoompan=z='max(1.001,1.12-on*${ffNumber(zoomStep)})':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':${common}`;
+  const progress = `min(on/${frames},1)`;
+  if (motion === "pan-left") return `zoompan=z=1.12:x='(iw-iw/zoom)*(1-${progress})':y='ih/2-(ih/zoom/2)':${common}`;
+  if (motion === "pan-right") return `zoompan=z=1.12:x='(iw-iw/zoom)*${progress}':y='ih/2-(ih/zoom/2)':${common}`;
+  if (motion === "pan-up") return `zoompan=z=1.12:x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(1-${progress})':${common}`;
+  return `zoompan=z=1.12:x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*${progress}':${common}`;
+}
+
+function vfxFilters(presets: CreatorVfxPreset[] | undefined): string[] {
+  return (presets ?? []).flatMap((preset): string[] => {
+    switch (preset) {
+      case "cinematic": return ["eq=contrast=1.08:saturation=0.94:brightness=-0.01", "vignette=PI/5"];
+      case "glow": return ["eq=gamma=1.05:saturation=1.12", "unsharp=5:5:0.55:5:5:0"];
+      case "neon": return ["eq=contrast=1.16:saturation=1.42:gamma=1.03", "unsharp=5:5:0.8:5:5:0"];
+      case "glitch": return ["rgbashift=rh=5:bh=-5:edge=smear", "noise=alls=5:allf=t+u"];
+      case "vhs": return ["rgbashift=rh=2:bh=-2:edge=smear", "noise=alls=8:allf=t+u", "eq=contrast=1.05:saturation=0.84"];
+      case "dream": return ["gblur=sigma=0.7", "eq=gamma=1.08:saturation=1.1"];
+      case "vintage": return ["colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131"];
+      case "noir": return ["hue=s=0", "eq=contrast=1.24:brightness=-0.02", "vignette=PI/5"];
+      case "comic": return ["eq=contrast=1.2:saturation=1.38", "unsharp=7:7:1.1:7:7:0", "noise=alls=2:allf=u"];
+      case "asmr-soft": return ["gblur=sigma=0.25", "eq=gamma=1.05:saturation=0.9", "vignette=PI/7"];
+    }
+  });
+}
+
 async function renderClipSegment(clip: CreatorClip, index: number, preset: CreatorPreset, baseDirectory: string, outputDirectory: string): Promise<SegmentResult> {
   const source = resolveFrom(baseDirectory, clip.source);
   if (!(await pathExists(source))) throw new AgentDemoError("CLIP_MISSING", `Clip '${clip.id}' is missing: ${source}`);
@@ -170,6 +216,12 @@ async function renderClipSegment(clip: CreatorClip, index: number, preset: Creat
   const freeze = clip.freezeAfterSeconds ?? 0;
   const duration = timed.duration + freeze;
   const effects = clip.effects;
+  let visualInput = "reframed";
+  const motion = image ? imageMotionFilter(clip, preset, duration) : undefined;
+  if (motion) {
+    filters.push(`[reframed]${motion}[motion]`);
+    visualInput = "motion";
+  }
   const visual: string[] = [`fps=${preset.fps}`];
   if (effects && [effects.brightness, effects.contrast, effects.saturation, effects.gamma].some((value) => value !== undefined)) {
     visual.push(`eq=brightness=${ffNumber(effects.brightness ?? 0)}:contrast=${ffNumber(effects.contrast ?? 1)}:saturation=${ffNumber(effects.saturation ?? 1)}:gamma=${ffNumber(effects.gamma ?? 1)}`);
@@ -177,6 +229,7 @@ async function renderClipSegment(clip: CreatorClip, index: number, preset: Creat
   if ((effects?.blur ?? 0) > 0) visual.push(`gblur=sigma=${ffNumber(effects!.blur!)}`);
   if ((effects?.sharpen ?? 0) > 0) visual.push(`unsharp=5:5:${ffNumber(effects!.sharpen!)}:5:5:0`);
   if (effects?.vignette) visual.push("vignette=PI/5");
+  visual.push(...vfxFilters(effects?.vfx));
   if (freeze > 0) visual.push(`tpad=stop_mode=clone:stop_duration=${ffNumber(freeze)}`);
   if ((effects?.fadeInSeconds ?? 0) > 0) visual.push(`fade=t=in:st=0:d=${ffNumber(Math.min(duration, effects!.fadeInSeconds!))}`);
   if ((effects?.fadeOutSeconds ?? 0) > 0) {
@@ -184,7 +237,7 @@ async function renderClipSegment(clip: CreatorClip, index: number, preset: Creat
     visual.push(`fade=t=out:st=${ffNumber(Math.max(0, duration - fade))}:d=${ffNumber(fade)}`);
   }
   visual.push(`trim=duration=${ffNumber(duration)}`, "setpts=PTS-STARTPTS", "format=yuv420p");
-  filters.push(`[reframed]${visual.join(",")}[vout]`);
+  filters.push(`[${visualInput}]${visual.join(",")}[vout]`);
   const audio: string[] = ["aresample=48000", "aformat=sample_fmts=fltp:channel_layouts=stereo", `volume=${ffNumber(clip.muted ? 0 : clip.volume ?? 1)}`];
   if (freeze > 0) audio.push("apad");
   if ((effects?.fadeInSeconds ?? 0) > 0) audio.push(`afade=t=in:st=0:d=${ffNumber(Math.min(duration, effects!.fadeInSeconds!))}`);
@@ -267,6 +320,7 @@ function trackFilter(track: CreatorAudioTrack, inputIndex: number, duration: num
   const delay = Math.round((track.startSeconds ?? 0) * 1000);
   if (delay) parts.push(`adelay=${delay}|${delay},`);
   parts.push("aresample=48000,aformat=channel_layouts=stereo,", `volume=${ffNumber(track.volume ?? 1)},`);
+  if ((track.pan ?? 0) !== 0) parts.push(`stereotools=balance_out=${ffNumber(track.pan!)},`);
   if ((track.fadeInSeconds ?? 0) > 0) parts.push(`afade=t=in:st=0:d=${ffNumber(track.fadeInSeconds!)},`);
   if ((track.fadeOutSeconds ?? 0) > 0) {
     const fade = Math.min(duration, track.fadeOutSeconds!);
@@ -280,6 +334,61 @@ function filterPath(filePath: string): string {
   return filePath.replaceAll("\\", "/").replaceAll(":", "\\:").replaceAll("'", "\\'");
 }
 
+function visualAssetPosition(asset: TimedVisualAsset, preset: CreatorPreset): { x: string; y: string; enterDuration: number; exitDuration: number } {
+  const animation = asset.animation;
+  const totalDuration = Math.max(0.05, asset.endSeconds - asset.startSeconds);
+  const enterDuration = Math.min(totalDuration / 2, animation?.durationSeconds ?? 0.45);
+  const exitDuration = Math.min(totalDuration / 2, animation?.exitDurationSeconds ?? animation?.durationSeconds ?? 0.4);
+  const intensity = animation?.intensity ?? 1;
+  const enterProgress = `clip((t-${ffNumber(asset.startSeconds)})/${ffNumber(enterDuration)},0,1)`;
+  const exitStart = Math.max(asset.startSeconds, asset.endSeconds - exitDuration);
+  const exitProgress = `clip((t-${ffNumber(exitStart)})/${ffNumber(exitDuration)},0,1)`;
+  const xParts = [`${asset.x}+((${asset.width}-overlay_w)/2)`];
+  const yParts = [`${asset.y}+((${asset.height}-overlay_h)/2)`];
+  const enter = animation?.enter ?? "none";
+  const exit = animation?.exit ?? "none";
+
+  if (enter === "slide-left") xParts.push(`-${preset.width}*(1-${enterProgress})`);
+  if (enter === "slide-right") xParts.push(`${preset.width}*(1-${enterProgress})`);
+  if (enter === "slide-up") yParts.push(`-${preset.height}*(1-${enterProgress})`);
+  if (enter === "slide-down") yParts.push(`${preset.height}*(1-${enterProgress})`);
+  if (enter === "rise") yParts.push(`${ffNumber(72 * intensity)}*(1-${enterProgress})`);
+  if (enter === "drop") yParts.push(`-${ffNumber(72 * intensity)}*(1-${enterProgress})`);
+  if (enter === "pop") yParts.push(`-${ffNumber(34 * intensity)}*sin(PI*${enterProgress})`);
+
+  const localTime = `(t-${ffNumber(asset.startSeconds)})`;
+  const amplitude = ffNumber(12 * intensity);
+  switch (animation?.loop ?? "none") {
+    case "float": yParts.push(`${amplitude}*sin(2*PI*${localTime}/2.8)`); break;
+    case "bounce": yParts.push(`-${ffNumber(16 * intensity)}*abs(sin(2*PI*${localTime}/1.6))`); break;
+    case "drift":
+      xParts.push(`${amplitude}*sin(2*PI*${localTime}/3.8)`);
+      yParts.push(`${ffNumber(7 * intensity)}*cos(2*PI*${localTime}/3.1)`);
+      break;
+    case "shake":
+      xParts.push(`${ffNumber(5 * intensity)}*sin(2*PI*${localTime}*8)`);
+      yParts.push(`${ffNumber(3 * intensity)}*cos(2*PI*${localTime}*11)`);
+      break;
+    case "pulse":
+      xParts.push(`${ffNumber(3 * intensity)}*sin(2*PI*${localTime}/1.2)`);
+      yParts.push(`${ffNumber(3 * intensity)}*cos(2*PI*${localTime}/1.2)`);
+      break;
+    case "talk":
+      xParts.push(`${ffNumber(1.5 * intensity)}*sin(2*PI*${localTime}*1.4)`);
+      yParts.push(`-${ffNumber(4 * intensity)}*abs(sin(2*PI*${localTime}*1.4))`);
+      break;
+  }
+
+  if (exit === "slide-left") xParts.push(`-${preset.width}*${exitProgress}`);
+  if (exit === "slide-right") xParts.push(`${preset.width}*${exitProgress}`);
+  if (exit === "slide-up") yParts.push(`-${preset.height}*${exitProgress}`);
+  if (exit === "slide-down") yParts.push(`${preset.height}*${exitProgress}`);
+  if (exit === "rise") yParts.push(`-${ffNumber(72 * intensity)}*${exitProgress}`);
+  if (exit === "drop") yParts.push(`${ffNumber(72 * intensity)}*${exitProgress}`);
+  if (exit === "pop") yParts.push(`${ffNumber(34 * intensity)}*sin(PI*${exitProgress})`);
+  return { x: xParts.join("+"), y: yParts.join("+"), enterDuration, exitDuration };
+}
+
 async function finalComposite(input: {
   timelinePath: string;
   outputPath: string;
@@ -287,7 +396,7 @@ async function finalComposite(input: {
   preset: CreatorPreset;
   manifest: CreatorManifest;
   duration: number;
-  rasterAssets: TimedRasterAsset[];
+  rasterAssets: TimedVisualAsset[];
   captionsAssPath?: string;
   baseDirectory: string;
 }): Promise<void> {
@@ -297,27 +406,39 @@ async function finalComposite(input: {
   const rasterInputs: number[] = [];
   for (const asset of input.rasterAssets) {
     rasterInputs.push(nextInput++);
-    args.push("-loop", "1", "-framerate", String(input.preset.fps), "-i", asset.path);
+    if (asset.kind === "raster") args.push("-loop", "1", "-framerate", String(input.preset.fps));
+    else if (asset.loop !== false) args.push("-stream_loop", "-1");
+    args.push("-i", asset.path);
   }
-  let voiceIndex: number | undefined;
-  if (input.manifest.audio?.voice) {
-    voiceIndex = nextInput++;
-    args.push("-i", resolveFrom(input.baseDirectory, input.manifest.audio.voice.source));
-  }
-  let musicIndex: number | undefined;
-  if (input.manifest.audio?.music) {
-    musicIndex = nextInput++;
-    if (input.manifest.audio.music.loop !== false) args.push("-stream_loop", "-1");
-    args.push("-i", resolveFrom(input.baseDirectory, input.manifest.audio.music.source));
-  }
+  const audioConfig = input.manifest.audio;
+  const addAudioInput = (track: CreatorAudioTrack, loopDefault: boolean): number => {
+    const index = nextInput++;
+    if (track.loop ?? loopDefault) args.push("-stream_loop", "-1");
+    args.push("-i", resolveFrom(input.baseDirectory, track.source));
+    return index;
+  };
+  const voiceTracks = [audioConfig?.voice, ...(audioConfig?.voices ?? [])].filter((track): track is CreatorAudioTrack => Boolean(track));
+  const voiceInputs = voiceTracks.map((track) => ({ track, index: addAudioInput(track, false) }));
+  const musicInput = audioConfig?.music ? { track: audioConfig.music, index: addAudioInput(audioConfig.music, true) } : undefined;
+  const ambienceInput = audioConfig?.ambience ? { track: audioConfig.ambience, index: addAudioInput(audioConfig.ambience, true) } : undefined;
+  const soundEffectInputs = (audioConfig?.soundEffects ?? []).map((track) => ({ track, index: addAudioInput(track, false) }));
   filters.push("[0:v]setpts=PTS-STARTPTS[vbase]");
   let video = "vbase";
   input.rasterAssets.forEach((asset, index) => {
     const prepared = `overlay${index}`;
     const output = `vover${index}`;
+    const duration = Math.max(0.05, asset.endSeconds - asset.startSeconds);
+    const assetFilters = [`trim=duration=${ffNumber(duration)}`, `setpts=PTS-STARTPTS+${ffNumber(asset.startSeconds)}/TB`];
+    if (asset.chromaKey) assetFilters.push(`chromakey=${(asset.chromaKey.color ?? "#00FF00").replace("#", "0x")}:${ffNumber(asset.chromaKey.similarity ?? 0.18)}:${ffNumber(asset.chromaKey.blend ?? 0.08)}`);
+    assetFilters.push(`scale=${asset.width}:${asset.height}:force_original_aspect_ratio=decrease:flags=lanczos`, "format=rgba");
+    if (asset.flipHorizontal) assetFilters.push("hflip");
+    if (asset.opacity < 1) assetFilters.push(`colorchannelmixer=aa=${ffNumber(asset.opacity)}`);
+    const position = visualAssetPosition(asset, input.preset);
+    if ((asset.animation?.enter ?? "none") !== "none") assetFilters.push(`fade=t=in:st=${ffNumber(asset.startSeconds)}:d=${ffNumber(position.enterDuration)}:alpha=1`);
+    if ((asset.animation?.exit ?? "none") !== "none") assetFilters.push(`fade=t=out:st=${ffNumber(Math.max(asset.startSeconds, asset.endSeconds - position.exitDuration))}:d=${ffNumber(position.exitDuration)}:alpha=1`);
     filters.push(
-      `[${rasterInputs[index]}:v]scale=${input.preset.width}:${input.preset.height}:flags=lanczos,format=rgba,setpts=PTS-STARTPTS[${prepared}]`,
-      `[${video}][${prepared}]overlay=0:0:eof_action=pass:enable='between(t,${ffNumber(asset.startSeconds)},${ffNumber(asset.endSeconds)})'[${output}]`,
+      `[${rasterInputs[index]}:v]${assetFilters.join(",")}[${prepared}]`,
+      `[${video}][${prepared}]overlay=x='${position.x}':y='${position.y}':eval=frame:eof_action=pass:enable='between(t,${ffNumber(asset.startSeconds)},${ffNumber(asset.endSeconds)})'[${output}]`,
     );
     video = output;
   });
@@ -327,41 +448,70 @@ async function finalComposite(input: {
   }
   filters.push(`[${video}]fps=${input.preset.fps},scale=${input.preset.width}:${input.preset.height}:flags=lanczos,format=yuv420p[vout]`);
 
-  const audioConfig = input.manifest.audio;
   const speechSources: string[] = [];
   if (audioConfig?.keepClipAudio !== false) {
     filters.push(`[0:a]aresample=48000,aformat=channel_layouts=stereo,volume=${ffNumber(audioConfig?.clipVolume ?? 1)},apad,atrim=duration=${ffNumber(input.duration)}[clipaudio]`);
     speechSources.push("clipaudio");
   }
-  if (voiceIndex !== undefined && audioConfig?.voice) {
-    filters.push(trackFilter(audioConfig.voice, voiceIndex, input.duration, "voiceaudio"));
-    speechSources.push("voiceaudio");
-  }
+  voiceInputs.forEach(({ track, index }, voiceIndex) => {
+    const label = `voiceaudio${voiceIndex}`;
+    filters.push(trackFilter(track, index, input.duration, label));
+    speechSources.push(label);
+  });
   let speech: string | undefined;
-  if (speechSources.length === 2) {
-    filters.push(`[${speechSources[0]}][${speechSources[1]}]amix=inputs=2:duration=longest:dropout_transition=1[speech]`);
+  if (speechSources.length > 1) {
+    filters.push(`${speechSources.map((label) => `[${label}]`).join("")}amix=inputs=${speechSources.length}:duration=longest:dropout_transition=1[speech]`);
     speech = "speech";
   } else speech = speechSources[0];
+  const backgroundSources: string[] = [];
+  if (musicInput) {
+    filters.push(trackFilter(musicInput.track, musicInput.index, input.duration, "music"));
+    backgroundSources.push("music");
+  }
+  if (ambienceInput) {
+    filters.push(trackFilter(ambienceInput.track, ambienceInput.index, input.duration, "ambience"));
+    backgroundSources.push("ambience");
+  }
+  let background: string | undefined;
+  if (backgroundSources.length > 1) {
+    filters.push(`${backgroundSources.map((label) => `[${label}]`).join("")}amix=inputs=${backgroundSources.length}:duration=longest:dropout_transition=2[background]`);
+    background = "background";
+  } else background = backgroundSources[0];
   let mixed: string;
-  if (musicIndex !== undefined && audioConfig?.music) {
-    filters.push(trackFilter(audioConfig.music, musicIndex, input.duration, "music"));
-    if (speech && audioConfig.duckMusic !== false) {
+  if (background) {
+    if (speech && audioConfig?.duckMusic !== false) {
       filters.push(
         `[${speech}]asplit=2[speechmix][speechside]`,
-        `[music][speechside]sidechaincompress=threshold=${ffNumber(audioConfig.duckingThreshold ?? 0.04)}:ratio=8:attack=15:release=350[ducked]`,
+        `[${background}][speechside]sidechaincompress=threshold=${ffNumber(audioConfig?.duckingThreshold ?? 0.04)}:ratio=8:attack=15:release=350[ducked]`,
         `[speechmix][ducked]amix=inputs=2:duration=longest:dropout_transition=2[mixed]`,
       );
       mixed = "mixed";
     } else if (speech) {
-      filters.push(`[${speech}][music]amix=inputs=2:duration=longest:dropout_transition=2[mixed]`);
+      filters.push(`[${speech}][${background}]amix=inputs=2:duration=longest:dropout_transition=2[mixed]`);
       mixed = "mixed";
-    } else mixed = "music";
+    } else mixed = background;
   } else if (speech) mixed = speech;
   else {
     filters.push(`[0:a]volume=0,apad,atrim=duration=${ffNumber(input.duration)}[silent]`);
     mixed = "silent";
   }
-  filters.push(`[${mixed}]atrim=duration=${ffNumber(input.duration)},loudnorm=I=${ffNumber(audioConfig?.targetLufs ?? -14)}:LRA=9:TP=${ffNumber(audioConfig?.truePeak ?? -1.5)},alimiter=limit=0.95[aout]`);
+  if (soundEffectInputs.length) {
+    const soundLabels: string[] = [];
+    soundEffectInputs.forEach(({ track, index }, soundIndex) => {
+      const label = `soundeffect${soundIndex}`;
+      filters.push(trackFilter(track, index, input.duration, label));
+      soundLabels.push(label);
+    });
+    filters.push(`[${mixed}]${soundLabels.map((label) => `[${label}]`).join("")}amix=inputs=${soundLabels.length + 1}:duration=longest:dropout_transition=1[withsfx]`);
+    mixed = "withsfx";
+  }
+  const audioTone = audioConfig?.mode === "asmr"
+    ? "highpass=f=28,lowpass=f=18500,"
+    : audioConfig?.mode === "voice"
+      ? "highpass=f=55,lowpass=f=16500,"
+      : "";
+  const defaultLufs = audioConfig?.mode === "asmr" ? -20 : audioConfig?.mode === "voice" ? -16 : -14;
+  filters.push(`[${mixed}]atrim=duration=${ffNumber(input.duration)},${audioTone}loudnorm=I=${ffNumber(audioConfig?.targetLufs ?? defaultLufs)}:LRA=9:TP=${ffNumber(audioConfig?.truePeak ?? -1.5)},alimiter=limit=0.95[aout]`);
   const codec = input.exportConfig.videoCodec === "hevc" ? "libx265" : "libx264";
   args.push(
     "-filter_complex", filters.join(";"), "-map", "[vout]", "-map", "[aout]", "-t", ffNumber(input.duration),
@@ -491,7 +641,7 @@ export async function renderCreatorManifest(input: string | CreatorManifest, rep
 export async function remixMedia(source: string, presets: CreatorExport["preset"][], options: { title?: string; outputDirectory?: string; captionsPath?: string; musicPath?: string; baseDirectory?: string } = {}, report: ProgressReporter = () => undefined): Promise<CreatorRenderResult> {
   const absoluteSource = path.resolve(options.baseDirectory ?? process.cwd(), source);
   const manifest: CreatorManifest = {
-    schemaVersion: 1,
+    schemaVersion: CREATOR_SCHEMA_VERSION,
     title: options.title ?? path.parse(source).name,
     outputDirectory: options.outputDirectory ?? "creator-output",
     clips: [{ id: "source", source: absoluteSource, reframe: "blur-background" }],
