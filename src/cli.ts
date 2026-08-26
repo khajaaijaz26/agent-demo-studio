@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { Command } from "commander";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import { createAgentDemoMcpServer } from "./mcp/server.js";
@@ -19,6 +20,27 @@ import {
 } from "./installer/agents.js";
 import { errorMessage } from "./errors.js";
 import type { RecordFlowInput } from "./types.js";
+import { analyzeMedia } from "./creator/media.js";
+import { transcribeMedia } from "./creator/captions.js";
+import { createTemplateManifest, listCreatorTemplates } from "./creator/templates.js";
+import { CREATOR_PRESETS, listCreatorPresets } from "./creator/presets.js";
+import { loadCreatorManifest, validateCreatorManifest } from "./creator/schema.js";
+import { remixMedia, renderCreatorManifest } from "./creator/renderer.js";
+import { createSocialPackage } from "./creator/social.js";
+import { CREATOR_TRANSITIONS } from "./creator/types.js";
+import {
+  publishMetadataFromOutput,
+  publishToInstagram,
+  publishToTikTok,
+  publishToYouTube,
+} from "./creator/publish.js";
+import type {
+  CreatorManifest,
+  CreatorPresetId,
+  CreatorRenderResult,
+  CreatorRenderedOutput,
+  CreatorTemplateId,
+} from "./creator/types.js";
 
 const program = new Command();
 
@@ -42,7 +64,31 @@ function targetsFromOptions(options: { codex?: boolean; claude?: boolean }): Age
 program
   .name("agent-demo")
   .description("Record, edit, narrate, and render polished browser demos from Codex or Claude Code.")
-  .version("0.1.0");
+  .version("0.2.0");
+
+function presetList(value: string): CreatorPresetId[] {
+  const values = value.split(",").map((item) => item.trim()).filter(Boolean);
+  for (const item of values) {
+    if (!(item in CREATOR_PRESETS)) throw new Error(`Unknown preset '${item}'. Run 'agent-demo creator presets'.`);
+  }
+  return values as CreatorPresetId[];
+}
+
+async function readRenderResult(filePath: string): Promise<CreatorRenderResult> {
+  return JSON.parse(await readFile(path.resolve(filePath), "utf8")) as CreatorRenderResult;
+}
+
+function selectRenderedOutput(result: CreatorRenderResult, outputId: string): CreatorRenderedOutput {
+  const selected = result.outputs.find((item) => item.id === outputId);
+  if (!selected) throw new Error(`Output '${outputId}' was not found. Available: ${result.outputs.map((item) => item.id).join(", ")}`);
+  return selected;
+}
+
+function requiredEnvironment(name: string): string {
+  const value = process.env[name];
+  if (!value) throw new Error(`Environment variable ${name} is required.`);
+  return value;
+}
 
 program
   .command("setup")
@@ -269,6 +315,187 @@ program
       process.once("SIGINT", shutdown);
       process.once("SIGTERM", shutdown);
     });
+  });
+
+const creator = program
+  .command("creator")
+  .description("Create, edit, analyze, package, and publish videos for YouTube, Shorts, Reels, TikTok, and more.");
+
+creator
+  .command("presets")
+  .description("List every built-in video and social export profile.")
+  .action(() => output({ presets: listCreatorPresets(), transitions: CREATOR_TRANSITIONS }));
+
+creator
+  .command("templates")
+  .description("List reusable video project templates.")
+  .action(() => output({ templates: listCreatorTemplates() }));
+
+creator
+  .command("init")
+  .description("Create an editable creator manifest from a template.")
+  .argument("<template>", "Template id")
+  .requiredOption("--source <path>", "Primary video or image source")
+  .option("--secondary-source <path>", "Second source for before/after projects")
+  .option("--title <title>", "Project title")
+  .option("--output-directory <path>", "Rendered output directory")
+  .option("--out <path>", "Manifest path", "creator-project.json")
+  .action(async (template: CreatorTemplateId, options: { source: string; secondarySource?: string; title?: string; outputDirectory?: string; out: string }) => {
+    if (!listCreatorTemplates().some((item) => item.id === template)) throw new Error(`Unknown template '${template}'.`);
+    const manifest = createTemplateManifest(template, {
+      source: path.resolve(options.source),
+      secondarySource: options.secondarySource ? path.resolve(options.secondarySource) : undefined,
+      title: options.title,
+      outputDirectory: options.outputDirectory,
+    });
+    const target = path.resolve(options.out);
+    await writeFile(target, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+    output({ manifestPath: target, manifest });
+  });
+
+creator
+  .command("validate")
+  .description("Validate a creator manifest and its platform profiles without rendering.")
+  .argument("<manifest>", "Creator manifest JSON")
+  .action(async (manifestPath: string) => {
+    const validation = validateCreatorManifest(JSON.parse(await readFile(path.resolve(manifestPath), "utf8")) as unknown);
+    output(validation);
+    if (!validation.valid) process.exitCode = 1;
+  });
+
+creator
+  .command("render")
+  .description("Render every export in a creator manifest.")
+  .argument("<manifest>", "Creator manifest JSON")
+  .option("--keep-work", "Keep intermediate normalized clips for debugging")
+  .action(async (manifestPath: string, options: { keepWork?: boolean }) => {
+    output(await renderCreatorManifest(manifestPath, progress, { keepWork: options.keepWork }));
+  });
+
+creator
+  .command("remix")
+  .description("Turn one existing video into multiple social formats.")
+  .argument("<source>", "Source video")
+  .option("--presets <ids>", "Comma-separated presets", "shorts,reels,tiktok")
+  .option("--title <title>", "Project title")
+  .option("--output-directory <path>", "Output directory", "creator-output")
+  .option("--captions <path>", "SRT or VTT captions")
+  .option("--music <path>", "Background music")
+  .action(async (source: string, options: { presets: string; title?: string; outputDirectory: string; captions?: string; music?: string }) => {
+    output(await remixMedia(source, presetList(options.presets), {
+      title: options.title,
+      outputDirectory: options.outputDirectory,
+      captionsPath: options.captions,
+      musicPath: options.music,
+    }, progress));
+  });
+
+creator
+  .command("analyze")
+  .description("Detect silence, scene changes, and suggested highlight clips.")
+  .argument("<source>", "Video or audio file")
+  .option("--out <path>", "Also save the analysis JSON")
+  .action(async (source: string, options: { out?: string }) => {
+    const analysis = await analyzeMedia(source);
+    if (options.out) await writeFile(path.resolve(options.out), `${JSON.stringify(analysis, null, 2)}\n`, "utf8");
+    output(analysis);
+  });
+
+creator
+  .command("transcribe")
+  .description("Generate local captions with an installed Whisper CLI.")
+  .argument("<source>", "Video or audio file")
+  .option("--language <code>", "Spoken language code")
+  .option("--model <name>", "Whisper model", "turbo")
+  .option("--format <format>", "srt or vtt", "srt")
+  .option("--output-directory <path>", "Caption output directory")
+  .action(async (source: string, options: { language?: string; model: string; format: "srt" | "vtt"; outputDirectory?: string }) => {
+    output({ captionsPath: await transcribeMedia(source, options) });
+  });
+
+creator
+  .command("package")
+  .description("Create a self-contained, reviewed social publishing package.")
+  .argument("<manifest>", "Creator manifest JSON")
+  .argument("<render-result>", "creator-render-result.json")
+  .option("--destination <path>", "Package directory")
+  .action(async (manifestPath: string, resultPath: string, options: { destination?: string }) => {
+    output(await createSocialPackage(await loadCreatorManifest(manifestPath), await readRenderResult(resultPath), options.destination));
+  });
+
+creator
+  .command("publish-youtube")
+  .description("Explicitly publish one reviewed export with YouTube's resumable API.")
+  .argument("<render-result>", "creator-render-result.json")
+  .argument("<output-id>", "Export id")
+  .requiredOption("--confirm", "Confirm the external publish operation")
+  .option("--token-env <name>", "Environment variable containing OAuth token", "YOUTUBE_ACCESS_TOKEN")
+  .requiredOption("--title <title>", "Video title")
+  .option("--description <text>", "Video description")
+  .option("--tags <tags>", "Comma-separated tags", "")
+  .option("--privacy <status>", "private, unlisted, or public", "private")
+  .option("--notify-subscribers", "Notify channel subscribers")
+  .option("--made-for-kids", "Declare the video as made for kids")
+  .option("--synthetic-media", "Declare realistic altered or synthetic media")
+  .option("--caption-language <code>", "Language for an uploaded caption sidecar", "en")
+  .option("--no-thumbnail", "Do not set the rendered thumbnail")
+  .option("--no-captions", "Do not upload the rendered caption sidecar")
+  .action(async (resultPath: string, outputId: string, options: { confirm: true; tokenEnv: string; title: string; description?: string; tags: string; privacy: "private" | "unlisted" | "public"; notifySubscribers?: boolean; madeForKids?: boolean; syntheticMedia?: boolean; captionLanguage: string; thumbnail: boolean; captions: boolean }) => {
+    const selected = selectRenderedOutput(await readRenderResult(resultPath), outputId);
+    output(await publishToYouTube(selected, publishMetadataFromOutput(selected, options.title, options.description, options.tags.split(",").filter(Boolean)), {
+      accessToken: requiredEnvironment(options.tokenEnv), confirmPublish: true, privacyStatus: options.privacy,
+      notifySubscribers: options.notifySubscribers, madeForKids: options.madeForKids, containsSyntheticMedia: options.syntheticMedia,
+      captionLanguage: options.captionLanguage, uploadThumbnail: options.thumbnail, uploadCaptions: options.captions,
+    }));
+  });
+
+creator
+  .command("publish-tiktok")
+  .description("Explicitly publish one reviewed export through TikTok Direct Post.")
+  .argument("<render-result>", "creator-render-result.json")
+  .argument("<output-id>", "Export id")
+  .requiredOption("--confirm", "Confirm the external publish operation")
+  .option("--token-env <name>", "Environment variable containing OAuth token", "TIKTOK_ACCESS_TOKEN")
+  .requiredOption("--title <title>", "Post title")
+  .requiredOption("--privacy <level>", "Creator-supported privacy level")
+  .option("--description <text>", "Post description")
+  .option("--tags <tags>", "Comma-separated tags", "")
+  .option("--disable-comment", "Disable comments on the post")
+  .option("--disable-duet", "Disable Duet")
+  .option("--disable-stitch", "Disable Stitch")
+  .option("--ai-generated", "Label the post as AI-generated content")
+  .option("--brand-organic", "Mark content promoting the creator's own business")
+  .option("--cover-timestamp-ms <number>", "Video cover timestamp in milliseconds")
+  .action(async (resultPath: string, outputId: string, options: { confirm: true; tokenEnv: string; title: string; privacy: string; description?: string; tags: string; disableComment?: boolean; disableDuet?: boolean; disableStitch?: boolean; aiGenerated?: boolean; brandOrganic?: boolean; coverTimestampMs?: string }) => {
+    const selected = selectRenderedOutput(await readRenderResult(resultPath), outputId);
+    output(await publishToTikTok(selected, publishMetadataFromOutput(selected, options.title, options.description, options.tags.split(",").filter(Boolean)), {
+      accessToken: requiredEnvironment(options.tokenEnv), confirmPublish: true, privacyLevel: options.privacy,
+      disableComment: options.disableComment, disableDuet: options.disableDuet, disableStitch: options.disableStitch,
+      isAigc: options.aiGenerated, brandOrganic: options.brandOrganic, coverTimestampMs: options.coverTimestampMs === undefined ? undefined : Number(options.coverTimestampMs),
+    }));
+  });
+
+creator
+  .command("publish-instagram")
+  .description("Explicitly publish one reviewed export as an Instagram Reel.")
+  .argument("<render-result>", "creator-render-result.json")
+  .argument("<output-id>", "Export id")
+  .requiredOption("--confirm", "Confirm the external publish operation")
+  .option("--token-env <name>", "Environment variable containing access token", "INSTAGRAM_ACCESS_TOKEN")
+  .requiredOption("--account-id <id>", "Instagram professional account id")
+  .requiredOption("--public-video-url <url>", "HTTPS URL Meta can fetch")
+  .requiredOption("--title <title>", "Reel title")
+  .option("--description <text>", "Reel caption")
+  .option("--tags <tags>", "Comma-separated tags", "")
+  .option("--cover-url <url>", "Public HTTPS cover image URL")
+  .option("--api-version <version>", "Meta Graph API version")
+  .option("--no-share-to-feed", "Do not also share the Reel to the feed")
+  .action(async (resultPath: string, outputId: string, options: { confirm: true; tokenEnv: string; accountId: string; publicVideoUrl: string; title: string; description?: string; tags: string; coverUrl?: string; apiVersion?: string; shareToFeed: boolean }) => {
+    const selected = selectRenderedOutput(await readRenderResult(resultPath), outputId);
+    output(await publishToInstagram(selected, publishMetadataFromOutput(selected, options.title, options.description, options.tags.split(",").filter(Boolean)), {
+      accessToken: requiredEnvironment(options.tokenEnv), instagramAccountId: options.accountId, publicVideoUrl: options.publicVideoUrl,
+      confirmPublish: true, coverUrl: options.coverUrl, apiVersion: options.apiVersion, shareToFeed: options.shareToFeed,
+    }));
   });
 
 program.parseAsync().catch((error) => {

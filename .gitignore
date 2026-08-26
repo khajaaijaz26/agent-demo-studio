@@ -12,3 +12,5 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+graphify-out/
+src/graphify-out/

@@ -1,12 +1,33 @@
 # Changelog
 
-All notable changes to Agent Demo Studio will be documented here.
+All notable changes to Agent Demo Studio are documented here.
 
 ## Unreleased
 
-- Add scene-synchronized neural narration with natural-rate multi-voice rendering
-- Add optional SRT sidecars and continuous-clock final audio mixing
-- Add the `agent-demo sync` command and `demo_render_synchronized` MCP tool
+## 0.2.0 - 2026-08-26
+
+Creator-engine release.
+
+### Added
+
+- Portable non-destructive creator manifest with semantic validation
+- Eight editable project templates and ten export presets for YouTube, Shorts, Reels, TikTok, Stories, square, portrait, LinkedIn, podcasts, and 4K
+- Multi-clip FFmpeg timeline with trims, images, constant speed, stepped speed ramps, freeze frames, reframing, focus points, effects, and 17 transitions
+- Matching audio crossfades, clip/voice/music buses, music ducking, fades, gain, 48 kHz stereo output, loudness normalization, and limiting
+- Timed text, lower-third, CTA, image, and watermark graphics rendered with Sharp
+- SRT/WebVTT parsing, scalable ASS burn-in, SRT sidecars, and optional local Whisper transcription
+- Silence and scene-change analysis with suggested highlight ranges
+- Multi-format remix command, output validation, thumbnails, chapters, and asset-rights reports
+- Reviewed publishing packages and explicit credentialed adapters for YouTube, TikTok, and Instagram
+- Creator commands and nine creator tools across the CLI and MCP server
+- Redesigned local Studio with demo/creator workspaces, JSON timeline editor, templates, presets, jobs, preview, and packaging
+- Real FFmpeg creator smoke test, expanded unit coverage, release automation, Dependabot, and third-party notices
+
+### Changed
+
+- Package and MCP version increased to 0.2.0
+- README and contributor documentation rewritten around the unified recorder and creator workflow
+- Scene-synchronized neural narration remains available for natural-rate, multi-voice demo masters
 
 ## 0.1.0 - 2026-08-25
 

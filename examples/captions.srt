@@ -1,0 +1,11 @@
+1
+00:00:00,400 --> 00:00:03,600
+Turn a real product workflow into a polished video.
+
+2
+00:00:04,000 --> 00:00:08,500
+One editable timeline creates every format your audience needs.
+
+3
+00:00:09,000 --> 00:00:13,800
+Your agent can record, narrate, edit, package, and publish from the terminal.

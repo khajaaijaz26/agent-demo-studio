@@ -18,3 +18,9 @@ Please do not open a public issue for a suspected vulnerability. Use GitHub's pr
 Agent Demo Studio is intended for controlled product-demo environments. Do not place passwords, session tokens, payment information, customer data, or other secrets in prompts or recording scripts. Review generated recordings before sharing them.
 
 The local Studio binds to `127.0.0.1`. Changes that expose it to other network interfaces must include authentication, origin validation, and a threat-model update.
+
+## Publishing credentials
+
+Publishing adapters read access tokens from runtime environment variables. Never place a token in a creator manifest, project file, fixture, shell history example, issue, or publishing package. Use the smallest platform scopes available, keep YouTube uploads private until reviewed, and rotate a credential immediately if it appears in logs or generated artifacts.
+
+Publishing remains an explicit operation: callers must select a rendered output and confirm the external action. Changes that weaken this boundary require a security review.

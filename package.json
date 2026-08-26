@@ -1,7 +1,7 @@
 {
   "name": "agent-demo-studio",
-  "version": "0.1.0",
-  "description": "Open-source MCP and CLI studio that lets AI agents record, edit, narrate, and render polished browser product demos.",
+  "version": "0.2.0",
+  "description": "Local-first MCP, CLI, and visual studio for AI agents to record product demos and create YouTube, Shorts, Reels, and TikTok videos.",
   "type": "module",
   "license": "MIT",
   "author": "Agent Demo Studio contributors",
@@ -21,7 +21,12 @@
     "product-demo",
     "playwright",
     "video-editing",
-    "ai-agent"
+    "ai-agent",
+    "youtube-shorts",
+    "instagram-reels",
+    "tiktok",
+    "ffmpeg",
+    "video-automation"
   ],
   "engines": {
     "node": ">=20.12"
@@ -30,14 +35,25 @@
     "agent-demo": "dist/cli.js",
     "agent-demo-mcp": "dist/mcp/entry.js"
   },
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "files": [
+    ".env.example",
     "dist",
     "README.md",
     "LICENSE",
-    "SECURITY.md"
+    "THIRD_PARTY_NOTICES.md",
+    "SECURITY.md",
+    "SUPPORT.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "docs",
+    "examples"
   ],
   "scripts": {
     "build": "tsc && node scripts/copy-static.mjs",
@@ -46,6 +62,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:smoke": "npm run build && node scripts/smoke.mjs",
+    "test:creator": "npm run build && node scripts/creator-smoke.mjs",
     "check": "npm run typecheck && npm run test && npm run build",
     "prepare": "npm run build",
     "prepublishOnly": "npm run check"
@@ -54,7 +71,7 @@
     "@modelcontextprotocol/server": "^2.0.0",
     "commander": "^15.0.0",
     "playwright": "^1.62.1",
-    "sharp": "^0.35.3",
+    "sharp": "^0.35.4",
     "zod": "^4.4.3"
   },
   "devDependencies": {

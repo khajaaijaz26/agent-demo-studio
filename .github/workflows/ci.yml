@@ -36,3 +36,16 @@ jobs:
       - run: sudo apt-get install --yes ffmpeg
       - run: npx playwright install --with-deps chromium
       - run: npm run test:smoke
+
+  creator-engine-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update
+      - run: sudo apt-get install --yes ffmpeg
+      - run: npm run test:creator

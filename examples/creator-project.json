@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "title": "Agent Demo Studio launch",
+  "description": "One editable timeline rendered for YouTube, Shorts, Reels, and TikTok.",
+  "outputDirectory": "./creator-output",
+  "brand": {
+    "name": "Agent Demo Studio",
+    "primary": "#8B5CF6",
+    "secondary": "#22D3EE",
+    "text": "#FFFFFF"
+  },
+  "clips": [
+    {
+      "id": "hook",
+      "source": "./media/01-hook.mp4",
+      "trimStartSeconds": 0.2,
+      "trimEndSeconds": 5.5,
+      "speedRamp": { "from": 1, "to": 1.35, "steps": 6 },
+      "reframe": "blur-background",
+      "chapter": "The problem",
+      "licenseId": "original-video"
+    },
+    {
+      "id": "workflow",
+      "source": "./media/02-workflow.mp4",
+      "speed": 1.08,
+      "reframe": "fit",
+      "transition": { "type": "slide-left", "durationSeconds": 0.35 },
+      "effects": { "sharpen": 0.45 },
+      "chapter": "How it works",
+      "licenseId": "original-video"
+    },
+    {
+      "id": "result",
+      "source": "./media/03-result.mp4",
+      "reframe": "fill",
+      "focusX": 0.5,
+      "focusY": 0.45,
+      "freezeAfterSeconds": 0.8,
+      "transition": { "type": "dissolve", "durationSeconds": 0.45 },
+      "chapter": "The result",
+      "licenseId": "original-video"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "hook-title",
+      "type": "text",
+      "text": "Record once. Publish everywhere.",
+      "startSeconds": 0.2,
+      "endSeconds": 3.8,
+      "x": 0.5,
+      "y": 0.18,
+      "fontSize": 64
+    },
+    {
+      "id": "brand-card",
+      "type": "lower-third",
+      "text": "Agent Demo Studio",
+      "subtitle": "Open source · MCP-native · Local first",
+      "startSeconds": 4,
+      "endSeconds": 9,
+      "x": 0.3,
+      "y": 0.8
+    },
+    {
+      "id": "call-to-action",
+      "type": "cta",
+      "text": "Build your first demo",
+      "startSeconds": 12,
+      "endSeconds": 17,
+      "x": 0.5,
+      "y": 0.8
+    }
+  ],
+  "captions": {
+    "source": "./media/narration.srt",
+    "format": "srt",
+    "burn": true,
+    "sidecar": true,
+    "language": "en",
+    "style": {
+      "position": "bottom",
+      "fontSize": 52,
+      "accent": "#22D3EE",
+      "maxCharactersPerLine": 34,
+      "maxLines": 3
+    }
+  },
+  "audio": {
+    "voice": {
+      "source": "./media/narration.mp3",
+      "volume": 1,
+      "licenseId": "original-narration"
+    },
+    "music": {
+      "source": "./media/music.wav",
+      "volume": 0.1,
+      "loop": true,
+      "fadeInSeconds": 1,
+      "fadeOutSeconds": 1.5,
+      "licenseId": "original-music"
+    },
+    "keepClipAudio": false,
+    "duckMusic": true,
+    "duckingThreshold": 0.04,
+    "targetLufs": -14,
+    "truePeak": -1.5
+  },
+  "exports": [
+    {
+      "id": "youtube",
+      "preset": "youtube-1080p",
+      "fileName": "agent-demo-studio-youtube",
+      "title": "Agent Demo Studio — complete creator workflow",
+      "tags": ["open source", "AI agents", "video automation"],
+      "quality": 18,
+      "thumbnailAtSeconds": 5
+    },
+    {
+      "id": "shorts",
+      "preset": "shorts",
+      "fileName": "agent-demo-studio-short",
+      "quality": 19
+    },
+    {
+      "id": "reels",
+      "preset": "reels",
+      "fileName": "agent-demo-studio-reel",
+      "quality": 19
+    },
+    {
+      "id": "tiktok",
+      "preset": "tiktok",
+      "fileName": "agent-demo-studio-tiktok",
+      "quality": 19
+    }
+  ],
+  "licenses": [
+    {
+      "id": "original-video",
+      "source": "./media/*.mp4",
+      "title": "Original product recordings",
+      "creator": "Project owner",
+      "license": "Original work — all rights held by project owner"
+    },
+    {
+      "id": "original-music",
+      "source": "./media/music.wav",
+      "title": "Original soundtrack",
+      "creator": "Project owner",
+      "license": "Original work — all rights held by project owner"
+    },
+    {
+      "id": "original-narration",
+      "source": "./media/narration.mp3",
+      "title": "Original narration",
+      "creator": "Project owner",
+      "license": "Original work — all rights held by project owner"
+    }
+  ]
+}

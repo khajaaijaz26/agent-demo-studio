@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/khajaaijaz26/agent-demo-studio/security/advisories/new
+    about: Report a vulnerability privately instead of opening a public issue.
+  - name: Setup and troubleshooting guide
+    url: https://github.com/khajaaijaz26/agent-demo-studio/blob/main/SUPPORT.md
+    about: Check the local diagnostics and information needed for support.

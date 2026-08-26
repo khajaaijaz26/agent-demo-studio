@@ -1,4 +1,5 @@
 import { pathToFileURL } from "node:url";
+import { readFile } from "node:fs/promises";
 import { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { createProject, listProjects, loadProject, resolveArtifact } from "../project-store.js";
@@ -17,6 +18,16 @@ import { recordDemoFlow } from "../workflow.js";
 import { runDoctor } from "../installer/agents.js";
 import { startStudioServer, type StudioServerHandle } from "../studio/server.js";
 import type { BrowserAction, DemoProject, RecordFlowInput, RenderDemoInput } from "../types.js";
+import { analyzeMedia } from "../creator/media.js";
+import { transcribeMedia } from "../creator/captions.js";
+import { listCreatorPresets } from "../creator/presets.js";
+import { createTemplateManifest, listCreatorTemplates } from "../creator/templates.js";
+import { loadCreatorManifest, validateCreatorManifest } from "../creator/schema.js";
+import { remixMedia, renderCreatorManifest } from "../creator/renderer.js";
+import { createSocialPackage } from "../creator/social.js";
+import { publishMetadataFromOutput, publishToInstagram, publishToTikTok, publishToYouTube } from "../creator/publish.js";
+import { CREATOR_TRANSITIONS } from "../creator/types.js";
+import type { CreatorManifest, CreatorPresetId, CreatorRenderResult, CreatorRenderedOutput } from "../creator/types.js";
 
 const themeSchema = z
   .object({
@@ -93,15 +104,52 @@ function projectResult(project: DemoProject, root?: string) {
   return { content, structuredContent: jsonSafe(project) as unknown as Record<string, unknown> };
 }
 
+function creatorRenderResult(value: CreatorRenderResult) {
+  const content: Array<
+    | { type: "text"; text: string }
+    | { type: "resource_link"; uri: string; name: string; description: string; mimeType: string }
+  > = [{ type: "text", text: JSON.stringify(jsonSafe(value), null, 2) }];
+  for (const item of value.outputs) {
+    content.push({
+      type: "resource_link",
+      uri: pathToFileURL(item.videoPath).href,
+      name: `${item.id}.mp4`,
+      description: `${item.preset} creator export`,
+      mimeType: "video/mp4",
+    });
+  }
+  return { content, structuredContent: jsonSafe(value) as unknown as Record<string, unknown> };
+}
+
+function isCreatorRenderResult(value: unknown): value is CreatorRenderResult {
+  return Boolean(value && typeof value === "object" && Array.isArray((value as CreatorRenderResult).outputs) && typeof (value as CreatorRenderResult).outputDirectory === "string");
+}
+
+async function loadCreatorResult(filePath: string): Promise<CreatorRenderResult> {
+  return JSON.parse(await readFile(filePath, "utf8")) as CreatorRenderResult;
+}
+
+function selectCreatorOutput(render: CreatorRenderResult, outputId: string): CreatorRenderedOutput {
+  const selected = render.outputs.find((item) => item.id === outputId);
+  if (!selected) throw new Error(`Output '${outputId}' was not found. Available: ${render.outputs.map((item) => item.id).join(", ")}`);
+  return selected;
+}
+
+function requiredToken(environmentName: string): string {
+  const value = process.env[environmentName];
+  if (!value) throw new Error(`Environment variable ${environmentName} is required.`);
+  return value;
+}
+
 let studio: StudioServerHandle | undefined;
 
 export function createAgentDemoMcpServer(): McpServer {
   const server = new McpServer(
-    { name: "agent-demo-studio", version: "0.1.0" },
+    { name: "agent-demo-studio", version: "0.2.0" },
     {
       capabilities: { tools: {} },
       instructions:
-        "Agent Demo Studio records websites in a visible browser and renders polished 1080p demos. Preferred live flow: demo_create_project, demo_browser_start, then demo_browser_snapshot and demo_browser_act as needed, demo_browser_finish, demo_generate_voice, and demo_render. For a known script, use demo_record_flow. Recording/rendering jobs return job_id; poll demo_job_status until completed. Use role/name or stable selectors. Never put passwords or secrets in demo actions.",
+        "Agent Demo Studio records websites and produces long-form videos, YouTube Shorts, Instagram Reels, TikTok videos, square/portrait posts, and 4K masters. For browser capture use demo_create_project and the demo_browser_* tools. For editing and social variants use demo_creator_templates, demo_creator_validate, demo_creator_render, demo_creator_remix, demo_creator_analyze, demo_creator_transcribe, and demo_creator_package. Long jobs return job_id; poll demo_job_status. Never put passwords, access tokens, or secrets in tool arguments; publishing tools read tokens from environment variables and require confirmPublish=true.",
     },
   );
 
@@ -316,6 +364,177 @@ export function createAgentDemoMcpServer(): McpServer {
   );
 
   server.registerTool(
+    "demo_creator_presets",
+    {
+      title: "List creator export presets",
+      description: "List YouTube, Shorts, Reels, TikTok, story, square, portrait, LinkedIn, podcast, and 4K profiles including safe zones.",
+      inputSchema: z.object({}),
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async () => result({ presets: listCreatorPresets(), transitions: CREATOR_TRANSITIONS }),
+  );
+
+  server.registerTool(
+    "demo_creator_templates",
+    {
+      title: "List or create video templates",
+      description: "Return reusable product demo, feature reel, launch short, tutorial, talking-head, podcast, testimonial, and before/after manifests.",
+      inputSchema: z.object({
+        templateId: z.enum(["product-demo", "feature-reel", "launch-short", "tutorial", "talking-head", "podcast-clip", "testimonial", "before-after"]).optional(),
+        title: z.string().optional(),
+        source: z.string().optional(),
+        secondarySource: z.string().optional(),
+        outputDirectory: z.string().optional(),
+      }),
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async (input) => result(input.templateId ? { template: createTemplateManifest(input.templateId, input) } : { templates: listCreatorTemplates() }),
+  );
+
+  server.registerTool(
+    "demo_creator_validate",
+    {
+      title: "Validate creator timeline",
+      description: "Validate a portable creator manifest, clip operations, overlays, licenses, and social exports without rendering.",
+      inputSchema: z.object({ manifest: z.record(z.string(), z.unknown()) }),
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async ({ manifest }) => result(validateCreatorManifest(manifest)),
+  );
+
+  server.registerTool(
+    "demo_creator_render",
+    {
+      title: "Render creator timeline",
+      description: "Render every output in a creator manifest with transitions, reframing, overlays, captions, music ducking, loudness normalization, thumbnails, chapters, and rights report.",
+      inputSchema: z.object({
+        manifestPath: z.string().optional(),
+        manifest: z.record(z.string(), z.unknown()).optional(),
+        baseDirectory: z.string().optional(),
+        keepWork: z.boolean().default(false),
+      }).refine((value) => Boolean(value.manifestPath || value.manifest), { message: "Provide manifestPath or manifest." }),
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true },
+    },
+    async (input) => {
+      const job = jobs.start("creator-render", (report) => renderCreatorManifest((input.manifestPath ?? input.manifest) as string | CreatorManifest, report, { baseDirectory: input.baseDirectory, keepWork: input.keepWork }));
+      return result(job);
+    },
+  );
+
+  server.registerTool(
+    "demo_creator_remix",
+    {
+      title: "Create social variants",
+      description: "Turn one existing video into several platform-ready formats with optional captions and music.",
+      inputSchema: z.object({
+        source: z.string().min(1),
+        presets: z.array(z.enum(["youtube-1080p", "youtube-4k", "shorts", "reels", "tiktok", "story", "square", "portrait", "linkedin", "podcast-vertical"])).min(1).default(["shorts", "reels", "tiktok"]),
+        title: z.string().optional(),
+        outputDirectory: z.string().optional(),
+        captionsPath: z.string().optional(),
+        musicPath: z.string().optional(),
+      }),
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async (input) => result(jobs.start("creator-remix", (report) => remixMedia(input.source, input.presets as CreatorPresetId[], input, report))),
+  );
+
+  server.registerTool(
+    "demo_creator_analyze",
+    {
+      title: "Analyze media for highlights",
+      description: "Detect silence, scene changes, media properties, and candidate clips for Shorts and Reels.",
+      inputSchema: z.object({ source: z.string().min(1), silenceNoiseDb: z.number().min(-90).max(-5).optional(), silenceDurationSeconds: z.number().min(0.1).max(10).optional(), sceneThreshold: z.number().min(0.05).max(0.95).optional() }),
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async ({ source, ...options }) => result(jobs.start("creator-analysis", () => analyzeMedia(source, options))),
+  );
+
+  server.registerTool(
+    "demo_creator_transcribe",
+    {
+      title: "Generate local captions",
+      description: "Run an installed local Whisper CLI and generate normalized SRT or VTT captions.",
+      inputSchema: z.object({ source: z.string().min(1), outputDirectory: z.string().optional(), language: z.string().optional(), model: z.string().default("turbo"), format: z.enum(["srt", "vtt"]).default("srt") }),
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async ({ source, ...options }) => result(jobs.start("creator-transcription", async () => ({ captionsPath: await transcribeMedia(source, options) }))),
+  );
+
+  server.registerTool(
+    "demo_creator_package",
+    {
+      title: "Package social exports",
+      description: "Create self-contained platform folders with video, thumbnail, captions, chapters, metadata plans, and asset-license report.",
+      inputSchema: z.object({ manifestPath: z.string().min(1), renderResultPath: z.string().min(1), destination: z.string().optional() }),
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async ({ manifestPath, renderResultPath, destination }) => result(await createSocialPackage(await loadCreatorManifest(manifestPath), await loadCreatorResult(renderResultPath), destination)),
+  );
+
+  server.registerTool(
+    "demo_creator_publish",
+    {
+      title: "Publish a reviewed social export",
+      description: "Explicitly publish through YouTube, TikTok, or Instagram official APIs. Uses the platform's fixed access-token environment variable and never accepts a token in the MCP payload.",
+      inputSchema: z.object({
+        platform: z.enum(["youtube", "tiktok", "instagram"]),
+        renderResultPath: z.string().min(1),
+        outputId: z.string().min(1),
+        title: z.string().min(1),
+        description: z.string().optional(),
+        tags: z.array(z.string()).default([]),
+        accessTokenEnvironment: z.enum(["YOUTUBE_ACCESS_TOKEN", "TIKTOK_ACCESS_TOKEN", "INSTAGRAM_ACCESS_TOKEN"]).optional(),
+        confirmPublish: z.literal(true),
+        privacy: z.string().optional(),
+        notifySubscribers: z.boolean().optional(),
+        madeForKids: z.boolean().optional(),
+        containsSyntheticMedia: z.boolean().optional(),
+        captionLanguage: z.string().min(2).optional(),
+        uploadThumbnail: z.boolean().optional(),
+        uploadCaptions: z.boolean().optional(),
+        disableComment: z.boolean().optional(),
+        disableDuet: z.boolean().optional(),
+        disableStitch: z.boolean().optional(),
+        brandOrganic: z.boolean().optional(),
+        coverTimestampMs: z.number().int().min(0).optional(),
+        instagramAccountId: z.string().optional(),
+        publicVideoUrl: z.url().optional(),
+        instagramCoverUrl: z.url().optional(),
+        shareToFeed: z.boolean().optional(),
+        metaApiVersion: z.string().regex(/^v\d+\.\d+$/).optional(),
+      }),
+      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: true },
+    },
+    async (input) => {
+      const render = await loadCreatorResult(input.renderResultPath);
+      const selected = selectCreatorOutput(render, input.outputId);
+      const metadata = publishMetadataFromOutput(selected, input.title, input.description, input.tags);
+      const tokenEnvironment = input.platform === "youtube" ? "YOUTUBE_ACCESS_TOKEN" : input.platform === "tiktok" ? "TIKTOK_ACCESS_TOKEN" : "INSTAGRAM_ACCESS_TOKEN";
+      if (input.accessTokenEnvironment && input.accessTokenEnvironment !== tokenEnvironment) throw new Error(`${input.platform} publishing only reads ${tokenEnvironment}.`);
+      const accessToken = requiredToken(tokenEnvironment);
+      const job = jobs.start(`creator-publish-${input.platform}`, async () => {
+        if (input.platform === "youtube") return publishToYouTube(selected, metadata, {
+          accessToken, confirmPublish: true, privacyStatus: (input.privacy ?? "private") as "private" | "unlisted" | "public",
+          notifySubscribers: input.notifySubscribers, madeForKids: input.madeForKids, containsSyntheticMedia: input.containsSyntheticMedia,
+          captionLanguage: input.captionLanguage, uploadThumbnail: input.uploadThumbnail, uploadCaptions: input.uploadCaptions,
+        });
+        if (input.platform === "tiktok") return publishToTikTok(selected, metadata, {
+          accessToken, confirmPublish: true, privacyLevel: input.privacy ?? "SELF_ONLY",
+          disableComment: input.disableComment, disableDuet: input.disableDuet, disableStitch: input.disableStitch,
+          isAigc: input.containsSyntheticMedia, brandOrganic: input.brandOrganic, coverTimestampMs: input.coverTimestampMs,
+        });
+        if (!input.instagramAccountId || !input.publicVideoUrl) throw new Error("Instagram publishing requires instagramAccountId and publicVideoUrl.");
+        return publishToInstagram(selected, metadata, {
+          accessToken, confirmPublish: true, instagramAccountId: input.instagramAccountId, publicVideoUrl: input.publicVideoUrl,
+          coverUrl: input.instagramCoverUrl, shareToFeed: input.shareToFeed, apiVersion: input.metaApiVersion,
+        });
+      });
+      return result(job);
+    },
+  );
+
+  server.registerTool(
     "demo_job_status",
     {
       title: "Get background job status",
@@ -323,7 +542,12 @@ export function createAgentDemoMcpServer(): McpServer {
       inputSchema: z.object({ jobId: z.string() }),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
-    async ({ jobId }) => result(jobs.get(jobId) ?? { error: "JOB_NOT_FOUND", jobId }),
+    async ({ jobId }) => {
+      const job = jobs.get(jobId);
+      if (!job) return result({ error: "JOB_NOT_FOUND", jobId });
+      if (job.state === "completed" && isCreatorRenderResult(job.result)) return creatorRenderResult(job.result);
+      return result(job);
+    },
   );
 
   server.registerTool(

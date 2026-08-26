@@ -8,6 +8,15 @@ import { listProjects, loadProject, resolveArtifact } from "../project-store.js"
 import { renderDemo } from "../render/renderer.js";
 import { generateVoiceover } from "../audio/tts.js";
 import type { RenderDemoInput } from "../types.js";
+import { jobs } from "../jobs.js";
+import { listCreatorPresets } from "../creator/presets.js";
+import { createTemplateManifest, listCreatorTemplates } from "../creator/templates.js";
+import { parseCreatorManifest, validateCreatorManifest } from "../creator/schema.js";
+import { remixMedia, renderCreatorManifest } from "../creator/renderer.js";
+import { analyzeMedia } from "../creator/media.js";
+import { transcribeMedia } from "../creator/captions.js";
+import { createSocialPackage } from "../creator/social.js";
+import type { CreatorManifest, CreatorPresetId, CreatorRenderResult, CreatorTemplateId } from "../creator/types.js";
 
 export interface StudioServerOptions {
   root?: string;
@@ -37,7 +46,7 @@ async function readJson(request: IncomingMessage): Promise<Record<string, unknow
   for await (const chunk of request) {
     const buffer = Buffer.from(chunk);
     size += buffer.length;
-    if (size > 1_000_000) throw new Error("Request body is too large.");
+    if (size > 5_000_000) throw new Error("Request body is too large.");
     chunks.push(buffer);
   }
   if (!chunks.length) return {};
@@ -105,7 +114,100 @@ export async function startStudioServer(
       const url = new URL(request.url || "/", "http://127.0.0.1");
 
       if (request.method === "GET" && url.pathname === "/api/health") {
-        sendJson(response, 200, { ok: true, product: "Agent Demo Studio" });
+        sendJson(response, 200, { ok: true, product: "Agent Demo Studio", version: "0.2.0", creatorEngine: true });
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/jobs") {
+        sendJson(response, 200, jobs.list());
+        return;
+      }
+      const jobMatch = /^\/api\/jobs\/([a-f0-9-]+)$/.exec(url.pathname);
+      if (request.method === "GET" && jobMatch) {
+        const job = jobs.get(jobMatch[1]!);
+        sendJson(response, job ? 200 : 404, job ?? { error: "Job not found" });
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/creator/presets") {
+        sendJson(response, 200, listCreatorPresets());
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/creator/templates") {
+        sendJson(response, 200, listCreatorTemplates());
+        return;
+      }
+      const creatorArtifactMatch = /^\/api\/creator\/jobs\/([a-f0-9-]+)\/outputs\/([^/]+)\/(video|thumbnail)$/.exec(url.pathname);
+      if (request.method === "GET" && creatorArtifactMatch) {
+        const job = jobs.get<CreatorRenderResult>(creatorArtifactMatch[1]!);
+        const outputId = decodeURIComponent(creatorArtifactMatch[2]!);
+        const artifact = job?.result?.outputs?.find((item) => item.id === outputId);
+        if (!artifact) throw new Error("Creator artifact was not found or is not ready.");
+        const kind = creatorArtifactMatch[3];
+        await serveFile(request, response, kind === "video" ? artifact.videoPath : artifact.thumbnailPath, kind === "video" ? "video/mp4" : "image/jpeg");
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/creator/template") {
+        const body = await readJson(request);
+        const templateId = String(body.templateId || "product-demo") as CreatorTemplateId;
+        if (!listCreatorTemplates().some((template) => template.id === templateId)) throw new Error(`Unknown creator template '${templateId}'.`);
+        sendJson(response, 200, createTemplateManifest(templateId, {
+          title: typeof body.title === "string" ? body.title : undefined,
+          source: typeof body.source === "string" ? body.source : undefined,
+          secondarySource: typeof body.secondarySource === "string" ? body.secondarySource : undefined,
+          outputDirectory: typeof body.outputDirectory === "string" ? body.outputDirectory : undefined,
+        }));
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/creator/validate") {
+        const body = await readJson(request);
+        sendJson(response, 200, validateCreatorManifest(body.manifest));
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/creator/render") {
+        const body = await readJson(request);
+        const manifest = typeof body.manifestPath === "string" ? body.manifestPath : parseCreatorManifest(body.manifest);
+        const job = jobs.start("creator-render", (report) => renderCreatorManifest(manifest, report, {
+          baseDirectory: typeof body.baseDirectory === "string" ? body.baseDirectory : undefined,
+          keepWork: body.keepWork === true,
+        }));
+        sendJson(response, 202, job);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/creator/remix") {
+        const body = await readJson(request);
+        const source = String(body.source || "");
+        const presets = (Array.isArray(body.presets) ? body.presets : ["shorts", "reels", "tiktok"]) as CreatorPresetId[];
+        const job = jobs.start("creator-remix", (report) => remixMedia(source, presets, {
+          title: typeof body.title === "string" ? body.title : undefined,
+          outputDirectory: typeof body.outputDirectory === "string" ? body.outputDirectory : undefined,
+          captionsPath: typeof body.captionsPath === "string" ? body.captionsPath : undefined,
+          musicPath: typeof body.musicPath === "string" ? body.musicPath : undefined,
+          baseDirectory: typeof body.baseDirectory === "string" ? body.baseDirectory : undefined,
+        }, report));
+        sendJson(response, 202, job);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/creator/analyze") {
+        const body = await readJson(request);
+        const job = jobs.start("creator-analysis", () => analyzeMedia(String(body.source || "")));
+        sendJson(response, 202, job);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/creator/transcribe") {
+        const body = await readJson(request);
+        const job = jobs.start("creator-transcription", async () => ({ captionsPath: await transcribeMedia(String(body.source || ""), {
+          outputDirectory: typeof body.outputDirectory === "string" ? body.outputDirectory : undefined,
+          language: typeof body.language === "string" ? body.language : undefined,
+          model: typeof body.model === "string" ? body.model : undefined,
+          format: body.format === "vtt" ? "vtt" : "srt",
+        }) }));
+        sendJson(response, 202, job);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/creator/package") {
+        const body = await readJson(request);
+        const manifest = parseCreatorManifest(body.manifest) as CreatorManifest;
+        const renderResult = body.renderResult as unknown as CreatorRenderResult;
+        sendJson(response, 200, await createSocialPackage(manifest, renderResult, typeof body.destination === "string" ? body.destination : undefined));
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/projects") {
