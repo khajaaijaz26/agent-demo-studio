@@ -346,7 +346,11 @@ async function finalComposite(input: {
   if (musicIndex !== undefined && audioConfig?.music) {
     filters.push(trackFilter(audioConfig.music, musicIndex, input.duration, "music"));
     if (speech && audioConfig.duckMusic !== false) {
-      filters.push(`[music][${speech}]sidechaincompress=threshold=${ffNumber(audioConfig.duckingThreshold ?? 0.04)}:ratio=8:attack=15:release=350[ducked]`, `[${speech}][ducked]amix=inputs=2:duration=longest:dropout_transition=2[mixed]`);
+      filters.push(
+        `[${speech}]asplit=2[speechmix][speechside]`,
+        `[music][speechside]sidechaincompress=threshold=${ffNumber(audioConfig.duckingThreshold ?? 0.04)}:ratio=8:attack=15:release=350[ducked]`,
+        `[speechmix][ducked]amix=inputs=2:duration=longest:dropout_transition=2[mixed]`,
+      );
       mixed = "mixed";
     } else if (speech) {
       filters.push(`[${speech}][music]amix=inputs=2:duration=longest:dropout_transition=2[mixed]`);
