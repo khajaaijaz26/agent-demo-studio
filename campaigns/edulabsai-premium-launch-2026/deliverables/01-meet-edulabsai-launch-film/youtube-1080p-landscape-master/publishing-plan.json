@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-26T17:24:27.645Z",
+  "platform": "youtube",
+  "preset": "youtube-1080p",
+  "video": "01-meet-edulabsai-launch-film.mp4",
+  "thumbnail": "01-meet-edulabsai-launch-film-thumbnail.jpg",
+  "captions": "01-meet-edulabsai-launch-film.srt",
+  "title": "Meet EdulabsAI",
+  "description": "The primary fully animated EdulabsAI launch film.",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "lesson planning",
+    "K-12",
+    "product launch"
+  ],
+  "reviewRequired": true,
+  "api": "YouTube Data API v3",
+  "flow": [
+    "OAuth youtube.upload scope",
+    "videos.insert resumable upload",
+    "thumbnails.set",
+    "captions.insert when supplied"
+  ],
+  "defaultPrivacy": "private",
+  "syntheticMediaDisclosure": "Set status.containsSyntheticMedia when applicable."
+}

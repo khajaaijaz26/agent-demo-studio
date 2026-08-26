@@ -1,0 +1,32 @@
+1
+00:00:00,340 --> 00:00:02,877
+Paper answers should not disappear into a
+
+2
+00:00:02,877 --> 00:00:03,964
+pile after marking.
+
+3
+00:00:04,464 --> 00:00:07,705
+Snap and Mark transcribes supported responses for
+
+4
+00:00:07,705 --> 00:00:10,947
+teacher review. The teacher corrects uncertainty and
+
+5
+00:00:10,947 --> 00:00:12,336
+confirms the evidence.
+
+6
+00:00:12,836 --> 00:00:15,524
+Then Learning Insights turns the verified gap
+
+7
+00:00:15,524 --> 00:00:17,444
+into a focused reteach workspace.
+
+8
+00:00:17,444 --> 00:00:19,748
+That is a connected learning loop.
+

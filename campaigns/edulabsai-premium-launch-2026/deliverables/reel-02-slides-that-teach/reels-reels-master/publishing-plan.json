@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-26T17:14:27.821Z",
+  "platform": "instagram",
+  "preset": "reels",
+  "video": "reel-02-slides-that-teach.mp4",
+  "thumbnail": "reel-02-slides-that-teach-thumbnail.jpg",
+  "captions": "reel-02-slides-that-teach.srt",
+  "title": "Slides that teach",
+  "description": "Subject-aware visual teaching resources.",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "lesson planning",
+    "K-12",
+    "Reels"
+  ],
+  "reviewRequired": true,
+  "api": "Instagram Platform Content Publishing",
+  "flow": [
+    "Host the rendered file at a public URL",
+    "Create a REELS media container",
+    "Poll container status",
+    "Publish after review"
+  ],
+  "mediaType": "REELS",
+  "publicVideoUrl": "REPLACE_WITH_PUBLIC_VIDEO_URL"
+}

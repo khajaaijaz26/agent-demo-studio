@@ -1,0 +1,743 @@
+{
+  "schemaVersion": 2,
+  "title": "A classroom that stays connected",
+  "description": "Student focus, managed collaboration, and family communication. https://www.edulabsai.com",
+  "outputDirectory": "../.work/renders/04-classroom-community",
+  "brand": {
+    "name": "EdulabsAI",
+    "primary": "#F45A3A",
+    "secondary": "#FFB224",
+    "text": "#FFF8EF",
+    "fontFamily": "Segoe UI"
+  },
+  "clips": [
+    {
+      "id": "student-hook",
+      "source": "../assets/generated/background-landscape-0.png",
+      "kind": "image",
+      "durationSeconds": 7.224,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic",
+          "glow"
+        ]
+      },
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0.46
+      },
+      "chapter": "THE STUDENT VIEW",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "focused-work",
+      "source": "../assets/generated/background-landscape-1.png",
+      "kind": "image",
+      "durationSeconds": 11.424,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic"
+        ]
+      },
+      "transition": {
+        "type": "reveal-up",
+        "durationSeconds": 0.46
+      },
+      "chapter": "FOCUS MODE",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "managed-chat",
+      "source": "../assets/generated/background-landscape-2.png",
+      "kind": "image",
+      "durationSeconds": 10.44,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic"
+        ]
+      },
+      "transition": {
+        "type": "diagonal",
+        "durationSeconds": 0.46
+      },
+      "chapter": "TEACHER-MANAGED CHAT",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "family",
+      "source": "../assets/generated/background-landscape-3.png",
+      "kind": "image",
+      "durationSeconds": 8.832,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic"
+        ]
+      },
+      "transition": {
+        "type": "dissolve",
+        "durationSeconds": 0.46
+      },
+      "chapter": "FAMILIES, WITH CONTEXT",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "community-cta",
+      "source": "../assets/generated/background-landscape-0.png",
+      "kind": "image",
+      "durationSeconds": 6.48,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic",
+          "glow"
+        ]
+      },
+      "transition": {
+        "type": "fade-white",
+        "durationSeconds": 0.46
+      },
+      "chapter": "EDULABSAI",
+      "licenseId": "edulabsai-original-motion-art"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "student-hook-product-1",
+      "type": "video",
+      "source": "../../../test-output/edulabs-v2/scenes/33-student-dashboard.webm",
+      "startSeconds": 0.2,
+      "endSeconds": 7.064,
+      "x": 0.69,
+      "y": 0.515,
+      "width": 1080,
+      "height": 608,
+      "loop": true,
+      "animation": {
+        "enter": "slide-right",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-verified-product-recording"
+    },
+    {
+      "id": "student-hook-frame-1",
+      "type": "image",
+      "source": "../assets/generated/screen-frame-landscape.png",
+      "startSeconds": 0.2,
+      "endSeconds": 7.064,
+      "x": 0.69,
+      "y": 0.515,
+      "width": 1080,
+      "height": 608,
+      "animation": {
+        "enter": "slide-right",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "student-hook-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/04-classroom-community-student-hook-landscape.png",
+      "startSeconds": 0.08,
+      "endSeconds": 7.1240000000000006,
+      "x": 0.235,
+      "y": 0.49,
+      "width": 760,
+      "animation": {
+        "enter": "slide-left",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "student-hook-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 0.04,
+      "endSeconds": 7.184,
+      "x": 0.115,
+      "y": 0.07,
+      "width": 250,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "focused-work-product-1",
+      "type": "video",
+      "source": "../../../test-output/edulabs-v2/scenes/34-student-worksheet.webm",
+      "startSeconds": 6.964,
+      "endSeconds": 18.028,
+      "x": 0.315,
+      "y": 0.515,
+      "width": 1080,
+      "height": 608,
+      "loop": true,
+      "animation": {
+        "enter": "slide-left",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-verified-product-recording"
+    },
+    {
+      "id": "focused-work-frame-1",
+      "type": "image",
+      "source": "../assets/generated/screen-frame-landscape.png",
+      "startSeconds": 6.964,
+      "endSeconds": 18.028,
+      "x": 0.315,
+      "y": 0.515,
+      "width": 1080,
+      "height": 608,
+      "animation": {
+        "enter": "slide-left",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "focused-work-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/04-classroom-community-focused-work-landscape.png",
+      "startSeconds": 6.844,
+      "endSeconds": 18.087999999999997,
+      "x": 0.805,
+      "y": 0.49,
+      "width": 720,
+      "animation": {
+        "enter": "slide-left",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "focused-work-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 6.804,
+      "endSeconds": 18.148,
+      "x": 0.115,
+      "y": 0.07,
+      "width": 250,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "managed-chat-art",
+      "type": "image",
+      "source": "../assets/generated/art/chat-network-landscape.png",
+      "startSeconds": 17.848,
+      "endSeconds": 28.048,
+      "x": 0.15,
+      "y": 0.79,
+      "width": 260,
+      "opacity": 0.9,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "float",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.18
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "managed-chat-product-1",
+      "type": "video",
+      "source": "../../../test-output/edulabs-v2/scenes/38-student-class-chat.webm",
+      "startSeconds": 17.927999999999997,
+      "endSeconds": 28.008,
+      "x": 0.69,
+      "y": 0.515,
+      "width": 1080,
+      "height": 608,
+      "loop": true,
+      "animation": {
+        "enter": "slide-right",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-verified-product-recording"
+    },
+    {
+      "id": "managed-chat-frame-1",
+      "type": "image",
+      "source": "../assets/generated/screen-frame-landscape.png",
+      "startSeconds": 17.927999999999997,
+      "endSeconds": 28.008,
+      "x": 0.69,
+      "y": 0.515,
+      "width": 1080,
+      "height": 608,
+      "animation": {
+        "enter": "slide-right",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "managed-chat-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/04-classroom-community-managed-chat-landscape.png",
+      "startSeconds": 17.807999999999996,
+      "endSeconds": 28.067999999999998,
+      "x": 0.235,
+      "y": 0.49,
+      "width": 760,
+      "animation": {
+        "enter": "slide-left",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "managed-chat-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 17.767999999999997,
+      "endSeconds": 28.128,
+      "x": 0.115,
+      "y": 0.07,
+      "width": 250,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "family-art",
+      "type": "image",
+      "source": "../assets/generated/art/family-signal-landscape.png",
+      "startSeconds": 27.828,
+      "endSeconds": 36.42,
+      "x": 0.82,
+      "y": 0.79,
+      "width": 260,
+      "opacity": 0.9,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "float",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.18
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "family-product-1",
+      "type": "video",
+      "source": "../../../test-output/edulabs-v2/scenes/30-teacher-family-digests.webm",
+      "startSeconds": 27.907999999999998,
+      "endSeconds": 36.38,
+      "x": 0.315,
+      "y": 0.515,
+      "width": 1080,
+      "height": 608,
+      "loop": true,
+      "animation": {
+        "enter": "slide-left",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-verified-product-recording"
+    },
+    {
+      "id": "family-frame-1",
+      "type": "image",
+      "source": "../assets/generated/screen-frame-landscape.png",
+      "startSeconds": 27.907999999999998,
+      "endSeconds": 36.38,
+      "x": 0.315,
+      "y": 0.515,
+      "width": 1080,
+      "height": 608,
+      "animation": {
+        "enter": "slide-left",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "family-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/04-classroom-community-family-landscape.png",
+      "startSeconds": 27.787999999999997,
+      "endSeconds": 36.44,
+      "x": 0.805,
+      "y": 0.49,
+      "width": 720,
+      "animation": {
+        "enter": "slide-left",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "family-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 27.747999999999998,
+      "endSeconds": 36.5,
+      "x": 0.115,
+      "y": 0.07,
+      "width": 250,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "community-cta-art",
+      "type": "image",
+      "source": "../assets/generated/art/finale-landscape.png",
+      "startSeconds": 36.199999999999996,
+      "endSeconds": 42.44,
+      "x": 0.73,
+      "y": 0.52,
+      "width": 840,
+      "opacity": 1,
+      "animation": {
+        "enter": "pop",
+        "exit": "fade",
+        "loop": "float",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.32
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "community-cta-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/04-classroom-community-community-cta-landscape.png",
+      "startSeconds": 36.16,
+      "endSeconds": 42.459999999999994,
+      "x": 0.255,
+      "y": 0.5,
+      "width": 790,
+      "animation": {
+        "enter": "slide-left",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "community-cta-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 36.12,
+      "endSeconds": 42.519999999999996,
+      "x": 0.115,
+      "y": 0.07,
+      "width": 250,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    }
+  ],
+  "captions": {
+    "source": "../.work/04-classroom-community/04-classroom-community.srt",
+    "format": "srt",
+    "burn": true,
+    "sidecar": true,
+    "language": "en",
+    "style": {
+      "position": "bottom",
+      "fontSize": 39,
+      "background": "#160B2AEF",
+      "accent": "#F45A3A",
+      "color": "#FFF8EF",
+      "maxCharactersPerLine": 52,
+      "maxLines": 2,
+      "margin": 78
+    }
+  },
+  "audio": {
+    "voices": [
+      {
+        "source": "../.work/04-classroom-community/voice/01-student-hook.mp3",
+        "startSeconds": 0.34,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/04-classroom-community/voice/02-focused-work.mp3",
+        "startSeconds": 7.104,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/04-classroom-community/voice/03-managed-chat.mp3",
+        "startSeconds": 18.068,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/04-classroom-community/voice/04-family.mp3",
+        "startSeconds": 28.048,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/04-classroom-community/voice/05-community-cta.mp3",
+        "startSeconds": 36.42,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      }
+    ],
+    "music": {
+      "source": "../.work/04-classroom-community/connected-spark.wav",
+      "loop": false,
+      "volume": 0.22,
+      "fadeInSeconds": 0.8,
+      "fadeOutSeconds": 1.4,
+      "licenseId": "edulabsai-connected-spark-score"
+    },
+    "soundEffects": [
+      {
+        "source": "../assets/generated/audio/impact.wav",
+        "startSeconds": 0,
+        "volume": 0.2,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/whoosh.wav",
+        "startSeconds": 6.764,
+        "volume": 0.12,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/whoosh.wav",
+        "startSeconds": 17.728,
+        "volume": 0.12,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/sparkle.wav",
+        "startSeconds": 27.708,
+        "volume": 0.12,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/impact.wav",
+        "startSeconds": 36.08,
+        "volume": 0.2,
+        "licenseId": "edulabsai-original-sound-design"
+      }
+    ],
+    "mode": "cinematic",
+    "keepClipAudio": false,
+    "duckMusic": true,
+    "duckingThreshold": 0.035,
+    "targetLufs": -15,
+    "truePeak": -2.3
+  },
+  "chapters": [
+    {
+      "title": "THE STUDENT VIEW",
+      "startSeconds": 0
+    },
+    {
+      "title": "FOCUS MODE",
+      "startSeconds": 6.764
+    },
+    {
+      "title": "TEACHER-MANAGED CHAT",
+      "startSeconds": 17.728
+    },
+    {
+      "title": "FAMILIES, WITH CONTEXT",
+      "startSeconds": 27.708
+    },
+    {
+      "title": "EDULABSAI",
+      "startSeconds": 36.08
+    }
+  ],
+  "exports": [
+    {
+      "id": "landscape-master",
+      "preset": "youtube-1080p",
+      "fileName": "04-classroom-community",
+      "title": "A classroom that stays connected",
+      "description": "Student focus, managed collaboration, and family communication.",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "lesson planning",
+        "K-12",
+        "product launch"
+      ],
+      "quality": 18,
+      "burnCaptions": true,
+      "thumbnailAtSeconds": 7.864
+    }
+  ],
+  "licenses": [
+    {
+      "id": "edulabsai-brand",
+      "source": "EdulabsAI brand identity",
+      "title": "EdulabsAI brand",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "https://www.edulabsai.com"
+    },
+    {
+      "id": "edulabsai-verified-product-recording",
+      "source": "Verified EdulabsAI browser recordings",
+      "title": "EdulabsAI product UI",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "test-output/edulabs-v2/recorded-scenes.json"
+    },
+    {
+      "id": "edulabsai-original-motion-art",
+      "source": "Generated campaign SVG and PNG motion art",
+      "title": "EdulabsAI campaign motion system",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original work",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-connected-spark-score",
+      "source": "Generated Connected Spark score",
+      "title": "Connected Spark",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original procedural composition",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-original-sound-design",
+      "source": "Generated impact, whoosh, sparkle, and click cues",
+      "title": "EdulabsAI campaign sound design",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original procedural sound",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "microsoft-edge-neural-speech",
+      "source": "en-US-EmmaMultilingualNeural",
+      "title": "Emma — cheerful, clear campaign narrator",
+      "creator": "Microsoft",
+      "license": "Provider terms",
+      "attribution": "Neural narration"
+    }
+  ],
+  "metadata": {
+    "campaign": "Meet EdulabsAI",
+    "campaignVersion": 2,
+    "productionId": "04-classroom-community",
+    "creativeDirection": "CREATIVE-DIRECTION.md",
+    "sourceTourUsedAsFootageOnly": true,
+    "syntheticVoice": true,
+    "originalMusic": true,
+    "sceneTimeline": [
+      {
+        "id": "student-hook",
+        "startSeconds": 0,
+        "endSeconds": 7.224
+      },
+      {
+        "id": "focused-work",
+        "startSeconds": 6.764,
+        "endSeconds": 18.188
+      },
+      {
+        "id": "managed-chat",
+        "startSeconds": 17.727999999999998,
+        "endSeconds": 28.168
+      },
+      {
+        "id": "family",
+        "startSeconds": 27.708,
+        "endSeconds": 36.54
+      },
+      {
+        "id": "community-cta",
+        "startSeconds": 36.08,
+        "endSeconds": 42.559999999999995
+      }
+    ]
+  }
+}

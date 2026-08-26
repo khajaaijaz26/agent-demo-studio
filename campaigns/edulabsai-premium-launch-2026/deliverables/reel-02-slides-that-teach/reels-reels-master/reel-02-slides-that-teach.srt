@@ -1,0 +1,28 @@
+1
+00:00:00,340 --> 00:00:03,414
+A teaching visual should explain the idea—not
+
+2
+00:00:03,414 --> 00:00:04,732
+decorate the slide.
+
+3
+00:00:05,232 --> 00:00:07,529
+EdulabsAI builds editable diagrams,
+
+4
+00:00:07,529 --> 00:00:11,549
+relevant images, questions, and explanations into one
+
+5
+00:00:11,549 --> 00:00:13,272
+lesson-aligned visual story.
+
+6
+00:00:13,772 --> 00:00:15,908
+Slides your class can see,
+
+7
+00:00:15,908 --> 00:00:18,044
+follow, and use. Meet EdulabsAI.
+

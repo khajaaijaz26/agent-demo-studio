@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-26T17:28:10.105Z",
+  "platform": "youtube",
+  "preset": "youtube-1080p",
+  "video": "04-classroom-community.mp4",
+  "thumbnail": "04-classroom-community-thumbnail.jpg",
+  "captions": "04-classroom-community.srt",
+  "title": "A classroom that stays connected",
+  "description": "Student focus, managed collaboration, and family communication.",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "lesson planning",
+    "K-12",
+    "product launch"
+  ],
+  "reviewRequired": true,
+  "api": "YouTube Data API v3",
+  "flow": [
+    "OAuth youtube.upload scope",
+    "videos.insert resumable upload",
+    "thumbnails.set",
+    "captions.insert when supplied"
+  ],
+  "defaultPrivacy": "private",
+  "syntheticMediaDisclosure": "Set status.containsSyntheticMedia when applicable."
+}

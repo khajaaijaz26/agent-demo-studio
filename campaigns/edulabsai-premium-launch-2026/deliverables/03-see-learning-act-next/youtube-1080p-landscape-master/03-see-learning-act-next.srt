@@ -1,0 +1,48 @@
+1
+00:00:00,340 --> 00:00:03,716
+A score tells you what happened. Useful evidence helps you
+
+2
+00:00:03,716 --> 00:00:05,404
+decide what to do next.
+
+3
+00:00:05,904 --> 00:00:09,910
+With Snap and Mark, a teacher can upload a capture
+
+4
+00:00:09,910 --> 00:00:13,115
+sheet, review transcribed short responses, correct anything uncertain,
+
+5
+00:00:13,115 --> 00:00:16,320
+and confirm the evidence before it is used.
+
+6
+00:00:16,820 --> 00:00:20,151
+Learning Insights groups verified signals around a misconception,
+
+7
+00:00:20,151 --> 00:00:24,314
+shows the supporting evidence, and opens a focused reteach workspace
+
+8
+00:00:24,314 --> 00:00:26,396
+instead of another blank page.
+
+9
+00:00:26,896 --> 00:00:30,247
+The teacher can turn that insight into a clearer explanation,
+
+10
+00:00:30,247 --> 00:00:33,598
+new practice, or a quick check—while keeping the next move
+
+11
+00:00:33,598 --> 00:00:35,608
+tied to the original learning goal.
+
+12
+00:00:36,108 --> 00:00:40,644
+That is the EdulabsAI difference: evidence returns to teaching.
+

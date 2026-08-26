@@ -1,0 +1,474 @@
+{
+  "schemaVersion": 2,
+  "title": "One connected learning loop",
+  "description": "The complete EdulabsAI differentiation in one reel. https://www.edulabsai.com",
+  "outputDirectory": "../.work/renders/reel-05-one-connected-loop",
+  "brand": {
+    "name": "EdulabsAI",
+    "primary": "#F45A3A",
+    "secondary": "#FFB224",
+    "text": "#FFF8EF",
+    "fontFamily": "Segoe UI"
+  },
+  "clips": [
+    {
+      "id": "loop-hook",
+      "source": "../assets/generated/background-vertical-0.png",
+      "kind": "image",
+      "durationSeconds": 6.48,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic",
+          "glow"
+        ]
+      },
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0.46
+      },
+      "chapter": "THE DIFFERENCE",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "loop-middle",
+      "source": "../assets/generated/background-vertical-1.png",
+      "kind": "image",
+      "durationSeconds": 9.432,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic"
+        ]
+      },
+      "transition": {
+        "type": "circle-open",
+        "durationSeconds": 0.46
+      },
+      "chapter": "ONE CONNECTED RECORD",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "loop-cta",
+      "source": "../assets/generated/background-vertical-2.png",
+      "kind": "image",
+      "durationSeconds": 5.712,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic",
+          "glow"
+        ]
+      },
+      "transition": {
+        "type": "fade-white",
+        "durationSeconds": 0.46
+      },
+      "chapter": "MEET EDULABSAI",
+      "licenseId": "edulabsai-original-motion-art"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "loop-hook-art",
+      "type": "image",
+      "source": "../assets/generated/art/logo-orbit-vertical.png",
+      "startSeconds": 0.12,
+      "endSeconds": 6.359999999999999,
+      "x": 0.5,
+      "y": 0.64,
+      "width": 860,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "drift",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.32
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "loop-hook-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-05-one-connected-loop-loop-hook-vertical.png",
+      "startSeconds": 0.08,
+      "endSeconds": 6.38,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "loop-hook-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 0.04,
+      "endSeconds": 6.4399999999999995,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "loop-middle-art",
+      "type": "image",
+      "source": "../assets/generated/art/connected-loop-vertical.png",
+      "startSeconds": 6.14,
+      "endSeconds": 15.331999999999999,
+      "x": 0.5,
+      "y": 0.78,
+      "width": 420,
+      "opacity": 0.9,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "drift",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.18
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "loop-middle-product-1",
+      "type": "video",
+      "source": "../../../test-output/edulabs-v2/scenes/27-teacher-learning-insights.webm",
+      "startSeconds": 6.22,
+      "endSeconds": 15.291999999999998,
+      "x": 0.5,
+      "y": 0.585,
+      "width": 980,
+      "height": 551,
+      "loop": true,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-verified-product-recording"
+    },
+    {
+      "id": "loop-middle-frame-1",
+      "type": "image",
+      "source": "../assets/generated/screen-frame-vertical.png",
+      "startSeconds": 6.22,
+      "endSeconds": 15.291999999999998,
+      "x": 0.5,
+      "y": 0.585,
+      "width": 980,
+      "height": 551,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "loop-middle-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-05-one-connected-loop-loop-middle-vertical.png",
+      "startSeconds": 6.1,
+      "endSeconds": 15.351999999999999,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "loop-middle-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 6.06,
+      "endSeconds": 15.411999999999999,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "loop-cta-art",
+      "type": "image",
+      "source": "../assets/generated/art/finale-vertical.png",
+      "startSeconds": 15.111999999999997,
+      "endSeconds": 20.583999999999996,
+      "x": 0.5,
+      "y": 0.64,
+      "width": 860,
+      "opacity": 1,
+      "animation": {
+        "enter": "pop",
+        "exit": "fade",
+        "loop": "float",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.32
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "loop-cta-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-05-one-connected-loop-loop-cta-vertical.png",
+      "startSeconds": 15.071999999999997,
+      "endSeconds": 20.603999999999996,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "loop-cta-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 15.031999999999996,
+      "endSeconds": 20.663999999999998,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    }
+  ],
+  "captions": {
+    "source": "../.work/reel-05-one-connected-loop/reel-05-one-connected-loop.srt",
+    "format": "srt",
+    "burn": true,
+    "sidecar": true,
+    "language": "en",
+    "style": {
+      "position": "bottom",
+      "fontSize": 50,
+      "background": "#160B2AEF",
+      "accent": "#F45A3A",
+      "color": "#FFF8EF",
+      "maxCharactersPerLine": 30,
+      "maxLines": 2,
+      "margin": 210
+    }
+  },
+  "audio": {
+    "voices": [
+      {
+        "source": "../.work/reel-05-one-connected-loop/voice/01-loop-hook.mp3",
+        "startSeconds": 0.34,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/reel-05-one-connected-loop/voice/02-loop-middle.mp3",
+        "startSeconds": 6.36,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/reel-05-one-connected-loop/voice/03-loop-cta.mp3",
+        "startSeconds": 15.332,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      }
+    ],
+    "music": {
+      "source": "../.work/reel-05-one-connected-loop/connected-spark.wav",
+      "loop": false,
+      "volume": 0.25,
+      "fadeInSeconds": 0.8,
+      "fadeOutSeconds": 1.4,
+      "licenseId": "edulabsai-connected-spark-score"
+    },
+    "soundEffects": [
+      {
+        "source": "../assets/generated/audio/impact.wav",
+        "startSeconds": 0,
+        "volume": 0.2,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/whoosh.wav",
+        "startSeconds": 6.02,
+        "volume": 0.12,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/impact.wav",
+        "startSeconds": 14.992,
+        "volume": 0.2,
+        "licenseId": "edulabsai-original-sound-design"
+      }
+    ],
+    "mode": "cinematic",
+    "keepClipAudio": false,
+    "duckMusic": true,
+    "duckingThreshold": 0.035,
+    "targetLufs": -14,
+    "truePeak": -2.3
+  },
+  "chapters": [
+    {
+      "title": "THE DIFFERENCE",
+      "startSeconds": 0
+    },
+    {
+      "title": "ONE CONNECTED RECORD",
+      "startSeconds": 6.02
+    },
+    {
+      "title": "MEET EDULABSAI",
+      "startSeconds": 14.992
+    }
+  ],
+  "exports": [
+    {
+      "id": "reels-master",
+      "preset": "reels",
+      "fileName": "reel-05-one-connected-loop",
+      "title": "One connected learning loop",
+      "description": "The complete EdulabsAI differentiation in one reel.",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "lesson planning",
+        "K-12",
+        "Reels"
+      ],
+      "quality": 18,
+      "burnCaptions": true,
+      "thumbnailAtSeconds": 7.12
+    }
+  ],
+  "licenses": [
+    {
+      "id": "edulabsai-brand",
+      "source": "EdulabsAI brand identity",
+      "title": "EdulabsAI brand",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "https://www.edulabsai.com"
+    },
+    {
+      "id": "edulabsai-verified-product-recording",
+      "source": "Verified EdulabsAI browser recordings",
+      "title": "EdulabsAI product UI",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "test-output/edulabs-v2/recorded-scenes.json"
+    },
+    {
+      "id": "edulabsai-original-motion-art",
+      "source": "Generated campaign SVG and PNG motion art",
+      "title": "EdulabsAI campaign motion system",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original work",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-connected-spark-score",
+      "source": "Generated Connected Spark score",
+      "title": "Connected Spark",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original procedural composition",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-original-sound-design",
+      "source": "Generated impact, whoosh, sparkle, and click cues",
+      "title": "EdulabsAI campaign sound design",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original procedural sound",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "microsoft-edge-neural-speech",
+      "source": "en-US-EmmaMultilingualNeural",
+      "title": "Emma — cheerful, clear campaign narrator",
+      "creator": "Microsoft",
+      "license": "Provider terms",
+      "attribution": "Neural narration"
+    }
+  ],
+  "metadata": {
+    "campaign": "Meet EdulabsAI",
+    "campaignVersion": 2,
+    "productionId": "reel-05-one-connected-loop",
+    "creativeDirection": "CREATIVE-DIRECTION.md",
+    "sourceTourUsedAsFootageOnly": true,
+    "syntheticVoice": true,
+    "originalMusic": true,
+    "sceneTimeline": [
+      {
+        "id": "loop-hook",
+        "startSeconds": 0,
+        "endSeconds": 6.4799999999999995
+      },
+      {
+        "id": "loop-middle",
+        "startSeconds": 6.02,
+        "endSeconds": 15.451999999999998
+      },
+      {
+        "id": "loop-cta",
+        "startSeconds": 14.991999999999997,
+        "endSeconds": 20.703999999999997
+      }
+    ]
+  }
+}

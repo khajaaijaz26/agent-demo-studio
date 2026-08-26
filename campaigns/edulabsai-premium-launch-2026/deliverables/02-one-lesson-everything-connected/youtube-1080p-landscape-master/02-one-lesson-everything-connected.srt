@@ -1,0 +1,72 @@
+1
+00:00:00,340 --> 00:00:02,860
+A lesson is not only a plan.
+
+2
+00:00:02,860 --> 00:00:05,740
+It is the explanation, the visuals, the questions,
+
+3
+00:00:05,740 --> 00:00:08,980
+the practice, and the next decision a teacher makes.
+
+4
+00:00:09,480 --> 00:00:12,622
+In EdulabsAI, the teacher starts with the curriculum,
+
+5
+00:00:12,622 --> 00:00:16,549
+class, subject, topic, teaching approach, and available time—so generation begins
+
+6
+00:00:16,549 --> 00:00:18,120
+with real classroom context.
+
+7
+00:00:18,620 --> 00:00:22,513
+The result is one connected package: an editable lesson plan,
+
+8
+00:00:22,513 --> 00:00:25,628
+a visual slide deck, a quiz with explanations,
+
+9
+00:00:25,628 --> 00:00:29,132
+and a differentiated worksheet—all aligned to the same objective.
+
+10
+00:00:29,632 --> 00:00:33,818
+Teachers can inspect quality evidence, make a targeted change with
+
+11
+00:00:33,818 --> 00:00:38,003
+AI, and recover earlier versions. The system accelerates the work;
+
+12
+00:00:38,003 --> 00:00:40,096
+the teacher remains the editor.
+
+13
+00:00:40,596 --> 00:00:44,375
+Export the lesson as editable PowerPoint, print-ready PDFs,
+
+14
+00:00:44,375 --> 00:00:49,099
+answer keys, quality reports, or a school-format plan—ready for the
+
+15
+00:00:49,099 --> 00:00:50,988
+tools teachers already use.
+
+16
+00:00:51,488 --> 00:00:55,728
+What begins as one clear teaching intention stays connected through
+
+17
+00:00:55,728 --> 00:00:59,120
+presentation, practice, assessment, and the next better lesson.
+
+18
+00:00:59,620 --> 00:01:03,052
+Build your next classroom-ready lesson with EdulabsAI.
+

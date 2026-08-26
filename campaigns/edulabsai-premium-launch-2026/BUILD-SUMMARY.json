@@ -1,0 +1,34 @@
+{
+  "campaign": "Meet EdulabsAI — premium launch campaign",
+  "startedAt": "2026-08-26T17:27:04.613Z",
+  "completedAt": "2026-08-26T17:28:10.112Z",
+  "elapsedSeconds": 65.5,
+  "productions": [
+    {
+      "id": "04-classroom-community",
+      "title": "A classroom that stays connected",
+      "format": "landscape",
+      "durationSeconds": 42.58,
+      "manifestPath": "manifests/04-classroom-community.creator.json",
+      "packageDirectory": "deliverables/04-classroom-community",
+      "outputs": [
+        {
+          "id": "landscape-master",
+          "preset": "youtube-1080p",
+          "durationSeconds": 42.58,
+          "width": 1920,
+          "height": 1080,
+          "fps": 30,
+          "validation": [
+            {
+              "level": "info",
+              "code": "PROFILE_OK",
+              "exportId": "landscape-master",
+              "message": "YouTube 1080p dimensions, duration advisory, and frame rate checks passed."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

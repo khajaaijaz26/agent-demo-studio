@@ -1,0 +1,39 @@
+{
+  "productionId": "reel-01-blank-page-to-ready",
+  "title": "Blank page to classroom-ready",
+  "format": "vertical",
+  "durationSeconds": 17.882667,
+  "outputs": [
+    {
+      "id": "reels-master",
+      "bytes": 3630149,
+      "publishingPlan": {
+        "generatedAt": "2026-08-26T17:13:45.028Z",
+        "platform": "instagram",
+        "preset": "reels",
+        "video": "reel-01-blank-page-to-ready.mp4",
+        "thumbnail": "reel-01-blank-page-to-ready-thumbnail.jpg",
+        "captions": "reel-01-blank-page-to-ready.srt",
+        "title": "Blank page to classroom-ready",
+        "description": "A fast product-generation hook for Reels and Shorts.",
+        "tags": [
+          "EdulabsAI",
+          "AI for teachers",
+          "lesson planning",
+          "K-12",
+          "Reels"
+        ],
+        "reviewRequired": true,
+        "api": "Instagram Platform Content Publishing",
+        "flow": [
+          "Host the rendered file at a public URL",
+          "Create a REELS media container",
+          "Poll container status",
+          "Publish after review"
+        ],
+        "mediaType": "REELS",
+        "publicVideoUrl": "REPLACE_WITH_PUBLIC_VIDEO_URL"
+      }
+    }
+  ]
+}

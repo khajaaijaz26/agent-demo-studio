@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-26T17:27:03.954Z",
+  "platform": "youtube",
+  "preset": "youtube-1080p",
+  "video": "03-see-learning-act-next.mp4",
+  "thumbnail": "03-see-learning-act-next-thumbnail.jpg",
+  "captions": "03-see-learning-act-next.srt",
+  "title": "See learning. Act next.",
+  "description": "The evidence-to-reteach differentiator story.",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "lesson planning",
+    "K-12",
+    "product launch"
+  ],
+  "reviewRequired": true,
+  "api": "YouTube Data API v3",
+  "flow": [
+    "OAuth youtube.upload scope",
+    "videos.insert resumable upload",
+    "thumbnails.set",
+    "captions.insert when supplied"
+  ],
+  "defaultPrivacy": "private",
+  "syntheticMediaDisclosure": "Set status.containsSyntheticMedia when applicable."
+}

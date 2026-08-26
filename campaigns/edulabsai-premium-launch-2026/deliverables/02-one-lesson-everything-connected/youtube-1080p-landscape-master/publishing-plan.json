@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-26T17:26:01.809Z",
+  "platform": "youtube",
+  "preset": "youtube-1080p",
+  "video": "02-one-lesson-everything-connected.mp4",
+  "thumbnail": "02-one-lesson-everything-connected-thumbnail.jpg",
+  "captions": "02-one-lesson-everything-connected.srt",
+  "title": "One lesson. Everything connected.",
+  "description": "A concise teacher workflow story using verified product footage.",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "lesson planning",
+    "K-12",
+    "product launch"
+  ],
+  "reviewRequired": true,
+  "api": "YouTube Data API v3",
+  "flow": [
+    "OAuth youtube.upload scope",
+    "videos.insert resumable upload",
+    "thumbnails.set",
+    "captions.insert when supplied"
+  ],
+  "defaultPrivacy": "private",
+  "syntheticMediaDisclosure": "Set status.containsSyntheticMedia when applicable."
+}

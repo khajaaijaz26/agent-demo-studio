@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-26T17:16:45.478Z",
+  "platform": "instagram",
+  "preset": "reels",
+  "video": "reel-05-one-connected-loop.mp4",
+  "thumbnail": "reel-05-one-connected-loop-thumbnail.jpg",
+  "captions": "reel-05-one-connected-loop.srt",
+  "title": "One connected learning loop",
+  "description": "The complete EdulabsAI differentiation in one reel.",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "lesson planning",
+    "K-12",
+    "Reels"
+  ],
+  "reviewRequired": true,
+  "api": "Instagram Platform Content Publishing",
+  "flow": [
+    "Host the rendered file at a public URL",
+    "Create a REELS media container",
+    "Poll container status",
+    "Publish after review"
+  ],
+  "mediaType": "REELS",
+  "publicVideoUrl": "REPLACE_WITH_PUBLIC_VIDEO_URL"
+}

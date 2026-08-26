@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 2,
+  "campaign": "Meet EdulabsAI",
+  "productionId": "02-one-lesson-everything-connected",
+  "title": "One lesson. Everything connected.",
+  "format": "landscape",
+  "generatedAt": "2026-08-26T17:26:01.814Z",
+  "durationSeconds": 63.712,
+  "outputs": [
+    {
+      "id": "landscape-master",
+      "preset": "youtube-1080p",
+      "video": "02-one-lesson-everything-connected.mp4",
+      "thumbnail": "02-one-lesson-everything-connected-thumbnail.jpg",
+      "captions": "02-one-lesson-everything-connected.srt",
+      "chapters": "02-one-lesson-everything-connected-chapters.ffmetadata",
+      "validation": [
+        {
+          "level": "info",
+          "code": "PROFILE_OK",
+          "exportId": "landscape-master",
+          "message": "YouTube 1080p dimensions, duration advisory, and frame rate checks passed."
+        }
+      ]
+    }
+  ],
+  "sceneTimeline": [
+    {
+      "id": "teacher-hook",
+      "startSeconds": 0,
+      "endSeconds": 9.6,
+      "narration": "A lesson is not only a plan. It is the explanation, the visuals, the questions, the practice, and the next decision a teacher makes."
+    },
+    {
+      "id": "brief",
+      "startSeconds": 9.14,
+      "endSeconds": 18.74,
+      "narration": "In EdulabsAI, the teacher starts with the curriculum, class, subject, topic, teaching approach, and available time—so generation begins with real classroom context."
+    },
+    {
+      "id": "package",
+      "startSeconds": 18.28,
+      "endSeconds": 29.752,
+      "narration": "The result is one connected package: an editable lesson plan, a visual slide deck, a quiz with explanations, and a differentiated worksheet—all aligned to the same objective."
+    },
+    {
+      "id": "review",
+      "startSeconds": 29.292,
+      "endSeconds": 40.716,
+      "narration": "Teachers can inspect quality evidence, make a targeted change with AI, and recover earlier versions. The system accelerates the work; the teacher remains the editor."
+    },
+    {
+      "id": "export",
+      "startSeconds": 40.256,
+      "endSeconds": 51.608,
+      "narration": "Export the lesson as editable PowerPoint, print-ready PDFs, answer keys, quality reports, or a school-format plan—ready for the tools teachers already use."
+    },
+    {
+      "id": "teach-and-continue",
+      "startSeconds": 51.148,
+      "endSeconds": 59.74,
+      "narration": "What begins as one clear teaching intention stays connected through presentation, practice, assessment, and the next better lesson."
+    },
+    {
+      "id": "teacher-cta",
+      "startSeconds": 59.28,
+      "endSeconds": 63.68,
+      "narration": "Build your next classroom-ready lesson with EdulabsAI."
+    }
+  ],
+  "rights": [
+    "EdulabsAI-owned brand and verified product recordings",
+    "Original campaign motion graphics, score, and sound effects",
+    "Microsoft Edge neural speech subject to provider terms"
+  ],
+  "reviewRequiredBeforePublishing": true
+}

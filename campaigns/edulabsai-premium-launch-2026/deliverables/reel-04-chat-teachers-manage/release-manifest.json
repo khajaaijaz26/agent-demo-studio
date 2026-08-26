@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 2,
+  "campaign": "Meet EdulabsAI",
+  "productionId": "reel-04-chat-teachers-manage",
+  "title": "Class chat teachers can manage",
+  "format": "vertical",
+  "generatedAt": "2026-08-26T17:15:59.574Z",
+  "durationSeconds": 20.252,
+  "outputs": [
+    {
+      "id": "reels-master",
+      "preset": "reels",
+      "video": "reel-04-chat-teachers-manage.mp4",
+      "thumbnail": "reel-04-chat-teachers-manage-thumbnail.jpg",
+      "captions": "reel-04-chat-teachers-manage.srt",
+      "chapters": "reel-04-chat-teachers-manage-chapters.ffmetadata",
+      "validation": [
+        {
+          "level": "info",
+          "code": "PROFILE_OK",
+          "exportId": "reels-master",
+          "message": "Instagram Reels dimensions, duration advisory, and frame rate checks passed."
+        }
+      ]
+    }
+  ],
+  "sceneTimeline": [
+    {
+      "id": "chat-hook",
+      "startSeconds": 0,
+      "endSeconds": 4.296,
+      "narration": "Class chat works better when the teacher can shape the space."
+    },
+    {
+      "id": "chat-product",
+      "startSeconds": 3.836,
+      "endSeconds": 13.436,
+      "narration": "Open one whole-class channel or create named groups, choose the profile, manage members, and assign another admin while the teacher retains oversight."
+    },
+    {
+      "id": "chat-cta",
+      "startSeconds": 12.976,
+      "endSeconds": 20.248,
+      "narration": "Students can ask, help, and build together inside the classroom community. Meet EdulabsAI."
+    }
+  ],
+  "rights": [
+    "EdulabsAI-owned brand and verified product recordings",
+    "Original campaign motion graphics, score, and sound effects",
+    "Microsoft Edge neural speech subject to provider terms"
+  ],
+  "reviewRequiredBeforePublishing": true
+}

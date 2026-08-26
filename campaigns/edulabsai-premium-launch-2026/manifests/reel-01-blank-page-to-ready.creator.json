@@ -1,0 +1,474 @@
+{
+  "schemaVersion": 2,
+  "title": "Blank page to classroom-ready",
+  "description": "A fast product-generation hook for Reels and Shorts. https://www.edulabsai.com",
+  "outputDirectory": "../.work/renders/reel-01-blank-page-to-ready",
+  "brand": {
+    "name": "EdulabsAI",
+    "primary": "#F45A3A",
+    "secondary": "#FFB224",
+    "text": "#FFF8EF",
+    "fontFamily": "Segoe UI"
+  },
+  "clips": [
+    {
+      "id": "blank-hook",
+      "source": "../assets/generated/background-vertical-0.png",
+      "kind": "image",
+      "durationSeconds": 3.936,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic",
+          "glow"
+        ]
+      },
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0.46
+      },
+      "chapter": "TEACHERS",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "brief-to-four",
+      "source": "../assets/generated/background-vertical-1.png",
+      "kind": "image",
+      "durationSeconds": 9.432,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic"
+        ]
+      },
+      "transition": {
+        "type": "zoom-in",
+        "durationSeconds": 0.46
+      },
+      "chapter": "ONE BRIEF",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "ready-cta",
+      "source": "../assets/generated/background-vertical-2.png",
+      "kind": "image",
+      "durationSeconds": 5.424,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic",
+          "glow"
+        ]
+      },
+      "transition": {
+        "type": "fade-white",
+        "durationSeconds": 0.46
+      },
+      "chapter": "KEEP YOUR JUDGMENT",
+      "licenseId": "edulabsai-original-motion-art"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "blank-hook-art",
+      "type": "image",
+      "source": "../assets/generated/art/logo-orbit-vertical.png",
+      "startSeconds": 0.12,
+      "endSeconds": 3.816,
+      "x": 0.5,
+      "y": 0.64,
+      "width": 860,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "drift",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.32
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "blank-hook-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-01-blank-page-to-ready-blank-hook-vertical.png",
+      "startSeconds": 0.08,
+      "endSeconds": 3.836,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "blank-hook-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 0.04,
+      "endSeconds": 3.896,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "brief-to-four-art",
+      "type": "image",
+      "source": "../assets/generated/art/resource-orbit-vertical.png",
+      "startSeconds": 3.596,
+      "endSeconds": 12.787999999999998,
+      "x": 0.5,
+      "y": 0.78,
+      "width": 420,
+      "opacity": 0.9,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "float",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.18
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "brief-to-four-product-1",
+      "type": "video",
+      "source": "../../../test-output/edulabs-v2/scenes/10-lesson-overview.webm",
+      "startSeconds": 3.676,
+      "endSeconds": 12.747999999999998,
+      "x": 0.5,
+      "y": 0.585,
+      "width": 980,
+      "height": 551,
+      "loop": true,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-verified-product-recording"
+    },
+    {
+      "id": "brief-to-four-frame-1",
+      "type": "image",
+      "source": "../assets/generated/screen-frame-vertical.png",
+      "startSeconds": 3.676,
+      "endSeconds": 12.747999999999998,
+      "x": 0.5,
+      "y": 0.585,
+      "width": 980,
+      "height": 551,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "brief-to-four-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-01-blank-page-to-ready-brief-to-four-vertical.png",
+      "startSeconds": 3.556,
+      "endSeconds": 12.807999999999998,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "brief-to-four-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 3.516,
+      "endSeconds": 12.867999999999999,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "ready-cta-art",
+      "type": "image",
+      "source": "../assets/generated/art/finale-vertical.png",
+      "startSeconds": 12.567999999999996,
+      "endSeconds": 17.751999999999995,
+      "x": 0.5,
+      "y": 0.64,
+      "width": 860,
+      "opacity": 1,
+      "animation": {
+        "enter": "pop",
+        "exit": "fade",
+        "loop": "float",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.32
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "ready-cta-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-01-blank-page-to-ready-ready-cta-vertical.png",
+      "startSeconds": 12.527999999999997,
+      "endSeconds": 17.771999999999995,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "ready-cta-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 12.487999999999996,
+      "endSeconds": 17.831999999999997,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    }
+  ],
+  "captions": {
+    "source": "../.work/reel-01-blank-page-to-ready/reel-01-blank-page-to-ready.srt",
+    "format": "srt",
+    "burn": true,
+    "sidecar": true,
+    "language": "en",
+    "style": {
+      "position": "bottom",
+      "fontSize": 50,
+      "background": "#160B2AEF",
+      "accent": "#F45A3A",
+      "color": "#FFF8EF",
+      "maxCharactersPerLine": 30,
+      "maxLines": 2,
+      "margin": 210
+    }
+  },
+  "audio": {
+    "voices": [
+      {
+        "source": "../.work/reel-01-blank-page-to-ready/voice/01-blank-hook.mp3",
+        "startSeconds": 0.34,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/reel-01-blank-page-to-ready/voice/02-brief-to-four.mp3",
+        "startSeconds": 3.816,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/reel-01-blank-page-to-ready/voice/03-ready-cta.mp3",
+        "startSeconds": 12.788,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      }
+    ],
+    "music": {
+      "source": "../.work/reel-01-blank-page-to-ready/connected-spark.wav",
+      "loop": false,
+      "volume": 0.25,
+      "fadeInSeconds": 0.8,
+      "fadeOutSeconds": 1.4,
+      "licenseId": "edulabsai-connected-spark-score"
+    },
+    "soundEffects": [
+      {
+        "source": "../assets/generated/audio/impact.wav",
+        "startSeconds": 0,
+        "volume": 0.2,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/whoosh.wav",
+        "startSeconds": 3.476,
+        "volume": 0.12,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/impact.wav",
+        "startSeconds": 12.448,
+        "volume": 0.2,
+        "licenseId": "edulabsai-original-sound-design"
+      }
+    ],
+    "mode": "cinematic",
+    "keepClipAudio": false,
+    "duckMusic": true,
+    "duckingThreshold": 0.035,
+    "targetLufs": -14,
+    "truePeak": -2.3
+  },
+  "chapters": [
+    {
+      "title": "TEACHERS",
+      "startSeconds": 0
+    },
+    {
+      "title": "ONE BRIEF",
+      "startSeconds": 3.476
+    },
+    {
+      "title": "KEEP YOUR JUDGMENT",
+      "startSeconds": 12.448
+    }
+  ],
+  "exports": [
+    {
+      "id": "reels-master",
+      "preset": "reels",
+      "fileName": "reel-01-blank-page-to-ready",
+      "title": "Blank page to classroom-ready",
+      "description": "A fast product-generation hook for Reels and Shorts.",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "lesson planning",
+        "K-12",
+        "Reels"
+      ],
+      "quality": 18,
+      "burnCaptions": true,
+      "thumbnailAtSeconds": 4.576
+    }
+  ],
+  "licenses": [
+    {
+      "id": "edulabsai-brand",
+      "source": "EdulabsAI brand identity",
+      "title": "EdulabsAI brand",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "https://www.edulabsai.com"
+    },
+    {
+      "id": "edulabsai-verified-product-recording",
+      "source": "Verified EdulabsAI browser recordings",
+      "title": "EdulabsAI product UI",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "test-output/edulabs-v2/recorded-scenes.json"
+    },
+    {
+      "id": "edulabsai-original-motion-art",
+      "source": "Generated campaign SVG and PNG motion art",
+      "title": "EdulabsAI campaign motion system",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original work",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-connected-spark-score",
+      "source": "Generated Connected Spark score",
+      "title": "Connected Spark",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original procedural composition",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-original-sound-design",
+      "source": "Generated impact, whoosh, sparkle, and click cues",
+      "title": "EdulabsAI campaign sound design",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original procedural sound",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "microsoft-edge-neural-speech",
+      "source": "en-US-EmmaMultilingualNeural",
+      "title": "Emma — cheerful, clear campaign narrator",
+      "creator": "Microsoft",
+      "license": "Provider terms",
+      "attribution": "Neural narration"
+    }
+  ],
+  "metadata": {
+    "campaign": "Meet EdulabsAI",
+    "campaignVersion": 2,
+    "productionId": "reel-01-blank-page-to-ready",
+    "creativeDirection": "CREATIVE-DIRECTION.md",
+    "sourceTourUsedAsFootageOnly": true,
+    "syntheticVoice": true,
+    "originalMusic": true,
+    "sceneTimeline": [
+      {
+        "id": "blank-hook",
+        "startSeconds": 0,
+        "endSeconds": 3.936
+      },
+      {
+        "id": "brief-to-four",
+        "startSeconds": 3.476,
+        "endSeconds": 12.907999999999998
+      },
+      {
+        "id": "ready-cta",
+        "startSeconds": 12.447999999999997,
+        "endSeconds": 17.871999999999996
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+1
+00:00:00,340 --> 00:00:02,944
+Still starting every lesson from a blank
+
+2
+00:00:02,944 --> 00:00:03,316
+page?
+
+3
+00:00:03,816 --> 00:00:05,510
+Choose the curriculum, class,
+
+4
+00:00:05,510 --> 00:00:08,476
+subject, and topic. EdulabsAI builds the plan,
+
+5
+00:00:08,476 --> 00:00:11,441
+slides, quiz, and worksheet together in about
+
+6
+00:00:11,441 --> 00:00:12,288
+two minutes.
+
+7
+00:00:12,788 --> 00:00:15,913
+Then review, edit, and teach it your
+
+8
+00:00:15,913 --> 00:00:17,252
+way. Meet EdulabsAI.
+

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "campaign": "Meet EdulabsAI",
+  "productionId": "03-see-learning-act-next",
+  "title": "See learning. Act next.",
+  "format": "landscape",
+  "generatedAt": "2026-08-26T17:27:03.960Z",
+  "durationSeconds": 41.277333,
+  "outputs": [
+    {
+      "id": "landscape-master",
+      "preset": "youtube-1080p",
+      "video": "03-see-learning-act-next.mp4",
+      "thumbnail": "03-see-learning-act-next-thumbnail.jpg",
+      "captions": "03-see-learning-act-next.srt",
+      "chapters": "03-see-learning-act-next-chapters.ffmetadata",
+      "validation": [
+        {
+          "level": "info",
+          "code": "PROFILE_OK",
+          "exportId": "landscape-master",
+          "message": "YouTube 1080p dimensions, duration advisory, and frame rate checks passed."
+        }
+      ]
+    }
+  ],
+  "sceneTimeline": [
+    {
+      "id": "evidence-hook",
+      "startSeconds": 0,
+      "endSeconds": 6.024,
+      "narration": "A score tells you what happened. Useful evidence helps you decide what to do next."
+    },
+    {
+      "id": "paper",
+      "startSeconds": 5.564,
+      "endSeconds": 16.94,
+      "narration": "With Snap and Mark, a teacher can upload a capture sheet, review transcribed short responses, correct anything uncertain, and confirm the evidence before it is used."
+    },
+    {
+      "id": "insight",
+      "startSeconds": 16.48,
+      "endSeconds": 27.016,
+      "narration": "Learning Insights groups verified signals around a misconception, shows the supporting evidence, and opens a focused reteach workspace instead of another blank page."
+    },
+    {
+      "id": "next-work",
+      "startSeconds": 26.556,
+      "endSeconds": 36.228,
+      "narration": "The teacher can turn that insight into a clearer explanation, new practice, or a quick check—while keeping the next move tied to the original learning goal."
+    },
+    {
+      "id": "evidence-cta",
+      "startSeconds": 35.768,
+      "endSeconds": 41.264,
+      "narration": "That is the EdulabsAI difference: evidence returns to teaching."
+    }
+  ],
+  "rights": [
+    "EdulabsAI-owned brand and verified product recordings",
+    "Original campaign motion graphics, score, and sound effects",
+    "Microsoft Edge neural speech subject to provider terms"
+  ],
+  "reviewRequiredBeforePublishing": true
+}

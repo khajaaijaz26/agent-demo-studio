@@ -1,0 +1,36 @@
+1
+00:00:00,340 --> 00:00:02,463
+Class chat works better when the teacher
+
+2
+00:00:02,463 --> 00:00:03,676
+can shape the space.
+
+3
+00:00:04,176 --> 00:00:06,925
+Open one whole-class channel or create named
+
+4
+00:00:06,925 --> 00:00:08,496
+groups, choose the profile,
+
+5
+00:00:08,496 --> 00:00:11,245
+manage members, and assign another admin while
+
+6
+00:00:11,245 --> 00:00:12,816
+the teacher retains oversight.
+
+7
+00:00:13,316 --> 00:00:15,258
+Students can ask, help,
+
+8
+00:00:15,258 --> 00:00:18,657
+and build together inside the classroom community.
+
+9
+00:00:18,657 --> 00:00:19,628
+Meet EdulabsAI.
+

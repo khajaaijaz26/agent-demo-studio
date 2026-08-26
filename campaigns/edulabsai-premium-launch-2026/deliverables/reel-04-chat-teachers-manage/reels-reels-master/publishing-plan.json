@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-26T17:15:59.569Z",
+  "platform": "instagram",
+  "preset": "reels",
+  "video": "reel-04-chat-teachers-manage.mp4",
+  "thumbnail": "reel-04-chat-teachers-manage-thumbnail.jpg",
+  "captions": "reel-04-chat-teachers-manage.srt",
+  "title": "Class chat teachers can manage",
+  "description": "Teacher-managed whole-class and learning-group chat.",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "lesson planning",
+    "K-12",
+    "Reels"
+  ],
+  "reviewRequired": true,
+  "api": "Instagram Platform Content Publishing",
+  "flow": [
+    "Host the rendered file at a public URL",
+    "Create a REELS media container",
+    "Poll container status",
+    "Publish after review"
+  ],
+  "mediaType": "REELS",
+  "publicVideoUrl": "REPLACE_WITH_PUBLIC_VIDEO_URL"
+}

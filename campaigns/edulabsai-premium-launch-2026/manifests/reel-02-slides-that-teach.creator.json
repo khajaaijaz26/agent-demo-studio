@@ -1,0 +1,454 @@
+{
+  "schemaVersion": 2,
+  "title": "Slides that teach",
+  "description": "Subject-aware visual teaching resources. https://www.edulabsai.com",
+  "outputDirectory": "../.work/renders/reel-02-slides-that-teach",
+  "brand": {
+    "name": "EdulabsAI",
+    "primary": "#F45A3A",
+    "secondary": "#FFB224",
+    "text": "#FFF8EF",
+    "fontFamily": "Segoe UI"
+  },
+  "clips": [
+    {
+      "id": "clip-art-hook",
+      "source": "../assets/generated/background-vertical-0.png",
+      "kind": "image",
+      "durationSeconds": 5.352,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic",
+          "glow"
+        ]
+      },
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0.46
+      },
+      "chapter": "NOT DECORATION",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "real-deck",
+      "source": "../assets/generated/background-vertical-1.png",
+      "kind": "image",
+      "durationSeconds": 9,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic"
+        ]
+      },
+      "transition": {
+        "type": "circle-open",
+        "durationSeconds": 0.46
+      },
+      "chapter": "BUILT FOR THE SUBJECT",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "slides-cta",
+      "source": "../assets/generated/background-vertical-2.png",
+      "kind": "image",
+      "durationSeconds": 5.232,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic",
+          "glow"
+        ]
+      },
+      "transition": {
+        "type": "fade-white",
+        "durationSeconds": 0.46
+      },
+      "chapter": "EDULABSAI",
+      "licenseId": "edulabsai-original-motion-art"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "clip-art-hook-art",
+      "type": "image",
+      "source": "../assets/generated/art/subject-diagrams-vertical.png",
+      "startSeconds": 0.12,
+      "endSeconds": 5.232,
+      "x": 0.5,
+      "y": 0.64,
+      "width": 860,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "float",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.32
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "clip-art-hook-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-02-slides-that-teach-clip-art-hook-vertical.png",
+      "startSeconds": 0.08,
+      "endSeconds": 5.252000000000001,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "clip-art-hook-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 0.04,
+      "endSeconds": 5.312,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "real-deck-product-1",
+      "type": "video",
+      "source": "../../../test-output/edulabs-v2/scenes/18-resource-pptx-original.webm",
+      "startSeconds": 5.0920000000000005,
+      "endSeconds": 13.732,
+      "x": 0.5,
+      "y": 0.585,
+      "width": 980,
+      "height": 551,
+      "loop": true,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-verified-product-recording"
+    },
+    {
+      "id": "real-deck-frame-1",
+      "type": "image",
+      "source": "../assets/generated/screen-frame-vertical.png",
+      "startSeconds": 5.0920000000000005,
+      "endSeconds": 13.732,
+      "x": 0.5,
+      "y": 0.585,
+      "width": 980,
+      "height": 551,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "real-deck-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-02-slides-that-teach-real-deck-vertical.png",
+      "startSeconds": 4.972,
+      "endSeconds": 13.792,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "real-deck-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 4.932,
+      "endSeconds": 13.852,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "slides-cta-art",
+      "type": "image",
+      "source": "../assets/generated/art/finale-vertical.png",
+      "startSeconds": 13.551999999999998,
+      "endSeconds": 18.543999999999997,
+      "x": 0.5,
+      "y": 0.64,
+      "width": 860,
+      "opacity": 1,
+      "animation": {
+        "enter": "pop",
+        "exit": "fade",
+        "loop": "float",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.32
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "slides-cta-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-02-slides-that-teach-slides-cta-vertical.png",
+      "startSeconds": 13.511999999999999,
+      "endSeconds": 18.563999999999997,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "slides-cta-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 13.471999999999998,
+      "endSeconds": 18.624,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    }
+  ],
+  "captions": {
+    "source": "../.work/reel-02-slides-that-teach/reel-02-slides-that-teach.srt",
+    "format": "srt",
+    "burn": true,
+    "sidecar": true,
+    "language": "en",
+    "style": {
+      "position": "bottom",
+      "fontSize": 50,
+      "background": "#160B2AEF",
+      "accent": "#F45A3A",
+      "color": "#FFF8EF",
+      "maxCharactersPerLine": 30,
+      "maxLines": 2,
+      "margin": 210
+    }
+  },
+  "audio": {
+    "voices": [
+      {
+        "source": "../.work/reel-02-slides-that-teach/voice/01-clip-art-hook.mp3",
+        "startSeconds": 0.34,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/reel-02-slides-that-teach/voice/02-real-deck.mp3",
+        "startSeconds": 5.232,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/reel-02-slides-that-teach/voice/03-slides-cta.mp3",
+        "startSeconds": 13.772,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      }
+    ],
+    "music": {
+      "source": "../.work/reel-02-slides-that-teach/connected-spark.wav",
+      "loop": false,
+      "volume": 0.25,
+      "fadeInSeconds": 0.8,
+      "fadeOutSeconds": 1.4,
+      "licenseId": "edulabsai-connected-spark-score"
+    },
+    "soundEffects": [
+      {
+        "source": "../assets/generated/audio/impact.wav",
+        "startSeconds": 0,
+        "volume": 0.2,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/whoosh.wav",
+        "startSeconds": 4.892,
+        "volume": 0.12,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/impact.wav",
+        "startSeconds": 13.432,
+        "volume": 0.2,
+        "licenseId": "edulabsai-original-sound-design"
+      }
+    ],
+    "mode": "cinematic",
+    "keepClipAudio": false,
+    "duckMusic": true,
+    "duckingThreshold": 0.035,
+    "targetLufs": -14,
+    "truePeak": -2.3
+  },
+  "chapters": [
+    {
+      "title": "NOT DECORATION",
+      "startSeconds": 0
+    },
+    {
+      "title": "BUILT FOR THE SUBJECT",
+      "startSeconds": 4.892
+    },
+    {
+      "title": "EDULABSAI",
+      "startSeconds": 13.432
+    }
+  ],
+  "exports": [
+    {
+      "id": "reels-master",
+      "preset": "reels",
+      "fileName": "reel-02-slides-that-teach",
+      "title": "Slides that teach",
+      "description": "Subject-aware visual teaching resources.",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "lesson planning",
+        "K-12",
+        "Reels"
+      ],
+      "quality": 18,
+      "burnCaptions": true,
+      "thumbnailAtSeconds": 5.992
+    }
+  ],
+  "licenses": [
+    {
+      "id": "edulabsai-brand",
+      "source": "EdulabsAI brand identity",
+      "title": "EdulabsAI brand",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "https://www.edulabsai.com"
+    },
+    {
+      "id": "edulabsai-verified-product-recording",
+      "source": "Verified EdulabsAI browser recordings",
+      "title": "EdulabsAI product UI",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "test-output/edulabs-v2/recorded-scenes.json"
+    },
+    {
+      "id": "edulabsai-original-motion-art",
+      "source": "Generated campaign SVG and PNG motion art",
+      "title": "EdulabsAI campaign motion system",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original work",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-connected-spark-score",
+      "source": "Generated Connected Spark score",
+      "title": "Connected Spark",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original procedural composition",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-original-sound-design",
+      "source": "Generated impact, whoosh, sparkle, and click cues",
+      "title": "EdulabsAI campaign sound design",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original procedural sound",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "microsoft-edge-neural-speech",
+      "source": "en-US-EmmaMultilingualNeural",
+      "title": "Emma — cheerful, clear campaign narrator",
+      "creator": "Microsoft",
+      "license": "Provider terms",
+      "attribution": "Neural narration"
+    }
+  ],
+  "metadata": {
+    "campaign": "Meet EdulabsAI",
+    "campaignVersion": 2,
+    "productionId": "reel-02-slides-that-teach",
+    "creativeDirection": "CREATIVE-DIRECTION.md",
+    "sourceTourUsedAsFootageOnly": true,
+    "syntheticVoice": true,
+    "originalMusic": true,
+    "sceneTimeline": [
+      {
+        "id": "clip-art-hook",
+        "startSeconds": 0,
+        "endSeconds": 5.352
+      },
+      {
+        "id": "real-deck",
+        "startSeconds": 4.892,
+        "endSeconds": 13.892
+      },
+      {
+        "id": "slides-cta",
+        "startSeconds": 13.431999999999999,
+        "endSeconds": 18.663999999999998
+      }
+    ]
+  }
+}

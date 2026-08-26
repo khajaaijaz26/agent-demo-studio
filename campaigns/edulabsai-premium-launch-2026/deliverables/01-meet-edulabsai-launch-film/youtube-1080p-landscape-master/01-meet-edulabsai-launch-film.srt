@@ -1,0 +1,76 @@
+1
+00:00:00,340 --> 00:00:04,605
+Meet EdulabsAI—the connected AI teaching workspace built around the way
+
+2
+00:00:04,605 --> 00:00:05,884
+learning actually moves.
+
+3
+00:00:06,384 --> 00:00:10,008
+Because teaching is not one task. It is a loop:
+
+4
+00:00:10,008 --> 00:00:13,632
+plan, teach, check, respond, and keep every next step connected.
+
+5
+00:00:14,132 --> 00:00:18,016
+Start with a curriculum, a class, and one clear topic.
+
+6
+00:00:18,016 --> 00:00:21,901
+In about two minutes, EdulabsAI creates an editable lesson plan,
+
+7
+00:00:21,901 --> 00:00:24,620
+visual slides, a quiz, and a worksheet—together.
+
+8
+00:00:25,120 --> 00:00:28,027
+Teach with diagrams your class can actually see,
+
+9
+00:00:28,027 --> 00:00:31,662
+then move from explanation to live participation without rebuilding the
+
+10
+00:00:31,662 --> 00:00:32,752
+lesson somewhere else.
+
+11
+00:00:33,252 --> 00:00:35,975
+Students get focused work, progress that saves,
+
+12
+00:00:35,975 --> 00:00:39,866
+and teacher-managed whole-class or group chat when collaboration belongs in
+
+13
+00:00:39,866 --> 00:00:40,644
+the lesson.
+
+14
+00:00:41,144 --> 00:00:45,680
+Paper answers and digital responses return as reviewed evidence,
+
+15
+00:00:45,680 --> 00:00:49,712
+exposing misconceptions and opening a focused reteach workspace.
+
+16
+00:00:50,212 --> 00:00:54,123
+Then teacher-approved progress can become clear report comments and family
+
+17
+00:00:54,123 --> 00:00:56,860
+updates, with the teacher still in control.
+
+18
+00:00:57,360 --> 00:01:02,367
+One intention. One connected record. One better next step.
+
+19
+00:01:02,367 --> 00:01:03,480
+Meet EdulabsAI.
+

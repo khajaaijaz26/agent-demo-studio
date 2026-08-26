@@ -1,0 +1,454 @@
+{
+  "schemaVersion": 2,
+  "title": "Class chat teachers can manage",
+  "description": "Teacher-managed whole-class and learning-group chat. https://www.edulabsai.com",
+  "outputDirectory": "../.work/renders/reel-04-chat-teachers-manage",
+  "brand": {
+    "name": "EdulabsAI",
+    "primary": "#F45A3A",
+    "secondary": "#FFB224",
+    "text": "#FFF8EF",
+    "fontFamily": "Segoe UI"
+  },
+  "clips": [
+    {
+      "id": "chat-hook",
+      "source": "../assets/generated/background-vertical-0.png",
+      "kind": "image",
+      "durationSeconds": 4.296,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic",
+          "glow"
+        ]
+      },
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0.46
+      },
+      "chapter": "CLASS CHAT",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "chat-product",
+      "source": "../assets/generated/background-vertical-1.png",
+      "kind": "image",
+      "durationSeconds": 9.6,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic"
+        ]
+      },
+      "transition": {
+        "type": "smooth-left",
+        "durationSeconds": 0.46
+      },
+      "chapter": "WHOLE CLASS OR GROUPS",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "chat-cta",
+      "source": "../assets/generated/background-vertical-2.png",
+      "kind": "image",
+      "durationSeconds": 7.272,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic",
+          "glow"
+        ]
+      },
+      "transition": {
+        "type": "fade-white",
+        "durationSeconds": 0.46
+      },
+      "chapter": "CONNECTED TO LEARNING",
+      "licenseId": "edulabsai-original-motion-art"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "chat-hook-art",
+      "type": "image",
+      "source": "../assets/generated/art/chat-network-vertical.png",
+      "startSeconds": 0.12,
+      "endSeconds": 4.175999999999999,
+      "x": 0.5,
+      "y": 0.64,
+      "width": 860,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "float",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.32
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "chat-hook-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-04-chat-teachers-manage-chat-hook-vertical.png",
+      "startSeconds": 0.08,
+      "endSeconds": 4.196,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "chat-hook-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 0.04,
+      "endSeconds": 4.255999999999999,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "chat-product-product-1",
+      "type": "video",
+      "source": "../../../test-output/edulabs-v2/scenes/38-student-class-chat.webm",
+      "startSeconds": 4.036,
+      "endSeconds": 13.276,
+      "x": 0.5,
+      "y": 0.585,
+      "width": 980,
+      "height": 551,
+      "loop": true,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-verified-product-recording"
+    },
+    {
+      "id": "chat-product-frame-1",
+      "type": "image",
+      "source": "../assets/generated/screen-frame-vertical.png",
+      "startSeconds": 4.036,
+      "endSeconds": 13.276,
+      "x": 0.5,
+      "y": 0.585,
+      "width": 980,
+      "height": 551,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "chat-product-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-04-chat-teachers-manage-chat-product-vertical.png",
+      "startSeconds": 3.9159999999999995,
+      "endSeconds": 13.336,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "chat-product-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 3.8759999999999994,
+      "endSeconds": 13.396,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "chat-cta-art",
+      "type": "image",
+      "source": "../assets/generated/art/finale-vertical.png",
+      "startSeconds": 13.095999999999998,
+      "endSeconds": 20.127999999999997,
+      "x": 0.5,
+      "y": 0.64,
+      "width": 860,
+      "opacity": 1,
+      "animation": {
+        "enter": "pop",
+        "exit": "fade",
+        "loop": "float",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.32
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "chat-cta-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-04-chat-teachers-manage-chat-cta-vertical.png",
+      "startSeconds": 13.056,
+      "endSeconds": 20.147999999999996,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "chat-cta-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 13.015999999999998,
+      "endSeconds": 20.208,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    }
+  ],
+  "captions": {
+    "source": "../.work/reel-04-chat-teachers-manage/reel-04-chat-teachers-manage.srt",
+    "format": "srt",
+    "burn": true,
+    "sidecar": true,
+    "language": "en",
+    "style": {
+      "position": "bottom",
+      "fontSize": 50,
+      "background": "#160B2AEF",
+      "accent": "#F45A3A",
+      "color": "#FFF8EF",
+      "maxCharactersPerLine": 30,
+      "maxLines": 2,
+      "margin": 210
+    }
+  },
+  "audio": {
+    "voices": [
+      {
+        "source": "../.work/reel-04-chat-teachers-manage/voice/01-chat-hook.mp3",
+        "startSeconds": 0.34,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/reel-04-chat-teachers-manage/voice/02-chat-product.mp3",
+        "startSeconds": 4.176,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/reel-04-chat-teachers-manage/voice/03-chat-cta.mp3",
+        "startSeconds": 13.316,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      }
+    ],
+    "music": {
+      "source": "../.work/reel-04-chat-teachers-manage/connected-spark.wav",
+      "loop": false,
+      "volume": 0.25,
+      "fadeInSeconds": 0.8,
+      "fadeOutSeconds": 1.4,
+      "licenseId": "edulabsai-connected-spark-score"
+    },
+    "soundEffects": [
+      {
+        "source": "../assets/generated/audio/impact.wav",
+        "startSeconds": 0,
+        "volume": 0.2,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/whoosh.wav",
+        "startSeconds": 3.836,
+        "volume": 0.12,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/impact.wav",
+        "startSeconds": 12.976,
+        "volume": 0.2,
+        "licenseId": "edulabsai-original-sound-design"
+      }
+    ],
+    "mode": "cinematic",
+    "keepClipAudio": false,
+    "duckMusic": true,
+    "duckingThreshold": 0.035,
+    "targetLufs": -14,
+    "truePeak": -2.3
+  },
+  "chapters": [
+    {
+      "title": "CLASS CHAT",
+      "startSeconds": 0
+    },
+    {
+      "title": "WHOLE CLASS OR GROUPS",
+      "startSeconds": 3.836
+    },
+    {
+      "title": "CONNECTED TO LEARNING",
+      "startSeconds": 12.976
+    }
+  ],
+  "exports": [
+    {
+      "id": "reels-master",
+      "preset": "reels",
+      "fileName": "reel-04-chat-teachers-manage",
+      "title": "Class chat teachers can manage",
+      "description": "Teacher-managed whole-class and learning-group chat.",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "lesson planning",
+        "K-12",
+        "Reels"
+      ],
+      "quality": 18,
+      "burnCaptions": true,
+      "thumbnailAtSeconds": 4.936
+    }
+  ],
+  "licenses": [
+    {
+      "id": "edulabsai-brand",
+      "source": "EdulabsAI brand identity",
+      "title": "EdulabsAI brand",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "https://www.edulabsai.com"
+    },
+    {
+      "id": "edulabsai-verified-product-recording",
+      "source": "Verified EdulabsAI browser recordings",
+      "title": "EdulabsAI product UI",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "test-output/edulabs-v2/recorded-scenes.json"
+    },
+    {
+      "id": "edulabsai-original-motion-art",
+      "source": "Generated campaign SVG and PNG motion art",
+      "title": "EdulabsAI campaign motion system",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original work",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-connected-spark-score",
+      "source": "Generated Connected Spark score",
+      "title": "Connected Spark",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original procedural composition",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-original-sound-design",
+      "source": "Generated impact, whoosh, sparkle, and click cues",
+      "title": "EdulabsAI campaign sound design",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original procedural sound",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "microsoft-edge-neural-speech",
+      "source": "en-US-EmmaMultilingualNeural",
+      "title": "Emma — cheerful, clear campaign narrator",
+      "creator": "Microsoft",
+      "license": "Provider terms",
+      "attribution": "Neural narration"
+    }
+  ],
+  "metadata": {
+    "campaign": "Meet EdulabsAI",
+    "campaignVersion": 2,
+    "productionId": "reel-04-chat-teachers-manage",
+    "creativeDirection": "CREATIVE-DIRECTION.md",
+    "sourceTourUsedAsFootageOnly": true,
+    "syntheticVoice": true,
+    "originalMusic": true,
+    "sceneTimeline": [
+      {
+        "id": "chat-hook",
+        "startSeconds": 0,
+        "endSeconds": 4.295999999999999
+      },
+      {
+        "id": "chat-product",
+        "startSeconds": 3.8359999999999994,
+        "endSeconds": 13.436
+      },
+      {
+        "id": "chat-cta",
+        "startSeconds": 12.975999999999999,
+        "endSeconds": 20.247999999999998
+      }
+    ]
+  }
+}

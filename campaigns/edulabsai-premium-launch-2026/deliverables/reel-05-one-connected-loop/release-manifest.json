@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 2,
+  "campaign": "Meet EdulabsAI",
+  "productionId": "reel-05-one-connected-loop",
+  "title": "One connected learning loop",
+  "format": "vertical",
+  "generatedAt": "2026-08-26T17:16:45.483Z",
+  "durationSeconds": 20.705333,
+  "outputs": [
+    {
+      "id": "reels-master",
+      "preset": "reels",
+      "video": "reel-05-one-connected-loop.mp4",
+      "thumbnail": "reel-05-one-connected-loop-thumbnail.jpg",
+      "captions": "reel-05-one-connected-loop.srt",
+      "chapters": "reel-05-one-connected-loop-chapters.ffmetadata",
+      "validation": [
+        {
+          "level": "info",
+          "code": "PROFILE_OK",
+          "exportId": "reels-master",
+          "message": "Instagram Reels dimensions, duration advisory, and frame rate checks passed."
+        }
+      ]
+    }
+  ],
+  "sceneTimeline": [
+    {
+      "id": "loop-hook",
+      "startSeconds": 0,
+      "endSeconds": 6.48,
+      "narration": "Generating a lesson is useful. Connecting what happens after it is the real difference."
+    },
+    {
+      "id": "loop-middle",
+      "startSeconds": 6.02,
+      "endSeconds": 15.452,
+      "narration": "EdulabsAI carries one objective through resources, student work, reviewed evidence, reteaching, and teacher-approved family communication."
+    },
+    {
+      "id": "loop-cta",
+      "startSeconds": 14.992,
+      "endSeconds": 20.704,
+      "narration": "One intention. One connected learning loop. Meet EdulabsAI."
+    }
+  ],
+  "rights": [
+    "EdulabsAI-owned brand and verified product recordings",
+    "Original campaign motion graphics, score, and sound effects",
+    "Microsoft Edge neural speech subject to provider terms"
+  ],
+  "reviewRequiredBeforePublishing": true
+}

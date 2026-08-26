@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-26T17:15:15.831Z",
+  "platform": "instagram",
+  "preset": "reels",
+  "video": "reel-03-paper-to-next-step.mp4",
+  "thumbnail": "reel-03-paper-to-next-step-thumbnail.jpg",
+  "captions": "reel-03-paper-to-next-step.srt",
+  "title": "Paper answers to the next step",
+  "description": "Snap & Mark and misconception-to-reteach story.",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "lesson planning",
+    "K-12",
+    "Reels"
+  ],
+  "reviewRequired": true,
+  "api": "Instagram Platform Content Publishing",
+  "flow": [
+    "Host the rendered file at a public URL",
+    "Create a REELS media container",
+    "Poll container status",
+    "Publish after review"
+  ],
+  "mediaType": "REELS",
+  "publicVideoUrl": "REPLACE_WITH_PUBLIC_VIDEO_URL"
+}

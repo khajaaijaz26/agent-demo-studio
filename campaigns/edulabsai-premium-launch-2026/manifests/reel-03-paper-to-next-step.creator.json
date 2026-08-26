@@ -1,0 +1,471 @@
+{
+  "schemaVersion": 2,
+  "title": "Paper answers to the next step",
+  "description": "Snap & Mark and misconception-to-reteach story. https://www.edulabsai.com",
+  "outputDirectory": "../.work/renders/reel-03-paper-to-next-step",
+  "brand": {
+    "name": "EdulabsAI",
+    "primary": "#F45A3A",
+    "secondary": "#FFB224",
+    "text": "#FFF8EF",
+    "fontFamily": "Segoe UI"
+  },
+  "clips": [
+    {
+      "id": "paper-hook",
+      "source": "../assets/generated/background-vertical-0.png",
+      "kind": "image",
+      "durationSeconds": 4.584,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic",
+          "glow"
+        ]
+      },
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0.46
+      },
+      "chapter": "PAPER IS EVIDENCE",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "snap-review",
+      "source": "../assets/generated/background-vertical-1.png",
+      "kind": "image",
+      "durationSeconds": 8.832,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic"
+        ]
+      },
+      "transition": {
+        "type": "reveal-up",
+        "durationSeconds": 0.46
+      },
+      "chapter": "SNAP & MARK",
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "reteach-cta",
+      "source": "../assets/generated/background-vertical-2.png",
+      "kind": "image",
+      "durationSeconds": 7.872,
+      "motion": "none",
+      "reframe": "fill",
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.02,
+        "vfx": [
+          "cinematic",
+          "glow"
+        ]
+      },
+      "transition": {
+        "type": "zoom-in",
+        "durationSeconds": 0.46
+      },
+      "chapter": "THEN ACT",
+      "licenseId": "edulabsai-original-motion-art"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "paper-hook-art",
+      "type": "image",
+      "source": "../assets/generated/art/evidence-pulse-vertical.png",
+      "startSeconds": 0.12,
+      "endSeconds": 4.4639999999999995,
+      "x": 0.5,
+      "y": 0.64,
+      "width": 860,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "float",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.35,
+        "intensity": 0.32
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "paper-hook-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-03-paper-to-next-step-paper-hook-vertical.png",
+      "startSeconds": 0.08,
+      "endSeconds": 4.484,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "paper-hook-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 0.04,
+      "endSeconds": 4.544,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "snap-review-product-1",
+      "type": "video",
+      "source": "../../../test-output/edulabs-v2/scenes/28-teacher-snap-mark.webm",
+      "startSeconds": 4.324,
+      "endSeconds": 12.796,
+      "x": 0.5,
+      "y": 0.585,
+      "width": 980,
+      "height": 551,
+      "loop": true,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-verified-product-recording"
+    },
+    {
+      "id": "snap-review-frame-1",
+      "type": "image",
+      "source": "../assets/generated/screen-frame-vertical.png",
+      "startSeconds": 4.324,
+      "endSeconds": 12.796,
+      "x": 0.5,
+      "y": 0.585,
+      "width": 980,
+      "height": 551,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "snap-review-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-03-paper-to-next-step-snap-review-vertical.png",
+      "startSeconds": 4.204,
+      "endSeconds": 12.856,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "snap-review-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 4.164,
+      "endSeconds": 12.916,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "reteach-cta-product-1",
+      "type": "video",
+      "source": "../../../test-output/edulabs-v2/scenes/27-teacher-learning-insights.webm",
+      "startSeconds": 12.695999999999998,
+      "endSeconds": 20.208,
+      "x": 0.5,
+      "y": 0.585,
+      "width": 980,
+      "height": 551,
+      "loop": true,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-verified-product-recording"
+    },
+    {
+      "id": "reteach-cta-frame-1",
+      "type": "image",
+      "source": "../assets/generated/screen-frame-vertical.png",
+      "startSeconds": 12.695999999999998,
+      "endSeconds": 20.208,
+      "x": 0.5,
+      "y": 0.585,
+      "width": 980,
+      "height": 551,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.3
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "reteach-cta-headline",
+      "type": "image",
+      "source": "../assets/generated/headlines/reel-03-paper-to-next-step-reteach-cta-vertical.png",
+      "startSeconds": 12.575999999999999,
+      "endSeconds": 20.267999999999997,
+      "x": 0.5,
+      "y": 0.2,
+      "width": 980,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.3,
+        "loop": "none",
+        "intensity": 0.72
+      },
+      "licenseId": "edulabsai-original-motion-art"
+    },
+    {
+      "id": "reteach-cta-brand",
+      "type": "image",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "startSeconds": 12.535999999999998,
+      "endSeconds": 20.328,
+      "x": 0.5,
+      "y": 0.055,
+      "width": 300,
+      "opacity": 0.94,
+      "animation": {
+        "enter": "fade",
+        "exit": "fade",
+        "durationSeconds": 0.3,
+        "exitDurationSeconds": 0.25
+      },
+      "licenseId": "edulabsai-brand"
+    }
+  ],
+  "captions": {
+    "source": "../.work/reel-03-paper-to-next-step/reel-03-paper-to-next-step.srt",
+    "format": "srt",
+    "burn": true,
+    "sidecar": true,
+    "language": "en",
+    "style": {
+      "position": "bottom",
+      "fontSize": 50,
+      "background": "#160B2AEF",
+      "accent": "#F45A3A",
+      "color": "#FFF8EF",
+      "maxCharactersPerLine": 30,
+      "maxLines": 2,
+      "margin": 210
+    }
+  },
+  "audio": {
+    "voices": [
+      {
+        "source": "../.work/reel-03-paper-to-next-step/voice/01-paper-hook.mp3",
+        "startSeconds": 0.34,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/reel-03-paper-to-next-step/voice/02-snap-review.mp3",
+        "startSeconds": 4.464,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/reel-03-paper-to-next-step/voice/03-reteach-cta.mp3",
+        "startSeconds": 12.836,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      }
+    ],
+    "music": {
+      "source": "../.work/reel-03-paper-to-next-step/connected-spark.wav",
+      "loop": false,
+      "volume": 0.25,
+      "fadeInSeconds": 0.8,
+      "fadeOutSeconds": 1.4,
+      "licenseId": "edulabsai-connected-spark-score"
+    },
+    "soundEffects": [
+      {
+        "source": "../assets/generated/audio/impact.wav",
+        "startSeconds": 0,
+        "volume": 0.2,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/whoosh.wav",
+        "startSeconds": 4.124,
+        "volume": 0.12,
+        "licenseId": "edulabsai-original-sound-design"
+      },
+      {
+        "source": "../assets/generated/audio/impact.wav",
+        "startSeconds": 12.496,
+        "volume": 0.2,
+        "licenseId": "edulabsai-original-sound-design"
+      }
+    ],
+    "mode": "cinematic",
+    "keepClipAudio": false,
+    "duckMusic": true,
+    "duckingThreshold": 0.035,
+    "targetLufs": -14,
+    "truePeak": -2.3
+  },
+  "chapters": [
+    {
+      "title": "PAPER IS EVIDENCE",
+      "startSeconds": 0
+    },
+    {
+      "title": "SNAP & MARK",
+      "startSeconds": 4.124
+    },
+    {
+      "title": "THEN ACT",
+      "startSeconds": 12.496
+    }
+  ],
+  "exports": [
+    {
+      "id": "reels-master",
+      "preset": "reels",
+      "fileName": "reel-03-paper-to-next-step",
+      "title": "Paper answers to the next step",
+      "description": "Snap & Mark and misconception-to-reteach story.",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "lesson planning",
+        "K-12",
+        "Reels"
+      ],
+      "quality": 18,
+      "burnCaptions": true,
+      "thumbnailAtSeconds": 5.224
+    }
+  ],
+  "licenses": [
+    {
+      "id": "edulabsai-brand",
+      "source": "EdulabsAI brand identity",
+      "title": "EdulabsAI brand",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "https://www.edulabsai.com"
+    },
+    {
+      "id": "edulabsai-verified-product-recording",
+      "source": "Verified EdulabsAI browser recordings",
+      "title": "EdulabsAI product UI",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "test-output/edulabs-v2/recorded-scenes.json"
+    },
+    {
+      "id": "edulabsai-original-motion-art",
+      "source": "Generated campaign SVG and PNG motion art",
+      "title": "EdulabsAI campaign motion system",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original work",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-connected-spark-score",
+      "source": "Generated Connected Spark score",
+      "title": "Connected Spark",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original procedural composition",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-original-sound-design",
+      "source": "Generated impact, whoosh, sparkle, and click cues",
+      "title": "EdulabsAI campaign sound design",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original procedural sound",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "microsoft-edge-neural-speech",
+      "source": "en-US-EmmaMultilingualNeural",
+      "title": "Emma — cheerful, clear campaign narrator",
+      "creator": "Microsoft",
+      "license": "Provider terms",
+      "attribution": "Neural narration"
+    }
+  ],
+  "metadata": {
+    "campaign": "Meet EdulabsAI",
+    "campaignVersion": 2,
+    "productionId": "reel-03-paper-to-next-step",
+    "creativeDirection": "CREATIVE-DIRECTION.md",
+    "sourceTourUsedAsFootageOnly": true,
+    "syntheticVoice": true,
+    "originalMusic": true,
+    "sceneTimeline": [
+      {
+        "id": "paper-hook",
+        "startSeconds": 0,
+        "endSeconds": 4.584
+      },
+      {
+        "id": "snap-review",
+        "startSeconds": 4.124,
+        "endSeconds": 12.956
+      },
+      {
+        "id": "reteach-cta",
+        "startSeconds": 12.495999999999999,
+        "endSeconds": 20.368
+      }
+    ]
+  }
+}

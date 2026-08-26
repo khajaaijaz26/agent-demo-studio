@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 2,
+  "campaign": "Meet EdulabsAI",
+  "productionId": "reel-02-slides-that-teach",
+  "title": "Slides that teach",
+  "format": "vertical",
+  "generatedAt": "2026-08-26T17:14:27.826Z",
+  "durationSeconds": 18.68,
+  "outputs": [
+    {
+      "id": "reels-master",
+      "preset": "reels",
+      "video": "reel-02-slides-that-teach.mp4",
+      "thumbnail": "reel-02-slides-that-teach-thumbnail.jpg",
+      "captions": "reel-02-slides-that-teach.srt",
+      "chapters": "reel-02-slides-that-teach-chapters.ffmetadata",
+      "validation": [
+        {
+          "level": "info",
+          "code": "PROFILE_OK",
+          "exportId": "reels-master",
+          "message": "Instagram Reels dimensions, duration advisory, and frame rate checks passed."
+        }
+      ]
+    }
+  ],
+  "sceneTimeline": [
+    {
+      "id": "clip-art-hook",
+      "startSeconds": 0,
+      "endSeconds": 5.352,
+      "narration": "A teaching visual should explain the idea—not decorate the slide."
+    },
+    {
+      "id": "real-deck",
+      "startSeconds": 4.892,
+      "endSeconds": 13.892,
+      "narration": "EdulabsAI builds editable diagrams, relevant images, questions, and explanations into one lesson-aligned visual story."
+    },
+    {
+      "id": "slides-cta",
+      "startSeconds": 13.432,
+      "endSeconds": 18.664,
+      "narration": "Slides your class can see, follow, and use. Meet EdulabsAI."
+    }
+  ],
+  "rights": [
+    "EdulabsAI-owned brand and verified product recordings",
+    "Original campaign motion graphics, score, and sound effects",
+    "Microsoft Edge neural speech subject to provider terms"
+  ],
+  "reviewRequiredBeforePublishing": true
+}

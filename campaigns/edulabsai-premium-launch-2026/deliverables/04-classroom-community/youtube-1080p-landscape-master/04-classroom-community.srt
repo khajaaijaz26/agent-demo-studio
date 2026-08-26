@@ -1,0 +1,48 @@
+1
+00:00:00,340 --> 00:00:02,428
+Students do not need another crowded portal.
+
+2
+00:00:02,428 --> 00:00:05,113
+They need a clear next step, the right work,
+
+3
+00:00:05,113 --> 00:00:06,604
+and help they can find.
+
+4
+00:00:07,104 --> 00:00:10,289
+Focused assignments keep instructions, teacher messages, progress,
+
+5
+00:00:10,289 --> 00:00:14,838
+and questions together. Students complete and submit the active work
+
+6
+00:00:14,838 --> 00:00:17,568
+before returning to the wider dashboard.
+
+7
+00:00:18,068 --> 00:00:22,018
+Teachers can open a whole-class channel or create named group
+
+8
+00:00:22,018 --> 00:00:25,968
+chats, set the profile, manage membership, and assign another admin
+
+9
+00:00:25,968 --> 00:00:27,548
+while retaining teacher oversight.
+
+10
+00:00:28,048 --> 00:00:32,421
+When communication belongs outside the classroom, Family Digest turns teacher-approved
+
+11
+00:00:32,421 --> 00:00:35,920
+learning progress into a clear update for guardians.
+
+12
+00:00:36,420 --> 00:00:41,940
+EdulabsAI keeps classroom work, collaboration, and communication connected to learning.
+

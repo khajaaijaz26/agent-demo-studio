@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 2,
+  "campaign": "Meet EdulabsAI",
+  "productionId": "reel-03-paper-to-next-step",
+  "title": "Paper answers to the next step",
+  "format": "vertical",
+  "generatedAt": "2026-08-26T17:15:15.837Z",
+  "durationSeconds": 20.385333,
+  "outputs": [
+    {
+      "id": "reels-master",
+      "preset": "reels",
+      "video": "reel-03-paper-to-next-step.mp4",
+      "thumbnail": "reel-03-paper-to-next-step-thumbnail.jpg",
+      "captions": "reel-03-paper-to-next-step.srt",
+      "chapters": "reel-03-paper-to-next-step-chapters.ffmetadata",
+      "validation": [
+        {
+          "level": "info",
+          "code": "PROFILE_OK",
+          "exportId": "reels-master",
+          "message": "Instagram Reels dimensions, duration advisory, and frame rate checks passed."
+        }
+      ]
+    }
+  ],
+  "sceneTimeline": [
+    {
+      "id": "paper-hook",
+      "startSeconds": 0,
+      "endSeconds": 4.584,
+      "narration": "Paper answers should not disappear into a pile after marking."
+    },
+    {
+      "id": "snap-review",
+      "startSeconds": 4.124,
+      "endSeconds": 12.956,
+      "narration": "Snap and Mark transcribes supported responses for teacher review. The teacher corrects uncertainty and confirms the evidence."
+    },
+    {
+      "id": "reteach-cta",
+      "startSeconds": 12.496,
+      "endSeconds": 20.368,
+      "narration": "Then Learning Insights turns the verified gap into a focused reteach workspace. That is a connected learning loop."
+    }
+  ],
+  "rights": [
+    "EdulabsAI-owned brand and verified product recordings",
+    "Original campaign motion graphics, score, and sound effects",
+    "Microsoft Edge neural speech subject to provider terms"
+  ],
+  "reviewRequiredBeforePublishing": true
+}

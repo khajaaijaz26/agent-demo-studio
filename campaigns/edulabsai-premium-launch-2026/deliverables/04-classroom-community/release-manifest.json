@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "campaign": "Meet EdulabsAI",
+  "productionId": "04-classroom-community",
+  "title": "A classroom that stays connected",
+  "format": "landscape",
+  "generatedAt": "2026-08-26T17:28:10.110Z",
+  "durationSeconds": 42.58,
+  "outputs": [
+    {
+      "id": "landscape-master",
+      "preset": "youtube-1080p",
+      "video": "04-classroom-community.mp4",
+      "thumbnail": "04-classroom-community-thumbnail.jpg",
+      "captions": "04-classroom-community.srt",
+      "chapters": "04-classroom-community-chapters.ffmetadata",
+      "validation": [
+        {
+          "level": "info",
+          "code": "PROFILE_OK",
+          "exportId": "landscape-master",
+          "message": "YouTube 1080p dimensions, duration advisory, and frame rate checks passed."
+        }
+      ]
+    }
+  ],
+  "sceneTimeline": [
+    {
+      "id": "student-hook",
+      "startSeconds": 0,
+      "endSeconds": 7.224,
+      "narration": "Students do not need another crowded portal. They need a clear next step, the right work, and help they can find."
+    },
+    {
+      "id": "focused-work",
+      "startSeconds": 6.764,
+      "endSeconds": 18.188,
+      "narration": "Focused assignments keep instructions, teacher messages, progress, and questions together. Students complete and submit the active work before returning to the wider dashboard."
+    },
+    {
+      "id": "managed-chat",
+      "startSeconds": 17.728,
+      "endSeconds": 28.168,
+      "narration": "Teachers can open a whole-class channel or create named group chats, set the profile, manage membership, and assign another admin while retaining teacher oversight."
+    },
+    {
+      "id": "family",
+      "startSeconds": 27.708,
+      "endSeconds": 36.54,
+      "narration": "When communication belongs outside the classroom, Family Digest turns teacher-approved learning progress into a clear update for guardians."
+    },
+    {
+      "id": "community-cta",
+      "startSeconds": 36.08,
+      "endSeconds": 42.56,
+      "narration": "EdulabsAI keeps classroom work, collaboration, and communication connected to learning."
+    }
+  ],
+  "rights": [
+    "EdulabsAI-owned brand and verified product recordings",
+    "Original campaign motion graphics, score, and sound effects",
+    "Microsoft Edge neural speech subject to provider terms"
+  ],
+  "reviewRequiredBeforePublishing": true
+}
