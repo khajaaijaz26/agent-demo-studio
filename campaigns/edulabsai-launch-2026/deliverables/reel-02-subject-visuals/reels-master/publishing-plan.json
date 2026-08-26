@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-26T15:59:22.195Z",
+  "platform": "instagram",
+  "preset": "reels",
+  "video": "reel-02-subject-visuals.mp4",
+  "thumbnail": "reel-02-subject-visuals-thumbnail.jpg",
+  "captions": "reel-02-subject-visuals.srt",
+  "title": "EdulabsAI Reel — Visuals Built for the Subject",
+  "description": "Showcase editable, topic-aware teaching diagrams across K–12 subjects.\n\nStart free: https://www.edulabsai.com",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "K-12 teaching",
+    "lesson planning",
+    "teacher tools"
+  ],
+  "reviewRequired": true,
+  "api": "Instagram Platform Content Publishing",
+  "flow": [
+    "Host the rendered file at a public URL",
+    "Create a REELS media container",
+    "Poll container status",
+    "Publish after review"
+  ],
+  "mediaType": "REELS",
+  "publicVideoUrl": "REPLACE_WITH_PUBLIC_VIDEO_URL"
+}

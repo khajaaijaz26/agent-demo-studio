@@ -64,6 +64,7 @@
     "test:smoke": "npm run build && node scripts/smoke.mjs",
     "test:creator": "npm run build && node scripts/creator-smoke.mjs",
     "check": "npm run typecheck && npm run test && npm run build",
+    "campaign:edulabsai": "npm run build && node campaigns/edulabsai-launch-2026/build.mjs",
     "prepare": "npm run build",
     "prepublishOnly": "npm run check"
   },

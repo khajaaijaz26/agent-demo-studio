@@ -1,0 +1,239 @@
+{
+  "generatedAt": "2026-08-26T15:59:25.091Z",
+  "outputs": [
+    {
+      "id": "video-01-connected-classroom-tour",
+      "format": "landscape",
+      "durationSeconds": 69.830667,
+      "sizeBytes": 9595350,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "channels": 2,
+        "sampleRate": "48000"
+      },
+      "checks": {
+        "dimensions": true,
+        "videoCodec": true,
+        "audioPresent": true,
+        "captionsPresent": true,
+        "thumbnailPresent": true,
+        "platformValidation": true
+      },
+      "passed": true
+    },
+    {
+      "id": "video-02-curriculum-to-classroom",
+      "format": "landscape",
+      "durationSeconds": 61.3,
+      "sizeBytes": 7207509,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "channels": 2,
+        "sampleRate": "48000"
+      },
+      "checks": {
+        "dimensions": true,
+        "videoCodec": true,
+        "audioPresent": true,
+        "captionsPresent": true,
+        "thumbnailPresent": true,
+        "platformValidation": true
+      },
+      "passed": true
+    },
+    {
+      "id": "video-03-evidence-to-action",
+      "format": "landscape",
+      "durationSeconds": 62.9,
+      "sizeBytes": 8172858,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "channels": 2,
+        "sampleRate": "48000"
+      },
+      "checks": {
+        "dimensions": true,
+        "videoCodec": true,
+        "audioPresent": true,
+        "captionsPresent": true,
+        "thumbnailPresent": true,
+        "platformValidation": true
+      },
+      "passed": true
+    },
+    {
+      "id": "video-04-school-pilot",
+      "format": "landscape",
+      "durationSeconds": 60.9,
+      "sizeBytes": 8615451,
+      "video": {
+        "codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "channels": 2,
+        "sampleRate": "48000"
+      },
+      "checks": {
+        "dimensions": true,
+        "videoCodec": true,
+        "audioPresent": true,
+        "captionsPresent": true,
+        "thumbnailPresent": true,
+        "platformValidation": true
+      },
+      "passed": true
+    },
+    {
+      "id": "reel-01-two-minutes-to-ready",
+      "format": "vertical",
+      "durationSeconds": 31.317375,
+      "sizeBytes": 4169658,
+      "video": {
+        "codec": "h264",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "channels": 2,
+        "sampleRate": "48000"
+      },
+      "checks": {
+        "dimensions": true,
+        "videoCodec": true,
+        "audioPresent": true,
+        "captionsPresent": true,
+        "thumbnailPresent": true,
+        "platformValidation": true
+      },
+      "passed": true
+    },
+    {
+      "id": "reel-02-subject-visuals",
+      "format": "vertical",
+      "durationSeconds": 32.7,
+      "sizeBytes": 4820518,
+      "video": {
+        "codec": "h264",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "channels": 2,
+        "sampleRate": "48000"
+      },
+      "checks": {
+        "dimensions": true,
+        "videoCodec": true,
+        "audioPresent": true,
+        "captionsPresent": true,
+        "thumbnailPresent": true,
+        "platformValidation": true
+      },
+      "passed": true
+    },
+    {
+      "id": "reel-03-paper-to-next-step",
+      "format": "vertical",
+      "durationSeconds": 25.7,
+      "sizeBytes": 4363125,
+      "video": {
+        "codec": "h264",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "channels": 2,
+        "sampleRate": "48000"
+      },
+      "checks": {
+        "dimensions": true,
+        "videoCodec": true,
+        "audioPresent": true,
+        "captionsPresent": true,
+        "thumbnailPresent": true,
+        "platformValidation": true
+      },
+      "passed": true
+    },
+    {
+      "id": "reel-04-safe-class-connection",
+      "format": "vertical",
+      "durationSeconds": 29.536,
+      "sizeBytes": 4691839,
+      "video": {
+        "codec": "h264",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "channels": 2,
+        "sampleRate": "48000"
+      },
+      "checks": {
+        "dimensions": true,
+        "videoCodec": true,
+        "audioPresent": true,
+        "captionsPresent": true,
+        "thumbnailPresent": true,
+        "platformValidation": true
+      },
+      "passed": true
+    },
+    {
+      "id": "reel-05-one-connected-loop",
+      "format": "vertical",
+      "durationSeconds": 35.526688,
+      "sizeBytes": 6019598,
+      "video": {
+        "codec": "h264",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1"
+      },
+      "audio": {
+        "codec": "aac",
+        "channels": 2,
+        "sampleRate": "48000"
+      },
+      "checks": {
+        "dimensions": true,
+        "videoCodec": true,
+        "audioPresent": true,
+        "captionsPresent": true,
+        "thumbnailPresent": true,
+        "platformValidation": true
+      },
+      "passed": true
+    }
+  ]
+}

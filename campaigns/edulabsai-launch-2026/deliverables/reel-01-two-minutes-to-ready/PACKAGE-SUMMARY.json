@@ -1,0 +1,33 @@
+[
+  {
+    "id": "master",
+    "bytes": 4169658,
+    "publishingPlan": {
+      "generatedAt": "2026-08-26T15:59:21.300Z",
+      "platform": "instagram",
+      "preset": "reels",
+      "video": "reel-01-two-minutes-to-ready.mp4",
+      "thumbnail": "reel-01-two-minutes-to-ready-thumbnail.jpg",
+      "captions": "reel-01-two-minutes-to-ready.srt",
+      "title": "EdulabsAI Reel — One Brief to a Lesson Pack",
+      "description": "A fast vertical ad showing the curriculum-to-ready workflow.\n\nStart free: https://www.edulabsai.com",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "K-12 teaching",
+        "lesson planning",
+        "teacher tools"
+      ],
+      "reviewRequired": true,
+      "api": "Instagram Platform Content Publishing",
+      "flow": [
+        "Host the rendered file at a public URL",
+        "Create a REELS media container",
+        "Poll container status",
+        "Publish after review"
+      ],
+      "mediaType": "REELS",
+      "publicVideoUrl": "REPLACE_WITH_PUBLIC_VIDEO_URL"
+    }
+  }
+]

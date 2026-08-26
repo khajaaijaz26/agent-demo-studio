@@ -1,0 +1,55 @@
+{
+  "title": "EdulabsAI Reel — One Brief to a Lesson Pack",
+  "outputDirectory": "../.work/sync/reel-01-two-minutes-to-ready",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "quality": 21,
+  "speechLeadSeconds": 0.36,
+  "speechTailSeconds": 0.48,
+  "maximumSlowdown": 1.08,
+  "musicVolume": 0.038,
+  "generatedMusic": true,
+  "voices": [
+    {
+      "id": "sonia",
+      "name": "Sonia — warm British English",
+      "voice": "en-GB-SoniaNeural",
+      "rate": 7,
+      "volume": 0,
+      "pitch": 0
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-v-ready-intro",
+      "videoPath": "../.work/motion/vertical/v-ready-intro.mp4",
+      "narration": "One brief. Four connected resources. About two minutes to a classroom-ready first draft.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "02-v-context",
+      "videoPath": "../.work/motion/vertical/v-context.mp4",
+      "narration": "Choose the curriculum, grade, subject, topic, language and any source your lesson needs.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "03-v-four-resources",
+      "videoPath": "../.work/motion/vertical/v-four-resources.mp4",
+      "narration": "Generate the plan, visual slides, quiz and worksheet together from the same objective.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "04-v-edit-teach",
+      "videoPath": "../.work/motion/vertical/v-edit-teach.mp4",
+      "narration": "Edit, preview, export and teach live, while you stay in control.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "05-vertical-outro",
+      "videoPath": "../.work/motion/vertical/vertical-outro.mp4",
+      "narration": "Create your first connected lesson free at edulabsai dot com.",
+      "minimumDurationSeconds": 3.2
+    }
+  ]
+}

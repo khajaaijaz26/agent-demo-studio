@@ -1,0 +1,33 @@
+[
+  {
+    "id": "master",
+    "bytes": 4691839,
+    "publishingPlan": {
+      "generatedAt": "2026-08-26T15:59:23.833Z",
+      "platform": "instagram",
+      "preset": "reels",
+      "video": "reel-04-safe-class-connection.mp4",
+      "thumbnail": "reel-04-safe-class-connection-thumbnail.jpg",
+      "captions": "reel-04-safe-class-connection.srt",
+      "title": "EdulabsAI Reel — Safe Class and Family Connection",
+      "description": "Whole-class chat, named groups, focus locking and consent-first Family Digests.\n\nStart free: https://www.edulabsai.com",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "K-12 teaching",
+        "lesson planning",
+        "teacher tools"
+      ],
+      "reviewRequired": true,
+      "api": "Instagram Platform Content Publishing",
+      "flow": [
+        "Host the rendered file at a public URL",
+        "Create a REELS media container",
+        "Poll container status",
+        "Publish after review"
+      ],
+      "mediaType": "REELS",
+      "publicVideoUrl": "REPLACE_WITH_PUBLIC_VIDEO_URL"
+    }
+  }
+]

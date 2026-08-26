@@ -1,0 +1,55 @@
+{
+  "title": "EdulabsAI Reel — Paper to the Next Teaching Move",
+  "outputDirectory": "../.work/sync/reel-03-paper-to-next-step",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "quality": 21,
+  "speechLeadSeconds": 0.36,
+  "speechTailSeconds": 0.48,
+  "maximumSlowdown": 1.08,
+  "musicVolume": 0.038,
+  "generatedMusic": true,
+  "voices": [
+    {
+      "id": "sonia",
+      "name": "Sonia — warm British English",
+      "voice": "en-GB-SoniaNeural",
+      "rate": 7,
+      "volume": 0,
+      "pitch": 0
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-v-paper-intro",
+      "videoPath": "../.work/motion/vertical/v-paper-intro.mp4",
+      "narration": "Paper answers should not disappear from the learning loop.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "02-v-teacher-review",
+      "videoPath": "../.work/motion/vertical/v-teacher-review.mp4",
+      "narration": "Recognition stays de-identified, and every transcription waits for teacher review.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "03-v-pattern",
+      "videoPath": "../.work/motion/vertical/v-pattern.mp4",
+      "narration": "Verify a repeated misconception before it changes the learning record.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "04-v-tomorrow",
+      "videoPath": "../.work/motion/vertical/v-tomorrow.mp4",
+      "narration": "Turn that pattern into editable groups and a focused Tomorrow Pack.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "05-vertical-outro",
+      "videoPath": "../.work/motion/vertical/vertical-outro.mp4",
+      "narration": "Bring evidence back into teaching at edulabsai dot com.",
+      "minimumDurationSeconds": 3.2
+    }
+  ]
+}

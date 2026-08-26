@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "title": "EdulabsAI — From Evidence to Tomorrow's Reteach",
+  "createdAt": "2026-08-26T15:59:19.255Z",
+  "sourceRenderResult": {
+    "title": "EdulabsAI — From Evidence to Tomorrow's Reteach",
+    "manifest": "../../manifests/video-03-evidence-to-action.creator.json",
+    "outputs": [
+      {
+        "id": "master",
+        "preset": "youtube-1080p",
+        "platform": "youtube",
+        "durationSeconds": 62.9,
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "fileSizeBytes": 8172858,
+        "validation": [
+          {
+            "level": "info",
+            "code": "PROFILE_OK",
+            "exportId": "master",
+            "message": "YouTube 1080p dimensions, duration advisory, and frame rate checks passed."
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-26T15:50:49.684Z"
+  },
+  "outputs": [
+    {
+      "id": "master",
+      "directory": "youtube-1080p-master",
+      "video": "youtube-1080p-master/video-03-evidence-to-action.mp4",
+      "thumbnail": "youtube-1080p-master/video-03-evidence-to-action-thumbnail.jpg",
+      "captions": "youtube-1080p-master/video-03-evidence-to-action.srt",
+      "publishingPlan": "youtube-1080p-master/publishing-plan.json"
+    }
+  ],
+  "portability": "All paths are relative to this release package. Reproducible intermediates are intentionally excluded."
+}

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "title": "EdulabsAI Reel — Visuals Built for the Subject",
+  "description": "Showcase editable, topic-aware teaching diagrams across K–12 subjects.\n\nTeaching visuals that explain the idea instead of decorating the slide.\n\nExplore: https://www.edulabsai.com",
+  "outputDirectory": "../.work/render/reel-02-subject-visuals",
+  "brand": {
+    "name": "EdulabsAI",
+    "primary": "#B83218",
+    "secondary": "#6B5BFF",
+    "text": "#FFFFFF",
+    "fontFamily": "Arial, Helvetica, sans-serif"
+  },
+  "clips": [
+    {
+      "id": "synchronized-master",
+      "source": "../.work/sync/reel-02-subject-visuals/edulabsai-reel-visuals-built-for-the-subject-sonia-1080p.mp4",
+      "kind": "video",
+      "volume": 1,
+      "reframe": "fill",
+      "effects": {
+        "contrast": 1.02,
+        "saturation": 1.02
+      },
+      "licenseId": "edulabsai-owned"
+    }
+  ],
+  "captions": {
+    "source": "../.work/sync/reel-02-subject-visuals/edulabsai-reel-visuals-built-for-the-subject-sonia-1080p.srt",
+    "format": "srt",
+    "burn": true,
+    "sidecar": true,
+    "language": "en",
+    "style": {
+      "position": "bottom",
+      "fontSize": 46,
+      "color": "#FFFFFF",
+      "background": "#2D1B47EE",
+      "accent": "#B83218",
+      "maxCharactersPerLine": 31,
+      "maxLines": 3,
+      "margin": 300
+    }
+  },
+  "audio": {
+    "keepClipAudio": true,
+    "clipVolume": 1,
+    "targetLufs": -16,
+    "truePeak": -1.5
+  },
+  "exports": [
+    {
+      "id": "master",
+      "preset": "reels",
+      "fileName": "reel-02-subject-visuals",
+      "title": "EdulabsAI Reel — Visuals Built for the Subject",
+      "description": "Showcase editable, topic-aware teaching diagrams across K–12 subjects.\n\nStart free: https://www.edulabsai.com",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "K-12 teaching",
+        "lesson planning",
+        "teacher tools"
+      ],
+      "quality": 23,
+      "videoCodec": "h264",
+      "thumbnailAtSeconds": 1.25,
+      "burnCaptions": true
+    }
+  ],
+  "licenses": [
+    {
+      "id": "edulabsai-owned",
+      "source": "EdulabsAI product and launch artwork",
+      "title": "EdulabsAI owned campaign assets",
+      "creator": "EdulabsAI",
+      "license": "Original brand, product UI and campaign artwork owned by EdulabsAI",
+      "attribution": "EdulabsAI"
+    }
+  ],
+  "metadata": {
+    "campaign": "EdulabsAI launch campaign 2026",
+    "campaignId": "reel-02-subject-visuals",
+    "format": "vertical",
+    "audience": "Teachers who want better presentation visuals",
+    "hook": "Teaching visuals that explain the idea instead of decorating the slide.",
+    "generatedBy": "Agent Demo Studio",
+    "reviewStatus": "rendered-for-founder-review"
+  }
+}

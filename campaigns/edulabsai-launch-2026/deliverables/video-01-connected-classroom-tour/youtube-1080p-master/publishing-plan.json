@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-26T15:59:17.226Z",
+  "platform": "youtube",
+  "preset": "youtube-1080p",
+  "video": "video-01-connected-classroom-tour.mp4",
+  "thumbnail": "video-01-connected-classroom-tour-thumbnail.jpg",
+  "captions": "video-01-connected-classroom-tour.srt",
+  "title": "EdulabsAI — The Connected Classroom Tour",
+  "description": "See how one curriculum-aware lesson record connects planning, live teaching, evidence, reteaching and family communication.\n\nStart free: https://www.edulabsai.com",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "K-12 teaching",
+    "lesson planning",
+    "teacher tools"
+  ],
+  "reviewRequired": true,
+  "api": "YouTube Data API v3",
+  "flow": [
+    "OAuth youtube.upload scope",
+    "videos.insert resumable upload",
+    "thumbnails.set",
+    "captions.insert when supplied"
+  ],
+  "defaultPrivacy": "private",
+  "syntheticMediaDisclosure": "Set status.containsSyntheticMedia when applicable."
+}

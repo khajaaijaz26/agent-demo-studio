@@ -1,0 +1,39 @@
+1
+00:00:00,460 --> 00:00:05,956
+A useful school AI pilot should reduce repeated work without reducing
+teacher control.
+
+2
+00:00:07,036 --> 00:00:15,100
+EdulabsAI connects curriculum-aware planning, editable resources, live
+delivery, evidence and the next teaching decision.
+
+3
+00:00:16,180 --> 00:00:23,764
+Teachers can work across broad K–12 curricula and subjects, with
+optional source grounding for exact local material.
+
+4
+00:00:24,844 --> 00:00:32,020
+Class and group communication is teacher administered, moderated and
+paused during focused assessments when required.
+
+5
+00:00:33,100 --> 00:00:39,748
+Paper recognition is de-identified and review-first, so automation never
+silently becomes a grade.
+
+6
+00:00:40,828 --> 00:00:46,636
+Family communication is consent first, source backed and teacher
+approved before delivery.
+
+7
+00:00:47,716 --> 00:00:55,012
+The result is one inspectable lesson record with clear human
+checkpoints, instead of scattered tools and copied context.
+
+8
+00:00:56,092 --> 00:01:00,196
+Book an EdulabsAI school pilot at edulabsai dot com.
+

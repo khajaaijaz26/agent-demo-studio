@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "title": "EdulabsAI Reel — Visuals Built for the Subject",
+  "createdAt": "2026-08-26T15:59:22.199Z",
+  "sourceRenderResult": {
+    "title": "EdulabsAI Reel — Visuals Built for the Subject",
+    "manifest": "../../manifests/reel-02-subject-visuals.creator.json",
+    "outputs": [
+      {
+        "id": "master",
+        "preset": "reels",
+        "platform": "instagram",
+        "durationSeconds": 32.7,
+        "width": 1080,
+        "height": 1920,
+        "fps": 30,
+        "fileSizeBytes": 4820518,
+        "validation": [
+          {
+            "level": "info",
+            "code": "PROFILE_OK",
+            "exportId": "master",
+            "message": "Instagram Reels dimensions, duration advisory, and frame rate checks passed."
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-26T15:53:33.144Z"
+  },
+  "outputs": [
+    {
+      "id": "master",
+      "directory": "reels-master",
+      "video": "reels-master/reel-02-subject-visuals.mp4",
+      "thumbnail": "reels-master/reel-02-subject-visuals-thumbnail.jpg",
+      "captions": "reels-master/reel-02-subject-visuals.srt",
+      "publishingPlan": "reels-master/publishing-plan.json"
+    }
+  ],
+  "portability": "All paths are relative to this release package. Reproducible intermediates are intentionally excluded."
+}

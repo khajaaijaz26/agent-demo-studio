@@ -1,0 +1,33 @@
+[
+  {
+    "id": "master",
+    "bytes": 7207509,
+    "publishingPlan": {
+      "generatedAt": "2026-08-26T15:59:18.211Z",
+      "platform": "youtube",
+      "preset": "youtube-1080p",
+      "video": "video-02-curriculum-to-classroom.mp4",
+      "thumbnail": "video-02-curriculum-to-classroom-thumbnail.jpg",
+      "captions": "video-02-curriculum-to-classroom.srt",
+      "title": "EdulabsAI — Curriculum to Classroom",
+      "description": "A focused walkthrough of curriculum-aware generation, editable subject visuals and classroom-ready exports.\n\nStart free: https://www.edulabsai.com",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "K-12 teaching",
+        "lesson planning",
+        "teacher tools"
+      ],
+      "reviewRequired": true,
+      "api": "YouTube Data API v3",
+      "flow": [
+        "OAuth youtube.upload scope",
+        "videos.insert resumable upload",
+        "thumbnails.set",
+        "captions.insert when supplied"
+      ],
+      "defaultPrivacy": "private",
+      "syntheticMediaDisclosure": "Set status.containsSyntheticMedia when applicable."
+    }
+  }
+]

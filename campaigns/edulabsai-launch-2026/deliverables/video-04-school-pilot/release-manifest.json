@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "title": "EdulabsAI — A Connected AI Teaching Pilot",
+  "createdAt": "2026-08-26T15:59:20.255Z",
+  "sourceRenderResult": {
+    "title": "EdulabsAI — A Connected AI Teaching Pilot",
+    "manifest": "../../manifests/video-04-school-pilot.creator.json",
+    "outputs": [
+      {
+        "id": "master",
+        "preset": "youtube-1080p",
+        "platform": "youtube",
+        "durationSeconds": 60.9,
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "fileSizeBytes": 8615451,
+        "validation": [
+          {
+            "level": "info",
+            "code": "PROFILE_OK",
+            "exportId": "master",
+            "message": "YouTube 1080p dimensions, duration advisory, and frame rate checks passed."
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-26T15:52:31.068Z"
+  },
+  "outputs": [
+    {
+      "id": "master",
+      "directory": "youtube-1080p-master",
+      "video": "youtube-1080p-master/video-04-school-pilot.mp4",
+      "thumbnail": "youtube-1080p-master/video-04-school-pilot-thumbnail.jpg",
+      "captions": "youtube-1080p-master/video-04-school-pilot.srt",
+      "publishingPlan": "youtube-1080p-master/publishing-plan.json"
+    }
+  ],
+  "portability": "All paths are relative to this release package. Reproducible intermediates are intentionally excluded."
+}

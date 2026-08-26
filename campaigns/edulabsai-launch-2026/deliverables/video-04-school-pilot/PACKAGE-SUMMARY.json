@@ -1,0 +1,33 @@
+[
+  {
+    "id": "master",
+    "bytes": 8615451,
+    "publishingPlan": {
+      "generatedAt": "2026-08-26T15:59:20.251Z",
+      "platform": "youtube",
+      "preset": "youtube-1080p",
+      "video": "video-04-school-pilot.mp4",
+      "thumbnail": "video-04-school-pilot-thumbnail.jpg",
+      "captions": "video-04-school-pilot.srt",
+      "title": "EdulabsAI — A Connected AI Teaching Pilot",
+      "description": "A concise school-leader overview of the connected workflow, teacher controls and pilot value.\n\nStart free: https://www.edulabsai.com",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "K-12 teaching",
+        "lesson planning",
+        "teacher tools"
+      ],
+      "reviewRequired": true,
+      "api": "YouTube Data API v3",
+      "flow": [
+        "OAuth youtube.upload scope",
+        "videos.insert resumable upload",
+        "thumbnails.set",
+        "captions.insert when supplied"
+      ],
+      "defaultPrivacy": "private",
+      "syntheticMediaDisclosure": "Set status.containsSyntheticMedia when applicable."
+    }
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-26T15:59:24.537Z",
+  "platform": "instagram",
+  "preset": "reels",
+  "video": "reel-05-one-connected-loop.mp4",
+  "thumbnail": "reel-05-one-connected-loop-thumbnail.jpg",
+  "captions": "reel-05-one-connected-loop.srt",
+  "title": "EdulabsAI Reel — One Connected Learning Loop",
+  "description": "The complete Plan, Teach, Respond, Reteach and Share loop in under a minute.\n\nStart free: https://www.edulabsai.com",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "K-12 teaching",
+    "lesson planning",
+    "teacher tools"
+  ],
+  "reviewRequired": true,
+  "api": "Instagram Platform Content Publishing",
+  "flow": [
+    "Host the rendered file at a public URL",
+    "Create a REELS media container",
+    "Poll container status",
+    "Publish after review"
+  ],
+  "mediaType": "REELS",
+  "publicVideoUrl": "REPLACE_WITH_PUBLIC_VIDEO_URL"
+}

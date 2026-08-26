@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "title": "EdulabsAI — Curriculum to Classroom",
+  "createdAt": "2026-08-26T15:59:18.217Z",
+  "sourceRenderResult": {
+    "title": "EdulabsAI — Curriculum to Classroom",
+    "manifest": "../../manifests/video-02-curriculum-to-classroom.creator.json",
+    "outputs": [
+      {
+        "id": "master",
+        "preset": "youtube-1080p",
+        "platform": "youtube",
+        "durationSeconds": 61.3,
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "fileSizeBytes": 7207509,
+        "validation": [
+          {
+            "level": "info",
+            "code": "PROFILE_OK",
+            "exportId": "master",
+            "message": "YouTube 1080p dimensions, duration advisory, and frame rate checks passed."
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-26T15:49:04.384Z"
+  },
+  "outputs": [
+    {
+      "id": "master",
+      "directory": "youtube-1080p-master",
+      "video": "youtube-1080p-master/video-02-curriculum-to-classroom.mp4",
+      "thumbnail": "youtube-1080p-master/video-02-curriculum-to-classroom-thumbnail.jpg",
+      "captions": "youtube-1080p-master/video-02-curriculum-to-classroom.srt",
+      "publishingPlan": "youtube-1080p-master/publishing-plan.json"
+    }
+  ],
+  "portability": "All paths are relative to this release package. Reproducible intermediates are intentionally excluded."
+}

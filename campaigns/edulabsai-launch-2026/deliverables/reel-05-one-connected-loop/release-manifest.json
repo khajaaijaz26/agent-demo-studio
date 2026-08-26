@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "title": "EdulabsAI Reel — One Connected Learning Loop",
+  "createdAt": "2026-08-26T15:59:24.540Z",
+  "sourceRenderResult": {
+    "title": "EdulabsAI Reel — One Connected Learning Loop",
+    "manifest": "../../manifests/reel-05-one-connected-loop.creator.json",
+    "outputs": [
+      {
+        "id": "master",
+        "preset": "reels",
+        "platform": "instagram",
+        "durationSeconds": 35.526688,
+        "width": 1080,
+        "height": 1920,
+        "fps": 30,
+        "fileSizeBytes": 6019598,
+        "validation": [
+          {
+            "level": "info",
+            "code": "PROFILE_OK",
+            "exportId": "master",
+            "message": "Instagram Reels dimensions, duration advisory, and frame rate checks passed."
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-26T15:56:48.533Z"
+  },
+  "outputs": [
+    {
+      "id": "master",
+      "directory": "reels-master",
+      "video": "reels-master/reel-05-one-connected-loop.mp4",
+      "thumbnail": "reels-master/reel-05-one-connected-loop-thumbnail.jpg",
+      "captions": "reels-master/reel-05-one-connected-loop.srt",
+      "publishingPlan": "reels-master/publishing-plan.json"
+    }
+  ],
+  "portability": "All paths are relative to this release package. Reproducible intermediates are intentionally excluded."
+}

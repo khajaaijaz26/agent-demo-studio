@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "title": "EdulabsAI Reel — One Brief to a Lesson Pack",
+  "createdAt": "2026-08-26T15:59:21.306Z",
+  "sourceRenderResult": {
+    "title": "EdulabsAI Reel — One Brief to a Lesson Pack",
+    "manifest": "../../manifests/reel-01-two-minutes-to-ready.creator.json",
+    "outputs": [
+      {
+        "id": "master",
+        "preset": "reels",
+        "platform": "instagram",
+        "durationSeconds": 31.317375,
+        "width": 1080,
+        "height": 1920,
+        "fps": 30,
+        "fileSizeBytes": 4169658,
+        "validation": [
+          {
+            "level": "info",
+            "code": "PROFILE_OK",
+            "exportId": "master",
+            "message": "Instagram Reels dimensions, duration advisory, and frame rate checks passed."
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-26T15:16:00.204Z"
+  },
+  "outputs": [
+    {
+      "id": "master",
+      "directory": "reels-master",
+      "video": "reels-master/reel-01-two-minutes-to-ready.mp4",
+      "thumbnail": "reels-master/reel-01-two-minutes-to-ready-thumbnail.jpg",
+      "captions": "reels-master/reel-01-two-minutes-to-ready.srt",
+      "publishingPlan": "reels-master/publishing-plan.json"
+    }
+  ],
+  "portability": "All paths are relative to this release package. Reproducible intermediates are intentionally excluded."
+}

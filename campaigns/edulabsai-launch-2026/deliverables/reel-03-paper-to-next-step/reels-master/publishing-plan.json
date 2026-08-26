@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-26T15:59:23.082Z",
+  "platform": "instagram",
+  "preset": "reels",
+  "video": "reel-03-paper-to-next-step.mp4",
+  "thumbnail": "reel-03-paper-to-next-step-thumbnail.jpg",
+  "captions": "reel-03-paper-to-next-step.srt",
+  "title": "EdulabsAI Reel — Paper to the Next Teaching Move",
+  "description": "Explain the controlled Snap and Mark to Tomorrow Pack workflow.\n\nStart free: https://www.edulabsai.com",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "K-12 teaching",
+    "lesson planning",
+    "teacher tools"
+  ],
+  "reviewRequired": true,
+  "api": "Instagram Platform Content Publishing",
+  "flow": [
+    "Host the rendered file at a public URL",
+    "Create a REELS media container",
+    "Poll container status",
+    "Publish after review"
+  ],
+  "mediaType": "REELS",
+  "publicVideoUrl": "REPLACE_WITH_PUBLIC_VIDEO_URL"
+}

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "title": "EdulabsAI Reel — Paper to the Next Teaching Move",
+  "createdAt": "2026-08-26T15:59:23.092Z",
+  "sourceRenderResult": {
+    "title": "EdulabsAI Reel — Paper to the Next Teaching Move",
+    "manifest": "../../manifests/reel-03-paper-to-next-step.creator.json",
+    "outputs": [
+      {
+        "id": "master",
+        "preset": "reels",
+        "platform": "instagram",
+        "durationSeconds": 25.7,
+        "width": 1080,
+        "height": 1920,
+        "fps": 30,
+        "fileSizeBytes": 4363125,
+        "validation": [
+          {
+            "level": "info",
+            "code": "PROFILE_OK",
+            "exportId": "master",
+            "message": "Instagram Reels dimensions, duration advisory, and frame rate checks passed."
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-26T15:54:25.062Z"
+  },
+  "outputs": [
+    {
+      "id": "master",
+      "directory": "reels-master",
+      "video": "reels-master/reel-03-paper-to-next-step.mp4",
+      "thumbnail": "reels-master/reel-03-paper-to-next-step-thumbnail.jpg",
+      "captions": "reels-master/reel-03-paper-to-next-step.srt",
+      "publishingPlan": "reels-master/publishing-plan.json"
+    }
+  ],
+  "portability": "All paths are relative to this release package. Reproducible intermediates are intentionally excluded."
+}

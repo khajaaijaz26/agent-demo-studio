@@ -1,0 +1,73 @@
+{
+  "title": "EdulabsAI — A Connected AI Teaching Pilot",
+  "outputDirectory": "../.work/sync/video-04-school-pilot",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "quality": 21,
+  "speechLeadSeconds": 0.46,
+  "speechTailSeconds": 0.62,
+  "maximumSlowdown": 1.08,
+  "musicVolume": 0.045,
+  "generatedMusic": true,
+  "voices": [
+    {
+      "id": "sonia",
+      "name": "Sonia — warm British English",
+      "voice": "en-GB-SoniaNeural",
+      "rate": 4,
+      "volume": 0,
+      "pitch": 0
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-brand-intro",
+      "videoPath": "../.work/motion/landscape/brand-intro.mp4",
+      "narration": "A useful school AI pilot should reduce repeated work without reducing teacher control.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "02-founder-02",
+      "videoPath": "../.work/motion/landscape/founder-02.mp4",
+      "narration": "EdulabsAI connects curriculum-aware planning, editable resources, live delivery, evidence and the next teaching decision.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "03-founder-05",
+      "videoPath": "../.work/motion/landscape/founder-05.mp4",
+      "narration": "Teachers can work across broad K–12 curricula and subjects, with optional source grounding for exact local material.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "04-founder-08",
+      "videoPath": "../.work/motion/landscape/founder-08.mp4",
+      "narration": "Class and group communication is teacher administered, moderated and paused during focused assessments when required.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "05-founder-09",
+      "videoPath": "../.work/motion/landscape/founder-09.mp4",
+      "narration": "Paper recognition is de-identified and review-first, so automation never silently becomes a grade.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "06-founder-11",
+      "videoPath": "../.work/motion/landscape/founder-11.mp4",
+      "narration": "Family communication is consent first, source backed and teacher approved before delivery.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "07-founder-12",
+      "videoPath": "../.work/motion/landscape/founder-12.mp4",
+      "narration": "The result is one inspectable lesson record with clear human checkpoints, instead of scattered tools and copied context.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "08-brand-outro",
+      "videoPath": "../.work/motion/landscape/brand-outro.mp4",
+      "narration": "Book an EdulabsAI school pilot at edulabsai dot com.",
+      "minimumDurationSeconds": 3.8
+    }
+  ]
+}

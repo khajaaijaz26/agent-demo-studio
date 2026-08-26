@@ -1,0 +1,79 @@
+{
+  "title": "EdulabsAI — The Connected Classroom Tour",
+  "outputDirectory": "../.work/sync/video-01-connected-classroom-tour",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "quality": 21,
+  "speechLeadSeconds": 0.46,
+  "speechTailSeconds": 0.62,
+  "maximumSlowdown": 1.08,
+  "musicVolume": 0.045,
+  "generatedMusic": true,
+  "voices": [
+    {
+      "id": "sonia",
+      "name": "Sonia — warm British English",
+      "voice": "en-GB-SoniaNeural",
+      "rate": 4,
+      "volume": 0,
+      "pitch": 0
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-brand-intro",
+      "videoPath": "../.work/motion/landscape/brand-intro.mp4",
+      "narration": "Meet EdulabsAI: one connected teaching workspace from the first idea to the next better lesson.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "02-founder-01",
+      "videoPath": "../.work/motion/landscape/founder-01.mp4",
+      "narration": "Start with a curriculum, grade, subject and topic. Add your own source when exact local grounding matters.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "03-founder-06",
+      "videoPath": "../.work/motion/landscape/founder-06.mp4",
+      "narration": "Generate a coherent lesson plan, visual slides, quiz and worksheet together, from the same objective.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "04-founder-07",
+      "videoPath": "../.work/motion/landscape/founder-07.mp4",
+      "narration": "Edit with AI, make teacher changes, preview clearly, then export the resources you choose.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "05-founder-08",
+      "videoPath": "../.work/motion/landscape/founder-08.mp4",
+      "narration": "Teach live with whole-class and group chat, teacher moderation, and an assessment focus lock when students need it.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "06-founder-09",
+      "videoPath": "../.work/motion/landscape/founder-09.mp4",
+      "narration": "Bring paper answers back through Snap and Mark, with de-identified recognition and an explicit teacher review.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "07-founder-10",
+      "videoPath": "../.work/motion/landscape/founder-10.mp4",
+      "narration": "When a pattern repeats, turn the verified misconception into editable groups and a ready Tomorrow Pack.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "08-founder-11",
+      "videoPath": "../.work/motion/landscape/founder-11.mp4",
+      "narration": "Then share a consent-first Family Digest only after the teacher approves the useful learning summary.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "09-brand-outro",
+      "videoPath": "../.work/motion/landscape/brand-outro.mp4",
+      "narration": "Plan once. Teach live. Respond with evidence. Start free at edulabsai dot com.",
+      "minimumDurationSeconds": 3.8
+    }
+  ]
+}

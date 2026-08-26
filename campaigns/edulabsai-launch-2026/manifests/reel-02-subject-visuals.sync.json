@@ -1,0 +1,61 @@
+{
+  "title": "EdulabsAI Reel — Visuals Built for the Subject",
+  "outputDirectory": "../.work/sync/reel-02-subject-visuals",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "quality": 21,
+  "speechLeadSeconds": 0.36,
+  "speechTailSeconds": 0.48,
+  "maximumSlowdown": 1.08,
+  "musicVolume": 0.038,
+  "generatedMusic": true,
+  "voices": [
+    {
+      "id": "sonia",
+      "name": "Sonia — warm British English",
+      "voice": "en-GB-SoniaNeural",
+      "rate": 7,
+      "volume": 0,
+      "pitch": 0
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-v-visual-intro",
+      "videoPath": "../.work/motion/vertical/v-visual-intro.mp4",
+      "narration": "Your presentation should explain the idea, not decorate it.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "02-v-fractions",
+      "videoPath": "../.work/motion/vertical/v-fractions.mp4",
+      "narration": "Fractions shade one sector at a time, so the class can count along.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "03-v-water",
+      "videoPath": "../.work/motion/vertical/v-water.mp4",
+      "narration": "The water cycle loops through evaporation, cloud and rainfall as one system.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "04-v-angle",
+      "videoPath": "../.work/motion/vertical/v-angle.mp4",
+      "narration": "An angle opens while the arc is drawn, keeping the comparison visible.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "05-v-more-subjects",
+      "videoPath": "../.work/motion/vertical/v-more-subjects.mp4",
+      "narration": "Equations, molecules, charts and timelines use the visual language their subject needs.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "06-vertical-outro",
+      "videoPath": "../.work/motion/vertical/vertical-outro.mp4",
+      "narration": "Build editable visual lessons at edulabsai dot com.",
+      "minimumDurationSeconds": 3.2
+    }
+  ]
+}

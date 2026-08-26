@@ -1,0 +1,67 @@
+{
+  "title": "EdulabsAI Reel — One Connected Learning Loop",
+  "outputDirectory": "../.work/sync/reel-05-one-connected-loop",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "quality": 21,
+  "speechLeadSeconds": 0.36,
+  "speechTailSeconds": 0.48,
+  "maximumSlowdown": 1.08,
+  "musicVolume": 0.038,
+  "generatedMusic": true,
+  "voices": [
+    {
+      "id": "sonia",
+      "name": "Sonia — warm British English",
+      "voice": "en-GB-SoniaNeural",
+      "rate": 7,
+      "volume": 0,
+      "pitch": 0
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-v-one-record",
+      "videoPath": "../.work/motion/vertical/v-one-record.mp4",
+      "narration": "In EdulabsAI, the objective travels and the context stays attached.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "02-v-four-resources",
+      "videoPath": "../.work/motion/vertical/v-four-resources.mp4",
+      "narration": "Plan once and generate four coherent, editable resources.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "03-v-live",
+      "videoPath": "../.work/motion/vertical/v-live.mp4",
+      "narration": "Teach live with clear classroom boundaries.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "04-v-evidence",
+      "videoPath": "../.work/motion/vertical/v-evidence.mp4",
+      "narration": "Review digital and paper evidence before it changes the record.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "05-v-reteach",
+      "videoPath": "../.work/motion/vertical/v-reteach.mp4",
+      "narration": "Turn a verified pattern into tomorrow's focused reteach.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "06-v-digest",
+      "videoPath": "../.work/motion/vertical/v-digest.mp4",
+      "narration": "Share useful progress with families after consent and teacher approval.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "07-vertical-outro",
+      "videoPath": "../.work/motion/vertical/vertical-outro.mp4",
+      "narration": "One lesson. One connected loop. Start at edulabsai dot com.",
+      "minimumDurationSeconds": 3.2
+    }
+  ]
+}

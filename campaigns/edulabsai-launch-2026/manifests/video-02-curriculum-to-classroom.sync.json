@@ -1,0 +1,73 @@
+{
+  "title": "EdulabsAI — Curriculum to Classroom",
+  "outputDirectory": "../.work/sync/video-02-curriculum-to-classroom",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "quality": 21,
+  "speechLeadSeconds": 0.46,
+  "speechTailSeconds": 0.62,
+  "maximumSlowdown": 1.08,
+  "musicVolume": 0.045,
+  "generatedMusic": true,
+  "voices": [
+    {
+      "id": "sonia",
+      "name": "Sonia — warm British English",
+      "voice": "en-GB-SoniaNeural",
+      "rate": 4,
+      "volume": 0,
+      "pitch": 0
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-brand-intro",
+      "videoPath": "../.work/motion/landscape/brand-intro.mp4",
+      "narration": "What if one careful brief could create the full first draft of tomorrow's lesson?",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "02-founder-05",
+      "videoPath": "../.work/motion/landscape/founder-05.mp4",
+      "narration": "Choose from broad K–12 curriculum and subject coverage, or use a safe custom subject when your exact topic is not listed.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "03-founder-06",
+      "videoPath": "../.work/motion/landscape/founder-06.mp4",
+      "narration": "EdulabsAI builds the plan, slides, quiz and worksheet together, so the objective and vocabulary stay aligned.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "04-subject-02",
+      "videoPath": "../.work/motion/landscape/subject-02.mp4",
+      "narration": "For mathematics, editable diagrams can make fractions and ratios visible as the explanation develops.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "05-subject-03",
+      "videoPath": "../.work/motion/landscape/subject-03.mp4",
+      "narration": "For science, processes like the water cycle become readable teaching systems instead of generic clip art.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "06-founder-07",
+      "videoPath": "../.work/motion/landscape/founder-07.mp4",
+      "narration": "Preview in a compact player, navigate with the keyboard or wheel, edit with AI, and export when it is truly yours.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "07-founder-08",
+      "videoPath": "../.work/motion/landscape/founder-08.mp4",
+      "narration": "Then launch the live classroom from the same lesson record, without rebuilding the context.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "08-brand-outro",
+      "videoPath": "../.work/motion/landscape/brand-outro.mp4",
+      "narration": "Move from curriculum to classroom in one connected workflow. Start free at edulabsai dot com.",
+      "minimumDurationSeconds": 3.8
+    }
+  ]
+}

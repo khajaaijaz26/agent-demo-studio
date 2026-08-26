@@ -1,0 +1,73 @@
+{
+  "title": "EdulabsAI — From Evidence to Tomorrow's Reteach",
+  "outputDirectory": "../.work/sync/video-03-evidence-to-action",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "quality": 21,
+  "speechLeadSeconds": 0.46,
+  "speechTailSeconds": 0.62,
+  "maximumSlowdown": 1.08,
+  "musicVolume": 0.045,
+  "generatedMusic": true,
+  "voices": [
+    {
+      "id": "sonia",
+      "name": "Sonia — warm British English",
+      "voice": "en-GB-SoniaNeural",
+      "rate": 4,
+      "volume": 0,
+      "pitch": 0
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-brand-intro",
+      "videoPath": "../.work/motion/landscape/brand-intro.mp4",
+      "narration": "The real value of assessment is not the score. It is what the teacher can do next.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "02-founder-09",
+      "videoPath": "../.work/motion/landscape/founder-09.mp4",
+      "narration": "Snap and Mark brings one private paper capture page into review, without sending roster identity or an answer key to recognition.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "03-founder-09",
+      "videoPath": "../.work/motion/landscape/founder-09.mp4",
+      "narration": "The transcription remains a proposal until the teacher corrects uncertainty and explicitly approves the record.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "04-founder-10",
+      "videoPath": "../.work/motion/landscape/founder-10.mp4",
+      "narration": "EdulabsAI helps surface repeated patterns, but the teacher verifies the misconception before any reteach is created.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "05-founder-10",
+      "videoPath": "../.work/motion/landscape/founder-10.mp4",
+      "narration": "Build editable learning groups, a mini explanation and focused practice inside a ready Tomorrow Pack.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "06-founder-11",
+      "videoPath": "../.work/motion/landscape/founder-11.mp4",
+      "narration": "Use new independent evidence to resolve the pattern, then draft a consent-first Family Digest for teacher approval.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "07-founder-12",
+      "videoPath": "../.work/motion/landscape/founder-12.mp4",
+      "narration": "Human review remains at every consequential point: paper transcription, group action and family communication.",
+      "minimumDurationSeconds": 3.8
+    },
+    {
+      "id": "08-brand-outro",
+      "videoPath": "../.work/motion/landscape/brand-outro.mp4",
+      "narration": "Turn evidence into tomorrow's move. Explore EdulabsAI at edulabsai dot com.",
+      "minimumDurationSeconds": 3.8
+    }
+  ]
+}

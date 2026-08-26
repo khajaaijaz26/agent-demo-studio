@@ -1,0 +1,55 @@
+{
+  "title": "EdulabsAI Reel — Safe Class and Family Connection",
+  "outputDirectory": "../.work/sync/reel-04-safe-class-connection",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "quality": 21,
+  "speechLeadSeconds": 0.36,
+  "speechTailSeconds": 0.48,
+  "maximumSlowdown": 1.08,
+  "musicVolume": 0.038,
+  "generatedMusic": true,
+  "voices": [
+    {
+      "id": "sonia",
+      "name": "Sonia — warm British English",
+      "voice": "en-GB-SoniaNeural",
+      "rate": 7,
+      "volume": 0,
+      "pitch": 0
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-v-chat",
+      "videoPath": "../.work/motion/vertical/v-chat.mp4",
+      "narration": "Create one whole-class channel plus named learning groups, each with its own picture and members.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "02-v-admin",
+      "videoPath": "../.work/motion/vertical/v-admin.mp4",
+      "narration": "Assign a student co-admin when useful, while the teacher remains final admin.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "03-v-focus",
+      "videoPath": "../.work/motion/vertical/v-focus.mp4",
+      "narration": "Pause chat during assessments and focused work, then restore access when the session ends.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "04-v-family",
+      "videoPath": "../.work/motion/vertical/v-family.mp4",
+      "narration": "Share progress through a consent-first Family Digest only after teacher approval.",
+      "minimumDurationSeconds": 3.2
+    },
+    {
+      "id": "05-vertical-outro",
+      "videoPath": "../.work/motion/vertical/vertical-outro.mp4",
+      "narration": "Keep the classroom connected and teacher controlled with EdulabsAI.",
+      "minimumDurationSeconds": 3.2
+    }
+  ]
+}

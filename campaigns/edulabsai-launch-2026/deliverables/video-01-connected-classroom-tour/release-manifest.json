@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "title": "EdulabsAI — The Connected Classroom Tour",
+  "createdAt": "2026-08-26T15:59:17.231Z",
+  "sourceRenderResult": {
+    "title": "EdulabsAI — The Connected Classroom Tour",
+    "manifest": "../../manifests/video-01-connected-classroom-tour.creator.json",
+    "outputs": [
+      {
+        "id": "master",
+        "preset": "youtube-1080p",
+        "platform": "youtube",
+        "durationSeconds": 69.830667,
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "fileSizeBytes": 9595350,
+        "validation": [
+          {
+            "level": "info",
+            "code": "PROFILE_OK",
+            "exportId": "master",
+            "message": "YouTube 1080p dimensions, duration advisory, and frame rate checks passed."
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-26T15:47:21.966Z"
+  },
+  "outputs": [
+    {
+      "id": "master",
+      "directory": "youtube-1080p-master",
+      "video": "youtube-1080p-master/video-01-connected-classroom-tour.mp4",
+      "thumbnail": "youtube-1080p-master/video-01-connected-classroom-tour-thumbnail.jpg",
+      "captions": "youtube-1080p-master/video-01-connected-classroom-tour.srt",
+      "publishingPlan": "youtube-1080p-master/publishing-plan.json"
+    }
+  ],
+  "portability": "All paths are relative to this release package. Reproducible intermediates are intentionally excluded."
+}

@@ -1,0 +1,24 @@
+1
+00:00:00,360 --> 00:00:05,856
+Create one whole-class channel plus named learning groups, each with its
+own picture and members.
+
+2
+00:00:06,696 --> 00:00:11,760
+Assign a student co-admin when useful, while the teacher remains final
+admin.
+
+3
+00:00:12,600 --> 00:00:17,952
+Pause chat during assessments and focused work, then restore access when
+the session ends.
+
+4
+00:00:18,792 --> 00:00:23,760
+Share progress through a consent-first Family Digest only after teacher
+approval.
+
+5
+00:00:24,600 --> 00:00:29,016
+Keep the classroom connected and teacher controlled with EdulabsAI.
+
