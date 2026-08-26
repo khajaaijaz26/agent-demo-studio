@@ -4,4 +4,6 @@ export * from "./jobs.js";
 export * from "./workflow.js";
 export * from "./browser/recorder.js";
 export * from "./audio/tts.js";
+export * from "./audio/neural-tts.js";
 export * from "./render/renderer.js";
+export * from "./render/synchronized.js";

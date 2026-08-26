@@ -11,6 +11,7 @@ It opens a real Chromium browser, performs the requested workflow live, records 
 - Branded intro and outro
 - Burned-in narration captions
 - Local system voice-over
+- Natural neural multi-voice narration with scene-accurate timing
 - Generated royalty-free ambient music
 - A local visual editor for previewing and restyling
 
@@ -187,6 +188,60 @@ Supported browser actions are:
 
 Prefer accessible `role` and `name` locators. CSS selectors and visible text are also supported.
 
+## Scene-synchronized neural narration
+
+For longer tours, record short clips and describe each clip in a timeline manifest. Agent Demo Studio generates narration separately for every scene, keeps the voice at its requested natural rate, and adjusts the matching visual instead of speeding up speech. One master is produced for each voice. Captions are saved as optional `.srt` sidecars and are not burned over the interface.
+
+Install the neural speech helper once:
+
+```bash
+uv tool install edge-tts
+```
+
+Create `tour.json`:
+
+```json
+{
+  "title": "Complete product tour",
+  "outputDirectory": "./exports",
+  "generatedMusic": true,
+  "voices": [
+    {
+      "id": "male",
+      "name": "Andrew",
+      "voice": "en-US-AndrewMultilingualNeural",
+      "rate": -4
+    },
+    {
+      "id": "female",
+      "name": "Ava",
+      "voice": "en-US-AvaMultilingualNeural",
+      "rate": -4
+    }
+  ],
+  "scenes": [
+    {
+      "id": "dashboard",
+      "videoPath": "./scenes/01-dashboard.webm",
+      "narration": "This dashboard keeps the next important actions easy to find."
+    },
+    {
+      "id": "export",
+      "videoPath": "./scenes/02-export.webm",
+      "narration": "Every resource can be downloaded and used outside the platform."
+    }
+  ]
+}
+```
+
+Render every configured voice:
+
+```bash
+agent-demo sync tour.json
+```
+
+The same workflow is available to Codex, Claude Code, and other MCP clients through `demo_render_synchronized`.
+
 ## Visual Studio
 
 Open the all-in-one local editor:
@@ -220,6 +275,7 @@ The server binds only to `127.0.0.1`.
 | `demo_browser_finish` | Finalize the raw screencast |
 | `demo_record_flow` | Run a complete scripted production job |
 | `demo_generate_voice` | Create local system voice-over |
+| `demo_render_synchronized` | Lock neural narration to each scene and render every voice |
 | `demo_render` | Edit and render the final MP4 |
 | `demo_job_status` | Poll background recording/render jobs |
 | `demo_get_project` | Read project state and output resources |

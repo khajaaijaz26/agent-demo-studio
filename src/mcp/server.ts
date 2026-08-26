@@ -12,6 +12,7 @@ import {
 } from "../browser/recorder.js";
 import { generateVoiceover } from "../audio/tts.js";
 import { renderDemo } from "../render/renderer.js";
+import { renderSynchronizedManifest } from "../render/synchronized.js";
 import { recordDemoFlow } from "../workflow.js";
 import { runDoctor } from "../installer/agents.js";
 import { startStudioServer, type StudioServerHandle } from "../studio/server.js";
@@ -265,6 +266,23 @@ export function createAgentDemoMcpServer(): McpServer {
         report(100, "Voice-over ready");
         return { projectId, output };
       });
+      return result(job);
+    },
+  );
+
+  server.registerTool(
+    "demo_render_synchronized",
+    {
+      title: "Render synchronized multi-voice demo",
+      description:
+        "Render a scene manifest with neural narration locked to each matching clip. Produces one 1080p master and optional subtitle sidecar per voice without burning text over the product UI.",
+      inputSchema: z.object({ manifestPath: z.string().min(1) }),
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true },
+    },
+    async ({ manifestPath }) => {
+      const job = jobs.start("synchronized-render", (report) =>
+        renderSynchronizedManifest(manifestPath, report),
+      );
       return result(job);
     },
   );

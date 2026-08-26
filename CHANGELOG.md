@@ -2,6 +2,12 @@
 
 All notable changes to Agent Demo Studio will be documented here.
 
+## Unreleased
+
+- Add scene-synchronized neural narration with natural-rate multi-voice rendering
+- Add optional SRT sidecars and continuous-clock final audio mixing
+- Add the `agent-demo sync` command and `demo_render_synchronized` MCP tool
+
 ## 0.1.0 - 2026-08-25
 
 Initial open-source browser-first release.

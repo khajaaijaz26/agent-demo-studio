@@ -7,6 +7,7 @@ import { createProject, listProjects, loadProject } from "./project-store.js";
 import { recordDemoFlow } from "./workflow.js";
 import { generateVoiceover } from "./audio/tts.js";
 import { renderDemo } from "./render/renderer.js";
+import { renderSynchronizedManifest } from "./render/synchronized.js";
 import { startStudioServer } from "./studio/server.js";
 import {
   ensureChromiumInstalled,
@@ -190,6 +191,14 @@ program
       });
     },
   );
+
+program
+  .command("sync")
+  .description("Render scene-locked neural narration for every voice in a timeline manifest.")
+  .argument("<manifest>", "Path to a synchronized scene manifest")
+  .action(async (manifestPath: string) => {
+    output(await renderSynchronizedManifest(manifestPath, progress));
+  });
 
 program
   .command("render")
