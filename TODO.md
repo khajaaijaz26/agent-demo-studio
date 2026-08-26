@@ -14,7 +14,7 @@ The comparison is architectural and product research. No MoneyPrinterTurbo sourc
 - [x] Validate fictional presenter/character animation, video overlays, chroma key, image motion, transitions, captions, and layered audio with real renders.
 - [x] Add generated-asset provenance, synthetic-character disclosure, examples, and manifest documentation.
 - [x] Run unit, smoke, package, install, security, and visual QA checks.
-- [x] Push, tag, release, and verify v0.3.0; reinstall Codex and Claude Code integrations.
+- [x] Push, tag, and verify v0.3.0 plus the v0.3.1 dense-timeline compatibility patch; reinstall Codex and Claude Code integrations.
 
 ## Existing strengths to preserve
 

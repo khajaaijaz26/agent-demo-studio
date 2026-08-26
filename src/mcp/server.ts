@@ -2,6 +2,7 @@ import { pathToFileURL } from "node:url";
 import { readFile } from "node:fs/promises";
 import { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
+import { AGENT_DEMO_VERSION } from "../config.js";
 import { createProject, listProjects, loadProject, resolveArtifact } from "../project-store.js";
 import { jobs } from "../jobs.js";
 import {
@@ -166,7 +167,7 @@ let studio: StudioServerHandle | undefined;
 
 export function createAgentDemoMcpServer(): McpServer {
   const server = new McpServer(
-    { name: "agent-demo-studio", version: "0.3.0" },
+    { name: "agent-demo-studio", version: AGENT_DEMO_VERSION },
     {
       capabilities: { tools: {} },
       instructions:

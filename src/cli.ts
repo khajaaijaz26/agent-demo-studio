@@ -3,6 +3,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Command } from "commander";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
+import { AGENT_DEMO_VERSION } from "./config.js";
 import { createAgentDemoMcpServer } from "./mcp/server.js";
 import { createProject, listProjects, loadProject } from "./project-store.js";
 import { recordDemoFlow } from "./workflow.js";
@@ -74,7 +75,7 @@ function targetsFromOptions(options: { codex?: boolean; claude?: boolean }): Age
 program
   .name("agent-demo")
   .description("Record, animate, narrate, apply VFX, and render polished videos from Codex, Claude Code, or another MCP agent.")
-  .version("0.3.0");
+  .version(AGENT_DEMO_VERSION);
 
 function presetList(value: string): CreatorPresetId[] {
   const values = value.split(",").map((item) => item.trim()).filter(Boolean);

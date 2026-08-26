@@ -1,6 +1,6 @@
 {
   "name": "agent-demo-studio",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Local-first MCP, CLI, and visual studio for agents to plan, record, animate, apply VFX, and create product, social, cartoon, story, and ASMR videos.",
   "type": "module",
   "license": "MIT",

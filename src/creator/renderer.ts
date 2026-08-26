@@ -41,6 +41,24 @@ interface SegmentResult {
   durationSeconds: number;
 }
 
+let filterComplexFileOptionPromise: Promise<string> | undefined;
+
+export function filterComplexFileOptionForVersion(versionText: string): "-filter_complex_script" | "-/filter_complex" {
+  const match = versionText.match(/ffmpeg version\s+(?:n-)?(\d+)/i);
+  return match && Number(match[1]) < 7 ? "-filter_complex_script" : "-/filter_complex";
+}
+
+async function filterComplexFileOption(): Promise<string> {
+  filterComplexFileOptionPromise ??= runCommand(ffmpegCommand(), ["-hide_banner", "-version"], { timeoutMs: 30_000 })
+    .then((result) => {
+      // FFmpeg 7 replaced the long-standing -filter_complex_script alias with
+      // the generic -/filter_complex file-loading syntax. Support both sides of
+      // that migration because Ubuntu 24.04 still ships FFmpeg 6.x.
+      return filterComplexFileOptionForVersion(`${result.stdout}\n${result.stderr}`);
+    });
+  return filterComplexFileOptionPromise;
+}
+
 function ffNumber(value: number): string {
   return value.toFixed(5).replace(/0+$/, "").replace(/\.$/, "");
 }
@@ -513,8 +531,13 @@ async function finalComposite(input: {
   const defaultLufs = audioConfig?.mode === "asmr" ? -20 : audioConfig?.mode === "voice" ? -16 : -14;
   filters.push(`[${mixed}]atrim=duration=${ffNumber(input.duration)},${audioTone}loudnorm=I=${ffNumber(audioConfig?.targetLufs ?? defaultLufs)}:LRA=9:TP=${ffNumber(audioConfig?.truePeak ?? -1.5)},alimiter=limit=0.95[aout]`);
   const codec = input.exportConfig.videoCodec === "hevc" ? "libx265" : "libx264";
+  // Rich timelines can contain dozens of animated overlays and audio layers.
+  // Passing that graph inline exceeds Windows' command-line limit long before
+  // FFmpeg reaches its own filter parser, so keep the graph in a UTF-8 script.
+  const filterScriptPath = path.join(path.dirname(input.timelinePath), `${safeOutputName(input.exportConfig.id)}-final-composite.filter`);
+  await writeFile(filterScriptPath, filters.join(";"), "utf8");
   args.push(
-    "-filter_complex", filters.join(";"), "-map", "[vout]", "-map", "[aout]", "-t", ffNumber(input.duration),
+    await filterComplexFileOption(), filterScriptPath, "-map", "[vout]", "-map", "[aout]", "-t", ffNumber(input.duration),
     "-c:v", codec, "-preset", "medium", "-crf", String(input.exportConfig.quality ?? 18), "-pix_fmt", "yuv420p",
     "-c:a", "aac", "-b:a", input.preset.audioBitrate, "-ar", "48000", "-ac", "2",
     "-movflags", "+faststart", "-metadata", `title=${input.exportConfig.title ?? input.manifest.title}`,

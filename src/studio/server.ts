@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readFile, stat } from "node:fs/promises";
 import { spawn } from "node:child_process";
+import { AGENT_DEMO_VERSION } from "../config.js";
 import { errorMessage, serializeError } from "../errors.js";
 import { listProjects, loadProject, resolveArtifact } from "../project-store.js";
 import { renderDemo } from "../render/renderer.js";
@@ -124,7 +125,7 @@ export async function startStudioServer(
       const url = new URL(request.url || "/", "http://127.0.0.1");
 
       if (request.method === "GET" && url.pathname === "/api/health") {
-        sendJson(response, 200, { ok: true, product: "Agent Demo Studio", version: "0.3.0", creatorEngine: true, promptVideo: true, vfx: true });
+        sendJson(response, 200, { ok: true, product: "Agent Demo Studio", version: AGENT_DEMO_VERSION, creatorEngine: true, promptVideo: true, vfx: true });
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/jobs") {

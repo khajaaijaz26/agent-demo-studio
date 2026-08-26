@@ -5,12 +5,19 @@ import { listCreatorAssets, resolveBundledCreatorAsset } from "../src/creator/as
 import { listCreatorPresets } from "../src/creator/presets.js";
 import { createPromptVideoManifest, createPromptVideoPlan } from "../src/creator/prompt.js";
 import { publishToYouTube, tiktokChunkPlan } from "../src/creator/publish.js";
+import { filterComplexFileOptionForVersion } from "../src/creator/renderer.js";
 import { validateCreatorManifest } from "../src/creator/schema.js";
 import { buildPublishingPlan, validateSocialOutput } from "../src/creator/social.js";
 import { createTemplateManifest, listCreatorTemplates } from "../src/creator/templates.js";
 import { CREATOR_IMAGE_MOTIONS, CREATOR_OVERLAY_ANIMATIONS, CREATOR_TRANSITIONS, CREATOR_VFX_PRESETS, type CreatorPromptMode, type CreatorRenderedOutput } from "../src/creator/types.js";
 
 describe("creator manifests", () => {
+  it("selects compatible file-backed filter graphs across FFmpeg generations", () => {
+    expect(filterComplexFileOptionForVersion("ffmpeg version 6.1.1-3ubuntu5")).toBe("-filter_complex_script");
+    expect(filterComplexFileOptionForVersion("ffmpeg version 7.0 Copyright")).toBe("-/filter_complex");
+    expect(filterComplexFileOptionForVersion("ffmpeg version 9.0-full_build")).toBe("-/filter_complex");
+  });
+
   it("applies a safe default export", () => {
     const result = validateCreatorManifest({ schemaVersion: 1, title: "Launch", clips: [{ id: "main", source: "demo.mp4" }] });
     expect(result.valid).toBe(true);

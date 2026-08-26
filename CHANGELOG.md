@@ -4,6 +4,16 @@ All notable changes to Agent Demo Studio are documented here.
 
 ## Unreleased
 
+## 0.3.1 - 2026-08-26
+
+### Fixed
+
+- Write dense final-composite filter graphs to UTF-8 script files so animated,
+  multi-layer timelines do not exceed Windows command-line limits.
+- Select the compatible FFmpeg file-loading option for both FFmpeg 6 and FFmpeg
+  7 or newer.
+- Centralize the CLI, MCP, and Studio version reported by the package.
+
 ## 0.3.0 - 2026-08-26
 
 Plan-first prompt-video, animation, character, audio, and VFX release.
