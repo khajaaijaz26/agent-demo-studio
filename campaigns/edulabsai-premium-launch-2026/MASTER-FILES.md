@@ -1,6 +1,6 @@
 # EdulabsAI campaign master files
 
-All nine videos below are final H.264/AAC masters with burned captions, a matching
+All ten videos below are final H.264/AAC masters with burned captions, a matching
 SRT sidecar, thumbnail, chapter metadata, publishing plan, and asset-license file
 inside the same production package.
 
@@ -14,6 +14,8 @@ inside the same production package.
    - `C:\Users\khaja\Projects\agent-demo-studio\campaigns\edulabsai-premium-launch-2026\deliverables\03-see-learning-act-next\youtube-1080p-landscape-master\03-see-learning-act-next.mp4`
 4. **A classroom that stays connected** — 42.580 seconds, 1920×1080
    - `C:\Users\khaja\Projects\agent-demo-studio\campaigns\edulabsai-premium-launch-2026\deliverables\04-classroom-community\youtube-1080p-landscape-master\04-classroom-community.mp4`
+5. **Every next step connected — hero advertisement** — 49.700 seconds, 1920×1080
+   - `C:\Users\khaja\Projects\agent-demo-studio\campaigns\edulabsai-premium-launch-2026\deliverables\05-every-next-step-connected-ad\youtube-1080p-landscape-master\05-every-next-step-connected-ad.mp4`
 
 ## Vertical reels
 
@@ -32,5 +34,4 @@ inside the same production package.
 
 - Human-readable result: `QA-REPORT.md`
 - Machine-readable result: `QA-REPORT.json`
-- Final result: **9/9 masters passed** media and platform QA.
-
+- Final result: **10/10 masters passed** media and platform QA.

@@ -1,13 +1,14 @@
 {
   "campaign": "Meet EdulabsAI — premium launch campaign",
-  "completedAt": "2026-08-26T17:28:49.126Z",
-  "masters": 9,
+  "completedAt": "2026-08-28T07:36:53.866Z",
+  "masters": 10,
   "status": "passed",
   "productions": [
     { "id": "01-meet-edulabsai-launch-film", "format": "landscape", "durationSeconds": 64.128, "masterPath": "deliverables/01-meet-edulabsai-launch-film/youtube-1080p-landscape-master/01-meet-edulabsai-launch-film.mp4" },
     { "id": "02-one-lesson-everything-connected", "format": "landscape", "durationSeconds": 63.712, "masterPath": "deliverables/02-one-lesson-everything-connected/youtube-1080p-landscape-master/02-one-lesson-everything-connected.mp4" },
     { "id": "03-see-learning-act-next", "format": "landscape", "durationSeconds": 41.277, "masterPath": "deliverables/03-see-learning-act-next/youtube-1080p-landscape-master/03-see-learning-act-next.mp4" },
     { "id": "04-classroom-community", "format": "landscape", "durationSeconds": 42.58, "masterPath": "deliverables/04-classroom-community/youtube-1080p-landscape-master/04-classroom-community.mp4" },
+    { "id": "05-every-next-step-connected-ad", "format": "landscape", "durationSeconds": 49.7, "masterPath": "deliverables/05-every-next-step-connected-ad/youtube-1080p-landscape-master/05-every-next-step-connected-ad.mp4" },
     { "id": "reel-01-blank-page-to-ready", "format": "vertical", "durationSeconds": 17.883, "masterPath": "deliverables/reel-01-blank-page-to-ready/reels-reels-master/reel-01-blank-page-to-ready.mp4" },
     { "id": "reel-02-slides-that-teach", "format": "vertical", "durationSeconds": 18.68, "masterPath": "deliverables/reel-02-slides-that-teach/reels-reels-master/reel-02-slides-that-teach.mp4" },
     { "id": "reel-03-paper-to-next-step", "format": "vertical", "durationSeconds": 20.385, "masterPath": "deliverables/reel-03-paper-to-next-step/reels-reels-master/reel-03-paper-to-next-step.mp4" },
@@ -15,8 +16,8 @@
     { "id": "reel-05-one-connected-loop", "format": "vertical", "durationSeconds": 20.705, "masterPath": "deliverables/reel-05-one-connected-loop/reels-reels-master/reel-05-one-connected-loop.mp4" }
   ],
   "validation": {
-    "platformProfiles": "9/9 passed",
-    "automatedMediaQA": "9/9 passed",
-    "manualCompositionReview": "9/9 passed"
+    "platformProfiles": "10/10 passed",
+    "automatedMediaQA": "10/10 passed",
+    "manualCompositionReview": "10/10 passed"
   }
 }

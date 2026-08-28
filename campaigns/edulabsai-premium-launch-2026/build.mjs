@@ -49,6 +49,10 @@ async function preflight(selected) {
   const missing = [];
   for (const fileName of files) if (!(await exists(path.join(sourceRoot, fileName)))) missing.push(fileName);
   if (missing.length) throw new Error(`Missing verified product scenes:\n${missing.map((item) => `- ${item}`).join("\n")}`);
+  const campaignFiles = [...new Set(selected.flatMap((production) => [production.plan, ...production.scenes.map((scene) => scene.image)].filter(Boolean)))];
+  const missingCampaignFiles = [];
+  for (const fileName of campaignFiles) if (!(await exists(path.join(campaignRoot, fileName)))) missingCampaignFiles.push(fileName);
+  if (missingCampaignFiles.length) throw new Error(`Missing campaign resources:\n${missingCampaignFiles.map((item) => `- ${item}`).join("\n")}`);
   await Promise.all([workRoot, assetsRoot, deliverablesRoot, manifestsRoot].map((directory) => mkdir(directory, { recursive: true })));
 }
 
@@ -97,4 +101,3 @@ const summary = {
 };
 await writeFile(path.join(campaignRoot, "BUILD-SUMMARY.json"), `${JSON.stringify(summary, null, 2)}\n`, "utf8");
 console.log(JSON.stringify(summary, null, 2));
-

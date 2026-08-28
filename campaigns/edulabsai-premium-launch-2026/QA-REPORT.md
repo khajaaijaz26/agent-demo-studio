@@ -1,8 +1,8 @@
 # Final media QA
 
-Generated: 2026-08-26T17:28:49.126Z
+Generated: 2026-08-28T07:36:53.866Z
 
-Result: **9/9 masters passed**.
+Result: **10/10 masters passed**.
 
 Status | Production | Dimensions | Duration | Loudness | True peak
 --- | --- | --- | ---: | ---: | ---:
@@ -10,6 +10,7 @@ PASS | 01-meet-edulabsai-launch-film | 1920x1080 | 64.128s | -16.73 LUFS | -1.29
 PASS | 02-one-lesson-everything-connected | 1920x1080 | 63.712s | -16.25 LUFS | -1.3 dBTP
 PASS | 03-see-learning-act-next | 1920x1080 | 41.277s | -16.18 LUFS | -1.87 dBTP
 PASS | 04-classroom-community | 1920x1080 | 42.58s | -15.91 LUFS | -1.67 dBTP
+PASS | 05-every-next-step-connected-ad | 1920x1080 | 49.7s | -16.04 LUFS | -1.04 dBTP
 PASS | reel-01-blank-page-to-ready | 1080x1920 | 17.883s | -14.41 LUFS | -3.01 dBTP
 PASS | reel-02-slides-that-teach | 1080x1920 | 18.68s | -14.51 LUFS | -2.58 dBTP
 PASS | reel-03-paper-to-next-step | 1080x1920 | 20.385s | -14.75 LUFS | -2.2 dBTP

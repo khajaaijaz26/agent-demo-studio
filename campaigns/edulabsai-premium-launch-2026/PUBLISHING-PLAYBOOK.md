@@ -2,15 +2,18 @@
 
 ## Recommended launch sequence
 
-1. Publish **Meet EdulabsAI** as the website launch film, YouTube launch video,
-   LinkedIn launch post, and pinned X/Instagram post.
-2. Publish **Blank page to classroom-ready** as the first Reel, Short, and TikTok
+1. Publish **Every next step connected** as the primary paid and organic hero
+   advertisement on the website, YouTube, and LinkedIn. Its 49.7-second arc has
+   the strongest opening key art, direct product proof, and on-screen URL.
+2. Publish **Meet EdulabsAI** as the longer website launch film, YouTube launch
+   video, and follow-up LinkedIn product story.
+3. Publish **Blank page to classroom-ready** as the first Reel, Short, and TikTok
    within 24 hours. Its job is reach: one pain point, one transformation, one CTA.
-3. Publish **One lesson. Everything connected.** for teachers who want the fuller
+4. Publish **One lesson. Everything connected.** for teachers who want the fuller
    workflow story. Use it on product and features pages and in retargeting.
-4. Alternate the remaining four reels every two or three days: teaching visuals,
+5. Alternate the remaining four reels every two or three days: teaching visuals,
    paper evidence, managed class chat, then the connected learning loop.
-5. Publish **See learning. Act next.** for assessment and school-leadership
+6. Publish **See learning. Act next.** for assessment and school-leadership
    audiences, followed by **A classroom that stays connected** for student,
    collaboration, and family-communication audiences.
 
@@ -35,4 +38,3 @@
 Each production directory contains a `publishing-plan.json` with its title,
 description, tags, platform preset, captions, thumbnail, and safe private-first
 upload flow.
-

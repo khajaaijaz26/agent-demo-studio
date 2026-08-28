@@ -1,0 +1,39 @@
+{
+  "productionId": "05-every-next-step-connected-ad",
+  "title": "Every next step connected",
+  "format": "landscape",
+  "durationSeconds": 49.7,
+  "outputs": [
+    {
+      "id": "landscape-master",
+      "bytes": 13434585,
+      "publishingPlan": {
+        "generatedAt": "2026-08-28T07:34:57.264Z",
+        "platform": "youtube",
+        "preset": "youtube-1080p",
+        "video": "05-every-next-step-connected-ad.mp4",
+        "thumbnail": "05-every-next-step-connected-ad-thumbnail.jpg",
+        "captions": "05-every-next-step-connected-ad.srt",
+        "title": "Every next step connected",
+        "description": "A premium hero advertisement that moves from one teaching intention through resources, live learning, evidence, reteaching, and approved communication.",
+        "tags": [
+          "EdulabsAI",
+          "AI for teachers",
+          "lesson planning",
+          "K-12",
+          "product launch"
+        ],
+        "reviewRequired": true,
+        "api": "YouTube Data API v3",
+        "flow": [
+          "OAuth youtube.upload scope",
+          "videos.insert resumable upload",
+          "thumbnails.set",
+          "captions.insert when supplied"
+        ],
+        "defaultPrivacy": "private",
+        "syntheticMediaDisclosure": "Set status.containsSyntheticMedia when applicable."
+      }
+    }
+  ]
+}

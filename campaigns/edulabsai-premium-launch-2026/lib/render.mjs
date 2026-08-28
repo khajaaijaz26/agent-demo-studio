@@ -132,6 +132,33 @@ function videoOverlays(production, entry, sourceRoot, framePath) {
   return overlays;
 }
 
+function campaignImageOverlay(production, entry, campaignRoot) {
+  if (!entry.scene.image || entry.scene.imageLayout === "background") return undefined;
+  const vertical = production.format === "vertical";
+  const full = entry.scene.imageLayout === "full";
+  const placement = full
+    ? { x: 0.5, y: 0.5, width: vertical ? 1080 : 1920, height: vertical ? 1920 : 1080 }
+    : positionFor(production, entry.scene, "video");
+  return {
+    id: `${entry.scene.id}-campaign-image`,
+    type: "image",
+    source: path.resolve(campaignRoot, entry.scene.image),
+    startSeconds: entry.start + 0.02,
+    endSeconds: entry.end - 0.04,
+    ...placement,
+    opacity: full ? 0.94 : 1,
+    animation: {
+      enter: "fade",
+      exit: "fade",
+      loop: "drift",
+      durationSeconds: 0.52,
+      exitDurationSeconds: 0.36,
+      intensity: full ? 0.06 : 0.12,
+    },
+    licenseId: "edulabsai-original-key-art",
+  };
+}
+
 function headlineOverlay(production, entry, headlinePath) {
   return {
     id: `${entry.scene.id}-headline`,
@@ -232,18 +259,25 @@ export async function renderProduction({ production, campaignRoot, studioRoot, s
   const clipStarts = timeline.entries.map((entry) => entry.start);
   const clips = timeline.entries.map((entry, index) => ({
     id: entry.scene.id,
-    source: relative(manifestDirectory, assets.backgrounds[index % assets.backgrounds.length]),
+    source: relative(
+      manifestDirectory,
+      entry.scene.image && entry.scene.imageLayout === "background"
+        ? path.resolve(campaignRoot, entry.scene.image)
+        : assets.backgrounds[index % assets.backgrounds.length],
+    ),
     kind: "image",
     durationSeconds: Number(entry.duration.toFixed(3)),
-    motion: "none",
+    motion: entry.scene.image && entry.scene.imageLayout === "background" ? "ken-burns-in" : "none",
     reframe: "fill",
     effects: { saturation: 1.04, contrast: 1.02, vfx: index === 0 || index === timeline.entries.length - 1 ? ["cinematic", "glow"] : ["cinematic"] },
     transition: { type: index === 0 ? "cut" : entry.scene.transition ?? "dissolve", durationSeconds: TRANSITION_DURATION },
     chapter: entry.scene.eyebrow,
-    licenseId: "edulabsai-original-motion-art",
+    licenseId: entry.scene.image ? "edulabsai-original-key-art" : "edulabsai-original-motion-art",
   }));
   const overlays = [];
   for (const entry of timeline.entries) {
+    const campaignImage = campaignImageOverlay(production, entry, campaignRoot);
+    if (campaignImage) overlays.push({ ...campaignImage, source: relative(manifestDirectory, campaignImage.source) });
     const art = artOverlay(production, entry, assets);
     if (art) overlays.push({ ...art, source: relative(manifestDirectory, art.source) });
     for (const overlay of videoOverlays(production, entry, sourceRoot, assets.frame)) {
@@ -316,6 +350,7 @@ export async function renderProduction({ production, campaignRoot, studioRoot, s
       { id: "edulabsai-brand", source: "EdulabsAI brand identity", title: "EdulabsAI brand", creator: "EdulabsAI", license: "Owner-provided", attribution: "EdulabsAI", proofUrl: campaign.website },
       { id: "edulabsai-verified-product-recording", source: "Verified EdulabsAI browser recordings", title: "EdulabsAI product UI", creator: "EdulabsAI", license: "Owner-provided", attribution: "EdulabsAI", proofUrl: "test-output/edulabs-v2/recorded-scenes.json" },
       { id: "edulabsai-original-motion-art", source: "Generated campaign SVG and PNG motion art", title: "EdulabsAI campaign motion system", creator: "EdulabsAI with Agent Demo Studio", license: "Original work", attribution: "EdulabsAI" },
+      { id: "edulabsai-original-key-art", source: "Original synthetic EdulabsAI campaign plates", title: "Connected workspace and learning-loop key art", creator: "EdulabsAI with Agent Demo Studio", license: "Original synthetic campaign artwork", attribution: "EdulabsAI", proofUrl: "IMAGE-ASSET-PROVENANCE.md" },
       { id: "edulabsai-connected-spark-score", source: "Generated Connected Spark score", title: "Connected Spark", creator: "EdulabsAI with Agent Demo Studio", license: "Original procedural composition", attribution: "EdulabsAI" },
       { id: "edulabsai-original-sound-design", source: "Generated impact, whoosh, sparkle, and click cues", title: "EdulabsAI campaign sound design", creator: "EdulabsAI with Agent Demo Studio", license: "Original procedural sound", attribution: "EdulabsAI" },
       { id: "microsoft-edge-neural-speech", source: campaign.voice, title: campaign.voiceName, creator: "Microsoft", license: "Provider terms", attribution: "Neural narration" },
@@ -324,9 +359,11 @@ export async function renderProduction({ production, campaignRoot, studioRoot, s
       campaign: campaign.name,
       campaignVersion: 2,
       productionId: production.id,
+      productionPlan: production.plan,
       creativeDirection: "CREATIVE-DIRECTION.md",
       sourceTourUsedAsFootageOnly: true,
       syntheticVoice: true,
+      syntheticImages: production.scenes.some((scene) => Boolean(scene.image)),
       originalMusic: true,
       sceneTimeline: timeline.entries.map((entry) => ({ id: entry.scene.id, startSeconds: entry.start, endSeconds: entry.end })),
     },

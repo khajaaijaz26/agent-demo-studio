@@ -1,21 +1,21 @@
 {
   "campaign": "Meet EdulabsAI — premium launch campaign",
-  "startedAt": "2026-08-26T17:27:04.613Z",
-  "completedAt": "2026-08-26T17:28:10.112Z",
-  "elapsedSeconds": 65.5,
+  "startedAt": "2026-08-28T07:30:56.386Z",
+  "completedAt": "2026-08-28T07:34:57.296Z",
+  "elapsedSeconds": 240.9,
   "productions": [
     {
-      "id": "04-classroom-community",
-      "title": "A classroom that stays connected",
+      "id": "05-every-next-step-connected-ad",
+      "title": "Every next step connected",
       "format": "landscape",
-      "durationSeconds": 42.58,
-      "manifestPath": "manifests/04-classroom-community.creator.json",
-      "packageDirectory": "deliverables/04-classroom-community",
+      "durationSeconds": 49.7,
+      "manifestPath": "manifests/05-every-next-step-connected-ad.creator.json",
+      "packageDirectory": "deliverables/05-every-next-step-connected-ad",
       "outputs": [
         {
           "id": "landscape-master",
           "preset": "youtube-1080p",
-          "durationSeconds": 42.58,
+          "durationSeconds": 49.7,
           "width": 1920,
           "height": 1080,
           "fps": 30,

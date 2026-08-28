@@ -12,11 +12,14 @@ captions, thumbnails, delivery manifests, and automated media QA.
 - `02-one-lesson-everything-connected` — the teacher workflow product story.
 - `03-see-learning-act-next` — assessment, Snap & Mark, insights, and reteaching.
 - `04-classroom-community` — student experience, managed chat, and family updates.
+- `05-every-next-step-connected-ad` — a 49.7-second premium hero advertisement
+  with original full-canvas key art, verified product proof, cinematic animation,
+  natural scene-locked narration, and a direct website CTA.
 - Five original vertical reels, each with a separate hook and edit.
 
 See `MASTER-FILES.md` for exact device paths, `PUBLISHING-PLAYBOOK.md` for the
 recommended release order, `CAMPAIGN-SUMMARY.json` for the complete build index,
-and `QA-REPORT.md` for the final 9/9 media check. `BUILD-SUMMARY.json` records the
+and `QA-REPORT.md` for the final 10/10 media check. `BUILD-SUMMARY.json` records the
 most recent targeted render command and is not the campaign-wide index.
 
 The two nine-minute complete tours are reference material only. They are not
@@ -29,6 +32,7 @@ From the Agent Demo Studio repository root:
 ```powershell
 npm run build
 node campaigns/edulabsai-premium-launch-2026/build.mjs --only 01-meet-edulabsai-launch-film
+node campaigns/edulabsai-premium-launch-2026/build.mjs --only 05-every-next-step-connected-ad
 node campaigns/edulabsai-premium-launch-2026/build.mjs --all
 ```
 

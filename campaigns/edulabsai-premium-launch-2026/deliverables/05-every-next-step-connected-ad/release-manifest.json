@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 2,
+  "campaign": "Meet EdulabsAI",
+  "productionId": "05-every-next-step-connected-ad",
+  "title": "Every next step connected",
+  "format": "landscape",
+  "generatedAt": "2026-08-28T07:34:57.288Z",
+  "durationSeconds": 49.7,
+  "outputs": [
+    {
+      "id": "landscape-master",
+      "preset": "youtube-1080p",
+      "video": "05-every-next-step-connected-ad.mp4",
+      "thumbnail": "05-every-next-step-connected-ad-thumbnail.jpg",
+      "captions": "05-every-next-step-connected-ad.srt",
+      "chapters": "05-every-next-step-connected-ad-chapters.ffmetadata",
+      "validation": [
+        {
+          "level": "info",
+          "code": "PROFILE_OK",
+          "exportId": "landscape-master",
+          "message": "YouTube 1080p dimensions, duration advisory, and frame rate checks passed."
+        }
+      ]
+    }
+  ],
+  "sceneTimeline": [
+    {
+      "id": "one-intention",
+      "startSeconds": 0,
+      "endSeconds": 4.4,
+      "narration": "Every great lesson begins with one clear intention."
+    },
+    {
+      "id": "meet-workspace",
+      "startSeconds": 3.94,
+      "endSeconds": 14.116,
+      "narration": "But planning, teaching, checking, and responding should not live in five different tools. Meet EdulabsAI—the connected AI teaching workspace for K-12."
+    },
+    {
+      "id": "build-together",
+      "startSeconds": 13.656,
+      "endSeconds": 22.128,
+      "narration": "Choose your curriculum and topic. In about two minutes, create an editable plan, visual slides, a quiz, and a worksheet—together."
+    },
+    {
+      "id": "teach-and-focus",
+      "startSeconds": 21.668,
+      "endSeconds": 30.236,
+      "narration": "Teach live. Keep students focused. Move from explanation to meaningful work without rebuilding the lesson somewhere else."
+    },
+    {
+      "id": "evidence-next",
+      "startSeconds": 29.776,
+      "endSeconds": 37.768,
+      "narration": "Bring paper or digital evidence back. Review the pattern, shape the reteach, and keep the teacher in control."
+    },
+    {
+      "id": "families",
+      "startSeconds": 37.308,
+      "endSeconds": 42.18,
+      "narration": "Then approve the progress families see—without losing the learning thread."
+    },
+    {
+      "id": "every-next-step",
+      "startSeconds": 41.72,
+      "endSeconds": 49.688,
+      "narration": "One lesson. Every next step connected. Create your first lesson free during beta at edulabsai.com."
+    }
+  ],
+  "rights": [
+    "EdulabsAI-owned brand and verified product recordings",
+    "Original campaign motion graphics, score, and sound effects",
+    "Microsoft Edge neural speech subject to provider terms"
+  ],
+  "reviewRequiredBeforePublishing": true
+}

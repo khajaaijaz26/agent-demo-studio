@@ -1,0 +1,235 @@
+{
+  "planVersion": 1,
+  "title": "Every Next Step Connected — EdulabsAI Hero Advertisement",
+  "productionId": "05-every-next-step-connected-ad",
+  "originalRequest": "Create the best EdulabsAI advertisement video with premium animation and transitions.",
+  "requirements": {
+    "objective": "Create a high-end product advertisement that positions EdulabsAI as the connected AI teaching workspace for K-12, demonstrates the real product, and drives teachers to create a first lesson.",
+    "audience": "K-12 teachers, school leaders, curriculum coordinators, and education decision-makers.",
+    "targetDurationSeconds": 45,
+    "outputPresets": [
+      "youtube-1080p"
+    ],
+    "primaryChannel": "Website hero, YouTube, LinkedIn, presentations, and paid landscape placements.",
+    "narration": true,
+    "music": true,
+    "captions": true,
+    "callToAction": "Create your first lesson free during beta at edulabsai.com."
+  },
+  "verifiedClaims": [
+    {
+      "claim": "EdulabsAI is an AI teaching workspace for K-12 classrooms.",
+      "source": "https://www.edulabsai.com/"
+    },
+    {
+      "claim": "A curriculum-aware request can create an editable lesson plan, visual slide deck, quiz, and worksheet in about two minutes.",
+      "source": "https://www.edulabsai.com/"
+    },
+    {
+      "claim": "The product connects live teaching, focused student work, reviewed evidence, reteaching, and teacher-approved communication.",
+      "source": "https://www.edulabsai.com/"
+    },
+    {
+      "claim": "The beta is free and no payment is collected.",
+      "source": "https://www.edulabsai.com/"
+    }
+  ],
+  "creativeDirection": {
+    "concept": "One clear teaching intention travels through the entire learning loop instead of breaking into disconnected tools.",
+    "visualStyle": "Premium educational technology commercial with tactile 3D key art, real product footage, dark aubergine stages, cream interface frames, coral motion accents, and luminous connection paths.",
+    "pacing": "Immediate question-led hook, confident product reveal, energetic demonstration, calmer evidence moment, and an uplifting resolved CTA.",
+    "composition": "Large readable typography and product UI; generated key art uses left-side negative space so the copy never competes with the visual.",
+    "transitions": [
+      "fade-black",
+      "smooth-left",
+      "circle-open",
+      "reveal-right",
+      "zoom-in",
+      "dissolve",
+      "fade-white"
+    ],
+    "motion": "0.35–0.55 second entrances, restrained float/drift loops, short impact cues, and stable holds whenever product UI must be read.",
+    "sound": "Natural female neural narration at conversational pace, original cinematic electronic score, subtle whooshes, impacts, sparkles, and clicks.",
+    "brandPalette": {
+      "aubergine": "#2D1B47",
+      "midnight": "#160B2A",
+      "coral": "#F45A3A",
+      "gold": "#FFB224",
+      "cream": "#FFF8EF",
+      "teal": "#0FA69A"
+    }
+  },
+  "storyboard": [
+    {
+      "order": 1,
+      "id": "one-intention",
+      "purpose": "Open with an emotionally clear teacher-centered promise.",
+      "visual": "Original connected-workspace 3D key art with kinetic headline.",
+      "headline": "What if one lesson could stay connected?",
+      "narration": "Every great lesson begins with one clear intention.",
+      "plannedDurationSeconds": 4.8
+    },
+    {
+      "order": 2,
+      "id": "meet-workspace",
+      "purpose": "Name the fragmentation problem and reveal the product category.",
+      "visual": "Real landing-page platform tour beside an animated connected-loop motif.",
+      "headline": "One workspace. The whole teaching loop.",
+      "narration": "But planning, teaching, checking, and responding should not live in five different tools. Meet EdulabsAI—the connected AI teaching workspace for K-12.",
+      "plannedDurationSeconds": 10.2
+    },
+    {
+      "order": 3,
+      "id": "build-together",
+      "purpose": "Demonstrate the core time-saving value with verified product footage.",
+      "visual": "Lesson brief and completed resource overview in a dual product layout.",
+      "headline": "Plan. Slides. Quiz. Worksheet.",
+      "narration": "Choose your curriculum and topic. In about two minutes, create an editable plan, visual slides, a quiz, and a worksheet—together.",
+      "plannedDurationSeconds": 9.4
+    },
+    {
+      "order": 4,
+      "id": "teach-and-focus",
+      "purpose": "Show the shift from preparation into live teaching and student work.",
+      "visual": "Presentation resource and student dashboard in a fast, readable dual layout.",
+      "headline": "Teach visually. Keep focus.",
+      "narration": "Teach live. Keep students focused. Move from explanation to meaningful work without rebuilding the lesson somewhere else.",
+      "plannedDurationSeconds": 7.6
+    },
+    {
+      "order": 5,
+      "id": "evidence-next",
+      "purpose": "Differentiate EdulabsAI by connecting evidence to the next teaching move.",
+      "visual": "Snap-and-Mark and Learning Insights product recordings with an evidence pulse.",
+      "headline": "See the pattern. Shape the reteach.",
+      "narration": "Bring paper or digital evidence back. Review the pattern, shape the reteach, and keep the teacher in control.",
+      "plannedDurationSeconds": 8.0
+    },
+    {
+      "order": 6,
+      "id": "families",
+      "purpose": "Complete the loop with reviewed communication.",
+      "visual": "Teacher family-digest and report-card recordings.",
+      "headline": "Share only what you approve.",
+      "narration": "Then approve the progress families see—without losing the learning thread.",
+      "plannedDurationSeconds": 5.4
+    },
+    {
+      "order": 7,
+      "id": "every-next-step",
+      "purpose": "Resolve the campaign promise and present one clear CTA.",
+      "visual": "Original connected-loop 3D finale with brand wordmark and CTA.",
+      "headline": "Every next step connected. Start free during beta at edulabsai.com.",
+      "narration": "One lesson. Every next step connected. Create your first lesson free during beta at edulabsai.com.",
+      "plannedDurationSeconds": 7.2
+    }
+  ],
+  "resources": [
+    {
+      "id": "edulabsai-brand",
+      "type": "brand",
+      "source": "../assets/generated/edulabsai-wordmark-light.png",
+      "status": "owned",
+      "rights": "EdulabsAI owner-provided brand identity."
+    },
+    {
+      "id": "connected-workspace-key-art",
+      "type": "image",
+      "source": "../assets/original/edulabsai-connected-workspace-hero.png",
+      "status": "generated",
+      "rights": "Original synthetic campaign artwork generated for this project; prompt and hash recorded in IMAGE-ASSET-PROVENANCE.md."
+    },
+    {
+      "id": "connected-loop-finale",
+      "type": "image",
+      "source": "../assets/original/edulabsai-connected-loop-finale.png",
+      "status": "generated",
+      "rights": "Original synthetic campaign artwork generated for this project; prompt and hash recorded in IMAGE-ASSET-PROVENANCE.md."
+    },
+    {
+      "id": "verified-product-footage",
+      "type": "video",
+      "source": "../../../test-output/edulabs-v2/scenes",
+      "files": [
+        "02-landing-platform-tour.webm",
+        "09-teacher-lesson-brief.webm",
+        "10-lesson-overview.webm",
+        "18-resource-pptx-original.webm",
+        "33-student-dashboard.webm",
+        "27-teacher-learning-insights.webm",
+        "28-teacher-snap-mark.webm",
+        "29-teacher-report-cards.webm",
+        "30-teacher-family-digests.webm"
+      ],
+      "status": "owned",
+      "rights": "Verified EdulabsAI browser recordings using fictional demonstration data."
+    },
+    {
+      "id": "narration",
+      "type": "voice",
+      "source": "Microsoft Edge neural speech — en-US-EmmaMultilingualNeural",
+      "status": "generated",
+      "rights": "Provider terms apply; synthetic narration must remain disclosed in package metadata."
+    },
+    {
+      "id": "connected-spark-score",
+      "type": "music",
+      "source": "Local procedural score generator",
+      "status": "generated",
+      "rights": "Original procedural composition generated by Agent Demo Studio for EdulabsAI."
+    },
+    {
+      "id": "campaign-sound-design",
+      "type": "sound-effects",
+      "source": "Local impact, whoosh, sparkle, and click generators",
+      "status": "generated",
+      "rights": "Original procedural sound design generated by Agent Demo Studio."
+    }
+  ],
+  "workflow": [
+    "Verify product claims against the current public website.",
+    "Persist the storyboard and resource/provenance list before rendering.",
+    "Generate scene-locked narration and derive natural scene durations from speech.",
+    "Prepare original key art, brand motion graphics, headlines, and product frames.",
+    "Build a schema-v2 editable timeline with transitions, overlays, captions, music, and sound cues.",
+    "Render the 1920x1080 H.264/AAC master and delivery sidecars.",
+    "Run automated codec, dimensions, duration, loudness, true-peak, silence, caption, and black-frame checks.",
+    "Inspect a representative contact sheet and revise any alignment, readability, timing, or visual-matching defects."
+  ],
+  "qualityChecklist": [
+    "The opening hook is understandable within three seconds.",
+    "Every product claim is supported by current website copy or verified product footage.",
+    "Product UI is large enough to read and remains stable during important moments.",
+    "Headlines, captions, logo, and CTA never overlap.",
+    "Narration sounds natural and each visual matches the active spoken line.",
+    "Music supports the pace without masking narration.",
+    "No black holds, unintended silence, exposed transparent padding, or hard visual jumps.",
+    "The master is 1920x1080, 30 fps, H.264/AAC, captioned, and at platform-safe loudness/true peak.",
+    "The package records synthetic voice and image provenance and remains review-required before publishing."
+  ],
+  "assumptions": [
+    "The primary deliverable is a landscape hero advertisement; vertical cutdowns can be derived after approval of this master.",
+    "Only fictional demonstration data appears in product footage.",
+    "Free during beta is accurate as of 2026-08-28 and should be rechecked before a later paid campaign is published.",
+    "Teacher judgement and approval remain explicit; the advertisement does not claim autonomous diagnosis or guaranteed learning outcomes."
+  ],
+  "delivery": {
+    "completedAt": "2026-08-28T07:36:53.866Z",
+    "actualDurationSeconds": 49.7,
+    "master": "../deliverables/05-every-next-step-connected-ad/youtube-1080p-landscape-master/05-every-next-step-connected-ad.mp4",
+    "captions": "../deliverables/05-every-next-step-connected-ad/youtube-1080p-landscape-master/05-every-next-step-connected-ad.srt",
+    "thumbnail": "../deliverables/05-every-next-step-connected-ad/youtube-1080p-landscape-master/05-every-next-step-connected-ad-thumbnail.jpg",
+    "qa": {
+      "passed": true,
+      "dimensions": "1920x1080",
+      "fps": 30,
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "integratedLufs": -16.04,
+      "truePeakDbtp": -1.04,
+      "blackFrames": 0,
+      "longSilences": 0
+    },
+    "manualReview": "Passed representative-frame review after replacing visible rectangular key-art overlays with full-canvas animated backgrounds and adding the direct edulabsai.com CTA."
+  }
+}

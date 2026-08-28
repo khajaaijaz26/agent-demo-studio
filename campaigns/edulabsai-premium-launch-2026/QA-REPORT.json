@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-26T17:28:49.126Z",
+  "generatedAt": "2026-08-28T07:36:53.866Z",
   "campaign": "Meet EdulabsAI — premium launch campaign",
-  "masters": 9,
-  "passed": 9,
+  "masters": 10,
+  "passed": 10,
   "failed": 0,
   "results": [
     {
@@ -112,6 +112,37 @@
       "audioChannels": 2,
       "integratedLufs": -15.91,
       "truePeakDbtp": -1.67,
+      "blackFrames": [],
+      "longSilences": [],
+      "checks": {
+        "h264Video": true,
+        "aacAudio": true,
+        "dimensions": true,
+        "frameRate": true,
+        "stereo48k": true,
+        "duration": true,
+        "subtitleSidecar": true,
+        "noBlackHold": true,
+        "noLongSilence": true,
+        "loudness": true,
+        "truePeak": true
+      },
+      "passed": true
+    },
+    {
+      "productionId": "05-every-next-step-connected-ad",
+      "master": "deliverables/05-every-next-step-connected-ad/youtube-1080p-landscape-master/05-every-next-step-connected-ad.mp4",
+      "subtitle": "deliverables/05-every-next-step-connected-ad/youtube-1080p-landscape-master/05-every-next-step-connected-ad.srt",
+      "contactSheet": ".work/qa/contact-sheets/05-every-next-step-connected-ad.jpg",
+      "durationSeconds": 49.7,
+      "dimensions": "1920x1080",
+      "fps": 30,
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "audioSampleRate": 48000,
+      "audioChannels": 2,
+      "integratedLufs": -16.04,
+      "truePeakDbtp": -1.04,
       "blackFrames": [],
       "longSilences": [],
       "checks": {
