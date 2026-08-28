@@ -4,6 +4,7 @@
   "checks": {
     "correctPreset": true,
     "nativeCanvasOverlays": true,
+    "noAutomaticBrandWatermark": true,
     "stableBackgrounds": true,
     "noLoopingOverlayMotion": true,
     "noShakeAnimation": true,

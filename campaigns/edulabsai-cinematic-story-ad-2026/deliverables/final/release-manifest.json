@@ -3,7 +3,7 @@
   "campaign": "EdulabsAI - Built for Teachers",
   "productionId": "edulabsai-built-for-teachers-cinematic-ad",
   "title": "Built for teachers. Everything connected. - EdulabsAI",
-  "generatedAt": "2026-08-28T18:23:20.375Z",
+  "generatedAt": "2026-08-28T20:01:36.438Z",
   "durationSeconds": 95.824,
   "outputs": [
     {
@@ -21,6 +21,7 @@
         "checks": {
           "correctPreset": true,
           "nativeCanvasOverlays": true,
+          "noAutomaticBrandWatermark": true,
           "stableBackgrounds": true,
           "noLoopingOverlayMotion": true,
           "noShakeAnimation": true,
@@ -48,6 +49,7 @@
         "checks": {
           "correctPreset": true,
           "nativeCanvasOverlays": true,
+          "noAutomaticBrandWatermark": true,
           "stableBackgrounds": true,
           "noLoopingOverlayMotion": true,
           "noShakeAnimation": true,

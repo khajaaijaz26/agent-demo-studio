@@ -1,6 +1,6 @@
 # Manual visual and audio QA
 
-Review date: 2026-08-28
+Review date: 2026-08-29
 
 Overall result: **PASS**
 
@@ -13,6 +13,7 @@ Overall result: **PASS**
 
 - The opening sequence was reviewed at 0.0, 0.5, 1.0, 1.5, 2.0, 3.0, and 4.0 seconds. The orange mark performs one downward arrival, becomes the dominant centered object, introduces EDULABSAI below it, and settles without bouncing or drifting.
 - Twelve encoded-video samples were reviewed in both formats in `VIDEO-CONTACT-SHEET-LANDSCAPE.png` and `VIDEO-CONTACT-SHEET-VERTICAL.png`.
+- All 24 source-to-encoded midpoint comparisons pass at 99.48% visual similarity or higher, confirming that the renderer preserves the authored full-canvas scale and position.
 - Full-resolution frames at 49 and 57 seconds confirm crisp resource cards, readable mobile headlines, large product close-ups, and unobstructed captions.
 - The story reads in the intended order: fragmented teacher workflow, connected EdulabsAI reveal, classroom context, four aligned resources, teaching/export, students, evidence, families, CTA.
 - Product interfaces, illustration subjects, headlines, captions, and CTA remain aligned. There is no collision, edge clipping, background shake, unintended zoom, or continuous floating.

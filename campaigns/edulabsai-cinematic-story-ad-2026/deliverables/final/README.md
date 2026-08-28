@@ -35,7 +35,7 @@ Set `REBUILD_VISUALS=1` only when the native scene plates need to be regenerated
 
 ## Verification
 
-`qa/QA-REPORT.json` is the machine-readable release gate. It validates resolution, frame rate, codecs, duration, loudness, true peak, black holds, long silence, file size, checksums, and 24 layout-safe-zone assertions. `MANUAL-VISUAL-QA.md` records the encoded-frame review. The final contact sheets, opening sequence, representative full-resolution frames, waveform, and spectrogram are in `qa/`.
+`qa/QA-REPORT.json` is the machine-readable release gate. It validates resolution, frame rate, codecs, duration, loudness, true peak, black holds, long silence, file size, checksums, 24 layout-safe-zone assertions, and 24 source-to-encoded midpoint comparisons. Every encoded comparison passes, with visual similarity from 99.48% to 99.85%, proving that the full-canvas logo and product compositions survive export without shrinking or shifting. `MANUAL-VISUAL-QA.md` records the encoded-frame review. The final contact sheets, opening sequence, representative full-resolution frames, waveform, and spectrogram are in `qa/`.
 
 ## Rights and privacy
 

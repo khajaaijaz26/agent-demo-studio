@@ -4,6 +4,13 @@ All notable changes to Agent Demo Studio are documented here.
 
 ## Unreleased
 
+### Fixed
+
+- Preserve explicitly authored image-overlay dimensions up to the full export
+  canvas instead of applying decorative-overlay size caps. This keeps native
+  scene plates, product screens, and brand artwork locked to their designed
+  positions in the encoded video.
+
 ## 0.3.1 - 2026-08-26
 
 ### Fixed

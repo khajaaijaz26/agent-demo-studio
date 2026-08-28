@@ -9,6 +9,34 @@ import { campaign, formats } from "../campaign.mjs";
 const FONT = "Segoe UI, Arial, sans-serif";
 const FORCE = process.env.REBUILD_VISUALS === "1";
 
+// One optical grid drives every scene. Nothing important is positioned with
+// one-off coordinates outside these columns and bands.
+const DESIGN_GRIDS = {
+  landscape: {
+    safe: { x: 240, y: 128, width: 3360, height: 1840 },
+    copy: { x: 240, y: 128, width: 1160, height: 1020 },
+    visual: { x: 1600, y: 300, width: 2000, height: 1340 },
+    support: { x: 1600, y: 1680, width: 2000, height: 180 },
+    captionTop: 1900
+  },
+  vertical: {
+    safe: { x: 90, y: 180, width: 820, height: 1410 },
+    copy: { x: 90, y: 180, width: 820, height: 450 },
+    visual: { x: 90, y: 640, width: 820, height: 720 },
+    support: { x: 90, y: 1390, width: 820, height: 140 },
+    captionTop: 1535
+  }
+};
+
+function designGrid(format) {
+  return DESIGN_GRIDS[format.id];
+}
+
+function fittedHeadlineSize(lines, maxWidth, preferred, minimum) {
+  const longest = Math.max(...lines.map((line) => line.length));
+  return Math.max(minimum, Math.min(preferred, Math.floor(maxWidth / Math.max(1, longest * .56))));
+}
+
 const stillDefinitions = {
   "lesson-brief": { file: "09-teacher-lesson-brief.webm", at: 11.4 },
   "lesson-overview": { file: "10-lesson-overview.webm", at: 0.8 },
@@ -89,9 +117,8 @@ function baseBackground(scene, format) {
   const orb2 = format.id === "landscape"
     ? `<circle cx="180" cy="${h + 40}" r="620" fill="${p.teal}" fill-opacity=".07"/>`
     : `<circle cx="80" cy="${h - 130}" r="420" fill="${p.teal}" fill-opacity=".07"/>`;
-  const rail = format.id === "landscape"
-    ? `<rect x="192" y="${h - 164}" width="${w - 384}" height="3" rx="2" fill="${tone.ink}" fill-opacity=".10"/>`
-    : `<rect x="90" y="${h - 322}" width="820" height="3" rx="2" fill="${tone.ink}" fill-opacity=".10"/>`;
+  const layout = designGrid(format);
+  const rail = "";
   return `<defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${tone.start}"/><stop offset="1" stop-color="${tone.end}"/></linearGradient>
     <pattern id="grid" width="${grid}" height="${grid}" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="3" fill="${tone.ink}" fill-opacity=".035"/></pattern>
@@ -107,55 +134,53 @@ function baseBackground(scene, format) {
 function brandBug(format, light) {
   const p = campaign.palette;
   if (format.id === "landscape") {
-    return `<g transform="translate(206 116)"><g transform="scale(1.25)"><path d="M31 43 C18 41 12 30 15 18 C27 21 31 32 31 43 Z" fill="${light ? p.cream : p.aubergine}"/><path d="M33 43 C46 41 52 30 49 18 C37 21 33 32 33 43 Z" fill="${light ? p.cream : p.aubergine}"/><path d="M32 40 V53" stroke="${light ? p.cream : p.aubergine}" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="56" r="6" fill="${p.coral}"/></g><text x="92" y="59" font-family="${FONT}" font-size="52" font-weight="800" fill="${light ? p.cream : p.aubergine}">Edulabs<tspan fill="${p.gold}">AI</tspan></text></g>`;
+    return `<g transform="translate(240 128)"><g transform="scale(1.16)"><path d="M31 43 C18 41 12 30 15 18 C27 21 31 32 31 43 Z" fill="${light ? p.cream : p.aubergine}"/><path d="M33 43 C46 41 52 30 49 18 C37 21 33 32 33 43 Z" fill="${light ? p.cream : p.aubergine}"/><path d="M32 40 V53" stroke="${light ? p.cream : p.aubergine}" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="56" r="6" fill="${p.coral}"/></g><text x="86" y="56" font-family="${FONT}" font-size="48" font-weight="800" fill="${light ? p.cream : p.aubergine}">Edulabs<tspan fill="${p.gold}">AI</tspan></text></g>`;
   }
-  return `<g transform="translate(90 82)"><g transform="scale(.82)"><path d="M31 43 C18 41 12 30 15 18 C27 21 31 32 31 43 Z" fill="${light ? p.cream : p.aubergine}"/><path d="M33 43 C46 41 52 30 49 18 C37 21 33 32 33 43 Z" fill="${light ? p.cream : p.aubergine}"/><path d="M32 40 V53" stroke="${light ? p.cream : p.aubergine}" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="56" r="6" fill="${p.coral}"/></g><text x="62" y="39" font-family="${FONT}" font-size="34" font-weight="800" fill="${light ? p.cream : p.aubergine}">Edulabs<tspan fill="${p.gold}">AI</tspan></text></g>`;
+  return `<g transform="translate(90 184)"><g transform="scale(.78)"><path d="M31 43 C18 41 12 30 15 18 C27 21 31 32 31 43 Z" fill="${light ? p.cream : p.aubergine}"/><path d="M33 43 C46 41 52 30 49 18 C37 21 33 32 33 43 Z" fill="${light ? p.cream : p.aubergine}"/><path d="M32 40 V53" stroke="${light ? p.cream : p.aubergine}" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="56" r="6" fill="${p.coral}"/></g><text x="60" y="38" font-family="${FONT}" font-size="32" font-weight="800" fill="${light ? p.cream : p.aubergine}">Edulabs<tspan fill="${p.gold}">AI</tspan></text></g>`;
 }
 
 function sceneCopy(scene, format) {
   const p = campaign.palette;
   const tone = paletteForTone(scene.tone);
   if (scene.id === "brand-arrival") return "";
+  const layout = designGrid(format);
   if (format.id === "landscape") {
-    const x = 220;
-    const eyebrowY = 340;
-    const headlineY = 490;
-    const size = scene.headline.length >= 3 ? 132 : 154;
-    const lineHeight = size * 1.03;
-    const subY = headlineY + scene.headline.length * lineHeight + 70;
+    const x = layout.copy.x;
+    const eyebrowY = 326;
+    const headlineY = 470;
+    const size = fittedHeadlineSize(scene.headline, layout.copy.width, scene.headline.length >= 3 ? 112 : 128, 88);
+    const lineHeight = size * 1.06;
+    const subY = headlineY + scene.headline.length * lineHeight + 62;
     const headline = scene.headline.map((line, index) => `<text x="${x}" y="${headlineY + index * lineHeight}" font-family="${FONT}" font-size="${size}" font-weight="850" letter-spacing="-4" fill="${tone.ink}">${esc(line)}</text>`).join("");
-    return `${brandBug(format, tone.dark)}<rect x="${x}" y="282" width="180" height="10" rx="5" fill="${p.coral}"/><text x="${x}" y="${eyebrowY}" font-family="${FONT}" font-size="37" font-weight="850" letter-spacing="7" fill="${p.coral}">${esc(scene.eyebrow)}</text>${headline}${scene.subhead ? `<text x="${x}" y="${subY}" font-family="${FONT}" font-size="52" font-weight="560" fill="${tone.muted}">${esc(scene.subhead)}</text>` : ""}`;
+    return `${brandBug(format, tone.dark)}<rect x="${x}" y="272" width="144" height="9" rx="5" fill="${p.coral}"/><text x="${x}" y="${eyebrowY}" font-family="${FONT}" font-size="32" font-weight="850" letter-spacing="5.2" fill="${p.coral}">${esc(scene.eyebrow)}</text>${headline}${scene.subhead ? `<text x="${x}" y="${subY}" font-family="${FONT}" font-size="36" font-weight="560" fill="${tone.muted}">${esc(scene.subhead)}</text>` : ""}`;
   }
-  const x = 90;
-  const eyebrowY = 246;
-  const headlineY = 330;
-  const size = scene.headline.length >= 3 ? 66 : scene.headline.some((line) => line.length > 21) ? 70 : 76;
+  const x = layout.copy.x;
+  const eyebrowY = 300;
+  const headlineY = 378;
+  const size = fittedHeadlineSize(scene.headline, layout.copy.width, scene.headline.length >= 3 ? 62 : 68, 50);
   const lineHeight = size * 1.06;
-  const subY = headlineY + scene.headline.length * lineHeight + 42;
+  const subY = headlineY + scene.headline.length * lineHeight + 34;
   const headline = scene.headline.map((line, index) => `<text x="${x}" y="${headlineY + index * lineHeight}" font-family="${FONT}" font-size="${size}" font-weight="850" letter-spacing="-2" fill="${tone.ink}">${esc(line)}</text>`).join("");
-  return `${brandBug(format, tone.dark)}<rect x="${x}" y="204" width="120" height="7" rx="4" fill="${p.coral}"/><text x="${x}" y="${eyebrowY}" font-family="${FONT}" font-size="24" font-weight="850" letter-spacing="3.2" fill="${p.coral}">${esc(scene.eyebrow)}</text>${headline}${scene.subhead ? `<text x="${x}" y="${subY}" font-family="${FONT}" font-size="31" font-weight="580" fill="${tone.muted}">${esc(scene.subhead)}</text>` : ""}`;
+  return `${brandBug(format, tone.dark)}<rect x="${x}" y="256" width="112" height="7" rx="4" fill="${p.coral}"/><text x="${x}" y="${eyebrowY}" font-family="${FONT}" font-size="22" font-weight="850" letter-spacing="2.8" fill="${p.coral}">${esc(scene.eyebrow)}</text>${headline}${scene.subhead ? `<text x="${x}" y="${subY}" font-family="${FONT}" font-size="27" font-weight="580" fill="${tone.muted}">${esc(scene.subhead)}</text>` : ""}`;
 }
 
 function copyBounds(scene, format) {
   if (scene.id === "brand-arrival") {
     return format.id === "landscape"
-      ? { x: 850, y: 1120, width: 2140, height: 720 }
-      : { x: 170, y: 930, width: 740, height: 420 };
+      ? { x: 760, y: 1160, width: 2320, height: 560 }
+      : { x: 90, y: 1000, width: 820, height: 340 };
   }
-  return format.id === "landscape"
-    ? { x: 206, y: 130, width: 1500, height: 1030 }
-    : { x: 90, y: 204, width: 820, height: 390 };
+  return { ...designGrid(format).copy };
 }
 
 function visualRegion(scene, format) {
+  const layout = designGrid(format);
   if (format.id === "landscape") {
-    if (["teacher-fragmented", "fragmentation-cost", "connected-reveal"].includes(scene.id)) return { x: 1900, y: 240, width: 1720, height: 1720 };
-    if (scene.id === "brand-arrival") return { x: 1200, y: 250, width: 1440, height: 1580 };
-    if (scene.id === "connected-loop-cta") return { x: 1960, y: 260, width: 1660, height: 1660 };
-    return { x: 1840, y: 300, width: 1780, height: 1450 };
+    if (scene.id === "brand-arrival") return { x: 1470, y: 170, width: 900, height: 900 };
+    return { ...layout.visual };
   }
-  if (scene.id === "brand-arrival") return { x: 190, y: 250, width: 700, height: 1150 };
-  return { x: 70, y: 610, width: 940, height: 940 };
+  if (scene.id === "brand-arrival") return { x: 180, y: 210, width: 720, height: 720 };
+  return { ...layout.visual };
 }
 
 async function extractStill(sourceRoot, outputRoot, id, definition) {
@@ -203,23 +228,23 @@ function productCrop(id, format) {
   const vertical = format.id === "vertical";
   const configs = {
     "lesson-brief": vertical
-      ? { extract: { left: 560, top: 60, width: 780, height: 1000 }, width: 900, height: 1080 }
-      : { extract: { left: 560, top: 60, width: 780, height: 1000 }, width: 1450, height: 1660 },
+      ? { extract: { left: 560, top: 80, width: 780, height: 820 }, width: 820, height: 800 }
+      : { extract: { left: 560, top: 60, width: 780, height: 1000 }, width: 1160, height: 1480 },
     "lesson-overview": vertical
-      ? { extract: { left: 235, top: 120, width: 1425, height: 590 }, width: 900, height: 520 }
-      : { extract: { left: 210, top: 110, width: 1470, height: 650 }, width: 2220, height: 980 },
+      ? { extract: { left: 235, top: 120, width: 1425, height: 590 }, width: 820, height: 370 }
+      : { extract: { left: 210, top: 110, width: 1470, height: 650 }, width: 2000, height: 880 },
     "teaching-slides": vertical
-      ? { extract: { left: 90, top: 20, width: 1740, height: 1020 }, width: 900, height: 530 }
-      : { extract: { left: 40, top: 10, width: 1840, height: 1040 }, width: 2300, height: 1300 },
+      ? { extract: { left: 90, top: 20, width: 1740, height: 1020 }, width: 820, height: 480 }
+      : { extract: { left: 40, top: 10, width: 1840, height: 1040 }, width: 2000, height: 1120 },
     "student-dashboard": vertical
-      ? { extract: { left: 290, top: 75, width: 1130, height: 905 }, width: 900, height: 720 }
-      : { extract: { left: 270, top: 70, width: 1580, height: 900 }, width: 2320, height: 1320 },
+      ? { extract: { left: 290, top: 75, width: 1130, height: 905 }, width: 820, height: 640 }
+      : { extract: { left: 270, top: 70, width: 1580, height: 900 }, width: 2000, height: 1120 },
     "learning-insights": vertical
-      ? { extract: { left: 350, top: 85, width: 1480, height: 585 }, width: 900, height: 510 }
-      : { extract: { left: 275, top: 80, width: 1580, height: 820 }, width: 2320, height: 1200 },
+      ? { extract: { left: 350, top: 85, width: 1480, height: 585 }, width: 820, height: 420 }
+      : { extract: { left: 275, top: 80, width: 1580, height: 820 }, width: 2000, height: 1040 },
     "family-digest": vertical
-      ? { extract: { left: 350, top: 85, width: 1480, height: 610 }, width: 900, height: 540 }
-      : { extract: { left: 275, top: 80, width: 1580, height: 820 }, width: 2320, height: 1200 }
+      ? { extract: { left: 350, top: 85, width: 1480, height: 610 }, width: 820, height: 420 }
+      : { extract: { left: 275, top: 80, width: 1580, height: 820 }, width: 2000, height: 1040 }
   };
   return configs[id];
 }
@@ -228,19 +253,14 @@ async function createProductLayer(outputPath, format, inputPath, id, options = {
   const config = productCrop(id, format);
   if (!config) throw new Error(`No crop configured for product still '${id}'.`);
   const frame = format.id === "landscape"
-    ? { x: id === "lesson-brief" ? 2140 : 1380, y: id === "lesson-brief" ? 270 : 760, width: config.width, height: config.height, radius: 54 }
-    : { x: 90, y: options.y ?? 650, width: config.width, height: config.height, radius: 34 };
-  if (format.id === "landscape" && id !== "lesson-brief") frame.x = 1320;
+    ? { x: id === "lesson-brief" ? 2320 : 1600, y: id === "lesson-brief" ? 300 : (options.y ?? 520), width: config.width, height: config.height, radius: 50 }
+    : { x: 90, y: options.y ?? 640, width: config.width, height: config.height, radius: 32 };
   if (!FORCE && (await exists(outputPath))) return { path: outputPath, bounds: frame };
   const product = await roundedImage(inputPath, frame.width, frame.height, frame.radius, { extract: config.extract, fit: "fill" });
-  const badgeBody = options.badge
-    ? svgDocument(format, `<g transform="translate(${frame.x + 32} ${frame.y + 32})"><rect width="${format.id === "landscape" ? 560 : 380}" height="${format.id === "landscape" ? 94 : 70}" rx="${format.id === "landscape" ? 32 : 24}" fill="${campaign.palette.midnight}" fill-opacity=".94"/><circle cx="${format.id === "landscape" ? 48 : 36}" cy="${format.id === "landscape" ? 47 : 35}" r="${format.id === "landscape" ? 15 : 11}" fill="${campaign.palette.coral}"/><text x="${format.id === "landscape" ? 82 : 62}" y="${format.id === "landscape" ? 61 : 45}" font-family="${FONT}" font-size="${format.id === "landscape" ? 38 : 26}" font-weight="800" fill="${campaign.palette.cream}">${esc(options.badge)}</text></g>`)
-    : null;
   const composites = [
     { input: frameSvg(format, frame, paletteForTone(options.tone ?? "product-dark").dark), left: 0, top: 0 },
     { input: product, left: frame.x, top: frame.y }
   ];
-  if (badgeBody) composites.push({ input: badgeBody, left: 0, top: 0 });
   await writeCompositeLayer(outputPath, format, composites);
   return { path: outputPath, bounds: frame };
 }
@@ -248,8 +268,8 @@ async function createProductLayer(outputPath, format, inputPath, id, options = {
 async function createIllustrationLayer(outputPath, format, inputPath, sceneId, options = {}) {
   const region = visualRegion({ id: sceneId }, format);
   const frame = format.id === "landscape"
-    ? { x: region.x, y: region.y, width: region.width, height: region.height, radius: 90 }
-    : { x: 40, y: options.y ?? 610, width: 1000, height: options.height ?? 980, radius: 58 };
+    ? { x: region.x + 120, y: region.y + 20, width: region.width - 240, height: options.height ?? 1420, radius: 82 }
+    : { x: 90, y: options.y ?? 640, width: 820, height: options.height ?? 720, radius: 48 };
   if (!FORCE && (await exists(outputPath))) return { path: outputPath, bounds: frame };
   const image = await roundedImage(inputPath, frame.width, frame.height, frame.radius, { fit: "cover", position: options.position ?? "centre" });
   const shadow = frameSvg(format, frame, true, options.stroke ?? campaign.palette.coral);
@@ -263,20 +283,20 @@ async function createIllustrationLayer(outputPath, format, inputPath, sceneId, o
 function openingCopy(format) {
   const p = campaign.palette;
   if (format.id === "landscape") {
-    return `<text x="1920" y="1290" text-anchor="middle" font-family="${FONT}" font-size="108" font-weight="900" letter-spacing="18" fill="${p.cream}">EDULABS<tspan fill="${p.gold}">AI</tspan></text><text x="1920" y="1510" text-anchor="middle" font-family="${FONT}" font-size="154" font-weight="850" letter-spacing="-5" fill="${p.cream}">Teaching deserves</text><text x="1920" y="1680" text-anchor="middle" font-family="${FONT}" font-size="154" font-weight="850" letter-spacing="-5" fill="${p.cream}">a better kind of day.</text>`;
+    return `<text x="1920" y="1240" text-anchor="middle" font-family="${FONT}" font-size="116" font-weight="900" letter-spacing="19" fill="${p.cream}">EDULABS<tspan fill="${p.gold}">AI</tspan></text><text x="1920" y="1445" text-anchor="middle" font-family="${FONT}" font-size="132" font-weight="850" letter-spacing="-4" fill="${p.cream}">Teaching deserves a better kind of day.</text>`;
   }
-  return `<text x="540" y="1000" text-anchor="middle" font-family="${FONT}" font-size="62" font-weight="900" letter-spacing="8" fill="${p.cream}">EDULABS<tspan fill="${p.gold}">AI</tspan></text><text x="540" y="1175" text-anchor="middle" font-family="${FONT}" font-size="78" font-weight="850" letter-spacing="-2" fill="${p.cream}">Teaching deserves</text><text x="540" y="1270" text-anchor="middle" font-family="${FONT}" font-size="78" font-weight="850" letter-spacing="-2" fill="${p.cream}">a better kind of day.</text>`;
+  return `<text x="540" y="1040" text-anchor="middle" font-family="${FONT}" font-size="68" font-weight="900" letter-spacing="9" fill="${p.cream}">EDULABS<tspan fill="${p.gold}">AI</tspan></text><text x="540" y="1180" text-anchor="middle" font-family="${FONT}" font-size="68" font-weight="850" letter-spacing="-2" fill="${p.cream}">Teaching deserves</text><text x="540" y="1265" text-anchor="middle" font-family="${FONT}" font-size="68" font-weight="850" letter-spacing="-2" fill="${p.cream}">a better kind of day.</text>`;
 }
 
 async function createOpeningLayers(outputDirectory, format, brand) {
   const logoPath = path.join(outputDirectory, "01-logo.png");
   const copyPath = path.join(outputDirectory, "02-copy.png");
-  const logoSize = format.id === "landscape" ? 760 : 600;
+  const logoSize = format.id === "landscape" ? 900 : 720;
   const logoX = Math.round((format.width - logoSize) / 2);
-  const logoY = format.id === "landscape" ? 250 : 260;
-  const frame = { x: logoX, y: logoY, width: logoSize, height: logoSize, radius: format.id === "landscape" ? 180 : 145 };
+  const logoY = format.id === "landscape" ? 170 : 210;
+  const frame = { x: logoX, y: logoY, width: logoSize, height: logoSize, radius: format.id === "landscape" ? 205 : 165 };
   if (FORCE || !(await exists(logoPath))) {
-    const logo = await roundedImage(brand.profile, logoSize, logoSize, format.id === "landscape" ? 180 : 145, { fit: "fill" });
+    const logo = await roundedImage(brand.profile, logoSize, logoSize, format.id === "landscape" ? 205 : 165, { fit: "fill" });
     await writeCompositeLayer(logoPath, format, [
       { input: frameSvg(format, frame, true, campaign.palette.orange), left: 0, top: 0 },
       { input: logo, left: logoX, top: logoY }
@@ -291,35 +311,51 @@ async function createOpeningLayers(outputDirectory, format, brand) {
 
 function toolCardsSvg(format, connected = false) {
   const p = campaign.palette;
-  const cards = format.id === "landscape"
-    ? [
-        { x: 1870, y: 430, w: 760, h: 410, label: "LESSON PLAN", sub: "Objectives and timing", color: p.coral, n: "01" },
-        { x: 2720, y: 430, w: 760, h: 410, label: "SLIDES", sub: "Visual teaching story", color: p.lilac, n: "02" },
-        { x: 1870, y: 950, w: 760, h: 410, label: "QUIZ", sub: "Questions and checks", color: p.gold, n: "03" },
-        { x: 2720, y: 950, w: 760, h: 410, label: "WORKSHEET", sub: "Focused practice", color: p.teal, n: "04" }
-      ]
-    : [
-        { x: 90, y: 650, w: 820, h: 190, label: "LESSON PLAN", sub: "Objectives and timing", color: p.coral, n: "01" },
-        { x: 90, y: 875, w: 820, h: 190, label: "SLIDES", sub: "Visual teaching story", color: p.lilac, n: "02" },
-        { x: 90, y: 1100, w: 820, h: 190, label: "QUIZ", sub: "Questions and checks", color: p.gold, n: "03" },
-        { x: 90, y: 1325, w: 820, h: 190, label: "WORKSHEET", sub: "Focused practice", color: p.teal, n: "04" }
-      ];
+  const definitions = [
+    { label: "LESSON PLAN", sub: "Objectives and timing", color: p.coral, n: "01" },
+    { label: "SLIDES", sub: "Visual teaching story", color: p.lilac, n: "02" },
+    { label: "QUIZ", sub: "Questions and checks", color: p.gold, n: "03" },
+    { label: "WORKSHEET", sub: "Focused practice", color: p.teal, n: "04" }
+  ];
+  const landscape = format.id === "landscape";
+  const cards = definitions.map((card, index) => {
+    if (landscape && connected) return { ...card, x: 1600 + index * 500, y: 1530, w: 470, h: 180 };
+    if (landscape) return { ...card, x: 1600 + (index % 2) * 1020, y: 450 + Math.floor(index / 2) * 520, w: 980, h: 420 };
+    if (connected) return { ...card, x: 90 + (index % 2) * 420, y: 1060 + Math.floor(index / 2) * 155, w: 400, h: 135 };
+    return { ...card, x: 90, y: 650 + index * 175, w: 820, h: 150 };
+  });
   const connector = connected
-    ? (format.id === "landscape"
-      ? `<path d="M1680 895 C1820 895 1760 635 1870 635 M2630 635 H2720 M2250 840 V950 M3100 840 V950" fill="none" stroke="${p.orange}" stroke-width="18" stroke-linecap="round"/><circle cx="1680" cy="895" r="28" fill="${p.orange}"/>`
-      : `<path d="M500 600 V1515" fill="none" stroke="${p.orange}" stroke-width="12" stroke-linecap="round" opacity=".65"/>`)
-    : (format.id === "landscape"
-      ? `<path d="M1660 895 L1795 895 M1808 895 L1870 895 M2630 635 L2670 635 M2698 635 L2720 635 M2250 840 L2250 880 M2250 914 L2250 950 M3100 840 L3100 880 M3100 914 L3100 950" fill="none" stroke="${p.coral}" stroke-width="18" stroke-linecap="round"/><path d="M1786 862 L1817 928 M1817 862 L1786 928" stroke="${p.gold}" stroke-width="12" stroke-linecap="round"/>`
-      : `<path d="M500 612 V640 M500 850 V867 M500 1075 V1092 M500 1300 V1317" stroke="${p.coral}" stroke-width="12" stroke-linecap="round"/><path d="M475 848 L525 886 M525 848 L475 886" stroke="${p.gold}" stroke-width="10" stroke-linecap="round"/>`);
-  return `<defs><filter id="cardShadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="20" stdDeviation="24" flood-color="#140B22" flood-opacity=".20"/></filter></defs>${connector}${cards.map((card) => `<g filter="url(#cardShadow)"><rect x="${card.x}" y="${card.y}" width="${card.w}" height="${card.h}" rx="${format.id === "landscape" ? 56 : 40}" fill="${p.white}"/><rect x="${card.x}" y="${card.y}" width="${format.id === "landscape" ? 18 : 13}" height="${card.h}" rx="7" fill="${card.color}"/><circle cx="${card.x + (format.id === "landscape" ? 88 : 72)}" cy="${card.y + (format.id === "landscape" ? 94 : 72)}" r="${format.id === "landscape" ? 38 : 30}" fill="${card.color}" fill-opacity=".18"/><circle cx="${card.x + (format.id === "landscape" ? 88 : 72)}" cy="${card.y + (format.id === "landscape" ? 94 : 72)}" r="${format.id === "landscape" ? 15 : 12}" fill="${card.color}"/><text x="${card.x + (format.id === "landscape" ? 154 : 126)}" y="${card.y + (format.id === "landscape" ? 112 : 82)}" font-family="${FONT}" font-size="${format.id === "landscape" ? 52 : 34}" font-weight="850" fill="${p.ink}">${card.label}</text><text x="${card.x + (format.id === "landscape" ? 78 : 66)}" y="${card.y + (format.id === "landscape" ? 235 : 145)}" font-family="${FONT}" font-size="${format.id === "landscape" ? 40 : 26}" font-weight="560" fill="${p.muted}">${card.sub}</text><text x="${card.x + card.w - (format.id === "landscape" ? 98 : 72)}" y="${card.y + (format.id === "landscape" ? 340 : 152)}" text-anchor="end" font-family="${FONT}" font-size="${format.id === "landscape" ? 72 : 42}" font-weight="850" fill="${card.color}" fill-opacity=".72">${card.n}</text></g>`).join("")}`;
+    ? (landscape
+      ? `<path d="M1635 1620 H3565" stroke="${p.orange}" stroke-width="12" stroke-linecap="round" opacity=".5"/>`
+      : `<path d="M290 1150 H710 M290 1310 H710 M500 1150 V1310" stroke="${p.orange}" stroke-width="9" stroke-linecap="round" opacity=".5"/>`)
+    : (landscape
+      ? `<path d="M2580 660 H2620 M2090 870 V970 M3110 870 V970" stroke="${p.coral}" stroke-width="14" stroke-linecap="round" stroke-dasharray="20 24"/><path d="M2578 625 L2622 695 M2622 625 L2578 695" stroke="${p.gold}" stroke-width="10" stroke-linecap="round"/>`
+      : `<path d="M500 800 V825 M500 975 V1000 M500 1150 V1175" stroke="${p.coral}" stroke-width="10" stroke-linecap="round" stroke-dasharray="12 12"/><path d="M478 970 L522 1005 M522 970 L478 1005" stroke="${p.gold}" stroke-width="9" stroke-linecap="round"/>`);
+  const cardMarkup = cards.map((card) => {
+    const compact = connected;
+    const bar = landscape ? (compact ? 12 : 18) : 12;
+    const radius = landscape ? (compact ? 38 : 54) : (compact ? 32 : 38);
+    const dotX = card.x + (compact ? (landscape ? 48 : 42) : (landscape ? 86 : 62));
+    const dotY = card.y + (compact ? (landscape ? 52 : 45) : (landscape ? 94 : 54));
+    const labelX = card.x + (compact ? (landscape ? 82 : 72) : (landscape ? 150 : 108));
+    const labelY = card.y + (compact ? (landscape ? 64 : 55) : (landscape ? 112 : 65));
+    const labelSize = landscape ? (compact ? 28 : 50) : (compact ? 23 : 31);
+    const subX = card.x + (compact ? (landscape ? 40 : 34) : (landscape ? 78 : 54));
+    const subY = card.y + (compact ? (landscape ? 126 : 105) : (landscape ? 238 : 116));
+    const subSize = landscape ? (compact ? 21 : 38) : (compact ? 17 : 23);
+    const numberSize = landscape ? (compact ? 32 : 66) : (compact ? 27 : 34);
+    const numberY = card.y + (compact ? (landscape ? 62 : 52) : (landscape ? 342 : 62));
+    return `<g filter="url(#cardShadow)"><rect x="${card.x}" y="${card.y}" width="${card.w}" height="${card.h}" rx="${radius}" fill="${p.white}"/><rect x="${card.x}" y="${card.y}" width="${bar}" height="${card.h}" rx="6" fill="${card.color}"/><circle cx="${dotX}" cy="${dotY}" r="${compact ? (landscape ? 18 : 15) : (landscape ? 36 : 25)}" fill="${card.color}" fill-opacity=".18"/><circle cx="${dotX}" cy="${dotY}" r="${compact ? (landscape ? 8 : 7) : (landscape ? 14 : 10)}" fill="${card.color}"/><text x="${labelX}" y="${labelY}" font-family="${FONT}" font-size="${labelSize}" font-weight="850" fill="${p.ink}">${card.label}</text><text x="${subX}" y="${subY}" font-family="${FONT}" font-size="${subSize}" font-weight="560" fill="${p.muted}">${card.sub}</text><text x="${card.x + card.w - (compact ? 28 : (landscape ? 78 : 36))}" y="${numberY}" text-anchor="end" font-family="${FONT}" font-size="${numberSize}" font-weight="850" fill="${card.color}" fill-opacity=".72">${card.n}</text></g>`;
+  }).join("");
+  return `<defs><filter id="cardShadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="${connected ? 12 : 18}" stdDeviation="${connected ? 16 : 22}" flood-color="#140B22" flood-opacity=".20"/></filter></defs>${connector}${cardMarkup}`;
 }
 
 function evidenceCardsSvg(format) {
   const p = campaign.palette;
   if (format.id === "landscape") {
-    return `<g transform="translate(1450 1600)">${["REVIEW EVIDENCE", "SPOT THE GAP", "SHAPE NEXT MOVE"].map((label, index) => `<g transform="translate(${index * 700} 0)"><rect width="630" height="170" rx="48" fill="${p.white}"/><circle cx="70" cy="85" r="32" fill="${[p.coral, p.gold, p.teal][index]}"/><text x="126" y="101" font-family="${FONT}" font-size="36" font-weight="820" fill="${p.ink}">${label}</text></g>${index < 2 ? `<path d="M${630 + index * 700} 85 H${700 + index * 700}" stroke="${p.orange}" stroke-width="12" stroke-linecap="round"/>` : ""}`).join("")}</g>`;
+    return `<g transform="translate(1600 1680)">${["REVIEW EVIDENCE", "SPOT THE GAP", "SHAPE NEXT MOVE"].map((label, index) => `<g transform="translate(${index * 690} 0)"><rect width="620" height="170" rx="46" fill="${p.white}"/><circle cx="66" cy="85" r="30" fill="${[p.coral, p.gold, p.teal][index]}"/><text x="120" y="99" font-family="${FONT}" font-size="34" font-weight="820" fill="${p.ink}">${label}</text></g>${index < 2 ? `<path d="M${620 + index * 690} 85 H${690 + index * 690}" stroke="${p.orange}" stroke-width="11" stroke-linecap="round"/>` : ""}`).join("")}</g>`;
   }
-  return `<g transform="translate(90 1220)">${["REVIEW", "UNDERSTAND", "RESPOND"].map((label, index) => `<g transform="translate(${index * 285} 0)"><rect width="250" height="150" rx="38" fill="${p.white}"/><circle cx="125" cy="48" r="24" fill="${[p.coral, p.gold, p.teal][index]}"/><text x="125" y="112" text-anchor="middle" font-family="${FONT}" font-size="23" font-weight="820" fill="${p.ink}">${label}</text></g>${index < 2 ? `<path d="M${250 + index * 285} 75 H${285 + index * 285}" stroke="${p.orange}" stroke-width="8" stroke-linecap="round"/>` : ""}`).join("")}</g>`;
+  return `<g transform="translate(90 1160)">${["REVIEW", "UNDERSTAND", "RESPOND"].map((label, index) => `<g transform="translate(${index * 285} 0)"><rect width="250" height="140" rx="36" fill="${p.white}"/><circle cx="125" cy="43" r="21" fill="${[p.coral, p.gold, p.teal][index]}"/><text x="125" y="104" text-anchor="middle" font-family="${FONT}" font-size="22" font-weight="820" fill="${p.ink}">${label}</text></g>${index < 2 ? `<path d="M${250 + index * 285} 70 H${285 + index * 285}" stroke="${p.orange}" stroke-width="8" stroke-linecap="round"/>` : ""}`).join("")}</g>`;
 }
 
 function exportBadgesSvg(format) {
@@ -330,35 +366,35 @@ function exportBadgesSvg(format) {
     { label: "EDITABLE", color: p.teal }
   ];
   if (format.id === "landscape") {
-    return `<g transform="translate(1600 1680)">${badges.map((badge, index) => `<g transform="translate(${index * 590} 0)"><rect width="520" height="156" rx="50" fill="${p.white}"/><circle cx="74" cy="78" r="28" fill="${badge.color}"/><text x="126" y="96" font-family="${FONT}" font-size="46" font-weight="850" fill="${p.ink}">${badge.label}</text></g>`).join("")}</g>`;
+    return `<g transform="translate(1600 1680)">${badges.map((badge, index) => `<g transform="translate(${index * 690} 0)"><rect width="620" height="156" rx="48" fill="${p.white}"/><circle cx="74" cy="78" r="27" fill="${badge.color}"/><text x="126" y="95" font-family="${FONT}" font-size="44" font-weight="850" fill="${p.ink}">${badge.label}</text></g>`).join("")}</g>`;
   }
-  return `<g transform="translate(90 1230)">${badges.map((badge, index) => `<g transform="translate(${index * 285} 0)"><rect width="250" height="132" rx="38" fill="${p.white}"/><circle cx="48" cy="66" r="20" fill="${badge.color}"/><text x="84" y="80" font-family="${FONT}" font-size="25" font-weight="850" fill="${p.ink}">${badge.label}</text></g>`).join("")}</g>`;
+  return `<g transform="translate(90 1180)">${badges.map((badge, index) => `<g transform="translate(${index * 285} 0)"><rect width="250" height="124" rx="36" fill="${p.white}"/><circle cx="47" cy="62" r="19" fill="${badge.color}"/><text x="82" y="76" font-family="${FONT}" font-size="24" font-weight="850" fill="${p.ink}">${badge.label}</text></g>`).join("")}</g>`;
 }
 
 function familyFlowSvg(format) {
   const p = campaign.palette;
   const labels = ["OPT IN", "TEACHER REVIEW", "PRIVATE EMAIL"];
   if (format.id === "landscape") {
-    return `<g transform="translate(1450 1600)">${labels.map((label, index) => `<g transform="translate(${index * 700} 0)"><rect width="630" height="170" rx="48" fill="${p.white}"/><circle cx="76" cy="85" r="34" fill="${[p.lilac, p.coral, p.teal][index]}"/><text x="136" y="101" font-family="${FONT}" font-size="37" font-weight="830" fill="${p.ink}">${label}</text></g>${index < 2 ? `<path d="M${630 + index * 700} 85 H${700 + index * 700}" stroke="${p.orange}" stroke-width="12"/>` : ""}`).join("")}</g>`;
+    return `<g transform="translate(1600 1680)">${labels.map((label, index) => `<g transform="translate(${index * 690} 0)"><rect width="620" height="170" rx="46" fill="${p.white}"/><circle cx="70" cy="85" r="31" fill="${[p.lilac, p.coral, p.teal][index]}"/><text x="128" y="100" font-family="${FONT}" font-size="35" font-weight="830" fill="${p.ink}">${label}</text></g>${index < 2 ? `<path d="M${620 + index * 690} 85 H${690 + index * 690}" stroke="${p.orange}" stroke-width="11"/>` : ""}`).join("")}</g>`;
   }
-  return `<g transform="translate(90 1240)">${labels.map((label, index) => `<g transform="translate(${index * 285} 0)"><rect width="250" height="150" rx="38" fill="${p.white}"/><circle cx="125" cy="50" r="24" fill="${[p.lilac, p.coral, p.teal][index]}"/><text x="125" y="112" text-anchor="middle" font-family="${FONT}" font-size="${index === 1 ? 19 : 22}" font-weight="830" fill="${p.ink}">${label}</text></g>`).join("")}</g>`;
+  return `<g transform="translate(90 1160)">${labels.map((label, index) => `<g transform="translate(${index * 285} 0)"><rect width="250" height="140" rx="36" fill="${p.white}"/><circle cx="125" cy="44" r="21" fill="${[p.lilac, p.coral, p.teal][index]}"/><text x="125" y="104" text-anchor="middle" font-family="${FONT}" font-size="${index === 1 ? 18 : 21}" font-weight="830" fill="${p.ink}">${label}</text></g>`).join("")}</g>`;
 }
 
 function brokenLoopSvg(format) {
   const p = campaign.palette;
   if (format.id === "landscape") {
-    return `<g transform="translate(1870 390)"><path d="M230 760 C230 310 590 70 1020 210 C1370 325 1480 700 1320 1010 C1160 1320 760 1420 450 1230" fill="none" stroke="${p.cream}" stroke-opacity=".46" stroke-width="22" stroke-linecap="round"/><path d="M410 1260 L475 1200 M420 1190 L485 1260" stroke="${p.gold}" stroke-width="24" stroke-linecap="round"/><g transform="translate(80 650)"><circle r="96" fill="${p.coral}"/><text y="18" text-anchor="middle" font-family="${FONT}" font-size="58" font-weight="900" fill="${p.white}">PLAN</text></g><g transform="translate(1040 145)"><circle r="96" fill="${p.lilac}"/><text y="18" text-anchor="middle" font-family="${FONT}" font-size="52" font-weight="900" fill="${p.white}">TEACH</text></g><g transform="translate(1370 1040)"><circle r="96" fill="${p.teal}"/><text y="18" text-anchor="middle" font-family="${FONT}" font-size="52" font-weight="900" fill="${p.white}">CHECK</text></g></g>`;
+    return `<g transform="translate(1600 310)"><path d="M280 760 C280 330 650 80 1080 210 C1450 325 1580 700 1410 1030 C1240 1360 810 1450 490 1240" fill="none" stroke="${p.cream}" stroke-opacity=".46" stroke-width="22" stroke-linecap="round"/><path d="M450 1270 L515 1210 M460 1200 L525 1270" stroke="${p.gold}" stroke-width="24" stroke-linecap="round"/><g transform="translate(130 660)"><circle r="94" fill="${p.coral}"/><text y="18" text-anchor="middle" font-family="${FONT}" font-size="56" font-weight="900" fill="${p.white}">PLAN</text></g><g transform="translate(1100 145)"><circle r="94" fill="${p.lilac}"/><text y="18" text-anchor="middle" font-family="${FONT}" font-size="50" font-weight="900" fill="${p.white}">TEACH</text></g><g transform="translate(1460 1050)"><circle r="94" fill="${p.teal}"/><text y="18" text-anchor="middle" font-family="${FONT}" font-size="50" font-weight="900" fill="${p.white}">CHECK</text></g></g>`;
   }
-  return `<g transform="translate(90 690)"><path d="M450 20 C740 20 900 250 820 520 C750 760 500 860 275 760 C70 670 -20 430 75 235" fill="none" stroke="${p.cream}" stroke-opacity=".45" stroke-width="14" stroke-linecap="round"/><path d="M40 250 L100 200 M40 200 L100 250" stroke="${p.gold}" stroke-width="18" stroke-linecap="round"/><g transform="translate(70 225)"><circle r="70" fill="${p.coral}"/><text y="10" text-anchor="middle" font-family="${FONT}" font-size="32" font-weight="900" fill="${p.white}">PLAN</text></g><g transform="translate(720 90)"><circle r="70" fill="${p.lilac}"/><text y="10" text-anchor="middle" font-family="${FONT}" font-size="30" font-weight="900" fill="${p.white}">TEACH</text></g><g transform="translate(760 680)"><circle r="70" fill="${p.teal}"/><text y="10" text-anchor="middle" font-family="${FONT}" font-size="30" font-weight="900" fill="${p.white}">CHECK</text></g></g>`;
+  return `<g transform="translate(90 650)"><path d="M410 30 C690 30 850 245 775 490 C705 710 480 800 270 720 C80 645 0 420 85 220" fill="none" stroke="${p.cream}" stroke-opacity=".45" stroke-width="14" stroke-linecap="round"/><path d="M50 238 L105 190 M50 190 L105 238" stroke="${p.gold}" stroke-width="18" stroke-linecap="round"/><g transform="translate(82 215)"><circle r="65" fill="${p.coral}"/><text y="10" text-anchor="middle" font-family="${FONT}" font-size="30" font-weight="900" fill="${p.white}">PLAN</text></g><g transform="translate(680 92)"><circle r="65" fill="${p.lilac}"/><text y="10" text-anchor="middle" font-family="${FONT}" font-size="28" font-weight="900" fill="${p.white}">TEACH</text></g><g transform="translate(710 650)"><circle r="65" fill="${p.teal}"/><text y="10" text-anchor="middle" font-family="${FONT}" font-size="28" font-weight="900" fill="${p.white}">CHECK</text></g></g>`;
 }
 
 function connectedRailSvg(format) {
   const p = campaign.palette;
   const labels = ["PLAN", "BUILD", "TEACH", "CHECK", "CONNECT"];
   if (format.id === "landscape") {
-    return `<g transform="translate(250 1540)"><path d="M120 90 H2600" stroke="${p.orange}" stroke-width="20" stroke-linecap="round"/>${labels.map((label, index) => `<g transform="translate(${120 + index * 620} 90)"><circle r="44" fill="${p.orange}"/><circle r="19" fill="${p.cream}"/><text x="0" y="112" text-anchor="middle" font-family="${FONT}" font-size="38" font-weight="850" fill="${p.cream}">${label}</text></g>`).join("")}</g>`;
+    return `<g transform="translate(240 1680)"><path d="M40 70 H3320" stroke="${p.orange}" stroke-width="18" stroke-linecap="round"/>${labels.map((label, index) => `<g transform="translate(${40 + index * 820} 70)"><circle r="40" fill="${p.orange}"/><circle r="17" fill="${p.cream}"/><text x="0" y="105" text-anchor="middle" font-family="${FONT}" font-size="34" font-weight="850" fill="${p.cream}">${label}</text></g>`).join("")}</g>`;
   }
-  return `<g transform="translate(95 1390)"><path d="M50 50 H810" stroke="${p.orange}" stroke-width="12" stroke-linecap="round"/>${labels.map((label, index) => `<g transform="translate(${50 + index * 190} 50)"><circle r="25" fill="${p.orange}"/><circle r="10" fill="${p.cream}"/><text x="0" y="65" text-anchor="middle" font-family="${FONT}" font-size="18" font-weight="850" fill="${p.cream}">${label}</text></g>`).join("")}</g>`;
+  return `<g transform="translate(90 1390)"><path d="M30 45 H790" stroke="${p.orange}" stroke-width="11" stroke-linecap="round"/>${labels.map((label, index) => `<g transform="translate(${30 + index * 190} 45)"><circle r="23" fill="${p.orange}"/><circle r="9" fill="${p.cream}"/><text x="0" y="64" text-anchor="middle" font-family="${FONT}" font-size="17" font-weight="850" fill="${p.cream}">${label}</text></g>`).join("")}</g>`;
 }
 
 async function createSceneLayers({ scene, format, outputDirectory, stills, illustrations, brand }) {
@@ -384,54 +420,52 @@ async function createSceneLayers({ scene, format, outputDirectory, stills, illus
     const railPath = layer("02-connected-rail.png");
     await renderSvg(railPath, format, connectedRailSvg(format));
     layers.push({ ...visual, role: "illustration", delay: .14, enter: "slide-right", enterDuration: .62, licenseId: "fictional-teacher-artwork" });
-    layers.push({ path: railPath, role: "vfx", delay: .92, enter: "rise", enterDuration: .48, bounds: format.id === "landscape" ? { x: 220, y: 1500, width: 2900, height: 260 } : { x: 90, y: 1380, width: 900, height: 160 }, licenseId: "campaign-motion-design" });
+    layers.push({ path: railPath, role: "vfx", delay: .92, enter: "rise", enterDuration: .48, bounds: format.id === "landscape" ? { x: 240, y: 1680, width: 3360, height: 180 } : { x: 90, y: 1390, width: 820, height: 110 }, licenseId: "campaign-motion-design" });
   } else if (scene.id === "classroom-context") {
-    const visual = await createProductLayer(layer("01-product.png"), format, stills[scene.still], scene.still, { badge: "REAL CLASSROOM CONTEXT", tone: scene.tone, y: 650 });
-    const chipsPath = layer("02-context-chips.png");
-    const chips = format.id === "landscape"
-      ? `<g transform="translate(220 1270)">${["CURRICULUM", "CLASS", "TOPIC", "LANGUAGE", "SOURCES"].map((label, index) => `<g transform="translate(${(index % 2) * 600} ${Math.floor(index / 2) * 150})"><rect width="540" height="116" rx="38" fill="${campaign.palette.cream}"/><circle cx="58" cy="58" r="20" fill="${[campaign.palette.coral, campaign.palette.gold, campaign.palette.teal, campaign.palette.lilac, campaign.palette.orange][index]}"/><text x="102" y="73" font-family="${FONT}" font-size="38" font-weight="820" fill="${campaign.palette.ink}">${label}</text></g>`).join("")}</g>`
-      : `<g transform="translate(90 1405)">${["CURRICULUM", "CLASS", "TOPIC", "LANGUAGE", "SOURCES"].map((label, index) => `<g transform="translate(${(index % 3) * 285} ${Math.floor(index / 3) * 90})"><rect width="250" height="76" rx="26" fill="${campaign.palette.cream}"/><circle cx="36" cy="38" r="13" fill="${[campaign.palette.coral, campaign.palette.gold, campaign.palette.teal, campaign.palette.lilac, campaign.palette.orange][index]}"/><text x="62" y="47" font-family="${FONT}" font-size="${label === "CURRICULUM" ? 19 : 21}" font-weight="820" fill="${campaign.palette.ink}">${label}</text></g>`).join("")}</g>`;
-    await renderSvg(chipsPath, format, chips);
+    const visual = await createProductLayer(layer("01-product.png"), format, stills[scene.still], scene.still, { tone: scene.tone, y: 640 });
     layers.push({ ...visual, role: "product", delay: .18, enter: "slide-right", enterDuration: .62, licenseId: "verified-product-stills" });
-    layers.push({ path: chipsPath, role: "drawing", delay: 1.05, enter: "rise", enterDuration: .48, bounds: format.id === "landscape" ? { x: 220, y: 1270, width: 1140, height: 420 } : { x: 90, y: 1405, width: 820, height: 166 }, licenseId: "campaign-motion-design" });
+    if (format.id === "landscape") {
+      const chipsPath = layer("02-context-chips.png");
+      const chips = `<g transform="translate(240 1180)">${["CURRICULUM", "CLASS", "TOPIC", "LANGUAGE", "SOURCES"].map((label, index) => `<g transform="translate(${(index % 2) * 600} ${Math.floor(index / 2) * 142})"><rect width="560" height="108" rx="36" fill="${campaign.palette.cream}"/><circle cx="54" cy="54" r="18" fill="${[campaign.palette.coral, campaign.palette.gold, campaign.palette.teal, campaign.palette.lilac, campaign.palette.orange][index]}"/><text x="96" y="68" font-family="${FONT}" font-size="35" font-weight="820" fill="${campaign.palette.ink}">${label}</text></g>`).join("")}</g>`;
+      await renderSvg(chipsPath, format, chips);
+      layers.push({ path: chipsPath, role: "drawing", delay: 1.05, enter: "rise", enterDuration: .48, bounds: { x: 240, y: 1180, width: 1160, height: 392 }, licenseId: "campaign-motion-design" });
+    }
   } else if (scene.id === "four-resources") {
-    const visual = await createProductLayer(layer("01-product.png"), format, stills[scene.still], scene.still, { badge: "ONE CONNECTED WORKSPACE", tone: scene.tone, y: 640 });
+    const visual = await createProductLayer(layer("01-product.png"), format, stills[scene.still], scene.still, { tone: scene.tone, y: 640 });
     const cardsPath = layer("02-resource-cards.png");
     await renderSvg(cardsPath, format, toolCardsSvg(format, true));
     layers.push({ ...visual, role: "product", delay: .15, enter: "fade", enterDuration: .5, licenseId: "verified-product-stills" });
-    layers.push({ path: cardsPath, role: "drawing", delay: 1.05, enter: "rise", enterDuration: .58, bounds: visualRegion(scene, format), licenseId: "campaign-motion-design" });
+    layers.push({ path: cardsPath, role: "drawing", delay: 1.05, enter: "rise", enterDuration: .58, bounds: format.id === "landscape" ? { x: 1600, y: 1530, width: 1970, height: 180 } : { x: 90, y: 1060, width: 820, height: 290 }, licenseId: "campaign-motion-design" });
   } else if (scene.id === "teach-and-export") {
-    const visual = await createProductLayer(layer("01-product.png"), format, stills[scene.still], scene.still, { badge: "EDITABLE TEACHING VISUALS", tone: scene.tone, y: 660 });
+    const visual = await createProductLayer(layer("01-product.png"), format, stills[scene.still], scene.still, { tone: scene.tone, y: format.id === "landscape" ? 480 : 640 });
     const badgePath = layer("02-export-badges.png");
     await renderSvg(badgePath, format, exportBadgesSvg(format));
     layers.push({ ...visual, role: "product", delay: .16, enter: "slide-right", enterDuration: .62, licenseId: "verified-product-stills" });
-    layers.push({ path: badgePath, role: "drawing", delay: 1.08, enter: "rise", enterDuration: .5, bounds: format.id === "landscape" ? { x: 1600, y: 1680, width: 1700, height: 160 } : { x: 90, y: 1230, width: 820, height: 132 }, licenseId: "campaign-motion-design" });
+    layers.push({ path: badgePath, role: "drawing", delay: 1.08, enter: "rise", enterDuration: .5, bounds: format.id === "landscape" ? { x: 1600, y: 1680, width: 2000, height: 156 } : { x: 90, y: 1180, width: 820, height: 124 }, licenseId: "campaign-motion-design" });
   } else if (scene.id === "students-connected") {
-    const human = await createIllustrationLayer(layer("01-classroom.png"), format, illustrations.classroom, scene.id, { y: 600, height: 1030, position: "centre", stroke: campaign.palette.teal });
-    const visual = await createProductLayer(layer("02-product.png"), format, stills[scene.still], scene.still, { badge: "STUDENT LEARNING SPACE", tone: scene.tone, y: 770 });
-    layers.push({ ...human, role: "illustration", delay: .12, enter: "fade", enterDuration: .52, licenseId: "fictional-classroom-artwork" });
-    layers.push({ ...visual, role: "product", delay: 1.2, enter: format.id === "landscape" ? "slide-right" : "rise", enterDuration: .58, licenseId: "verified-product-stills" });
+    const visual = await createProductLayer(layer("01-product.png"), format, stills[scene.still], scene.still, { tone: scene.tone, y: format.id === "landscape" ? 480 : 660 });
+    layers.push({ ...visual, role: "product", delay: .2, enter: format.id === "landscape" ? "slide-right" : "rise", enterDuration: .58, licenseId: "verified-product-stills" });
   } else if (scene.id === "evidence-next-step") {
-    const visual = await createProductLayer(layer("01-product.png"), format, stills[scene.still], scene.still, { badge: "NOTHING ASSIGNS WITHOUT YOU", tone: scene.tone, y: 650 });
+    const visual = await createProductLayer(layer("01-product.png"), format, stills[scene.still], scene.still, { tone: scene.tone, y: format.id === "landscape" ? 520 : 640 });
     const flowPath = layer("02-evidence-flow.png");
     await renderSvg(flowPath, format, evidenceCardsSvg(format));
     layers.push({ ...visual, role: "product", delay: .15, enter: "fade", enterDuration: .52, licenseId: "verified-product-stills" });
-    layers.push({ path: flowPath, role: "drawing", delay: 1.12, enter: "rise", enterDuration: .52, bounds: format.id === "landscape" ? { x: 1450, y: 1600, width: 2050, height: 170 } : { x: 90, y: 1220, width: 820, height: 150 }, licenseId: "campaign-motion-design" });
+    layers.push({ path: flowPath, role: "drawing", delay: 1.12, enter: "rise", enterDuration: .52, bounds: format.id === "landscape" ? { x: 1600, y: 1680, width: 2000, height: 170 } : { x: 90, y: 1160, width: 820, height: 140 }, licenseId: "campaign-motion-design" });
   } else if (scene.id === "families-connected") {
-    const visual = await createProductLayer(layer("01-product.png"), format, stills[scene.still], scene.still, { badge: "CONTROLLED BETA - TEACHER APPROVED", tone: scene.tone, y: 650 });
+    const visual = await createProductLayer(layer("01-product.png"), format, stills[scene.still], scene.still, { tone: scene.tone, y: format.id === "landscape" ? 520 : 640 });
     const flowPath = layer("02-family-flow.png");
     await renderSvg(flowPath, format, familyFlowSvg(format));
     layers.push({ ...visual, role: "product", delay: .15, enter: "slide-right", enterDuration: .6, licenseId: "verified-product-stills" });
-    layers.push({ path: flowPath, role: "drawing", delay: 1.08, enter: "rise", enterDuration: .5, bounds: format.id === "landscape" ? { x: 1450, y: 1600, width: 2050, height: 170 } : { x: 90, y: 1240, width: 820, height: 150 }, licenseId: "campaign-motion-design" });
+    layers.push({ path: flowPath, role: "drawing", delay: 1.08, enter: "rise", enterDuration: .5, bounds: format.id === "landscape" ? { x: 1600, y: 1680, width: 2000, height: 170 } : { x: 90, y: 1160, width: 820, height: 140 }, licenseId: "campaign-motion-design" });
   } else if (scene.id === "connected-loop-cta") {
-    const human = await createIllustrationLayer(layer("01-classroom.png"), format, illustrations.classroom, scene.id, { y: 600, height: 1030, position: "centre", stroke: campaign.palette.orange });
+    const human = await createIllustrationLayer(layer("01-classroom.png"), format, illustrations.classroom, scene.id, { y: 640, height: format.id === "landscape" ? 1220 : 700, position: "centre", stroke: campaign.palette.orange });
     const ctaPath = layer("02-cta.png");
     const cta = format.id === "landscape"
-      ? `<g transform="translate(220 1250)"><rect width="1380" height="250" rx="72" fill="${campaign.palette.coral}"/><text x="690" y="105" text-anchor="middle" font-family="${FONT}" font-size="48" font-weight="850" fill="${campaign.palette.white}">CREATE YOUR FIRST LESSON FREE</text><text x="690" y="180" text-anchor="middle" font-family="${FONT}" font-size="42" font-weight="730" fill="${campaign.palette.white}">edulabsai.com</text></g>`
-      : `<g transform="translate(90 1340)"><rect width="820" height="190" rx="58" fill="${campaign.palette.coral}"/><text x="410" y="78" text-anchor="middle" font-family="${FONT}" font-size="31" font-weight="850" fill="${campaign.palette.white}">CREATE YOUR FIRST LESSON FREE</text><text x="410" y="136" text-anchor="middle" font-family="${FONT}" font-size="30" font-weight="760" fill="${campaign.palette.white}">edulabsai.com</text></g>`;
+      ? `<g transform="translate(240 1200)"><rect width="1160" height="230" rx="66" fill="${campaign.palette.coral}"/><text x="580" y="96" text-anchor="middle" font-family="${FONT}" font-size="42" font-weight="850" fill="${campaign.palette.white}">CREATE YOUR FIRST LESSON FREE</text><text x="580" y="170" text-anchor="middle" font-family="${FONT}" font-size="40" font-weight="730" fill="${campaign.palette.white}">edulabsai.com</text></g>`
+      : `<g transform="translate(90 1230)"><rect width="820" height="180" rx="54" fill="${campaign.palette.coral}"/><text x="410" y="75" text-anchor="middle" font-family="${FONT}" font-size="30" font-weight="850" fill="${campaign.palette.white}">CREATE YOUR FIRST LESSON FREE</text><text x="410" y="132" text-anchor="middle" font-family="${FONT}" font-size="29" font-weight="760" fill="${campaign.palette.white}">edulabsai.com</text></g>`;
     await renderSvg(ctaPath, format, cta);
     layers.push({ ...human, role: "illustration", delay: .1, enter: "fade", enterDuration: .54, licenseId: "fictional-classroom-artwork" });
-    layers.push({ path: ctaPath, role: "cta", delay: .92, enter: "rise", enterDuration: .54, bounds: format.id === "landscape" ? { x: 220, y: 1250, width: 1380, height: 250 } : { x: 90, y: 1340, width: 820, height: 190 }, licenseId: "campaign-motion-design" });
+    layers.push({ path: ctaPath, role: "cta", delay: .92, enter: "rise", enterDuration: .54, bounds: format.id === "landscape" ? { x: 240, y: 1200, width: 1160, height: 230 } : { x: 90, y: 1230, width: 820, height: 180 }, licenseId: "campaign-motion-design" });
   }
 
   const copyPath = layer(`${String(layers.length + 1).padStart(2, "0")}-copy.png`);
@@ -442,7 +476,7 @@ async function createSceneLayers({ scene, format, outputDirectory, stills, illus
 
 export async function prepareVisualAssets({ assetsRoot, sourceRoot, brandRoot, production }) {
   const brandDirectory = path.join(assetsRoot, "brand");
-  const scenesDirectory = path.join(assetsRoot, "scenes");
+  const scenesDirectory = path.join(assetsRoot, "scenes-aligned");
   const illustrationsDirectory = path.join(assetsRoot, "illustrations");
   await Promise.all([brandDirectory, scenesDirectory, illustrationsDirectory, path.join(assetsRoot, "stills")].map((directory) => mkdir(directory, { recursive: true })));
 

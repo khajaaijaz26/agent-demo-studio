@@ -68,15 +68,21 @@ function elementBox(overlay: CreatorOverlay, preset: CreatorPreset): { x: number
 
 async function renderImageOverlay(overlay: CreatorOverlay, preset: CreatorPreset, sourcePath: string, outputPath: string): Promise<{ x: number; y: number; width: number; height: number }> {
   const character = overlay.type === "presenter" || overlay.type === "character";
+  const hasExplicitSize = overlay.width !== undefined || overlay.height !== undefined;
   const defaultWidth = overlay.type === "watermark"
     ? preset.width * 0.16
     : character
       ? preset.width * (preset.height > preset.width ? 0.58 : 0.32)
       : preset.width * 0.38;
-  const targetWidth = Math.round(Math.min(preset.width * 0.92, overlay.width ?? defaultWidth));
+  // Explicit dimensions represent an authored plate and must survive export at
+  // the requested canvas size. Only automatically sized images receive the
+  // decorative-overlay safety caps.
+  const maximumWidth = hasExplicitSize ? preset.width : preset.width * 0.92;
+  const maximumHeight = hasExplicitSize ? preset.height : preset.height * (character ? 0.78 : 0.62);
+  const targetWidth = Math.round(Math.min(maximumWidth, overlay.width ?? defaultWidth));
   const metadata = await sharp(sourcePath).metadata();
   const ratio = metadata.width && metadata.height ? metadata.height / metadata.width : 1;
-  const targetHeight = Math.round(Math.min(preset.height * (character ? 0.78 : 0.62), overlay.height ?? targetWidth * ratio));
+  const targetHeight = Math.round(Math.min(maximumHeight, overlay.height ?? targetWidth * ratio));
   const opacity = overlay.opacity ?? (overlay.type === "watermark" ? 0.78 : 1);
   // `inside` avoids adding transparent padding. FFmpeg alpha fades can expose the
   // RGB values of padded pixels as black bands, while natural image bounds keep

@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { existsSync } from "node:fs";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import sharp from "sharp";
 import { parseCaptions, serializeAss, serializeSrt, serializeVtt } from "../src/creator/captions.js";
 import { listCreatorAssets, resolveBundledCreatorAsset } from "../src/creator/assets.js";
+import { renderOverlayAssets } from "../src/creator/design.js";
 import { listCreatorPresets } from "../src/creator/presets.js";
 import { createPromptVideoManifest, createPromptVideoPlan } from "../src/creator/prompt.js";
 import { publishToYouTube, tiktokChunkPlan } from "../src/creator/publish.js";
@@ -12,6 +17,39 @@ import { createTemplateManifest, listCreatorTemplates } from "../src/creator/tem
 import { CREATOR_IMAGE_MOTIONS, CREATOR_OVERLAY_ANIMATIONS, CREATOR_TRANSITIONS, CREATOR_VFX_PRESETS, type CreatorPromptMode, type CreatorRenderedOutput } from "../src/creator/types.js";
 
 describe("creator manifests", () => {
+  it("preserves explicitly authored full-canvas image overlays", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "agent-demo-studio-overlay-"));
+    try {
+      const preset = listCreatorPresets().find((item) => item.id === "youtube-1080p")!;
+      const source = path.join(directory, "plate.png");
+      await sharp({
+        create: {
+          width: preset.width,
+          height: preset.height,
+          channels: 4,
+          background: { r: 244, g: 91, b: 62, alpha: 0 },
+        },
+      }).png().toFile(source);
+
+      const [asset] = await renderOverlayAssets([{
+        id: "authored-plate",
+        type: "image",
+        source,
+        startSeconds: 0,
+        endSeconds: 2,
+        x: 0.5,
+        y: 0.5,
+        width: preset.width,
+        height: preset.height,
+      }], preset, path.join(directory, "rendered"));
+
+      expect(asset).toMatchObject({ x: 0, y: 0, width: preset.width, height: preset.height });
+      await expect(sharp(asset!.path).metadata()).resolves.toMatchObject({ width: preset.width, height: preset.height });
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
   it("selects compatible file-backed filter graphs across FFmpeg generations", () => {
     expect(filterComplexFileOptionForVersion("ffmpeg version 6.1.1-3ubuntu5")).toBe("-filter_complex_script");
     expect(filterComplexFileOptionForVersion("ffmpeg version 7.0 Copyright")).toBe("-/filter_complex");

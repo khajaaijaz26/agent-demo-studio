@@ -1,6 +1,7 @@
 .work/
 assets/generated/brand/
 assets/generated/scenes/
+assets/generated/scenes-aligned/
 assets/generated/stills/
 assets/generated/ALIGNMENT-SPEC.json
 qa/

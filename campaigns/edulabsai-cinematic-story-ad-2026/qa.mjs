@@ -10,10 +10,11 @@ import { formats, production } from "./campaign.mjs";
 
 const campaignRoot = path.dirname(fileURLToPath(import.meta.url));
 const assetsRoot = path.join(campaignRoot, "assets", "generated");
-const scenesRoot = path.join(assetsRoot, "scenes");
+const scenesRoot = path.join(assetsRoot, "scenes-aligned");
 const deliverablesRoot = path.join(campaignRoot, "deliverables", "final");
 const qaRoot = path.join(campaignRoot, "qa");
 const framesRoot = path.join(qaRoot, "frames");
+const encodedFramesRoot = path.join(qaRoot, "encoded-frames");
 
 function exists(filePath) {
   return access(filePath).then(() => true, () => false);
@@ -61,7 +62,7 @@ async function labelStrip(width, height, text) {
   return sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="${width}" height="${height}" fill="#170C29"/><text x="24" y="${Math.round(height * .7)}" font-family="Segoe UI, Arial, sans-serif" font-size="${Math.round(height * .42)}" font-weight="800" fill="#FFF8EF">${safe}</text></svg>`)).png().toBuffer();
 }
 
-async function createContactSheet(format, frames) {
+async function createContactSheet(format, frames, prefix = "CONTACT-SHEET") {
   const vertical = format.id === "vertical";
   const thumbWidth = vertical ? 360 : 960;
   const thumbHeight = vertical ? 640 : 540;
@@ -85,10 +86,70 @@ async function createContactSheet(format, frames) {
     composites.push({ input: image, left: x, top: y });
     composites.push({ input: await labelStrip(thumbWidth, labelHeight, `${index + 1}. ${frames[index].id}`), left: x, top: y + thumbHeight });
   }
-  const output = path.join(qaRoot, `CONTACT-SHEET-${format.id.toUpperCase()}.png`);
+  const output = path.join(qaRoot, `${prefix}-${format.id.toUpperCase()}.png`);
   await mkdir(qaRoot, { recursive: true });
   await canvas.composite(composites).png({ compressionLevel: 9 }).toFile(output);
   return output;
+}
+
+async function extractEncodedFrame(videoPath, seconds, outputPath) {
+  await mkdir(path.dirname(outputPath), { recursive: true });
+  await run("ffmpeg", [
+    "-y", "-hide_banner", "-loglevel", "error",
+    "-ss", seconds.toFixed(3), "-i", videoPath,
+    "-frames:v", "1", "-an", outputPath
+  ]);
+}
+
+async function visualSimilarity(referencePath, encodedPath, bounds) {
+  const crop = {
+    left: Math.round(bounds.x),
+    top: Math.round(bounds.y),
+    width: Math.round(bounds.width),
+    height: Math.round(bounds.height)
+  };
+  const prepare = (filePath) => sharp(filePath)
+    .extract(crop)
+    .resize(192, 108, { fit: "fill", kernel: sharp.kernel.lanczos3 })
+    .removeAlpha()
+    .raw()
+    .toBuffer();
+  const [reference, encoded] = await Promise.all([prepare(referencePath), prepare(encodedPath)]);
+  let difference = 0;
+  for (let index = 0; index < reference.length; index += 1) difference += Math.abs(reference[index] - encoded[index]);
+  return 1 - difference / (reference.length * 255);
+}
+
+async function generateEncodedPreviews(videoResults, sourcePreviews) {
+  const alignment = JSON.parse(await readFile(path.join(assetsRoot, "ALIGNMENT-SPEC.json"), "utf8"));
+  const outputs = {};
+  const matches = [];
+  for (const video of videoResults) {
+    const format = formats[video.format];
+    const manifestPath = path.join(campaignRoot, "manifests", `${production.id}-${format.id}.creator.json`);
+    const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+    const timeline = manifest.metadata.sceneTimeline;
+    const frames = [];
+    for (const timing of timeline) {
+      const midpoint = timing.startSeconds + (timing.endSeconds - timing.startSeconds) / 2;
+      const outputPath = path.join(encodedFramesRoot, format.id, `${timing.id}.png`);
+      await extractEncodedFrame(video.filePath, midpoint, outputPath);
+      const reference = sourcePreviews[format.id].frames.find((frame) => frame.id === timing.id);
+      const similarity = await visualSimilarity(
+        reference.path,
+        outputPath,
+        alignment.formats[format.id].scenes[timing.id].visual
+      );
+      const passed = similarity >= .96;
+      frames.push({ id: timing.id, path: outputPath });
+      matches.push({ format: format.id, scene: timing.id, midpointSeconds: midpoint, visualSimilarity: similarity, passed });
+    }
+    outputs[format.id] = {
+      frames,
+      contactSheet: await createContactSheet(format, frames, "VIDEO-CONTACT-SHEET")
+    };
+  }
+  return { outputs, matches, passed: matches.length === production.scenes.length * videoResults.length && matches.every((item) => item.passed) };
 }
 
 async function generateVisualPreviews() {
@@ -122,9 +183,20 @@ async function auditAlignment() {
     for (const scene of production.scenes) {
       const sceneSpec = spec.scenes[scene.id];
       const copySafe = insideSafe(sceneSpec.copy, format);
-      const ctaLayers = sceneSpec.layers.filter((item) => item.role === "cta");
-      const ctaSafe = ctaLayers.every((item) => insideSafe(item.bounds, format));
-      results.push({ format: format.id, scene: scene.id, copySafe, ctaSafe, passed: copySafe && ctaSafe });
+      const visualSafe = insideSafe(sceneSpec.visual, format);
+      const allLayersSafe = sceneSpec.layers.every((item) => insideSafe(item.bounds, format));
+      const productLayers = sceneSpec.layers.filter((item) => item.role === "product");
+      const mobileProductsFillColumn = format.id !== "vertical" || productLayers.every((item) => item.bounds?.x === 90 && item.bounds?.width === 820);
+      const copyVisualSeparated = scene.id === "brand-arrival"
+        || (format.id === "landscape"
+          ? sceneSpec.copy.x + sceneSpec.copy.width <= sceneSpec.visual.x
+          : sceneSpec.copy.y + sceneSpec.copy.height <= sceneSpec.visual.y);
+      const gridAnchored = scene.id === "brand-arrival"
+        || (format.id === "landscape"
+          ? sceneSpec.copy.x === 240 && sceneSpec.visual.x === 1600 && sceneSpec.visual.x + sceneSpec.visual.width === 3600
+          : sceneSpec.copy.x === 90 && sceneSpec.visual.x === 90 && sceneSpec.visual.width === 820);
+      const passed = copySafe && visualSafe && allLayersSafe && mobileProductsFillColumn && copyVisualSeparated && gridAnchored;
+      results.push({ format: format.id, scene: scene.id, copySafe, visualSafe, allLayersSafe, mobileProductsFillColumn, copyVisualSeparated, gridAnchored, passed });
     }
   }
   return results;
@@ -219,6 +291,13 @@ async function auditVideos() {
 
 function markdownReport(report) {
   const alignmentFailures = report.alignment.filter((item) => !item.passed);
+  const encodedFailures = report.encodedPreviews.matches.filter((item) => !item.passed);
+  const encodedContactLines = report.encodedPreviews.outputs.landscape && report.encodedPreviews.outputs.vertical
+    ? [
+      `- Encoded landscape contact sheet: \`${path.relative(campaignRoot, report.encodedPreviews.outputs.landscape.contactSheet).replaceAll("\\", "/")}\``,
+      `- Encoded vertical contact sheet: \`${path.relative(campaignRoot, report.encodedPreviews.outputs.vertical.contactSheet).replaceAll("\\", "/")}\``
+    ]
+    : ["- Encoded contact sheets: not generated because no video masters were found."];
   const lines = [
     "# QA report",
     "",
@@ -229,6 +308,8 @@ function markdownReport(report) {
     `- Landscape contact sheet: \`${path.relative(campaignRoot, report.previews.landscape.contactSheet).replaceAll("\\", "/")}\``,
     `- Vertical contact sheet: \`${path.relative(campaignRoot, report.previews.vertical.contactSheet).replaceAll("\\", "/")}\``,
     `- Alignment checks: ${report.alignment.length - alignmentFailures.length}/${report.alignment.length} passed`,
+    `- Encoded midpoint matches: ${report.encodedPreviews.matches.length - encodedFailures.length}/${report.encodedPreviews.matches.length} passed`,
+    ...encodedContactLines,
     "- Manual review is still required for visual taste, narration-to-scene match, and music character.",
     "",
     "## Video masters",
@@ -239,7 +320,10 @@ function markdownReport(report) {
     lines.push(`### ${item.format}`, "", `- Result: **${item.passed ? "PASS" : "FAIL"}**`, `- File: \`${item.relativePath}\``, `- Format: ${item.width}x${item.height} at ${item.fps.toFixed(2)} fps`, `- Duration: ${item.durationSeconds.toFixed(3)} seconds`, `- Loudness: ${item.loudness.input_i} LUFS; peak ${item.loudness.input_tp} dBTP`, `- Size: ${(item.sizeBytes / 1024 / 1024).toFixed(2)} MiB`, `- SHA-256: \`${item.sha256}\``, "");
   }
   if (alignmentFailures.length) {
-    lines.push("## Alignment failures", "", ...alignmentFailures.map((item) => `- ${item.format}/${item.scene}: copySafe=${item.copySafe}, ctaSafe=${item.ctaSafe}`), "");
+    lines.push("## Alignment failures", "", ...alignmentFailures.map((item) => `- ${item.format}/${item.scene}: copySafe=${item.copySafe}, visualSafe=${item.visualSafe}, allLayersSafe=${item.allLayersSafe}, mobileProductsFillColumn=${item.mobileProductsFillColumn}, copyVisualSeparated=${item.copyVisualSeparated}, gridAnchored=${item.gridAnchored}`), "");
+  }
+  if (encodedFailures.length) {
+    lines.push("## Encoded midpoint failures", "", ...encodedFailures.map((item) => `- ${item.format}/${item.scene}: visualSimilarity=${item.visualSimilarity.toFixed(4)} at ${item.midpointSeconds.toFixed(3)}s`), "");
   }
   return `${lines.join("\n")}\n`;
 }
@@ -248,12 +332,16 @@ await mkdir(qaRoot, { recursive: true });
 const previews = await generateVisualPreviews();
 const alignment = await auditAlignment();
 const videos = await auditVideos();
+const encodedPreviews = await generateEncodedPreviews(videos.results, previews);
 const report = {
   generatedAt: new Date().toISOString(),
   previews,
   alignment,
   videos,
-  passed: alignment.every((item) => item.passed) && (videos.results.length === 0 || videos.passed)
+  encodedPreviews,
+  passed: alignment.every((item) => item.passed)
+    && (videos.results.length === 0 || videos.passed)
+    && encodedPreviews.passed
 };
 await writeFile(path.join(qaRoot, "QA-REPORT.json"), `${JSON.stringify(report, null, 2)}\n`, "utf8");
 await writeFile(path.join(qaRoot, "QA-REPORT.md"), markdownReport(report), "utf8");

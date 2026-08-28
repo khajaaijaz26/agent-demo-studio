@@ -7,6 +7,9 @@ Overall: **PASS**
 - Landscape contact sheet: `qa/CONTACT-SHEET-LANDSCAPE.png`
 - Vertical contact sheet: `qa/CONTACT-SHEET-VERTICAL.png`
 - Alignment checks: 24/24 passed
+- Encoded midpoint matches: 24/24 passed
+- Encoded landscape contact sheet: `qa/VIDEO-CONTACT-SHEET-LANDSCAPE.png`
+- Encoded vertical contact sheet: `qa/VIDEO-CONTACT-SHEET-VERTICAL.png`
 - Manual review is still required for visual taste, narration-to-scene match, and music character.
 
 ## Video masters
@@ -18,8 +21,8 @@ Overall: **PASS**
 - Format: 3840x2160 at 30.00 fps
 - Duration: 95.873 seconds
 - Loudness: -15.30 LUFS; peak -1.50 dBTP
-- Size: 12.25 MiB
-- SHA-256: `73e24d950291f416700e70be53da5e9f1c4347e333b400ea1600895f90e431ff`
+- Size: 14.40 MiB
+- SHA-256: `ec6a38922a1dc6d292e8be456b2c8e3283076d459d080ef6d737182893301f6a`
 
 ### vertical
 
@@ -28,5 +31,6 @@ Overall: **PASS**
 - Format: 1080x1920 at 30.00 fps
 - Duration: 95.873 seconds
 - Loudness: -15.30 LUFS; peak -1.49 dBTP
-- Size: 7.21 MiB
-- SHA-256: `83b40f84eab10003a9e71c9dfdea3db2b6e6e63cfe66f9c35921eca15fd76109`
+- Size: 8.32 MiB
+- SHA-256: `e1b4f0e12a07bb482c2fbbc2518e76fb5eb486fcadcbc58f6760ff368885d86a`
+

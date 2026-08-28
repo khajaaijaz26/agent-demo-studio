@@ -75,8 +75,8 @@ function buildManifest({ production, format, timeline, assets, captionsPath, mus
     source: relative(manifestsRoot, item.path),
     startSeconds: Number((entry.start + item.delay).toFixed(3)),
     endSeconds: Number((entry.end - .03).toFixed(3)),
-    x: .5,
-    y: .5,
+    x: 0.5,
+    y: 0.5,
     width: format.width,
     height: format.height,
     opacity: 1,
@@ -105,8 +105,6 @@ function buildManifest({ production, format, timeline, assets, captionsPath, mus
     outputDirectory: relative(manifestsRoot, path.join(workRoot, "renders", production.id, format.id)),
     brand: {
       name: "EdulabsAI",
-      logo: relative(manifestsRoot, assets.brand.profile),
-      logoLicenseId: "edulabsai-brand",
       primary: campaign.palette.coral,
       secondary: campaign.palette.gold,
       text: campaign.palette.cream,
@@ -166,7 +164,7 @@ function buildManifest({ production, format, timeline, assets, captionsPath, mus
     ],
     metadata: {
       campaign: campaign.name,
-      campaignVersion: 1,
+      campaignVersion: 2,
       productionId: production.id,
       format: format.id,
       nativeCanvas: true,
@@ -188,7 +186,8 @@ function buildManifest({ production, format, timeline, assets, captionsPath, mus
 function auditManifest(manifest, format) {
   const checks = {
     correctPreset: manifest.exports.every((item) => item.preset === format.preset),
-    nativeCanvasOverlays: manifest.overlays.every((item) => item.width === format.width && item.height === format.height && item.x === .5 && item.y === .5),
+    nativeCanvasOverlays: manifest.overlays.every((item) => item.width === format.width && item.height === format.height && item.x === 0.5 && item.y === 0.5),
+    noAutomaticBrandWatermark: !manifest.brand?.logo,
     stableBackgrounds: manifest.clips.every((clip) => clip.motion === "none"),
     noLoopingOverlayMotion: manifest.overlays.every((item) => item.animation?.loop === "none"),
     noShakeAnimation: manifest.overlays.every((item) => !["shake", "bounce", "float", "drift"].includes(item.animation?.loop)),

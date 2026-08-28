@@ -1,7 +1,7 @@
 {
   "productionId": "edulabsai-built-for-teachers-cinematic-ad",
   "title": "Built for teachers. Everything connected. - EdulabsAI",
-  "generatedAt": "2026-08-28T18:23:20.397Z",
+  "generatedAt": "2026-08-28T20:01:36.468Z",
   "durationSeconds": 95.82400000000001,
   "outputs": [
     {
@@ -15,7 +15,7 @@
         "width": 3840,
         "height": 2160,
         "fps": 30,
-        "fileSizeBytes": 12844807,
+        "fileSizeBytes": 15102624,
         "platform": "youtube",
         "videoPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\.work\\renders\\edulabsai-built-for-teachers-cinematic-ad\\landscape\\edulabsai-ad-4k.mp4",
         "thumbnailPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\.work\\renders\\edulabsai-built-for-teachers-cinematic-ad\\landscape\\edulabsai-ad-4k-thumbnail.jpg",
@@ -43,7 +43,7 @@
         "width": 1080,
         "height": 1920,
         "fps": 30,
-        "fileSizeBytes": 7565052,
+        "fileSizeBytes": 8724371,
         "platform": "instagram",
         "videoPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\.work\\renders\\edulabsai-built-for-teachers-cinematic-ad\\vertical\\edulabsai-ad-vertical.mp4",
         "thumbnailPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\.work\\renders\\edulabsai-built-for-teachers-cinematic-ad\\vertical\\edulabsai-ad-vertical-thumbnail.jpg",
@@ -66,7 +66,7 @@
     "campaign": "EdulabsAI - Built for Teachers",
     "productionId": "edulabsai-built-for-teachers-cinematic-ad",
     "title": "Built for teachers. Everything connected. - EdulabsAI",
-    "generatedAt": "2026-08-28T18:23:20.375Z",
+    "generatedAt": "2026-08-28T20:01:36.438Z",
     "durationSeconds": 95.824,
     "outputs": [
       {
@@ -84,6 +84,7 @@
           "checks": {
             "correctPreset": true,
             "nativeCanvasOverlays": true,
+            "noAutomaticBrandWatermark": true,
             "stableBackgrounds": true,
             "noLoopingOverlayMotion": true,
             "noShakeAnimation": true,
@@ -111,6 +112,7 @@
           "checks": {
             "correctPreset": true,
             "nativeCanvasOverlays": true,
+            "noAutomaticBrandWatermark": true,
             "stableBackgrounds": true,
             "noLoopingOverlayMotion": true,
             "noShakeAnimation": true,

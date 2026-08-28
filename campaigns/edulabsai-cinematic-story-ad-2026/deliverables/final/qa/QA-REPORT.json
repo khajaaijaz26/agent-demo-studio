@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-28T18:25:42.399Z",
+  "generatedAt": "2026-08-28T20:06:29.281Z",
   "previews": {
     "landscape": {
       "frames": [
@@ -113,168 +113,264 @@
       "format": "landscape",
       "scene": "brand-arrival",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "landscape",
       "scene": "teacher-fragmented",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "landscape",
       "scene": "tool-by-tool",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "landscape",
       "scene": "fragmentation-cost",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "landscape",
       "scene": "connected-reveal",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "landscape",
       "scene": "classroom-context",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "landscape",
       "scene": "four-resources",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "landscape",
       "scene": "teach-and-export",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "landscape",
       "scene": "students-connected",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "landscape",
       "scene": "evidence-next-step",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "landscape",
       "scene": "families-connected",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "landscape",
       "scene": "connected-loop-cta",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "vertical",
       "scene": "brand-arrival",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "vertical",
       "scene": "teacher-fragmented",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "vertical",
       "scene": "tool-by-tool",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "vertical",
       "scene": "fragmentation-cost",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "vertical",
       "scene": "connected-reveal",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "vertical",
       "scene": "classroom-context",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "vertical",
       "scene": "four-resources",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "vertical",
       "scene": "teach-and-export",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "vertical",
       "scene": "students-connected",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "vertical",
       "scene": "evidence-next-step",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "vertical",
       "scene": "families-connected",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     },
     {
       "format": "vertical",
       "scene": "connected-loop-cta",
       "copySafe": true,
-      "ctaSafe": true,
+      "visualSafe": true,
+      "allLayersSafe": true,
+      "mobileProductsFillColumn": true,
+      "copyVisualSeparated": true,
+      "gridAnchored": true,
       "passed": true
     }
   ],
@@ -290,7 +386,7 @@
         "durationSeconds": 95.873333,
         "videoCodec": "h264",
         "audioCodec": "aac",
-        "sizeBytes": 12844807,
+        "sizeBytes": 15102624,
         "loudness": {
           "input_i": "-15.30",
           "input_tp": "-1.50",
@@ -307,7 +403,7 @@
           "blackSegments": 0,
           "silenceSegments": 0
         },
-        "sha256": "73e24d950291f416700e70be53da5e9f1c4347e333b400ea1600895f90e431ff",
+        "sha256": "ec6a38922a1dc6d292e8be456b2c8e3283076d459d080ef6d737182893301f6a",
         "checks": {
           "width": true,
           "height": true,
@@ -333,7 +429,7 @@
         "durationSeconds": 95.873333,
         "videoCodec": "h264",
         "audioCodec": "aac",
-        "sizeBytes": 7565052,
+        "sizeBytes": 8724371,
         "loudness": {
           "input_i": "-15.30",
           "input_tp": "-1.49",
@@ -350,7 +446,7 @@
           "blackSegments": 0,
           "silenceSegments": 0
         },
-        "sha256": "83b40f84eab10003a9e71c9dfdea3db2b6e6e63cfe66f9c35921eca15fd76109",
+        "sha256": "e1b4f0e12a07bb482c2fbbc2518e76fb5eb486fcadcbc58f6760ff368885d86a",
         "checks": {
           "width": true,
           "height": true,
@@ -368,6 +464,287 @@
       }
     ],
     "durationMatch": true,
+    "passed": true
+  },
+  "encodedPreviews": {
+    "outputs": {
+      "landscape": {
+        "frames": [
+          {
+            "id": "brand-arrival",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\landscape\\brand-arrival.png"
+          },
+          {
+            "id": "teacher-fragmented",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\landscape\\teacher-fragmented.png"
+          },
+          {
+            "id": "tool-by-tool",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\landscape\\tool-by-tool.png"
+          },
+          {
+            "id": "fragmentation-cost",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\landscape\\fragmentation-cost.png"
+          },
+          {
+            "id": "connected-reveal",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\landscape\\connected-reveal.png"
+          },
+          {
+            "id": "classroom-context",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\landscape\\classroom-context.png"
+          },
+          {
+            "id": "four-resources",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\landscape\\four-resources.png"
+          },
+          {
+            "id": "teach-and-export",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\landscape\\teach-and-export.png"
+          },
+          {
+            "id": "students-connected",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\landscape\\students-connected.png"
+          },
+          {
+            "id": "evidence-next-step",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\landscape\\evidence-next-step.png"
+          },
+          {
+            "id": "families-connected",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\landscape\\families-connected.png"
+          },
+          {
+            "id": "connected-loop-cta",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\landscape\\connected-loop-cta.png"
+          }
+        ],
+        "contactSheet": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\VIDEO-CONTACT-SHEET-LANDSCAPE.png"
+      },
+      "vertical": {
+        "frames": [
+          {
+            "id": "brand-arrival",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\vertical\\brand-arrival.png"
+          },
+          {
+            "id": "teacher-fragmented",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\vertical\\teacher-fragmented.png"
+          },
+          {
+            "id": "tool-by-tool",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\vertical\\tool-by-tool.png"
+          },
+          {
+            "id": "fragmentation-cost",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\vertical\\fragmentation-cost.png"
+          },
+          {
+            "id": "connected-reveal",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\vertical\\connected-reveal.png"
+          },
+          {
+            "id": "classroom-context",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\vertical\\classroom-context.png"
+          },
+          {
+            "id": "four-resources",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\vertical\\four-resources.png"
+          },
+          {
+            "id": "teach-and-export",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\vertical\\teach-and-export.png"
+          },
+          {
+            "id": "students-connected",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\vertical\\students-connected.png"
+          },
+          {
+            "id": "evidence-next-step",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\vertical\\evidence-next-step.png"
+          },
+          {
+            "id": "families-connected",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\vertical\\families-connected.png"
+          },
+          {
+            "id": "connected-loop-cta",
+            "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\encoded-frames\\vertical\\connected-loop-cta.png"
+          }
+        ],
+        "contactSheet": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\VIDEO-CONTACT-SHEET-VERTICAL.png"
+      }
+    },
+    "matches": [
+      {
+        "format": "landscape",
+        "scene": "brand-arrival",
+        "midpointSeconds": 2.3,
+        "visualSimilarity": 0.994759327342048,
+        "passed": true
+      },
+      {
+        "format": "landscape",
+        "scene": "teacher-fragmented",
+        "midpointSeconds": 8.2,
+        "visualSimilarity": 0.9953810871056241,
+        "passed": true
+      },
+      {
+        "format": "landscape",
+        "scene": "tool-by-tool",
+        "midpointSeconds": 16.224000000000004,
+        "visualSimilarity": 0.9974929773864278,
+        "passed": true
+      },
+      {
+        "format": "landscape",
+        "scene": "fragmentation-cost",
+        "midpointSeconds": 24.248000000000005,
+        "visualSimilarity": 0.9955590479504559,
+        "passed": true
+      },
+      {
+        "format": "landscape",
+        "scene": "connected-reveal",
+        "midpointSeconds": 31.876000000000005,
+        "visualSimilarity": 0.9951881858710563,
+        "passed": true
+      },
+      {
+        "format": "landscape",
+        "scene": "classroom-context",
+        "midpointSeconds": 39.788000000000004,
+        "visualSimilarity": 0.996502624969741,
+        "passed": true
+      },
+      {
+        "format": "landscape",
+        "scene": "four-resources",
+        "midpointSeconds": 48.660000000000004,
+        "visualSimilarity": 0.9954271060275962,
+        "passed": true
+      },
+      {
+        "format": "landscape",
+        "scene": "teach-and-export",
+        "midpointSeconds": 58.108000000000004,
+        "visualSimilarity": 0.9957120451061083,
+        "passed": true
+      },
+      {
+        "format": "landscape",
+        "scene": "students-connected",
+        "midpointSeconds": 66.512,
+        "visualSimilarity": 0.9953891561768741,
+        "passed": true
+      },
+      {
+        "format": "landscape",
+        "scene": "evidence-next-step",
+        "midpointSeconds": 74.61600000000001,
+        "visualSimilarity": 0.9956397386629549,
+        "passed": true
+      },
+      {
+        "format": "landscape",
+        "scene": "families-connected",
+        "midpointSeconds": 82.69600000000001,
+        "visualSimilarity": 0.9954028357742274,
+        "passed": true
+      },
+      {
+        "format": "landscape",
+        "scene": "connected-loop-cta",
+        "midpointSeconds": 91.22000000000001,
+        "visualSimilarity": 0.9956207637375938,
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "scene": "brand-arrival",
+        "midpointSeconds": 2.3,
+        "visualSimilarity": 0.9951541444767207,
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "scene": "teacher-fragmented",
+        "midpointSeconds": 8.2,
+        "visualSimilarity": 0.9947875690914226,
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "scene": "tool-by-tool",
+        "midpointSeconds": 16.224000000000004,
+        "visualSimilarity": 0.9985125801863955,
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "scene": "fragmentation-cost",
+        "midpointSeconds": 24.248000000000005,
+        "visualSimilarity": 0.995113231763899,
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "scene": "connected-reveal",
+        "midpointSeconds": 31.876000000000005,
+        "visualSimilarity": 0.9951720477285565,
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "scene": "classroom-context",
+        "midpointSeconds": 39.788000000000004,
+        "visualSimilarity": 0.9973705544460583,
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "scene": "four-resources",
+        "midpointSeconds": 48.660000000000004,
+        "visualSimilarity": 0.9964625948115872,
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "scene": "teach-and-export",
+        "midpointSeconds": 58.108000000000004,
+        "visualSimilarity": 0.9957702306745744,
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "scene": "students-connected",
+        "midpointSeconds": 66.512,
+        "visualSimilarity": 0.9953528453562495,
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "scene": "evidence-next-step",
+        "midpointSeconds": 74.61600000000001,
+        "visualSimilarity": 0.9959424549140644,
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "scene": "families-connected",
+        "midpointSeconds": 82.69600000000001,
+        "visualSimilarity": 0.9957336676954732,
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "scene": "connected-loop-cta",
+        "midpointSeconds": 91.22000000000001,
+        "visualSimilarity": 0.9948653599814411,
+        "passed": true
+      }
+    ],
     "passed": true
   },
   "passed": true

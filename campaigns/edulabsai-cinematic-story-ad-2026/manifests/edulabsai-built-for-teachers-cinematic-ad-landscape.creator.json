@@ -5,8 +5,6 @@
   "outputDirectory": "../.work/renders/edulabsai-built-for-teachers-cinematic-ad/landscape",
   "brand": {
     "name": "EdulabsAI",
-    "logo": "../assets/generated/brand/edulabsai-profile-coral.png",
-    "logoLicenseId": "edulabsai-brand",
     "primary": "#F45B3E",
     "secondary": "#FFB52E",
     "text": "#FFF8EF",
@@ -15,7 +13,7 @@
   "clips": [
     {
       "id": "landscape-brand-arrival",
-      "source": "../assets/generated/scenes/landscape/brand-arrival/00-base.png",
+      "source": "../assets/generated/scenes-aligned/landscape/brand-arrival/00-base.png",
       "kind": "image",
       "durationSeconds": 4.6,
       "motion": "none",
@@ -29,7 +27,7 @@
     },
     {
       "id": "landscape-teacher-fragmented",
-      "source": "../assets/generated/scenes/landscape/teacher-fragmented/00-base.png",
+      "source": "../assets/generated/scenes-aligned/landscape/teacher-fragmented/00-base.png",
       "kind": "image",
       "durationSeconds": 7.2,
       "motion": "none",
@@ -43,7 +41,7 @@
     },
     {
       "id": "landscape-tool-by-tool",
-      "source": "../assets/generated/scenes/landscape/tool-by-tool/00-base.png",
+      "source": "../assets/generated/scenes-aligned/landscape/tool-by-tool/00-base.png",
       "kind": "image",
       "durationSeconds": 8.848,
       "motion": "none",
@@ -57,7 +55,7 @@
     },
     {
       "id": "landscape-fragmentation-cost",
-      "source": "../assets/generated/scenes/landscape/fragmentation-cost/00-base.png",
+      "source": "../assets/generated/scenes-aligned/landscape/fragmentation-cost/00-base.png",
       "kind": "image",
       "durationSeconds": 7.2,
       "motion": "none",
@@ -71,7 +69,7 @@
     },
     {
       "id": "landscape-connected-reveal",
-      "source": "../assets/generated/scenes/landscape/connected-reveal/00-base.png",
+      "source": "../assets/generated/scenes-aligned/landscape/connected-reveal/00-base.png",
       "kind": "image",
       "durationSeconds": 8.056,
       "motion": "none",
@@ -85,7 +83,7 @@
     },
     {
       "id": "landscape-classroom-context",
-      "source": "../assets/generated/scenes/landscape/classroom-context/00-base.png",
+      "source": "../assets/generated/scenes-aligned/landscape/classroom-context/00-base.png",
       "kind": "image",
       "durationSeconds": 7.768,
       "motion": "none",
@@ -99,7 +97,7 @@
     },
     {
       "id": "landscape-four-resources",
-      "source": "../assets/generated/scenes/landscape/four-resources/00-base.png",
+      "source": "../assets/generated/scenes-aligned/landscape/four-resources/00-base.png",
       "kind": "image",
       "durationSeconds": 9.976,
       "motion": "none",
@@ -113,7 +111,7 @@
     },
     {
       "id": "landscape-teach-and-export",
-      "source": "../assets/generated/scenes/landscape/teach-and-export/00-base.png",
+      "source": "../assets/generated/scenes-aligned/landscape/teach-and-export/00-base.png",
       "kind": "image",
       "durationSeconds": 8.92,
       "motion": "none",
@@ -127,7 +125,7 @@
     },
     {
       "id": "landscape-students-connected",
-      "source": "../assets/generated/scenes/landscape/students-connected/00-base.png",
+      "source": "../assets/generated/scenes-aligned/landscape/students-connected/00-base.png",
       "kind": "image",
       "durationSeconds": 7.888,
       "motion": "none",
@@ -141,7 +139,7 @@
     },
     {
       "id": "landscape-evidence-next-step",
-      "source": "../assets/generated/scenes/landscape/evidence-next-step/00-base.png",
+      "source": "../assets/generated/scenes-aligned/landscape/evidence-next-step/00-base.png",
       "kind": "image",
       "durationSeconds": 8.32,
       "motion": "none",
@@ -155,7 +153,7 @@
     },
     {
       "id": "landscape-families-connected",
-      "source": "../assets/generated/scenes/landscape/families-connected/00-base.png",
+      "source": "../assets/generated/scenes-aligned/landscape/families-connected/00-base.png",
       "kind": "image",
       "durationSeconds": 7.84,
       "motion": "none",
@@ -169,7 +167,7 @@
     },
     {
       "id": "landscape-connected-loop-cta",
-      "source": "../assets/generated/scenes/landscape/connected-loop-cta/00-base.png",
+      "source": "../assets/generated/scenes-aligned/landscape/connected-loop-cta/00-base.png",
       "kind": "image",
       "durationSeconds": 9.208,
       "motion": "none",
@@ -186,7 +184,7 @@
     {
       "id": "landscape-brand-arrival-brand-1",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/brand-arrival/01-logo.png",
+      "source": "../assets/generated/scenes-aligned/landscape/brand-arrival/01-logo.png",
       "startSeconds": 0.08,
       "endSeconds": 4.57,
       "x": 0.5,
@@ -207,7 +205,7 @@
     {
       "id": "landscape-brand-arrival-copy-2",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/brand-arrival/02-copy.png",
+      "source": "../assets/generated/scenes-aligned/landscape/brand-arrival/02-copy.png",
       "startSeconds": 0.82,
       "endSeconds": 4.57,
       "x": 0.5,
@@ -228,7 +226,7 @@
     {
       "id": "landscape-teacher-fragmented-illustration-1",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/teacher-fragmented/01-teacher.png",
+      "source": "../assets/generated/scenes-aligned/landscape/teacher-fragmented/01-teacher.png",
       "startSeconds": 4.78,
       "endSeconds": 11.77,
       "x": 0.5,
@@ -249,7 +247,7 @@
     {
       "id": "landscape-teacher-fragmented-copy-2",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/teacher-fragmented/02-copy.png",
+      "source": "../assets/generated/scenes-aligned/landscape/teacher-fragmented/02-copy.png",
       "startSeconds": 4.92,
       "endSeconds": 11.77,
       "x": 0.5,
@@ -270,7 +268,7 @@
     {
       "id": "landscape-tool-by-tool-drawing-1",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/tool-by-tool/01-tool-cards.png",
+      "source": "../assets/generated/scenes-aligned/landscape/tool-by-tool/01-tool-cards.png",
       "startSeconds": 12,
       "endSeconds": 20.618,
       "x": 0.5,
@@ -291,7 +289,7 @@
     {
       "id": "landscape-tool-by-tool-copy-2",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/tool-by-tool/02-copy.png",
+      "source": "../assets/generated/scenes-aligned/landscape/tool-by-tool/02-copy.png",
       "startSeconds": 12.12,
       "endSeconds": 20.618,
       "x": 0.5,
@@ -312,7 +310,7 @@
     {
       "id": "landscape-fragmentation-cost-illustration-1",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/fragmentation-cost/01-teacher.png",
+      "source": "../assets/generated/scenes-aligned/landscape/fragmentation-cost/01-teacher.png",
       "startSeconds": 20.748,
       "endSeconds": 27.818,
       "x": 0.5,
@@ -333,7 +331,7 @@
     {
       "id": "landscape-fragmentation-cost-vfx-2",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/fragmentation-cost/02-broken-loop.png",
+      "source": "../assets/generated/scenes-aligned/landscape/fragmentation-cost/02-broken-loop.png",
       "startSeconds": 21.548,
       "endSeconds": 27.818,
       "x": 0.5,
@@ -354,7 +352,7 @@
     {
       "id": "landscape-fragmentation-cost-copy-3",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/fragmentation-cost/03-copy.png",
+      "source": "../assets/generated/scenes-aligned/landscape/fragmentation-cost/03-copy.png",
       "startSeconds": 20.968,
       "endSeconds": 27.818,
       "x": 0.5,
@@ -375,7 +373,7 @@
     {
       "id": "landscape-connected-reveal-illustration-1",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/connected-reveal/01-teacher.png",
+      "source": "../assets/generated/scenes-aligned/landscape/connected-reveal/01-teacher.png",
       "startSeconds": 27.988,
       "endSeconds": 35.874,
       "x": 0.5,
@@ -396,7 +394,7 @@
     {
       "id": "landscape-connected-reveal-vfx-2",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/connected-reveal/02-connected-rail.png",
+      "source": "../assets/generated/scenes-aligned/landscape/connected-reveal/02-connected-rail.png",
       "startSeconds": 28.768,
       "endSeconds": 35.874,
       "x": 0.5,
@@ -417,7 +415,7 @@
     {
       "id": "landscape-connected-reveal-copy-3",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/connected-reveal/03-copy.png",
+      "source": "../assets/generated/scenes-aligned/landscape/connected-reveal/03-copy.png",
       "startSeconds": 28.168,
       "endSeconds": 35.874,
       "x": 0.5,
@@ -438,7 +436,7 @@
     {
       "id": "landscape-classroom-context-product-1",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/classroom-context/01-product.png",
+      "source": "../assets/generated/scenes-aligned/landscape/classroom-context/01-product.png",
       "startSeconds": 36.084,
       "endSeconds": 43.642,
       "x": 0.5,
@@ -459,7 +457,7 @@
     {
       "id": "landscape-classroom-context-drawing-2",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/classroom-context/02-context-chips.png",
+      "source": "../assets/generated/scenes-aligned/landscape/classroom-context/02-context-chips.png",
       "startSeconds": 36.954,
       "endSeconds": 43.642,
       "x": 0.5,
@@ -480,7 +478,7 @@
     {
       "id": "landscape-classroom-context-copy-3",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/classroom-context/03-copy.png",
+      "source": "../assets/generated/scenes-aligned/landscape/classroom-context/03-copy.png",
       "startSeconds": 36.224,
       "endSeconds": 43.642,
       "x": 0.5,
@@ -501,7 +499,7 @@
     {
       "id": "landscape-four-resources-product-1",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/four-resources/01-product.png",
+      "source": "../assets/generated/scenes-aligned/landscape/four-resources/01-product.png",
       "startSeconds": 43.822,
       "endSeconds": 53.618,
       "x": 0.5,
@@ -522,7 +520,7 @@
     {
       "id": "landscape-four-resources-drawing-2",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/four-resources/02-resource-cards.png",
+      "source": "../assets/generated/scenes-aligned/landscape/four-resources/02-resource-cards.png",
       "startSeconds": 44.722,
       "endSeconds": 53.618,
       "x": 0.5,
@@ -543,7 +541,7 @@
     {
       "id": "landscape-four-resources-copy-3",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/four-resources/03-copy.png",
+      "source": "../assets/generated/scenes-aligned/landscape/four-resources/03-copy.png",
       "startSeconds": 43.992,
       "endSeconds": 53.618,
       "x": 0.5,
@@ -564,7 +562,7 @@
     {
       "id": "landscape-teach-and-export-product-1",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/teach-and-export/01-product.png",
+      "source": "../assets/generated/scenes-aligned/landscape/teach-and-export/01-product.png",
       "startSeconds": 53.808,
       "endSeconds": 62.538,
       "x": 0.5,
@@ -585,7 +583,7 @@
     {
       "id": "landscape-teach-and-export-drawing-2",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/teach-and-export/02-export-badges.png",
+      "source": "../assets/generated/scenes-aligned/landscape/teach-and-export/02-export-badges.png",
       "startSeconds": 54.728,
       "endSeconds": 62.538,
       "x": 0.5,
@@ -606,7 +604,7 @@
     {
       "id": "landscape-teach-and-export-copy-3",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/teach-and-export/03-copy.png",
+      "source": "../assets/generated/scenes-aligned/landscape/teach-and-export/03-copy.png",
       "startSeconds": 53.968,
       "endSeconds": 62.538,
       "x": 0.5,
@@ -625,31 +623,10 @@
       "licenseId": "campaign-motion-design"
     },
     {
-      "id": "landscape-students-connected-illustration-1",
+      "id": "landscape-students-connected-product-1",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/students-connected/01-classroom.png",
-      "startSeconds": 62.688,
-      "endSeconds": 70.426,
-      "x": 0.5,
-      "y": 0.5,
-      "width": 3840,
-      "height": 2160,
-      "opacity": 1,
-      "animation": {
-        "enter": "fade",
-        "exit": "none",
-        "loop": "none",
-        "durationSeconds": 0.52,
-        "exitDurationSeconds": 0.1,
-        "intensity": 1
-      },
-      "licenseId": "fictional-classroom-artwork"
-    },
-    {
-      "id": "landscape-students-connected-product-2",
-      "type": "image",
-      "source": "../assets/generated/scenes/landscape/students-connected/02-product.png",
-      "startSeconds": 63.768,
+      "source": "../assets/generated/scenes-aligned/landscape/students-connected/01-product.png",
+      "startSeconds": 62.768,
       "endSeconds": 70.426,
       "x": 0.5,
       "y": 0.5,
@@ -667,9 +644,9 @@
       "licenseId": "verified-product-stills"
     },
     {
-      "id": "landscape-students-connected-copy-3",
+      "id": "landscape-students-connected-copy-2",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/students-connected/03-copy.png",
+      "source": "../assets/generated/scenes-aligned/landscape/students-connected/02-copy.png",
       "startSeconds": 62.888,
       "endSeconds": 70.426,
       "x": 0.5,
@@ -690,7 +667,7 @@
     {
       "id": "landscape-evidence-next-step-product-1",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/evidence-next-step/01-product.png",
+      "source": "../assets/generated/scenes-aligned/landscape/evidence-next-step/01-product.png",
       "startSeconds": 70.606,
       "endSeconds": 78.746,
       "x": 0.5,
@@ -711,7 +688,7 @@
     {
       "id": "landscape-evidence-next-step-drawing-2",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/evidence-next-step/02-evidence-flow.png",
+      "source": "../assets/generated/scenes-aligned/landscape/evidence-next-step/02-evidence-flow.png",
       "startSeconds": 71.576,
       "endSeconds": 78.746,
       "x": 0.5,
@@ -732,7 +709,7 @@
     {
       "id": "landscape-evidence-next-step-copy-3",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/evidence-next-step/03-copy.png",
+      "source": "../assets/generated/scenes-aligned/landscape/evidence-next-step/03-copy.png",
       "startSeconds": 70.776,
       "endSeconds": 78.746,
       "x": 0.5,
@@ -753,7 +730,7 @@
     {
       "id": "landscape-families-connected-product-1",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/families-connected/01-product.png",
+      "source": "../assets/generated/scenes-aligned/landscape/families-connected/01-product.png",
       "startSeconds": 78.926,
       "endSeconds": 86.586,
       "x": 0.5,
@@ -774,7 +751,7 @@
     {
       "id": "landscape-families-connected-drawing-2",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/families-connected/02-family-flow.png",
+      "source": "../assets/generated/scenes-aligned/landscape/families-connected/02-family-flow.png",
       "startSeconds": 79.856,
       "endSeconds": 86.586,
       "x": 0.5,
@@ -795,7 +772,7 @@
     {
       "id": "landscape-families-connected-copy-3",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/families-connected/03-copy.png",
+      "source": "../assets/generated/scenes-aligned/landscape/families-connected/03-copy.png",
       "startSeconds": 79.096,
       "endSeconds": 86.586,
       "x": 0.5,
@@ -816,7 +793,7 @@
     {
       "id": "landscape-connected-loop-cta-illustration-1",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/connected-loop-cta/01-classroom.png",
+      "source": "../assets/generated/scenes-aligned/landscape/connected-loop-cta/01-classroom.png",
       "startSeconds": 86.716,
       "endSeconds": 95.794,
       "x": 0.5,
@@ -837,7 +814,7 @@
     {
       "id": "landscape-connected-loop-cta-cta-2",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/connected-loop-cta/02-cta.png",
+      "source": "../assets/generated/scenes-aligned/landscape/connected-loop-cta/02-cta.png",
       "startSeconds": 87.536,
       "endSeconds": 95.794,
       "x": 0.5,
@@ -858,7 +835,7 @@
     {
       "id": "landscape-connected-loop-cta-copy-3",
       "type": "image",
-      "source": "../assets/generated/scenes/landscape/connected-loop-cta/03-copy.png",
+      "source": "../assets/generated/scenes-aligned/landscape/connected-loop-cta/03-copy.png",
       "startSeconds": 86.936,
       "endSeconds": 95.794,
       "x": 0.5,
@@ -1116,7 +1093,7 @@
   ],
   "metadata": {
     "campaign": "EdulabsAI - Built for Teachers",
-    "campaignVersion": 1,
+    "campaignVersion": 2,
     "productionId": "edulabsai-built-for-teachers-cinematic-ad",
     "format": "landscape",
     "nativeCanvas": true,
