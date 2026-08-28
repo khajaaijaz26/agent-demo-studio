@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-08-28T23:04:38.344Z",
+  "platform": "youtube",
+  "preset": "shorts",
+  "video": "raindrop-classroom-cartoon-short-mp4.mp4",
+  "thumbnail": "raindrop-classroom-cartoon-short-mp4-thumbnail.jpg",
+  "captions": "raindrop-classroom-cartoon-short-mp4.srt",
+  "title": "The Journey of a Raindrop | Animated Classroom Short",
+  "description": "Ms. Maya and her class discover evaporation, condensation, precipitation, and collection in one original animated mini-lesson.",
+  "tags": [
+    "water cycle",
+    "animated classroom",
+    "science for kids",
+    "education",
+    "shorts",
+    "reels"
+  ],
+  "reviewRequired": true,
+  "api": "YouTube Data API v3",
+  "flow": [
+    "OAuth youtube.upload scope",
+    "videos.insert resumable upload",
+    "thumbnails.set",
+    "captions.insert when supplied"
+  ],
+  "defaultPrivacy": "private",
+  "syntheticMediaDisclosure": "Set status.containsSyntheticMedia when applicable."
+}

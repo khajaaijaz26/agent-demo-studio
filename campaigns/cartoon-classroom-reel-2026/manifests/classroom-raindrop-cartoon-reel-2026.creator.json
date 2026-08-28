@@ -1,0 +1,777 @@
+{
+  "schemaVersion": 2,
+  "title": "The Journey of a Raindrop",
+  "description": "An original animated classroom mini-lesson about the water cycle, created for YouTube Shorts and Instagram Reels.",
+  "outputDirectory": "../.work/render",
+  "brand": {
+    "name": "Curious Classroom",
+    "primary": "#F7B733",
+    "secondary": "#42B7E9",
+    "text": "#FFF8E8",
+    "fontFamily": "Segoe UI, Arial, sans-serif"
+  },
+  "clips": [
+    {
+      "id": "welcome",
+      "source": "../assets/generated/scenes/01-welcome.png",
+      "kind": "image",
+      "durationSeconds": 9.414,
+      "reframe": "fill",
+      "focusX": 0.5,
+      "focusY": 0.5,
+      "motion": "ken-burns-in",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0.001
+      },
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.015,
+        "sharpen": 0.18,
+        "fadeInSeconds": 0.35
+      },
+      "chapter": "A RAINDROP'S JOURNEY",
+      "licenseId": "original-generated-classroom-art"
+    },
+    {
+      "id": "big-question",
+      "source": "../assets/generated/scenes/02-big-question.png",
+      "kind": "image",
+      "durationSeconds": 9,
+      "reframe": "fill",
+      "focusX": 0.5,
+      "focusY": 0.5,
+      "motion": "pan-right",
+      "transition": {
+        "type": "smooth-left",
+        "durationSeconds": 0.45
+      },
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.015,
+        "sharpen": 0.18
+      },
+      "chapter": "WHERE DOES WATER GO?",
+      "licenseId": "original-generated-classroom-art"
+    },
+    {
+      "id": "evaporation",
+      "source": "../assets/generated/scenes/03-evaporation.png",
+      "kind": "image",
+      "durationSeconds": 11,
+      "reframe": "fill",
+      "focusX": 0.5,
+      "focusY": 0.5,
+      "motion": "pan-up",
+      "transition": {
+        "type": "dissolve",
+        "durationSeconds": 0.45
+      },
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.015,
+        "sharpen": 0.18
+      },
+      "chapter": "EVAPORATION",
+      "licenseId": "original-generated-classroom-art"
+    },
+    {
+      "id": "condensation",
+      "source": "../assets/generated/scenes/04-condensation.png",
+      "kind": "image",
+      "durationSeconds": 11,
+      "reframe": "fill",
+      "focusX": 0.5,
+      "focusY": 0.5,
+      "motion": "pan-left",
+      "transition": {
+        "type": "reveal-left",
+        "durationSeconds": 0.45
+      },
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.015,
+        "sharpen": 0.18
+      },
+      "chapter": "CONDENSATION",
+      "licenseId": "original-generated-classroom-art"
+    },
+    {
+      "id": "precipitation",
+      "source": "../assets/generated/scenes/05-precipitation.png",
+      "kind": "image",
+      "durationSeconds": 12,
+      "reframe": "fill",
+      "focusX": 0.5,
+      "focusY": 0.5,
+      "motion": "ken-burns-in",
+      "transition": {
+        "type": "wipe-down",
+        "durationSeconds": 0.45
+      },
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.015,
+        "sharpen": 0.18
+      },
+      "chapter": "PRECIPITATION",
+      "licenseId": "original-generated-classroom-art"
+    },
+    {
+      "id": "complete-cycle",
+      "source": "../assets/generated/scenes/06-complete-cycle.png",
+      "kind": "image",
+      "durationSeconds": 20.934,
+      "reframe": "fill",
+      "focusX": 0.5,
+      "focusY": 0.54,
+      "motion": "ken-burns-out",
+      "transition": {
+        "type": "circle-open",
+        "durationSeconds": 0.5
+      },
+      "effects": {
+        "saturation": 1.04,
+        "contrast": 1.015,
+        "sharpen": 0.18,
+        "fadeOutSeconds": 0.55
+      },
+      "chapter": "EVERY DROP HAS A STORY",
+      "licenseId": "original-generated-classroom-art"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "welcome-label",
+      "type": "text",
+      "text": "A RAINDROP'S JOURNEY",
+      "startSeconds": 0.28,
+      "endSeconds": 4.4,
+      "x": 0.5,
+      "y": 0.135,
+      "width": 840,
+      "height": 132,
+      "fontSize": 50,
+      "color": "#FFF8E8",
+      "background": "#0B2545E6",
+      "accent": "#F7B733",
+      "cornerRadius": 42,
+      "animation": {
+        "enter": "drop",
+        "exit": "fade",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.28
+      }
+    },
+    {
+      "id": "big-question-label",
+      "type": "text",
+      "text": "WHERE DOES WATER GO?",
+      "startSeconds": 9.244,
+      "endSeconds": 12.214,
+      "x": 0.5,
+      "y": 0.135,
+      "width": 840,
+      "height": 132,
+      "fontSize": 54,
+      "color": "#FFF8E8",
+      "background": "#0B2545E6",
+      "accent": "#42B7E9",
+      "cornerRadius": 42,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.28
+      }
+    },
+    {
+      "id": "evaporation-label",
+      "type": "text",
+      "text": "1  EVAPORATION",
+      "startSeconds": 17.794,
+      "endSeconds": 20.764,
+      "x": 0.5,
+      "y": 0.135,
+      "width": 840,
+      "height": 132,
+      "fontSize": 54,
+      "color": "#FFF8E8",
+      "background": "#0B2545E6",
+      "accent": "#F7B733",
+      "cornerRadius": 42,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.28
+      }
+    },
+    {
+      "id": "condensation-label",
+      "type": "text",
+      "text": "2  CONDENSATION",
+      "startSeconds": 28.344,
+      "endSeconds": 31.314,
+      "x": 0.5,
+      "y": 0.135,
+      "width": 840,
+      "height": 132,
+      "fontSize": 54,
+      "color": "#FFF8E8",
+      "background": "#0B2545E6",
+      "accent": "#42B7E9",
+      "cornerRadius": 42,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.28
+      }
+    },
+    {
+      "id": "precipitation-label",
+      "type": "text",
+      "text": "3  PRECIPITATION",
+      "startSeconds": 38.894,
+      "endSeconds": 41.864,
+      "x": 0.5,
+      "y": 0.135,
+      "width": 840,
+      "height": 132,
+      "fontSize": 54,
+      "color": "#FFF8E8",
+      "background": "#0B2545E6",
+      "accent": "#F7B733",
+      "cornerRadius": 42,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.28
+      }
+    },
+    {
+      "id": "complete-cycle-label",
+      "type": "text",
+      "text": "EVERY DROP HAS A STORY",
+      "startSeconds": 50.394,
+      "endSeconds": 53.364,
+      "x": 0.5,
+      "y": 0.135,
+      "width": 840,
+      "height": 132,
+      "fontSize": 50,
+      "color": "#FFF8E8",
+      "background": "#0B2545E6",
+      "accent": "#42B7E9",
+      "cornerRadius": 42,
+      "animation": {
+        "enter": "rise",
+        "exit": "fade",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.28
+      }
+    },
+    {
+      "id": "opening-water-drop",
+      "type": "image",
+      "source": "../assets/water-drop.svg",
+      "startSeconds": 0.25,
+      "endSeconds": 4.4,
+      "x": 0.81,
+      "y": 0.32,
+      "width": 112,
+      "height": 140,
+      "licenseId": "campaign-motion-design",
+      "animation": {
+        "enter": "drop",
+        "exit": "fade",
+        "loop": "none",
+        "durationSeconds": 0.62,
+        "exitDurationSeconds": 0.25
+      }
+    },
+    {
+      "id": "closing-water-drop",
+      "type": "image",
+      "source": "../assets/water-drop.svg",
+      "startSeconds": 60.314,
+      "endSeconds": 70.898,
+      "x": 0.81,
+      "y": 0.3,
+      "width": 124,
+      "height": 155,
+      "licenseId": "campaign-motion-design",
+      "animation": {
+        "enter": "pop",
+        "exit": "fade",
+        "loop": "pulse",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.2,
+        "intensity": 0.035
+      }
+    }
+  ],
+  "captions": {
+    "source": "../assets/generated/audio/raindrop-classroom-captions.srt",
+    "format": "srt",
+    "burn": true,
+    "sidecar": true,
+    "language": "en",
+    "style": {
+      "position": "bottom",
+      "fontSize": 50,
+      "color": "#FFFDF7",
+      "background": "#071B32E8",
+      "accent": "#F7B733",
+      "maxCharactersPerLine": 27,
+      "maxLines": 2,
+      "margin": 330
+    }
+  },
+  "audio": {
+    "voices": [
+      {
+        "source": "../assets/generated/audio/01-welcome-teacher-1.mp3",
+        "startSeconds": 0.78,
+        "volume": 1,
+        "fadeInSeconds": 0.025,
+        "fadeOutSeconds": 0.035,
+        "licenseId": "synthetic-neural-voices"
+      },
+      {
+        "source": "../assets/generated/audio/02-big-question-teacher-1.mp3",
+        "startSeconds": 9.744,
+        "volume": 1,
+        "fadeInSeconds": 0.025,
+        "fadeOutSeconds": 0.035,
+        "licenseId": "synthetic-neural-voices"
+      },
+      {
+        "source": "../assets/generated/audio/03-evaporation-teacher-1.mp3",
+        "startSeconds": 18.294,
+        "volume": 1,
+        "fadeInSeconds": 0.025,
+        "fadeOutSeconds": 0.035,
+        "licenseId": "synthetic-neural-voices"
+      },
+      {
+        "source": "../assets/generated/audio/04-condensation-teacher-1.mp3",
+        "startSeconds": 28.844,
+        "volume": 1,
+        "fadeInSeconds": 0.025,
+        "fadeOutSeconds": 0.035,
+        "licenseId": "synthetic-neural-voices"
+      },
+      {
+        "source": "../assets/generated/audio/05-precipitation-teacher-1.mp3",
+        "startSeconds": 39.394,
+        "volume": 1,
+        "fadeInSeconds": 0.025,
+        "fadeOutSeconds": 0.035,
+        "licenseId": "synthetic-neural-voices"
+      },
+      {
+        "source": "../assets/generated/audio/06-complete-cycle-teacher-1.mp3",
+        "startSeconds": 50.894,
+        "volume": 1,
+        "fadeInSeconds": 0.025,
+        "fadeOutSeconds": 0.035,
+        "licenseId": "synthetic-neural-voices"
+      },
+      {
+        "source": "../assets/generated/audio/06-complete-cycle-student-2.mp3",
+        "startSeconds": 53.45,
+        "volume": 0.98,
+        "fadeInSeconds": 0.025,
+        "fadeOutSeconds": 0.035,
+        "licenseId": "synthetic-neural-voices"
+      },
+      {
+        "source": "../assets/generated/audio/06-complete-cycle-teacher-3.mp3",
+        "startSeconds": 63.662,
+        "volume": 1,
+        "fadeInSeconds": 0.025,
+        "fadeOutSeconds": 0.035,
+        "licenseId": "synthetic-neural-voices"
+      }
+    ],
+    "music": {
+      "source": "../assets/generated/audio/curious-classroom-score.wav",
+      "startSeconds": 0,
+      "volume": 0.17,
+      "loop": false,
+      "fadeInSeconds": 1.1,
+      "fadeOutSeconds": 2.1,
+      "licenseId": "original-procedural-score"
+    },
+    "keepClipAudio": false,
+    "duckMusic": true,
+    "duckingThreshold": 0.025,
+    "mode": "voice",
+    "targetLufs": -15,
+    "truePeak": -2
+  },
+  "chapters": [
+    {
+      "title": "A RAINDROP'S JOURNEY",
+      "startSeconds": 0
+    },
+    {
+      "title": "WHERE DOES WATER GO?",
+      "startSeconds": 8.964
+    },
+    {
+      "title": "EVAPORATION",
+      "startSeconds": 17.514
+    },
+    {
+      "title": "CONDENSATION",
+      "startSeconds": 28.064
+    },
+    {
+      "title": "PRECIPITATION",
+      "startSeconds": 38.614
+    },
+    {
+      "title": "EVERY DROP HAS A STORY",
+      "startSeconds": 50.114
+    }
+  ],
+  "exports": [
+    {
+      "id": "master",
+      "preset": "shorts",
+      "fileName": "raindrop-classroom-cartoon-short.mp4",
+      "title": "The Journey of a Raindrop | Animated Classroom Short",
+      "description": "Ms. Maya and her class discover evaporation, condensation, precipitation, and collection in one original animated mini-lesson.",
+      "tags": [
+        "water cycle",
+        "animated classroom",
+        "science for kids",
+        "education",
+        "shorts",
+        "reels"
+      ],
+      "quality": 18,
+      "videoCodec": "h264",
+      "thumbnailAtSeconds": 52.314,
+      "burnCaptions": true
+    }
+  ],
+  "licenses": [
+    {
+      "id": "original-generated-classroom-art",
+      "source": "OpenAI built-in image generation",
+      "title": "Original fictional classroom cast and six scene plates",
+      "creator": "Generated for the Agent Demo Studio campaign",
+      "license": "Original synthetic campaign artwork; review platform synthetic-media disclosure requirements",
+      "attribution": "No real people, students, brands, or copyrighted characters depicted"
+    },
+    {
+      "id": "synthetic-neural-voices",
+      "source": "Microsoft Edge neural text-to-speech",
+      "title": "Ms. Maya and student synthetic voices",
+      "creator": "Microsoft neural voice service",
+      "license": "Synthetic speech generated from original campaign text",
+      "attribution": "No identity cloning"
+    },
+    {
+      "id": "original-procedural-score",
+      "source": "campaigns/cartoon-classroom-reel-2026/lib/audio.mjs",
+      "title": "Curious Classroom",
+      "creator": "Agent Demo Studio procedural synthesizer",
+      "license": "Original code-generated music with no samples"
+    },
+    {
+      "id": "campaign-motion-design",
+      "source": "campaigns/cartoon-classroom-reel-2026/assets/water-drop.svg",
+      "title": "Original water-drop motion graphic",
+      "creator": "Agent Demo Studio campaign",
+      "license": "Original campaign artwork"
+    }
+  ],
+  "metadata": {
+    "productionId": "classroom-raindrop-cartoon-reel-2026",
+    "productionMode": "cartoon",
+    "workflow": "plan-first-original-animation",
+    "productionPlanPath": "../production-plan.json",
+    "productionPlan": {
+      "schemaVersion": 1,
+      "productionId": "classroom-raindrop-cartoon-reel-2026",
+      "title": "The Journey of a Raindrop",
+      "createdAt": "2026-08-29",
+      "requirements": {
+        "goal": "Create a short original animated classroom story in which a teacher teaches and students listen, think, answer, and celebrate learning together.",
+        "audience": "Children ages 8-13, teachers, parents, and general short-form viewers.",
+        "lesson": "A simple, scientifically accurate introduction to evaporation, condensation, precipitation, and collection.",
+        "targetDurationSeconds": 67,
+        "acceptableDurationSeconds": {
+          "minimum": 60,
+          "maximum": 75
+        },
+        "language": "English",
+        "output": {
+          "preset": "shorts",
+          "platforms": [
+            "YouTube Shorts",
+            "Instagram Reels"
+          ],
+          "width": 1080,
+          "height": 1920,
+          "fps": 30,
+          "videoCodec": "H.264",
+          "audioCodec": "AAC",
+          "captions": "Burned in plus editable SRT sidecar"
+        },
+        "narration": "Warm, natural female teacher voice with one short student response; measured pacing with scene holds instead of accelerated speech.",
+        "sourceStrategy": "Original generated fictional character and classroom artwork, local deterministic animation, locally generated music, neural speech, and no downloaded stock media."
+      },
+      "creativeDirection": {
+        "useCase": "illustration-story",
+        "format": "Vertical educational cartoon",
+        "visualStyle": "Original high-end 3D children's educational animation with rounded shapes, tactile clay-like materials, expressive faces, warm cinematic classroom light, and clean readable staging.",
+        "palette": [
+          "sunny yellow",
+          "sky blue",
+          "coral",
+          "leaf green",
+          "warm cream",
+          "deep navy"
+        ],
+        "pacing": "Six clear story beats lasting roughly 9-12 seconds each, with a visual action change every 2-4 seconds through restrained camera motion and layered educational graphics.",
+        "composition": "Characters stay large in frame; the teacher, listening students, board, and lesson object remain readable on a phone. Captions stay within the Shorts/Reels safe area.",
+        "animation": "Subtle Ken Burns camera movement, short dissolves and directional reveals, animated water-cycle icons, restrained character emphasis, and no shaking or uncontrolled floating.",
+        "music": "Original cheerful classroom score with soft marimba-like notes, rounded bass, gentle hand-clap texture, and no harsh stingers.",
+        "textPolicy": "No generated in-image text. All labels and captions are rendered deterministically by the video pipeline.",
+        "avoid": [
+          "copyrighted characters or recognizable franchise styles",
+          "real student identities",
+          "watermarks or logos",
+          "tiny characters",
+          "illegible board writing",
+          "rapid flashing",
+          "camera shake",
+          "harsh music hits",
+          "caption overlap"
+        ]
+      },
+      "cast": [
+        {
+          "id": "ms-maya",
+          "role": "Teacher",
+          "description": "Fictional South Asian woman in her early thirties with warm brown skin, shoulder-length dark wavy hair, a mustard cardigan over a teal blouse, navy trousers, and small round gold earrings. Calm, encouraging, and expressive."
+        },
+        {
+          "id": "leo",
+          "role": "Student",
+          "description": "Fictional Black boy, age 10, short coiled hair, cobalt-blue hoodie, curious and attentive."
+        },
+        {
+          "id": "amina",
+          "role": "Student",
+          "description": "Fictional Arab girl, age 10, dark braid, coral headband, cream top with green overalls, thoughtful and confident."
+        },
+        {
+          "id": "mei",
+          "role": "Student",
+          "description": "Fictional East Asian girl, age 9, chin-length black bob, round glasses, lavender sweatshirt, observant and cheerful."
+        },
+        {
+          "id": "sam",
+          "role": "Student",
+          "description": "Fictional white boy, age 11, freckles, tousled auburn hair, yellow T-shirt under denim overalls, energetic but respectful."
+        }
+      ],
+      "storyboard": [
+        {
+          "id": "welcome",
+          "targetStartSeconds": 0,
+          "targetEndSeconds": 9,
+          "visual": "Wide vertical classroom view. Ms. Maya welcomes the class while four students settle at curved desks and turn toward her. A large blank interactive board sits behind her.",
+          "action": "Gentle push-in; teacher raises one hand; students look up and settle.",
+          "narration": "Good morning, explorers! Today we're following one tiny raindrop on an amazing journey through the water cycle.",
+          "onScreenLabel": "A RAINDROP'S JOURNEY"
+        },
+        {
+          "id": "big-question",
+          "targetStartSeconds": 9,
+          "targetEndSeconds": 18,
+          "visual": "Ms. Maya points to a bright illustrated sun above an ocean and puddle on the board. Students lean forward and watch.",
+          "action": "Slow pan toward the board; question mark and small water-drop icon appear as deterministic overlays.",
+          "narration": "When sunshine warms oceans, lakes, and puddles, where does the water go? Watch closely.",
+          "onScreenLabel": "WHERE DOES WATER GO?"
+        },
+        {
+          "id": "evaporation",
+          "targetStartSeconds": 18,
+          "targetEndSeconds": 29,
+          "visual": "Close classroom teaching view. A tabletop bowl of water glows gently under a safe demonstration lamp while vapor arrows rise toward the board. Students observe with wonder.",
+          "action": "Upward camera drift limited to three percent; translucent arrows rise once; students' eyes follow the vapor.",
+          "narration": "It becomes invisible water vapor and rises. This is evaporation—the sun gives water energy to climb into the sky.",
+          "onScreenLabel": "1  EVAPORATION"
+        },
+        {
+          "id": "condensation",
+          "targetStartSeconds": 29,
+          "targetEndSeconds": 40,
+          "visual": "The interactive board shows vapor cooling into tiny droplets and forming a fluffy cloud. Ms. Maya gestures across the sequence; students listen closely.",
+          "action": "Soft left-to-right reveal; tiny droplets assemble into one cloud; no repetitive looping.",
+          "narration": "High above us, cooler air turns vapor into tiny droplets. They gather into clouds. This is condensation.",
+          "onScreenLabel": "2  CONDENSATION"
+        },
+        {
+          "id": "precipitation",
+          "targetStartSeconds": 40,
+          "targetEndSeconds": 52,
+          "visual": "A friendly cloud diagram releases rain, snow, and tiny hail icons on the board. Amina raises her hand while the other students stay focused.",
+          "action": "Short rain streak reveal; camera eases toward Amina's raised hand; teacher nods.",
+          "narration": "When clouds become heavy, water falls as rain, snow, or hail. This is precipitation, returning water to Earth.",
+          "onScreenLabel": "3  PRECIPITATION"
+        },
+        {
+          "id": "complete-cycle",
+          "targetStartSeconds": 52,
+          "targetEndSeconds": 68,
+          "visual": "The whole class gathers around a completed circular water-cycle display. Amina answers, Ms. Maya gives a thumbs-up, and the students smile as a tiny raindrop travels around the loop.",
+          "action": "Circular line traces once; brief student close-up, then a warm wide ending; final raindrop settles at center.",
+          "narration": "Can anyone complete the cycle? Evaporation, condensation, precipitation—and collection, as rivers, soil, and oceans gather the water. Exactly! Water keeps traveling around and around. Every drop has a story.",
+          "onScreenLabel": "EVERY DROP HAS A STORY"
+        }
+      ],
+      "resources": [
+        {
+          "id": "character-anchor",
+          "category": "character",
+          "status": "generated",
+          "source": "OpenAI built-in image generation",
+          "purpose": "Consistency reference for Ms. Maya and the four fictional students",
+          "rights": "Original synthetic artwork generated for this campaign"
+        },
+        {
+          "id": "six-classroom-scenes",
+          "category": "scene",
+          "status": "generated",
+          "source": "OpenAI built-in image generation using the character anchor",
+          "purpose": "Six portrait classroom story plates",
+          "rights": "Original synthetic artwork generated for this campaign"
+        },
+        {
+          "id": "teacher-voice",
+          "category": "voice",
+          "status": "generated",
+          "source": "Microsoft Edge neural TTS through the local studio pipeline",
+          "purpose": "Warm English lesson narration",
+          "rights": "Synthetic voice output; no identity cloning"
+        },
+        {
+          "id": "captions",
+          "category": "captions",
+          "status": "generated",
+          "source": "Deterministic SRT generation from the approved script",
+          "purpose": "Burn-in accessibility captions and editable sidecar",
+          "rights": "Original campaign copy"
+        },
+        {
+          "id": "classroom-score",
+          "category": "music",
+          "status": "generated",
+          "source": "Local procedural synthesis",
+          "purpose": "Cheerful non-distracting background music",
+          "rights": "Original code-generated audio with no samples"
+        },
+        {
+          "id": "vertical-export",
+          "category": "export",
+          "status": "generated",
+          "source": "Agent Demo Studio creator renderer",
+          "purpose": "1080x1920 H.264/AAC master for Shorts and Reels",
+          "rights": "Project output"
+        }
+      ],
+      "workflow": [
+        "Persist this production plan before generating media.",
+        "Generate and inspect one cast anchor image.",
+        "Generate six portrait scene plates using the cast anchor as the identity and style reference.",
+        "Generate scene-level neural narration and measure the real audio duration.",
+        "Build the final scene timeline from measured narration plus readable holds.",
+        "Generate original procedural music and an SRT caption sidecar.",
+        "Assemble a schema-v2 creator manifest with restrained motion and short transitions.",
+        "Render the native 1080x1920 master and thumbnail.",
+        "Inspect encoded frames, safe zones, audio levels, duration, and delivery profile.",
+        "Package the video, captions, thumbnail, manifest, plan, resource list, and QA report."
+      ],
+      "qualityChecklist": [
+        "Teacher and all students remain visually consistent across all six scenes.",
+        "Every frame clearly shows teaching, listening, thinking, answering, or celebrating learning.",
+        "The water-cycle sequence is scientifically accurate and narration matches the visible lesson beat.",
+        "No generated text is relied upon; deterministic labels are spelled correctly.",
+        "Faces, hands, and classroom objects have no obvious generation artifacts at phone viewing size.",
+        "Captions use no more than two lines and stay above the Shorts/Reels bottom UI area.",
+        "No important face, board element, label, or caption touches the unsafe edge regions.",
+        "Motion is smooth and deliberate with no shaking, flashing, or uncontrolled floating.",
+        "Voice remains natural and music stays below narration without harsh transient sounds.",
+        "Final duration remains between 60 and 75 seconds at 1080x1920 and 30 fps.",
+        "H.264 video, AAC audio, thumbnail, SRT, checksums, and provenance are present."
+      ],
+      "assumptions": [
+        "A general English-language educational story is appropriate because no curriculum, age, or language was specified.",
+        "One vertical master can be uploaded unchanged to both YouTube Shorts and Instagram Reels.",
+        "The requested cartoon can use 2D/2.5D motion over original generated scene plates; phoneme-level lip sync is not required.",
+        "All people are fictional and no real child identity is represented."
+      ]
+    },
+    "sceneTimeline": [
+      {
+        "id": "welcome",
+        "startSeconds": 0,
+        "endSeconds": 9.414,
+        "durationSeconds": 9.414
+      },
+      {
+        "id": "big-question",
+        "startSeconds": 8.964,
+        "endSeconds": 17.964,
+        "durationSeconds": 9
+      },
+      {
+        "id": "evaporation",
+        "startSeconds": 17.514,
+        "endSeconds": 28.514,
+        "durationSeconds": 11
+      },
+      {
+        "id": "condensation",
+        "startSeconds": 28.064,
+        "endSeconds": 39.064,
+        "durationSeconds": 11
+      },
+      {
+        "id": "precipitation",
+        "startSeconds": 38.614,
+        "endSeconds": 50.614,
+        "durationSeconds": 12
+      },
+      {
+        "id": "complete-cycle",
+        "startSeconds": 50.114,
+        "endSeconds": 71.048,
+        "durationSeconds": 20.934
+      }
+    ],
+    "targetPlatforms": [
+      "youtube-shorts",
+      "instagram-reels"
+    ],
+    "syntheticMedia": true,
+    "fictionalPeopleOnly": true,
+    "imageGenerationProvider": "OpenAI built-in image generation"
+  }
+}

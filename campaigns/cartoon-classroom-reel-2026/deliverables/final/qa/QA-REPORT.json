@@ -1,0 +1,210 @@
+{
+  "generatedAt": "2026-08-28T23:11:11.236Z",
+  "passed": true,
+  "video": {
+    "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\deliverables\\final\\shorts-master\\raindrop-classroom-cartoon-short-mp4.mp4",
+    "bytes": 44325890,
+    "sha256": "37e0eda054afc08f8ffd256135cc000f389c301341a7243ed81fb31c3755aefe",
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "videoCodec": "h264",
+    "pixelFormat": "yuv420p",
+    "audioCodec": "aac",
+    "audioSampleRate": 48000,
+    "audioChannels": 2,
+    "durationSeconds": 71.048,
+    "bitRate": 4991092,
+    "integratedLufs": -14.85,
+    "truePeakDbtp": -1.49,
+    "loudnessRange": 3.7,
+    "maximumSilenceSeconds": 0,
+    "maximumBlackSeconds": 0,
+    "silenceEvents": 0,
+    "blackEvents": 0
+  },
+  "checks": {
+    "dimensions": true,
+    "frameRate": true,
+    "videoCodec": true,
+    "pixelFormat": true,
+    "audioCodec": true,
+    "audioSampleRate": true,
+    "stereoAudio": true,
+    "requestedDuration": true,
+    "loudness": true,
+    "truePeak": true,
+    "noLongSilence": true,
+    "noLongBlack": true,
+    "githubFileSize": true,
+    "sixScenes": true,
+    "portraitSources": true,
+    "overlaysSafe": true,
+    "captionsSafe": true,
+    "fictionalDisclosure": true,
+    "rightsRecords": true
+  },
+  "overlayAudit": [
+    {
+      "id": "welcome-label",
+      "bounds": {
+        "left": 120,
+        "top": 193.20000000000005,
+        "right": 960,
+        "bottom": 325.20000000000005
+      },
+      "passed": true
+    },
+    {
+      "id": "big-question-label",
+      "bounds": {
+        "left": 120,
+        "top": 193.20000000000005,
+        "right": 960,
+        "bottom": 325.20000000000005
+      },
+      "passed": true
+    },
+    {
+      "id": "evaporation-label",
+      "bounds": {
+        "left": 120,
+        "top": 193.20000000000005,
+        "right": 960,
+        "bottom": 325.20000000000005
+      },
+      "passed": true
+    },
+    {
+      "id": "condensation-label",
+      "bounds": {
+        "left": 120,
+        "top": 193.20000000000005,
+        "right": 960,
+        "bottom": 325.20000000000005
+      },
+      "passed": true
+    },
+    {
+      "id": "precipitation-label",
+      "bounds": {
+        "left": 120,
+        "top": 193.20000000000005,
+        "right": 960,
+        "bottom": 325.20000000000005
+      },
+      "passed": true
+    },
+    {
+      "id": "complete-cycle-label",
+      "bounds": {
+        "left": 120,
+        "top": 193.20000000000005,
+        "right": 960,
+        "bottom": 325.20000000000005
+      },
+      "passed": true
+    },
+    {
+      "id": "opening-water-drop",
+      "bounds": {
+        "left": 818.8000000000001,
+        "top": 544.4,
+        "right": 930.8000000000001,
+        "bottom": 684.4
+      },
+      "passed": true
+    },
+    {
+      "id": "closing-water-drop",
+      "bounds": {
+        "left": 812.8000000000001,
+        "top": 498.5,
+        "right": 936.8000000000001,
+        "bottom": 653.5
+      },
+      "passed": true
+    }
+  ],
+  "imageAudit": [
+    {
+      "id": "welcome",
+      "width": 941,
+      "height": 1672,
+      "aspectRatio": 0.562799043062201,
+      "passed": true
+    },
+    {
+      "id": "big-question",
+      "width": 941,
+      "height": 1672,
+      "aspectRatio": 0.562799043062201,
+      "passed": true
+    },
+    {
+      "id": "evaporation",
+      "width": 941,
+      "height": 1672,
+      "aspectRatio": 0.562799043062201,
+      "passed": true
+    },
+    {
+      "id": "condensation",
+      "width": 941,
+      "height": 1672,
+      "aspectRatio": 0.562799043062201,
+      "passed": true
+    },
+    {
+      "id": "precipitation",
+      "width": 941,
+      "height": 1672,
+      "aspectRatio": 0.562799043062201,
+      "passed": true
+    },
+    {
+      "id": "complete-cycle",
+      "width": 941,
+      "height": 1672,
+      "aspectRatio": 0.562799043062201,
+      "passed": true
+    }
+  ],
+  "frames": [
+    {
+      "id": "welcome",
+      "midpointSeconds": 4.707,
+      "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\qa\\frames\\welcome.png"
+    },
+    {
+      "id": "big-question",
+      "midpointSeconds": 13.463999999999999,
+      "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\qa\\frames\\big-question.png"
+    },
+    {
+      "id": "evaporation",
+      "midpointSeconds": 23.014,
+      "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\qa\\frames\\evaporation.png"
+    },
+    {
+      "id": "condensation",
+      "midpointSeconds": 33.564,
+      "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\qa\\frames\\condensation.png"
+    },
+    {
+      "id": "precipitation",
+      "midpointSeconds": 44.614,
+      "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\qa\\frames\\precipitation.png"
+    },
+    {
+      "id": "complete-cycle",
+      "midpointSeconds": 60.581,
+      "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\qa\\frames\\complete-cycle.png"
+    }
+  ],
+  "artifacts": {
+    "contactSheet": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\qa\\ENCODED-CONTACT-SHEET.png",
+    "waveform": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\qa\\AUDIO-WAVEFORM.png",
+    "spectrogram": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\qa\\AUDIO-SPECTROGRAM.png"
+  }
+}

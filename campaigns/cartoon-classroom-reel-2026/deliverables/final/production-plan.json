@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "productionId": "classroom-raindrop-cartoon-reel-2026",
+  "title": "The Journey of a Raindrop",
+  "createdAt": "2026-08-29",
+  "requirements": {
+    "goal": "Create a short original animated classroom story in which a teacher teaches and students listen, think, answer, and celebrate learning together.",
+    "audience": "Children ages 8-13, teachers, parents, and general short-form viewers.",
+    "lesson": "A simple, scientifically accurate introduction to evaporation, condensation, precipitation, and collection.",
+    "targetDurationSeconds": 67,
+    "acceptableDurationSeconds": {
+      "minimum": 60,
+      "maximum": 75
+    },
+    "language": "English",
+    "output": {
+      "preset": "shorts",
+      "platforms": [
+        "YouTube Shorts",
+        "Instagram Reels"
+      ],
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "videoCodec": "H.264",
+      "audioCodec": "AAC",
+      "captions": "Burned in plus editable SRT sidecar"
+    },
+    "narration": "Warm, natural female teacher voice with one short student response; measured pacing with scene holds instead of accelerated speech.",
+    "sourceStrategy": "Original generated fictional character and classroom artwork, local deterministic animation, locally generated music, neural speech, and no downloaded stock media."
+  },
+  "creativeDirection": {
+    "useCase": "illustration-story",
+    "format": "Vertical educational cartoon",
+    "visualStyle": "Original high-end 3D children's educational animation with rounded shapes, tactile clay-like materials, expressive faces, warm cinematic classroom light, and clean readable staging.",
+    "palette": [
+      "sunny yellow",
+      "sky blue",
+      "coral",
+      "leaf green",
+      "warm cream",
+      "deep navy"
+    ],
+    "pacing": "Six clear story beats lasting roughly 9-12 seconds each, with a visual action change every 2-4 seconds through restrained camera motion and layered educational graphics.",
+    "composition": "Characters stay large in frame; the teacher, listening students, board, and lesson object remain readable on a phone. Captions stay within the Shorts/Reels safe area.",
+    "animation": "Subtle Ken Burns camera movement, short dissolves and directional reveals, animated water-cycle icons, restrained character emphasis, and no shaking or uncontrolled floating.",
+    "music": "Original cheerful classroom score with soft marimba-like notes, rounded bass, gentle hand-clap texture, and no harsh stingers.",
+    "textPolicy": "No generated in-image text. All labels and captions are rendered deterministically by the video pipeline.",
+    "avoid": [
+      "copyrighted characters or recognizable franchise styles",
+      "real student identities",
+      "watermarks or logos",
+      "tiny characters",
+      "illegible board writing",
+      "rapid flashing",
+      "camera shake",
+      "harsh music hits",
+      "caption overlap"
+    ]
+  },
+  "cast": [
+    {
+      "id": "ms-maya",
+      "role": "Teacher",
+      "description": "Fictional South Asian woman in her early thirties with warm brown skin, shoulder-length dark wavy hair, a mustard cardigan over a teal blouse, navy trousers, and small round gold earrings. Calm, encouraging, and expressive."
+    },
+    {
+      "id": "leo",
+      "role": "Student",
+      "description": "Fictional Black boy, age 10, short coiled hair, cobalt-blue hoodie, curious and attentive."
+    },
+    {
+      "id": "amina",
+      "role": "Student",
+      "description": "Fictional Arab girl, age 10, dark braid, coral headband, cream top with green overalls, thoughtful and confident."
+    },
+    {
+      "id": "mei",
+      "role": "Student",
+      "description": "Fictional East Asian girl, age 9, chin-length black bob, round glasses, lavender sweatshirt, observant and cheerful."
+    },
+    {
+      "id": "sam",
+      "role": "Student",
+      "description": "Fictional white boy, age 11, freckles, tousled auburn hair, yellow T-shirt under denim overalls, energetic but respectful."
+    }
+  ],
+  "storyboard": [
+    {
+      "id": "welcome",
+      "targetStartSeconds": 0,
+      "targetEndSeconds": 9,
+      "visual": "Wide vertical classroom view. Ms. Maya welcomes the class while four students settle at curved desks and turn toward her. A large blank interactive board sits behind her.",
+      "action": "Gentle push-in; teacher raises one hand; students look up and settle.",
+      "narration": "Good morning, explorers! Today we're following one tiny raindrop on an amazing journey through the water cycle.",
+      "onScreenLabel": "A RAINDROP'S JOURNEY"
+    },
+    {
+      "id": "big-question",
+      "targetStartSeconds": 9,
+      "targetEndSeconds": 18,
+      "visual": "Ms. Maya points to a bright illustrated sun above an ocean and puddle on the board. Students lean forward and watch.",
+      "action": "Slow pan toward the board; question mark and small water-drop icon appear as deterministic overlays.",
+      "narration": "When sunshine warms oceans, lakes, and puddles, where does the water go? Watch closely.",
+      "onScreenLabel": "WHERE DOES WATER GO?"
+    },
+    {
+      "id": "evaporation",
+      "targetStartSeconds": 18,
+      "targetEndSeconds": 29,
+      "visual": "Close classroom teaching view. A tabletop bowl of water glows gently under a safe demonstration lamp while vapor arrows rise toward the board. Students observe with wonder.",
+      "action": "Upward camera drift limited to three percent; translucent arrows rise once; students' eyes follow the vapor.",
+      "narration": "It becomes invisible water vapor and rises. This is evaporation—the sun gives water energy to climb into the sky.",
+      "onScreenLabel": "1  EVAPORATION"
+    },
+    {
+      "id": "condensation",
+      "targetStartSeconds": 29,
+      "targetEndSeconds": 40,
+      "visual": "The interactive board shows vapor cooling into tiny droplets and forming a fluffy cloud. Ms. Maya gestures across the sequence; students listen closely.",
+      "action": "Soft left-to-right reveal; tiny droplets assemble into one cloud; no repetitive looping.",
+      "narration": "High above us, cooler air turns vapor into tiny droplets. They gather into clouds. This is condensation.",
+      "onScreenLabel": "2  CONDENSATION"
+    },
+    {
+      "id": "precipitation",
+      "targetStartSeconds": 40,
+      "targetEndSeconds": 52,
+      "visual": "A friendly cloud diagram releases rain, snow, and tiny hail icons on the board. Amina raises her hand while the other students stay focused.",
+      "action": "Short rain streak reveal; camera eases toward Amina's raised hand; teacher nods.",
+      "narration": "When clouds become heavy, water falls as rain, snow, or hail. This is precipitation, returning water to Earth.",
+      "onScreenLabel": "3  PRECIPITATION"
+    },
+    {
+      "id": "complete-cycle",
+      "targetStartSeconds": 52,
+      "targetEndSeconds": 68,
+      "visual": "The whole class gathers around a completed circular water-cycle display. Amina answers, Ms. Maya gives a thumbs-up, and the students smile as a tiny raindrop travels around the loop.",
+      "action": "Circular line traces once; brief student close-up, then a warm wide ending; final raindrop settles at center.",
+      "narration": "Can anyone complete the cycle? Evaporation, condensation, precipitation—and collection, as rivers, soil, and oceans gather the water. Exactly! Water keeps traveling around and around. Every drop has a story.",
+      "onScreenLabel": "EVERY DROP HAS A STORY"
+    }
+  ],
+  "resources": [
+    {
+      "id": "character-anchor",
+      "category": "character",
+      "status": "generated",
+      "source": "OpenAI built-in image generation",
+      "purpose": "Consistency reference for Ms. Maya and the four fictional students",
+      "rights": "Original synthetic artwork generated for this campaign"
+    },
+    {
+      "id": "six-classroom-scenes",
+      "category": "scene",
+      "status": "generated",
+      "source": "OpenAI built-in image generation using the character anchor",
+      "purpose": "Six portrait classroom story plates",
+      "rights": "Original synthetic artwork generated for this campaign"
+    },
+    {
+      "id": "teacher-voice",
+      "category": "voice",
+      "status": "generated",
+      "source": "Microsoft Edge neural TTS through the local studio pipeline",
+      "purpose": "Warm English lesson narration",
+      "rights": "Synthetic voice output; no identity cloning"
+    },
+    {
+      "id": "captions",
+      "category": "captions",
+      "status": "generated",
+      "source": "Deterministic SRT generation from the approved script",
+      "purpose": "Burn-in accessibility captions and editable sidecar",
+      "rights": "Original campaign copy"
+    },
+    {
+      "id": "classroom-score",
+      "category": "music",
+      "status": "generated",
+      "source": "Local procedural synthesis",
+      "purpose": "Cheerful non-distracting background music",
+      "rights": "Original code-generated audio with no samples"
+    },
+    {
+      "id": "vertical-export",
+      "category": "export",
+      "status": "generated",
+      "source": "Agent Demo Studio creator renderer",
+      "purpose": "1080x1920 H.264/AAC master for Shorts and Reels",
+      "rights": "Project output"
+    }
+  ],
+  "workflow": [
+    "Persist this production plan before generating media.",
+    "Generate and inspect one cast anchor image.",
+    "Generate six portrait scene plates using the cast anchor as the identity and style reference.",
+    "Generate scene-level neural narration and measure the real audio duration.",
+    "Build the final scene timeline from measured narration plus readable holds.",
+    "Generate original procedural music and an SRT caption sidecar.",
+    "Assemble a schema-v2 creator manifest with restrained motion and short transitions.",
+    "Render the native 1080x1920 master and thumbnail.",
+    "Inspect encoded frames, safe zones, audio levels, duration, and delivery profile.",
+    "Package the video, captions, thumbnail, manifest, plan, resource list, and QA report."
+  ],
+  "qualityChecklist": [
+    "Teacher and all students remain visually consistent across all six scenes.",
+    "Every frame clearly shows teaching, listening, thinking, answering, or celebrating learning.",
+    "The water-cycle sequence is scientifically accurate and narration matches the visible lesson beat.",
+    "No generated text is relied upon; deterministic labels are spelled correctly.",
+    "Faces, hands, and classroom objects have no obvious generation artifacts at phone viewing size.",
+    "Captions use no more than two lines and stay above the Shorts/Reels bottom UI area.",
+    "No important face, board element, label, or caption touches the unsafe edge regions.",
+    "Motion is smooth and deliberate with no shaking, flashing, or uncontrolled floating.",
+    "Voice remains natural and music stays below narration without harsh transient sounds.",
+    "Final duration remains between 60 and 75 seconds at 1080x1920 and 30 fps.",
+    "H.264 video, AAC audio, thumbnail, SRT, checksums, and provenance are present."
+  ],
+  "assumptions": [
+    "A general English-language educational story is appropriate because no curriculum, age, or language was specified.",
+    "One vertical master can be uploaded unchanged to both YouTube Shorts and Instagram Reels.",
+    "The requested cartoon can use 2D/2.5D motion over original generated scene plates; phoneme-level lip sync is not required.",
+    "All people are fictional and no real child identity is represented."
+  ]
+}

@@ -74,6 +74,7 @@
     "test:creator": "npm run build && node scripts/creator-smoke.mjs",
     "check": "npm run typecheck && npm run test && npm run build",
     "campaign:edulabsai": "npm run build && node campaigns/edulabsai-launch-2026/build.mjs",
+    "campaign:cartoon-classroom": "npm run build && node campaigns/cartoon-classroom-reel-2026/build.mjs",
     "prepare": "npm run build",
     "prepublishOnly": "npm run check"
   },

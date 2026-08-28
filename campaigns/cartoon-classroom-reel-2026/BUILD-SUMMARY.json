@@ -1,0 +1,49 @@
+{
+  "productionId": "classroom-raindrop-cartoon-reel-2026",
+  "title": "The Journey of a Raindrop",
+  "startedAt": "2026-08-28T23:02:47.792Z",
+  "completedAt": "2026-08-28T23:04:38.350Z",
+  "elapsedSeconds": 110.6,
+  "measuredTimelineSeconds": 71.048,
+  "voices": {
+    "teacher": "en-US-AvaNeural",
+    "student": "en-US-AnaNeural"
+  },
+  "renderResult": {
+    "title": "The Journey of a Raindrop",
+    "manifestPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\manifests\\classroom-raindrop-cartoon-reel-2026.creator.json",
+    "outputDirectory": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\.work\\render",
+    "outputs": [
+      {
+        "id": "master",
+        "preset": "shorts",
+        "durationSeconds": 71.048,
+        "width": 1080,
+        "height": 1920,
+        "fps": 30,
+        "fileSizeBytes": 44325890,
+        "platform": "youtube",
+        "videoPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\.work\\render\\raindrop-classroom-cartoon-short-mp4.mp4",
+        "thumbnailPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\.work\\render\\raindrop-classroom-cartoon-short-mp4-thumbnail.jpg",
+        "captionsPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\.work\\render\\raindrop-classroom-cartoon-short-mp4.srt",
+        "chaptersPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\.work\\render\\raindrop-classroom-cartoon-short-mp4-chapters.ffmetadata",
+        "validation": [
+          {
+            "level": "info",
+            "code": "PROFILE_OK",
+            "exportId": "master",
+            "message": "YouTube Shorts dimensions, duration advisory, and frame rate checks passed."
+          }
+        ]
+      }
+    ],
+    "licenseReportPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\.work\\render\\ASSET-LICENSES.md",
+    "createdAt": "2026-08-28T23:04:38.301Z"
+  },
+  "packageDirectory": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\deliverables\\final",
+  "finalVideo": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\deliverables\\final\\shorts-master\\raindrop-classroom-cartoon-short-mp4.mp4",
+  "finalThumbnail": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\deliverables\\final\\shorts-master\\raindrop-classroom-cartoon-short-mp4-thumbnail.jpg",
+  "finalCaptions": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\deliverables\\final\\shorts-master\\raindrop-classroom-cartoon-short-mp4.srt",
+  "manifest": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\cartoon-classroom-reel-2026\\manifests\\classroom-raindrop-cartoon-reel-2026.creator.json",
+  "validation": []
+}
