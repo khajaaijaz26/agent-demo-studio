@@ -1,0 +1,65 @@
+{
+  "campaign": "One learning loop — EdulabsAI",
+  "mode": "assets-only",
+  "completedAt": "2026-08-28T08:14:27.144Z",
+  "scenes": [
+    "one-clear-idea",
+    "real-classroom-context",
+    "four-aligned-resources",
+    "teach-and-practice",
+    "evidence-to-reteach",
+    "teacher-approved-connection",
+    "start-free"
+  ],
+  "alignmentSpec": {
+    "canvas": {
+      "width": 1920,
+      "height": 1080,
+      "fps": 30
+    },
+    "safeMarginPixels": 96,
+    "contentBottomPixels": 900,
+    "overlayPlacement": {
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080
+    },
+    "allowedOverlayEntrance": "fade",
+    "allowedOverlayLoop": "none",
+    "allowedTransitions": [
+      "cut"
+    ],
+    "positionalMotionException": "opening orange logo drop only",
+    "stillFrames": {
+      "lesson-brief": {
+        "source": "09-teacher-lesson-brief.webm",
+        "timestampSeconds": 11.4
+      },
+      "lesson-overview": {
+        "source": "10-lesson-overview.webm",
+        "timestampSeconds": 0.8
+      },
+      "teaching-slides": {
+        "source": "18-resource-pptx-original.webm",
+        "timestampSeconds": 3.2
+      },
+      "student-dashboard": {
+        "source": "33-student-dashboard.webm",
+        "timestampSeconds": 1.2
+      },
+      "snap-mark": {
+        "source": "28-teacher-snap-mark.webm",
+        "timestampSeconds": 1.2
+      },
+      "learning-insights": {
+        "source": "27-teacher-learning-insights.webm",
+        "timestampSeconds": 1.2
+      },
+      "family-digest": {
+        "source": "30-teacher-family-digests.webm",
+        "timestampSeconds": 1.2
+      }
+    }
+  }
+}

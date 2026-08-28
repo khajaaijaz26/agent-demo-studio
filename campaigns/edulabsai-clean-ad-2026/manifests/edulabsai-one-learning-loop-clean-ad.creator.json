@@ -1,0 +1,630 @@
+{
+  "schemaVersion": 2,
+  "title": "One learning loop — EdulabsAI",
+  "description": "A stability-first EdulabsAI advertisement made from fixed product stills, aligned vector artwork, calm narration, and a soft original score. https://www.edulabsai.com",
+  "outputDirectory": "../.work/renders/edulabsai-one-learning-loop-clean-ad",
+  "brand": {
+    "name": "EdulabsAI",
+    "primary": "#F45B3E",
+    "secondary": "#FFB52E",
+    "text": "#FFF8EF",
+    "fontFamily": "Segoe UI"
+  },
+  "clips": [
+    {
+      "id": "one-clear-idea",
+      "source": "../assets/generated/scenes/one-clear-idea/00-base.png",
+      "kind": "image",
+      "durationSeconds": 9.346,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "INTRODUCING",
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "real-classroom-context",
+      "source": "../assets/generated/scenes/real-classroom-context/00-base.png",
+      "kind": "image",
+      "durationSeconds": 9.084,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "START WITH THE CLASSROOM",
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "four-aligned-resources",
+      "source": "../assets/generated/scenes/four-aligned-resources/00-base.png",
+      "kind": "image",
+      "durationSeconds": 9.9,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "READY IN ABOUT TWO MINUTES",
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "teach-and-practice",
+      "source": "../assets/generated/scenes/teach-and-practice/00-base.png",
+      "kind": "image",
+      "durationSeconds": 7.98,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "FROM TEACHING TO DOING",
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "evidence-to-reteach",
+      "source": "../assets/generated/scenes/evidence-to-reteach/00-base.png",
+      "kind": "image",
+      "durationSeconds": 8.892,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "EVIDENCE BECOMES ACTION",
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "teacher-approved-connection",
+      "source": "../assets/generated/scenes/teacher-approved-connection/00-base.png",
+      "kind": "image",
+      "durationSeconds": 6.6,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "TEACHER-APPROVED CONNECTION",
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "start-free",
+      "source": "../assets/generated/scenes/start-free/00-base.png",
+      "kind": "image",
+      "durationSeconds": 9.588,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "EDULABSAI",
+      "licenseId": "edulabsai-locked-motion-art"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "one-clear-idea-locked-layer-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/one-clear-idea/01-art.png",
+      "startSeconds": 0.16,
+      "endSeconds": 9.346,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "drop",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.86,
+        "exitDurationSeconds": 0.1,
+        "intensity": 3
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "one-clear-idea-locked-layer-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/one-clear-idea/02-detail.png",
+      "startSeconds": 1.05,
+      "endSeconds": 9.346,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "real-classroom-context-locked-layer-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/real-classroom-context/01-product.png",
+      "startSeconds": 9.586,
+      "endSeconds": 18.43,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-verified-product-stills"
+    },
+    {
+      "id": "real-classroom-context-locked-layer-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/real-classroom-context/02-art.png",
+      "startSeconds": 10.266,
+      "endSeconds": 18.43,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "four-aligned-resources-locked-layer-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/four-aligned-resources/01-product.png",
+      "startSeconds": 18.67,
+      "endSeconds": 28.33,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-verified-product-stills"
+    },
+    {
+      "id": "four-aligned-resources-locked-layer-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/four-aligned-resources/02-art.png",
+      "startSeconds": 19.35,
+      "endSeconds": 28.33,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "teach-and-practice-locked-layer-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/teach-and-practice/01-product.png",
+      "startSeconds": 28.57,
+      "endSeconds": 36.31,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-verified-product-stills"
+    },
+    {
+      "id": "teach-and-practice-locked-layer-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/teach-and-practice/02-art.png",
+      "startSeconds": 29.25,
+      "endSeconds": 36.31,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "evidence-to-reteach-locked-layer-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/evidence-to-reteach/01-product.png",
+      "startSeconds": 36.55,
+      "endSeconds": 45.202,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-verified-product-stills"
+    },
+    {
+      "id": "evidence-to-reteach-locked-layer-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/evidence-to-reteach/02-art.png",
+      "startSeconds": 37.23,
+      "endSeconds": 45.202,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "teacher-approved-connection-locked-layer-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/teacher-approved-connection/01-product.png",
+      "startSeconds": 45.442,
+      "endSeconds": 51.802,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-verified-product-stills"
+    },
+    {
+      "id": "teacher-approved-connection-locked-layer-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/teacher-approved-connection/02-art.png",
+      "startSeconds": 46.122,
+      "endSeconds": 51.802,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "start-free-locked-layer-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/start-free/01-art.png",
+      "startSeconds": 52.042,
+      "endSeconds": 61.39,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-locked-motion-art"
+    },
+    {
+      "id": "start-free-locked-layer-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/start-free/02-detail.png",
+      "startSeconds": 52.722,
+      "endSeconds": 61.39,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1920,
+      "height": 1080,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 0
+      },
+      "licenseId": "edulabsai-locked-motion-art"
+    }
+  ],
+  "captions": {
+    "source": "../.work/edulabsai-one-learning-loop-clean-ad/edulabsai-one-learning-loop-clean-ad.srt",
+    "format": "srt",
+    "burn": true,
+    "sidecar": true,
+    "language": "en",
+    "style": {
+      "position": "bottom",
+      "fontSize": 38,
+      "color": "#FFF8EF",
+      "background": "#170C2924",
+      "accent": "#F45B3E",
+      "maxCharactersPerLine": 58,
+      "maxLines": 2,
+      "margin": 58
+    }
+  },
+  "audio": {
+    "voices": [
+      {
+        "source": "../.work/edulabsai-one-learning-loop-clean-ad/voice/01-one-clear-idea-956c442dd8.mp3",
+        "startSeconds": 1.05,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-one-learning-loop-clean-ad/voice/02-real-classroom-context-ccf0a65b54.mp3",
+        "startSeconds": 9.966,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-one-learning-loop-clean-ad/voice/03-four-aligned-resources-9d175a3c25.mp3",
+        "startSeconds": 19.05,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-one-learning-loop-clean-ad/voice/04-teach-and-practice-0f962d6786.mp3",
+        "startSeconds": 28.95,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-one-learning-loop-clean-ad/voice/05-evidence-to-reteach-a1d35d5472.mp3",
+        "startSeconds": 36.93,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-one-learning-loop-clean-ad/voice/06-teacher-approved-connection-8cce2544ec.mp3",
+        "startSeconds": 45.822,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-one-learning-loop-clean-ad/voice/07-start-free-7a8fe15431.mp3",
+        "startSeconds": 52.422,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      }
+    ],
+    "music": {
+      "source": "../.work/edulabsai-one-learning-loop-clean-ad/quiet-momentum.wav",
+      "loop": false,
+      "volume": 0.12,
+      "fadeInSeconds": 1.8,
+      "fadeOutSeconds": 2.6,
+      "licenseId": "edulabsai-quiet-momentum-score"
+    },
+    "soundEffects": [],
+    "mode": "voice",
+    "keepClipAudio": false,
+    "duckMusic": true,
+    "duckingThreshold": 0.032,
+    "targetLufs": -16,
+    "truePeak": -2.5
+  },
+  "chapters": [
+    {
+      "title": "INTRODUCING",
+      "startSeconds": 0
+    },
+    {
+      "title": "START WITH THE CLASSROOM",
+      "startSeconds": 9.346
+    },
+    {
+      "title": "READY IN ABOUT TWO MINUTES",
+      "startSeconds": 18.43
+    },
+    {
+      "title": "FROM TEACHING TO DOING",
+      "startSeconds": 28.33
+    },
+    {
+      "title": "EVIDENCE BECOMES ACTION",
+      "startSeconds": 36.31
+    },
+    {
+      "title": "TEACHER-APPROVED CONNECTION",
+      "startSeconds": 45.202
+    },
+    {
+      "title": "EDULABSAI",
+      "startSeconds": 51.802
+    }
+  ],
+  "exports": [
+    {
+      "id": "clean-master",
+      "preset": "youtube-1080p",
+      "fileName": "edulabsai-one-learning-loop-clean-ad",
+      "title": "One learning loop — EdulabsAI",
+      "description": "A stability-first EdulabsAI advertisement made from fixed product stills, aligned vector artwork, calm narration, and a soft original score.",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "lesson planning",
+        "K-12",
+        "education technology"
+      ],
+      "quality": 17,
+      "burnCaptions": true,
+      "thumbnailAtSeconds": 2.2
+    }
+  ],
+  "licenses": [
+    {
+      "id": "edulabsai-brand",
+      "source": "EdulabsAI brand identity",
+      "title": "EdulabsAI brand",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "https://www.edulabsai.com"
+    },
+    {
+      "id": "edulabsai-verified-product-stills",
+      "source": "Still frames extracted from verified EdulabsAI browser recordings",
+      "title": "EdulabsAI product UI",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "test-output/edulabs-v2/recorded-scenes.json"
+    },
+    {
+      "id": "edulabsai-locked-motion-art",
+      "source": "Original fixed SVG and PNG production design",
+      "title": "One Learning Loop visual system",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original work",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "edulabsai-quiet-momentum-score",
+      "source": "Original procedural continuous-pad composition",
+      "title": "Quiet Momentum",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original work",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "microsoft-edge-neural-speech",
+      "source": "en-US-AvaMultilingualNeural",
+      "title": "Ava — warm, natural campaign narrator",
+      "creator": "Microsoft",
+      "license": "Provider terms",
+      "attribution": "Neural narration"
+    }
+  ],
+  "metadata": {
+    "campaign": "EdulabsAI — One Learning Loop",
+    "campaignVersion": 1,
+    "productionId": "edulabsai-one-learning-loop-clean-ad",
+    "productionPlan": "../PRODUCTION-PLAN.md",
+    "creativeDirection": "../CREATIVE-DIRECTION.md",
+    "fixedProductStills": true,
+    "continuousMotion": false,
+    "openingLogoDropOnly": true,
+    "soundEffects": false,
+    "originalMusic": true,
+    "syntheticVoice": true,
+    "sceneTimeline": [
+      {
+        "id": "one-clear-idea",
+        "startSeconds": 0,
+        "endSeconds": 9.346
+      },
+      {
+        "id": "real-classroom-context",
+        "startSeconds": 9.346,
+        "endSeconds": 18.43
+      },
+      {
+        "id": "four-aligned-resources",
+        "startSeconds": 18.43,
+        "endSeconds": 28.33
+      },
+      {
+        "id": "teach-and-practice",
+        "startSeconds": 28.33,
+        "endSeconds": 36.31
+      },
+      {
+        "id": "evidence-to-reteach",
+        "startSeconds": 36.31,
+        "endSeconds": 45.202
+      },
+      {
+        "id": "teacher-approved-connection",
+        "startSeconds": 45.202,
+        "endSeconds": 51.802
+      },
+      {
+        "id": "start-free",
+        "startSeconds": 51.802,
+        "endSeconds": 61.39
+      }
+    ]
+  }
+}

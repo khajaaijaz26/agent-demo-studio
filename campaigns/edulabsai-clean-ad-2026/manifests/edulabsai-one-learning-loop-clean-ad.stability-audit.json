@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "policy": "All visuals remain position-locked. The only positional animation is the opening orange logo drop.",
+  "checks": {
+    "canvasIs1080p": true,
+    "clipsAreImages": true,
+    "clipMotionLocked": true,
+    "sceneChangesAreCuts": true,
+    "noClipVfx": true,
+    "overlaysAreImages": true,
+    "overlaysUseFullCanvasGrid": true,
+    "overlayLoopsDisabled": true,
+    "noOverlayExitMotion": true,
+    "onlyOpeningDropMoves": true,
+    "noVideoOverlays": true,
+    "noSoundEffects": true,
+    "clipAudioDisabled": true,
+    "musicDoesNotLoop": true
+  }
+}

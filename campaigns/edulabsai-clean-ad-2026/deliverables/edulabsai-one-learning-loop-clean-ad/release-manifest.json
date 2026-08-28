@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 2,
+  "campaign": "EdulabsAI — One Learning Loop",
+  "productionId": "edulabsai-one-learning-loop-clean-ad",
+  "title": "One learning loop — EdulabsAI",
+  "generatedAt": "2026-08-28T08:19:45.527Z",
+  "durationSeconds": 61.433333,
+  "format": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "preset": "youtube-1080p"
+  },
+  "master": "edulabsai-one-learning-loop-clean-ad.mp4",
+  "stabilityAudit": {
+    "passed": true,
+    "policy": "All visuals remain position-locked. The only positional animation is the opening orange logo drop.",
+    "checks": {
+      "canvasIs1080p": true,
+      "clipsAreImages": true,
+      "clipMotionLocked": true,
+      "sceneChangesAreCuts": true,
+      "noClipVfx": true,
+      "overlaysAreImages": true,
+      "overlaysUseFullCanvasGrid": true,
+      "overlayLoopsDisabled": true,
+      "noOverlayExitMotion": true,
+      "onlyOpeningDropMoves": true,
+      "noVideoOverlays": true,
+      "noSoundEffects": true,
+      "clipAudioDisabled": true,
+      "musicDoesNotLoop": true
+    }
+  },
+  "audioPolicy": {
+    "narration": "Ava — warm, natural campaign narrator",
+    "voiceRate": "-5%",
+    "score": "Quiet Momentum — original continuous ambient score",
+    "percussion": false,
+    "soundEffects": false
+  },
+  "sceneTimeline": [
+    {
+      "id": "one-clear-idea",
+      "startSeconds": 0,
+      "endSeconds": 9.346,
+      "narration": "Meet EdulabsAI. Great teaching begins with one clear idea—and every next step should stay connected."
+    },
+    {
+      "id": "real-classroom-context",
+      "startSeconds": 9.346,
+      "endSeconds": 18.43,
+      "narration": "In EdulabsAI, choose your curriculum, class, and topic, so the lesson starts with real classroom context."
+    },
+    {
+      "id": "four-aligned-resources",
+      "startSeconds": 18.43,
+      "endSeconds": 28.33,
+      "narration": "In about two minutes, create an editable lesson plan, visual slides, a quiz, and a worksheet from the same brief."
+    },
+    {
+      "id": "teach-and-practice",
+      "startSeconds": 28.33,
+      "endSeconds": 36.31,
+      "narration": "Teach with clear visuals, then give students focused work without rebuilding the lesson in another tool."
+    },
+    {
+      "id": "evidence-to-reteach",
+      "startSeconds": 36.31,
+      "endSeconds": 45.202,
+      "narration": "Bring reviewed evidence back, see the misconception, and shape a focused reteach with the teacher still in control."
+    },
+    {
+      "id": "teacher-approved-connection",
+      "startSeconds": 45.202,
+      "endSeconds": 51.802,
+      "narration": "Then turn progress into a clear, teacher-approved update for families."
+    },
+    {
+      "id": "start-free",
+      "startSeconds": 51.802,
+      "endSeconds": 61.39,
+      "narration": "From planning to progress, one learning loop. Create your first lesson free during beta at edulabsai.com."
+    }
+  ],
+  "rights": [
+    "EdulabsAI-owned brand and verified product recordings",
+    "Original fixed vector production design and original procedural score",
+    "Microsoft Edge neural speech subject to provider terms"
+  ],
+  "reviewRequiredBeforePublishing": true,
+  "checksum": {
+    "algorithm": "sha256",
+    "value": "c2fb5efd70d335eb1844d0c77af047133b5b2a0b10c76e27230fc45c744e5efb"
+  },
+  "technicalQa": {
+    "passed": true,
+    "report": "QA-REPORT.json"
+  }
+}

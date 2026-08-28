@@ -1,0 +1,44 @@
+{
+  "campaign": "One learning loop — EdulabsAI",
+  "startedAt": "2026-08-28T08:18:41.100Z",
+  "completedAt": "2026-08-28T08:19:45.534Z",
+  "elapsedSeconds": 64.4,
+  "manifestPath": "manifests/edulabsai-one-learning-loop-clean-ad.creator.json",
+  "packageDirectory": "deliverables/edulabsai-one-learning-loop-clean-ad",
+  "stabilityAudit": {
+    "passed": true,
+    "policy": "All visuals remain position-locked. The only positional animation is the opening orange logo drop.",
+    "checks": {
+      "canvasIs1080p": true,
+      "clipsAreImages": true,
+      "clipMotionLocked": true,
+      "sceneChangesAreCuts": true,
+      "noClipVfx": true,
+      "overlaysAreImages": true,
+      "overlaysUseFullCanvasGrid": true,
+      "overlayLoopsDisabled": true,
+      "noOverlayExitMotion": true,
+      "onlyOpeningDropMoves": true,
+      "noVideoOverlays": true,
+      "noSoundEffects": true,
+      "clipAudioDisabled": true,
+      "musicDoesNotLoop": true
+    }
+  },
+  "output": {
+    "id": "clean-master",
+    "preset": "youtube-1080p",
+    "durationSeconds": 61.433333,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "validation": [
+      {
+        "level": "info",
+        "code": "PROFILE_OK",
+        "exportId": "clean-master",
+        "message": "YouTube 1080p dimensions, duration advisory, and frame rate checks passed."
+      }
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "generatedAt": "2026-08-28T08:21:20.994Z",
+  "masterPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-clean-ad-2026\\deliverables\\edulabsai-one-learning-loop-clean-ad\\youtube-1080p-clean-master\\edulabsai-one-learning-loop-clean-ad.mp4",
+  "checksum": {
+    "algorithm": "sha256",
+    "value": "c2fb5efd70d335eb1844d0c77af047133b5b2a0b10c76e27230fc45c744e5efb"
+  },
+  "media": {
+    "durationSeconds": 61.433333,
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "videoCodec": "h264",
+    "pixelFormat": "yuv420p",
+    "audioCodec": "aac",
+    "audioChannels": 2,
+    "integratedLufs": -16.07,
+    "truePeakDbtp": -2.03
+  },
+  "checks": {
+    "stabilityManifestPassed": true,
+    "exactResolution": true,
+    "exactFrameRate": true,
+    "h264Video": true,
+    "yuv420pPixelFormat": true,
+    "aacStereoAudio": true,
+    "durationInAdvertisingRange": true,
+    "noDetectedBlackFrames": true,
+    "noUnexpectedLongSilence": true,
+    "loudnessNearTarget": true,
+    "truePeakHasHeadroom": true,
+    "allSceneAssetsAreFullCanvas": true,
+    "noSoundEffectsInManifest": true,
+    "noContinuousOverlayMotion": true,
+    "allSceneChangesAreCuts": true,
+    "manualVisualReviewRecorded": true
+  },
+  "findings": {
+    "blackSegments": [],
+    "silenceStarts": [],
+    "invalidSceneAssets": [],
+    "soundEffectsCount": 0,
+    "continuousMotionCount": 0
+  },
+  "contactSheetPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-clean-ad-2026\\qa\\CONTACT-SHEET.png",
+  "manualVisualReview": {
+    "passed": true,
+    "report": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-clean-ad-2026\\MANUAL-VISUAL-QA.md"
+  }
+}

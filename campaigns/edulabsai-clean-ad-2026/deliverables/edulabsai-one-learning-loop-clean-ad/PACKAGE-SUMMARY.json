@@ -1,0 +1,58 @@
+{
+  "productionId": "edulabsai-one-learning-loop-clean-ad",
+  "title": "One learning loop — EdulabsAI",
+  "durationSeconds": 61.433333,
+  "stabilityAudit": {
+    "passed": true,
+    "policy": "All visuals remain position-locked. The only positional animation is the opening orange logo drop.",
+    "checks": {
+      "canvasIs1080p": true,
+      "clipsAreImages": true,
+      "clipMotionLocked": true,
+      "sceneChangesAreCuts": true,
+      "noClipVfx": true,
+      "overlaysAreImages": true,
+      "overlaysUseFullCanvasGrid": true,
+      "overlayLoopsDisabled": true,
+      "noOverlayExitMotion": true,
+      "onlyOpeningDropMoves": true,
+      "noVideoOverlays": true,
+      "noSoundEffects": true,
+      "clipAudioDisabled": true,
+      "musicDoesNotLoop": true
+    }
+  },
+  "outputs": [
+    {
+      "id": "clean-master",
+      "bytes": 3709190,
+      "publishingPlan": {
+        "generatedAt": "2026-08-28T08:19:45.517Z",
+        "platform": "youtube",
+        "preset": "youtube-1080p",
+        "video": "edulabsai-one-learning-loop-clean-ad.mp4",
+        "thumbnail": "edulabsai-one-learning-loop-clean-ad-thumbnail.jpg",
+        "captions": "edulabsai-one-learning-loop-clean-ad.srt",
+        "title": "One learning loop — EdulabsAI",
+        "description": "A stability-first EdulabsAI advertisement made from fixed product stills, aligned vector artwork, calm narration, and a soft original score.",
+        "tags": [
+          "EdulabsAI",
+          "AI for teachers",
+          "lesson planning",
+          "K-12",
+          "education technology"
+        ],
+        "reviewRequired": true,
+        "api": "YouTube Data API v3",
+        "flow": [
+          "OAuth youtube.upload scope",
+          "videos.insert resumable upload",
+          "thumbnails.set",
+          "captions.insert when supplied"
+        ],
+        "defaultPrivacy": "private",
+        "syntheticMediaDisclosure": "Set status.containsSyntheticMedia when applicable."
+      }
+    }
+  ]
+}
