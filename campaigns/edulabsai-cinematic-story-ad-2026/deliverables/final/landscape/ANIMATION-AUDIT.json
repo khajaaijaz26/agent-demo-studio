@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "policy": "Native format layouts, stable backgrounds, deliberate one-time motion, smooth original music, and no isolated sound effects.",
+  "checks": {
+    "correctPreset": true,
+    "nativeCanvasOverlays": true,
+    "stableBackgrounds": true,
+    "noLoopingOverlayMotion": true,
+    "noShakeAnimation": true,
+    "noOverlayExitMotion": true,
+    "transitionsAreShort": true,
+    "noSoundEffects": true,
+    "musicDoesNotLoop": true,
+    "narrationPresentEveryScene": true,
+    "captionsBurnAndSidecar": true
+  }
+}

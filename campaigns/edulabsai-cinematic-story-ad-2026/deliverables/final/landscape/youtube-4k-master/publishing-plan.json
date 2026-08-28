@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-28T18:21:21.222Z",
+  "platform": "youtube",
+  "preset": "youtube-4k",
+  "video": "edulabsai-ad-4k.mp4",
+  "thumbnail": "edulabsai-ad-4k-thumbnail.jpg",
+  "captions": "edulabsai-ad-4k.srt",
+  "title": "Built for teachers. Everything connected. - EdulabsAI",
+  "description": "A story-led EdulabsAI advertisement that turns a fragmented teacher workday into one connected learning loop.",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "teacher tools",
+    "lesson planning",
+    "education technology"
+  ],
+  "reviewRequired": true,
+  "api": "YouTube Data API v3",
+  "flow": [
+    "OAuth youtube.upload scope",
+    "videos.insert resumable upload",
+    "thumbnails.set",
+    "captions.insert when supplied"
+  ],
+  "defaultPrivacy": "private",
+  "syntheticMediaDisclosure": "Set status.containsSyntheticMedia when applicable."
+}

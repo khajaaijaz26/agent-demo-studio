@@ -1,0 +1,163 @@
+1
+00:00:00,460 --> 00:00:01,790
+Teaching deserves a better
+
+2
+00:00:01,790 --> 00:00:02,788
+kind of day.
+
+3
+00:00:05,180 --> 00:00:06,488
+But too often,
+
+4
+00:00:06,488 --> 00:00:08,668
+a teacher's day becomes a
+
+5
+00:00:08,668 --> 00:00:10,412
+maze of disconnected tools.
+
+6
+00:00:12,380 --> 00:00:14,222
+Plan in one place.
+
+7
+00:00:14,222 --> 00:00:16,064
+Build slides in another.
+
+8
+00:00:16,064 --> 00:00:17,446
+Make quizzes, worksheets,
+
+9
+00:00:17,446 --> 00:00:19,748
+and downloads one by one.
+
+10
+00:00:21,228 --> 00:00:23,012
+Every handoff steals time,
+
+11
+00:00:23,012 --> 00:00:25,242
+students wait, and the learning
+
+12
+00:00:25,242 --> 00:00:26,580
+story breaks apart.
+
+13
+00:00:28,428 --> 00:00:31,716
+Introducing EdulabsAI, built for teachers
+
+14
+00:00:31,716 --> 00:00:35,004
+so every step stays connected.
+
+15
+00:00:36,484 --> 00:00:38,056
+Choose the curriculum,
+
+16
+00:00:38,056 --> 00:00:39,628
+class, topic, language,
+
+17
+00:00:39,628 --> 00:00:41,724
+and the source material
+
+18
+00:00:41,724 --> 00:00:42,772
+you trust.
+
+19
+00:00:44,252 --> 00:00:45,593
+From one brief,
+
+20
+00:00:45,593 --> 00:00:47,829
+create an editable lesson plan,
+
+21
+00:00:47,829 --> 00:00:49,618
+visual slides, a quiz,
+
+22
+00:00:49,618 --> 00:00:51,407
+and a worksheet in
+
+23
+00:00:51,407 --> 00:00:52,748
+about two minutes.
+
+24
+00:00:54,228 --> 00:00:56,212
+Teach with clear visuals,
+
+25
+00:00:56,212 --> 00:00:58,196
+edit what you need,
+
+26
+00:00:58,196 --> 00:01:00,180
+and export classroom-ready PowerPoint
+
+27
+00:01:00,180 --> 00:01:01,668
+and PDF resources.
+
+28
+00:01:03,148 --> 00:01:04,750
+Students join, practise,
+
+29
+00:01:04,750 --> 00:01:07,420
+and see their work in
+
+30
+00:01:07,420 --> 00:01:09,556
+one focused learning space.
+
+31
+00:01:11,036 --> 00:01:12,319
+Teachers review evidence,
+
+32
+00:01:12,319 --> 00:01:13,601
+spot the gap,
+
+33
+00:01:13,601 --> 00:01:15,739
+and shape the next teaching
+
+34
+00:01:15,739 --> 00:01:17,876
+move while staying in control.
+
+35
+00:01:19,356 --> 00:01:22,247
+And teacher-approved progress can become
+
+36
+00:01:22,247 --> 00:01:24,560
+a clear, consent-based update
+
+37
+00:01:24,560 --> 00:01:25,716
+for families.
+
+38
+00:01:27,196 --> 00:01:29,469
+Less rebuilding. More time to
+
+39
+00:01:29,469 --> 00:01:31,742
+teach. Create your first lesson
+
+40
+00:01:31,742 --> 00:01:33,560
+free during beta at
+
+41
+00:01:33,560 --> 00:01:34,924
+edulabsai dot com.

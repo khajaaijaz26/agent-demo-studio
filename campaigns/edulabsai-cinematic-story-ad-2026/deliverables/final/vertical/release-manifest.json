@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "title": "Built for teachers. Everything connected. - EdulabsAI",
+  "createdAt": "2026-08-28T18:23:20.368Z",
+  "sourceRenderResult": {
+    "title": "Built for teachers. Everything connected. - EdulabsAI",
+    "manifestPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\manifests\\edulabsai-built-for-teachers-cinematic-ad-vertical.creator.json",
+    "outputDirectory": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\.work\\renders\\edulabsai-built-for-teachers-cinematic-ad\\vertical",
+    "outputs": [
+      {
+        "id": "master",
+        "preset": "reels",
+        "durationSeconds": 95.873333,
+        "width": 1080,
+        "height": 1920,
+        "fps": 30,
+        "fileSizeBytes": 7565052,
+        "platform": "instagram",
+        "videoPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\.work\\renders\\edulabsai-built-for-teachers-cinematic-ad\\vertical\\edulabsai-ad-vertical.mp4",
+        "thumbnailPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\.work\\renders\\edulabsai-built-for-teachers-cinematic-ad\\vertical\\edulabsai-ad-vertical-thumbnail.jpg",
+        "captionsPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\.work\\renders\\edulabsai-built-for-teachers-cinematic-ad\\vertical\\edulabsai-ad-vertical.srt",
+        "chaptersPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\.work\\renders\\edulabsai-built-for-teachers-cinematic-ad\\vertical\\edulabsai-ad-vertical-chapters.ffmetadata",
+        "validation": [
+          {
+            "level": "info",
+            "code": "PROFILE_OK",
+            "exportId": "master",
+            "message": "Instagram Reels dimensions, duration advisory, and frame rate checks passed."
+          }
+        ]
+      }
+    ],
+    "licenseReportPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\.work\\renders\\edulabsai-built-for-teachers-cinematic-ad\\vertical\\ASSET-LICENSES.md",
+    "createdAt": "2026-08-28T18:23:20.336Z"
+  },
+  "outputs": [
+    {
+      "id": "master",
+      "directory": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\deliverables\\final\\vertical\\reels-master",
+      "video": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\deliverables\\final\\vertical\\reels-master\\edulabsai-ad-vertical.mp4",
+      "thumbnail": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\deliverables\\final\\vertical\\reels-master\\edulabsai-ad-vertical-thumbnail.jpg",
+      "captions": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\deliverables\\final\\vertical\\reels-master\\edulabsai-ad-vertical.srt",
+      "chapters": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\deliverables\\final\\vertical\\reels-master\\edulabsai-ad-vertical-chapters.ffmetadata",
+      "publishingPlan": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\deliverables\\final\\vertical\\reels-master\\publishing-plan.json"
+    }
+  ]
+}

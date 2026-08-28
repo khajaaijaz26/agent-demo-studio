@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "edulabsai-cinematic-story-ad-2026",
+  "title": "EdulabsAI - Built for Teachers. Everything Connected.",
+  "goal": "Create a premium, story-led EdulabsAI advertisement that first makes the cost of fragmented teacher tools emotionally clear, then proves how EdulabsAI connects planning, resources, teaching, student practice, evidence, and family communication in one learning loop.",
+  "audience": {
+    "primary": "K-12 teachers and school leaders",
+    "secondary": "Education technology partners and early beta users"
+  },
+  "message": {
+    "problem": "Teachers lose time and continuity when planning, slides, quizzes, worksheets, downloads, student work, and progress live in separate tools.",
+    "solution": "EdulabsAI is built for teachers so the full learning workflow stays connected and teacher-controlled.",
+    "callToAction": "Create your first lesson free during beta at edulabsai.com."
+  },
+  "durationTargetSeconds": 80,
+  "actualDurationSeconds": 95.824,
+  "durationNote": "Natural measured narration and readable mobile holds expanded the execution beyond the initial target; speech was not accelerated.",
+  "outputs": [
+    {
+      "id": "youtube-4k-cinematic-master",
+      "platform": "YouTube and presentation displays",
+      "width": 3840,
+      "height": 2160,
+      "fps": 30,
+      "aspectRatio": "16:9",
+      "codec": "H.264/AAC",
+      "targetLufs": -16,
+      "truePeakDbtp": -2
+    },
+    {
+      "id": "vertical-mobile-master",
+      "platform": "Instagram Reels, YouTube Shorts, TikTok, and mobile viewing",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "aspectRatio": "9:16",
+      "codec": "H.264/AAC",
+      "targetLufs": -16,
+      "truePeakDbtp": -2,
+      "safeZone": {
+        "top": 180,
+        "right": 170,
+        "bottom": 330,
+        "left": 90
+      }
+    }
+  ],
+  "creativeDirection": {
+    "style": "Premium editorial animation combining original fictional teacher illustrations, paper-cut classroom drawings, large kinetic typography, verified EdulabsAI product close-ups, connection-line VFX, and stable high-contrast brand surfaces.",
+    "palette": ["#170C29", "#2B1944", "#F45B3E", "#FF7A45", "#FFB52E", "#FFF8EF", "#0FA69A", "#8D73E6"],
+    "mobileComposition": "Author every vertical scene independently. Keep the main subject or product crop within the central safe zone, occupy at least 60 percent of the useful frame, use two-to-five-word headlines, and never shrink a complete desktop dashboard into a phone-sized window.",
+    "landscapeComposition": "Use native 4K vector plates, asymmetric editorial grids, generous but purposeful depth, and product crops large enough to read from a television or laptop.",
+    "motion": "Stable backgrounds with deliberate one-time entrances, reveals, connection-line draws, scale resolves, and short transitions. No shake, bounce loops, drifting backgrounds, or continuous floating.",
+    "vfx": "Use warm light sweeps, controlled glow, paper-card assembly, line tracing, and masked product reveals. VFX must clarify the story and may not reduce text or UI legibility.",
+    "captions": "Large burn-in captions plus SRT sidecars. Maximum two lines, short phrases, high contrast, and independent layout for 4K and 9:16.",
+    "narration": "Natural adult male voice, measured and warm, approximately 140-150 words per minute. Scene durations follow the speech; speech is never accelerated to fit.",
+    "music": "Original warm cinematic score with soft piano/pluck, rounded low pulse, pads, and a restrained rise at the solution reveal. No isolated sound effects, harsh transients, or irritating high-frequency cues."
+  },
+  "storyboard": [
+    {
+      "id": "brand-arrival",
+      "startSeconds": 0,
+      "endSeconds": 3.2,
+      "headline": "EDULABSAI",
+      "narration": "Teaching deserves a better kind of day.",
+      "visual": "An oversized orange EdulabsAI mark drops once into a full-frame aubergine halo, resolves into the EDULABSAI wordmark, and holds large enough to dominate mobile and landscape.",
+      "motion": "Single logo drop and soft light resolve; background remains locked."
+    },
+    {
+      "id": "teacher-fragmented",
+      "startSeconds": 3.2,
+      "endSeconds": 10,
+      "headline": "A teacher's day should not look like this.",
+      "narration": "But too often, a teacher's day becomes a maze of disconnected tools.",
+      "visual": "Original fictional teacher illustration fills the frame while oversized tool cards crowd the scene.",
+      "motion": "Cards enter from separate directions and stop; no looping motion."
+    },
+    {
+      "id": "tool-by-tool",
+      "startSeconds": 10,
+      "endSeconds": 17.2,
+      "headline": "Plan here. Slides there. Quizzes somewhere else.",
+      "narration": "Plan in one place. Build slides in another. Make quizzes, worksheets, and downloads one by one.",
+      "visual": "Four large illustrated resource windows appear sequentially with broken connectors and duplicated actions.",
+      "motion": "Fast but readable card cuts synchronized to narration."
+    },
+    {
+      "id": "fragmentation-cost",
+      "startSeconds": 17.2,
+      "endSeconds": 23.8,
+      "headline": "Every handoff breaks the learning story.",
+      "narration": "Every handoff steals time, students wait, and the learning story breaks apart.",
+      "visual": "The connected line fractures between planning, teaching, students, and evidence while the fictional teacher remains the emotional focus.",
+      "motion": "One fracture animation followed by a still hold."
+    },
+    {
+      "id": "connected-reveal",
+      "startSeconds": 23.8,
+      "endSeconds": 30.5,
+      "headline": "Built for teachers. Everything connected.",
+      "narration": "Introducing EdulabsAI, built for teachers so every step stays connected.",
+      "visual": "Large EdulabsAI mark and wordmark emerge as one orange connection line joins Plan, Build, Teach, Check, and Connect.",
+      "motion": "Logo scale resolve and line trace; controlled glow only."
+    },
+    {
+      "id": "classroom-context",
+      "startSeconds": 30.5,
+      "endSeconds": 37.3,
+      "headline": "Start with your classroom.",
+      "narration": "Choose the curriculum, class, topic, language, and the source material you trust.",
+      "visual": "Verified lesson-brief UI shown as a full, readable close-up with curriculum and topic focus treatments.",
+      "motion": "One masked product reveal and two focus rings."
+    },
+    {
+      "id": "four-resources",
+      "startSeconds": 37.3,
+      "endSeconds": 45.5,
+      "headline": "One brief. Four aligned resources.",
+      "narration": "From one brief, create an editable lesson plan, visual slides, a quiz, and a worksheet in about two minutes.",
+      "visual": "Lesson overview followed by four large resource cards. Vertical uses one hero card at a time; landscape uses a connected four-card arc.",
+      "motion": "Accelerated progress line and sequential resource assembly; never show a fake waiting screen."
+    },
+    {
+      "id": "teach-and-export",
+      "startSeconds": 45.5,
+      "endSeconds": 52.5,
+      "headline": "Teach it. Shape it. Export it.",
+      "narration": "Teach with clear visuals, edit what you need, and export classroom-ready PowerPoint and PDF resources.",
+      "visual": "Verified teaching-slide and export-resource close-ups with editable-resource badges.",
+      "motion": "Slide reveal, page peel, and restrained orange highlight sweep."
+    },
+    {
+      "id": "students-connected",
+      "startSeconds": 52.5,
+      "endSeconds": 59.5,
+      "headline": "Students stay in the same story.",
+      "narration": "Students join, practise, and see their work in one focused learning space.",
+      "visual": "Original connected-classroom illustration transitions into a large verified student-dashboard crop.",
+      "motion": "Illustration-to-product match cut and one focus pulse."
+    },
+    {
+      "id": "evidence-next-step",
+      "startSeconds": 59.5,
+      "endSeconds": 66.7,
+      "headline": "Evidence becomes the next move.",
+      "narration": "Teachers review evidence, spot the gap, and shape the next teaching move while staying in control.",
+      "visual": "Verified learning-insights UI, with Snap-and-Mark identified as a controlled teacher-review beta rather than an automatic marking claim.",
+      "motion": "Evidence dots converge into one teacher-approved next-step card."
+    },
+    {
+      "id": "families-connected",
+      "startSeconds": 66.7,
+      "endSeconds": 72.7,
+      "headline": "Progress becomes a clear story.",
+      "narration": "And teacher-approved progress can become a clear, consent-based update for families.",
+      "visual": "Verified Family Learning Digest preview with a visible controlled-beta label and teacher-approval seal.",
+      "motion": "Single approval reveal and line continuation."
+    },
+    {
+      "id": "connected-loop-cta",
+      "startSeconds": 72.7,
+      "endSeconds": 79.5,
+      "headline": "One connected learning loop.",
+      "narration": "Less rebuilding. More time to teach. Create your first lesson free during beta at edulabsai.com.",
+      "visual": "Fictional teacher and classroom resolve around a large EdulabsAI mark, URL, and high-contrast beta call to action.",
+      "motion": "Connection ring closes once; all elements then hold for readability."
+    }
+  ],
+  "resources": [
+    {
+      "id": "edulabsai-brand",
+      "status": "supplied",
+      "source": "C:/Users/khaja/EduLabsAI99/public/brand",
+      "usage": "Authoritative Sprout mark, coral profile mark, and wordmark",
+      "rights": "Owner-provided EdulabsAI brand asset"
+    },
+    {
+      "id": "verified-product-recordings",
+      "status": "supplied",
+      "source": "test-output/edulabs-v2/scenes",
+      "usage": "Readable close-ups of teacher brief, connected lesson resources, exports, student dashboard, learning insights, Snap-and-Mark, and Family Digest",
+      "rights": "Owner-provided recordings of the EdulabsAI product; fictional test data only"
+    },
+    {
+      "id": "fictional-teacher-problem",
+      "status": "generated",
+      "source": "OpenAI built-in image generation",
+      "usage": "Teacher overwhelmed by disconnected tools",
+      "rights": "Original generated campaign artwork; no identifiable real person, logos, or learner data"
+    },
+    {
+      "id": "fictional-teacher-connected",
+      "status": "generated",
+      "source": "OpenAI built-in image generation",
+      "usage": "Same teacher using a connected teaching workspace",
+      "rights": "Original generated campaign artwork; no identifiable real person, logos, or learner data"
+    },
+    {
+      "id": "fictional-connected-classroom",
+      "status": "generated",
+      "source": "OpenAI built-in image generation",
+      "usage": "Warm classroom story and final human payoff",
+      "rights": "Original generated campaign artwork; fictional teacher and students, no readable text or logos"
+    },
+    {
+      "id": "campaign-motion-design",
+      "status": "generated",
+      "source": "Local SVG/PNG composition",
+      "usage": "Tool cards, broken and connected lines, focus rings, labels, VFX mattes, and captions",
+      "rights": "Original project-local vector artwork"
+    },
+    {
+      "id": "campaign-score",
+      "status": "generated",
+      "source": "Local procedural synthesis",
+      "usage": "Original warm cinematic music bed",
+      "rights": "Original project-local composition; no samples"
+    },
+    {
+      "id": "campaign-voice",
+      "status": "generated",
+      "source": "Microsoft Edge neural speech",
+      "usage": "Natural adult male narration",
+      "rights": "Provider terms; disclosed as synthetic narration"
+    }
+  ],
+  "workflow": [
+    "Verify brand and product claims against the EdulabsAI repository and recorded browser scenes.",
+    "Generate and inspect the three original fictional illustration anchors.",
+    "Extract lossless product stills and create task-specific close crops for landscape and mobile.",
+    "Build each scene as stable native 4K and 9:16 base, product, art, copy, and VFX layers.",
+    "Generate natural narration scene by scene and set scene duration from measured speech plus reading time.",
+    "Generate an original smooth score, then mix with voice ducking and no sound-effect track.",
+    "Render separate creator manifests for 4K landscape and vertical mobile.",
+    "Inspect contact sheets and representative transition frames; revise any small text, overlap, crop, shake, blank area, or narration mismatch.",
+    "Validate codecs, resolution, frame rate, duration, loudness, true peak, captions, and licenses.",
+    "Package videos, SRT captions, thumbnails, manifests, plan, provenance, QA report, and checksums."
+  ],
+  "qualityGates": [
+    "The orange logo is the dominant opening element and remains readable on a phone.",
+    "The problem is understood before the product workflow begins.",
+    "Every vertical product scene uses a close crop authored for 9:16; no full desktop UI is reduced to unreadable size.",
+    "All headlines and captions remain inside platform safe zones and do not overlap one another.",
+    "Backgrounds are stable; there is no shake, jitter, bounce loop, or unintended scaling.",
+    "Animations are purposeful one-time entrances or reveals and settle into a readable hold.",
+    "Narration matches the visible scene and is neither rushed nor ahead of the visuals.",
+    "Music contains no isolated cue sounds, clipping, harsh transients, or speech masking.",
+    "Product claims distinguish shipped capabilities from controlled beta features.",
+    "Both masters are H.264/AAC, 30 fps, high resolution, captioned, and technically validated."
+  ],
+  "assumptions": [
+    "The advertisement uses owner-provided EdulabsAI branding and verified fictional/demo product data.",
+    "The campaign is a brand advertisement rather than a complete five-minute feature tour.",
+    "Snap-and-Mark and Family Learning Digest are presented only as controlled beta, teacher-reviewed workflows.",
+    "External publishing is not performed; repository push and local deliverable creation are in scope."
+  ]
+}

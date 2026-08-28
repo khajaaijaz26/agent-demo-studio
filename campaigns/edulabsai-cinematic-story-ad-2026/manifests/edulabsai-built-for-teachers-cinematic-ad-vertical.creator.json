@@ -1,0 +1,1199 @@
+{
+  "schemaVersion": 2,
+  "title": "Built for teachers. Everything connected. - EdulabsAI",
+  "description": "A story-led EdulabsAI advertisement that turns a fragmented teacher workday into one connected learning loop. https://www.edulabsai.com",
+  "outputDirectory": "../.work/renders/edulabsai-built-for-teachers-cinematic-ad/vertical",
+  "brand": {
+    "name": "EdulabsAI",
+    "logo": "../assets/generated/brand/edulabsai-profile-coral.png",
+    "logoLicenseId": "edulabsai-brand",
+    "primary": "#F45B3E",
+    "secondary": "#FFB52E",
+    "text": "#FFF8EF",
+    "fontFamily": "Segoe UI"
+  },
+  "clips": [
+    {
+      "id": "vertical-brand-arrival",
+      "source": "../assets/generated/scenes/vertical/brand-arrival/00-base.png",
+      "kind": "image",
+      "durationSeconds": 4.6,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "EDULABSAI",
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-teacher-fragmented",
+      "source": "../assets/generated/scenes/vertical/teacher-fragmented/00-base.png",
+      "kind": "image",
+      "durationSeconds": 7.2,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "THE TEACHER'S REALITY",
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-tool-by-tool",
+      "source": "../assets/generated/scenes/vertical/tool-by-tool/00-base.png",
+      "kind": "image",
+      "durationSeconds": 8.848,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "TOOL BY TOOL",
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-fragmentation-cost",
+      "source": "../assets/generated/scenes/vertical/fragmentation-cost/00-base.png",
+      "kind": "image",
+      "durationSeconds": 7.2,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "THE COST OF DISCONNECTION",
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-connected-reveal",
+      "source": "../assets/generated/scenes/vertical/connected-reveal/00-base.png",
+      "kind": "image",
+      "durationSeconds": 8.056,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "INTRODUCING EDULABSAI",
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-classroom-context",
+      "source": "../assets/generated/scenes/vertical/classroom-context/00-base.png",
+      "kind": "image",
+      "durationSeconds": 7.768,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "START WITH YOUR CLASSROOM",
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-four-resources",
+      "source": "../assets/generated/scenes/vertical/four-resources/00-base.png",
+      "kind": "image",
+      "durationSeconds": 9.976,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "READY IN ABOUT TWO MINUTES",
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-teach-and-export",
+      "source": "../assets/generated/scenes/vertical/teach-and-export/00-base.png",
+      "kind": "image",
+      "durationSeconds": 8.92,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "CLASSROOM-READY RESOURCES",
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-students-connected",
+      "source": "../assets/generated/scenes/vertical/students-connected/00-base.png",
+      "kind": "image",
+      "durationSeconds": 7.888,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "THE SAME LEARNING STORY",
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-evidence-next-step",
+      "source": "../assets/generated/scenes/vertical/evidence-next-step/00-base.png",
+      "kind": "image",
+      "durationSeconds": 8.32,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "TEACHER-REVIEWED EVIDENCE",
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-families-connected",
+      "source": "../assets/generated/scenes/vertical/families-connected/00-base.png",
+      "kind": "image",
+      "durationSeconds": 7.84,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "CONSENT-BASED CONTROLLED BETA",
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-connected-loop-cta",
+      "source": "../assets/generated/scenes/vertical/connected-loop-cta/00-base.png",
+      "kind": "image",
+      "durationSeconds": 9.208,
+      "motion": "none",
+      "reframe": "fill",
+      "transition": {
+        "type": "cut",
+        "durationSeconds": 0
+      },
+      "chapter": "EDULABSAI",
+      "licenseId": "campaign-motion-design"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "vertical-brand-arrival-brand-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/brand-arrival/01-logo.png",
+      "startSeconds": 0.08,
+      "endSeconds": 4.57,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "drop",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.72,
+        "exitDurationSeconds": 0.1,
+        "intensity": 2.2
+      },
+      "licenseId": "edulabsai-brand"
+    },
+    {
+      "id": "vertical-brand-arrival-copy-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/brand-arrival/02-copy.png",
+      "startSeconds": 0.82,
+      "endSeconds": 4.57,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.58,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-teacher-fragmented-illustration-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/teacher-fragmented/01-teacher.png",
+      "startSeconds": 4.78,
+      "endSeconds": 11.77,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.62,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "fictional-teacher-artwork"
+    },
+    {
+      "id": "vertical-teacher-fragmented-copy-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/teacher-fragmented/02-copy.png",
+      "startSeconds": 4.92,
+      "endSeconds": 11.77,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-tool-by-tool-drawing-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/tool-by-tool/01-tool-cards.png",
+      "startSeconds": 12,
+      "endSeconds": 20.618,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "pop",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.58,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-tool-by-tool-copy-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/tool-by-tool/02-copy.png",
+      "startSeconds": 12.12,
+      "endSeconds": 20.618,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-fragmentation-cost-illustration-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/fragmentation-cost/01-teacher.png",
+      "startSeconds": 20.748,
+      "endSeconds": 27.818,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "fictional-teacher-artwork"
+    },
+    {
+      "id": "vertical-fragmentation-cost-vfx-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/fragmentation-cost/02-broken-loop.png",
+      "startSeconds": 21.548,
+      "endSeconds": 27.818,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "pop",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.46,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-fragmentation-cost-copy-3",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/fragmentation-cost/03-copy.png",
+      "startSeconds": 20.968,
+      "endSeconds": 27.818,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-connected-reveal-illustration-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/connected-reveal/01-teacher.png",
+      "startSeconds": 27.988,
+      "endSeconds": 35.874,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "slide-right",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.62,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "fictional-teacher-artwork"
+    },
+    {
+      "id": "vertical-connected-reveal-vfx-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/connected-reveal/02-connected-rail.png",
+      "startSeconds": 28.768,
+      "endSeconds": 35.874,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-connected-reveal-copy-3",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/connected-reveal/03-copy.png",
+      "startSeconds": 28.168,
+      "endSeconds": 35.874,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-classroom-context-product-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/classroom-context/01-product.png",
+      "startSeconds": 36.084,
+      "endSeconds": 43.642,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "slide-right",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.62,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "verified-product-stills"
+    },
+    {
+      "id": "vertical-classroom-context-drawing-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/classroom-context/02-context-chips.png",
+      "startSeconds": 36.954,
+      "endSeconds": 43.642,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.48,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-classroom-context-copy-3",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/classroom-context/03-copy.png",
+      "startSeconds": 36.224,
+      "endSeconds": 43.642,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-four-resources-product-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/four-resources/01-product.png",
+      "startSeconds": 43.822,
+      "endSeconds": 53.618,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "verified-product-stills"
+    },
+    {
+      "id": "vertical-four-resources-drawing-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/four-resources/02-resource-cards.png",
+      "startSeconds": 44.722,
+      "endSeconds": 53.618,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.58,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-four-resources-copy-3",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/four-resources/03-copy.png",
+      "startSeconds": 43.992,
+      "endSeconds": 53.618,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-teach-and-export-product-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/teach-and-export/01-product.png",
+      "startSeconds": 53.808,
+      "endSeconds": 62.538,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "slide-right",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.62,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "verified-product-stills"
+    },
+    {
+      "id": "vertical-teach-and-export-drawing-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/teach-and-export/02-export-badges.png",
+      "startSeconds": 54.728,
+      "endSeconds": 62.538,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-teach-and-export-copy-3",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/teach-and-export/03-copy.png",
+      "startSeconds": 53.968,
+      "endSeconds": 62.538,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-students-connected-illustration-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/students-connected/01-classroom.png",
+      "startSeconds": 62.688,
+      "endSeconds": 70.426,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "fictional-classroom-artwork"
+    },
+    {
+      "id": "vertical-students-connected-product-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/students-connected/02-product.png",
+      "startSeconds": 63.768,
+      "endSeconds": 70.426,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.58,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "verified-product-stills"
+    },
+    {
+      "id": "vertical-students-connected-copy-3",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/students-connected/03-copy.png",
+      "startSeconds": 62.888,
+      "endSeconds": 70.426,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-evidence-next-step-product-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/evidence-next-step/01-product.png",
+      "startSeconds": 70.606,
+      "endSeconds": 78.746,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "verified-product-stills"
+    },
+    {
+      "id": "vertical-evidence-next-step-drawing-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/evidence-next-step/02-evidence-flow.png",
+      "startSeconds": 71.576,
+      "endSeconds": 78.746,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.52,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-evidence-next-step-copy-3",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/evidence-next-step/03-copy.png",
+      "startSeconds": 70.776,
+      "endSeconds": 78.746,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-families-connected-product-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/families-connected/01-product.png",
+      "startSeconds": 78.926,
+      "endSeconds": 86.586,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "slide-right",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.6,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "verified-product-stills"
+    },
+    {
+      "id": "vertical-families-connected-drawing-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/families-connected/02-family-flow.png",
+      "startSeconds": 79.856,
+      "endSeconds": 86.586,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-families-connected-copy-3",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/families-connected/03-copy.png",
+      "startSeconds": 79.096,
+      "endSeconds": 86.586,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-connected-loop-cta-illustration-1",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/connected-loop-cta/01-classroom.png",
+      "startSeconds": 86.716,
+      "endSeconds": 95.794,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "fade",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.54,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "fictional-classroom-artwork"
+    },
+    {
+      "id": "vertical-connected-loop-cta-cta-2",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/connected-loop-cta/02-cta.png",
+      "startSeconds": 87.536,
+      "endSeconds": 95.794,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.54,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    },
+    {
+      "id": "vertical-connected-loop-cta-copy-3",
+      "type": "image",
+      "source": "../assets/generated/scenes/vertical/connected-loop-cta/03-copy.png",
+      "startSeconds": 86.936,
+      "endSeconds": 95.794,
+      "x": 0.5,
+      "y": 0.5,
+      "width": 1080,
+      "height": 1920,
+      "opacity": 1,
+      "animation": {
+        "enter": "rise",
+        "exit": "none",
+        "loop": "none",
+        "durationSeconds": 0.5,
+        "exitDurationSeconds": 0.1,
+        "intensity": 1
+      },
+      "licenseId": "campaign-motion-design"
+    }
+  ],
+  "captions": {
+    "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/vertical/edulabsai-built-for-teachers-cinematic-ad-vertical.srt",
+    "format": "srt",
+    "burn": true,
+    "sidecar": true,
+    "language": "en",
+    "style": {
+      "position": "bottom",
+      "fontSize": 48,
+      "color": "#FFF8EF",
+      "background": "#170C2920",
+      "accent": "#F45B3E",
+      "maxCharactersPerLine": 30,
+      "maxLines": 2,
+      "margin": 350
+    }
+  },
+  "audio": {
+    "voices": [
+      {
+        "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/voice/01-brand-arrival-f930d26942.mp3",
+        "startSeconds": 0.46,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/voice/02-teacher-fragmented-b8354e73ed.mp3",
+        "startSeconds": 5.18,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/voice/03-tool-by-tool-3e6c3fb75b.mp3",
+        "startSeconds": 12.38,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/voice/04-fragmentation-cost-6f3f0bda2e.mp3",
+        "startSeconds": 21.228,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/voice/05-connected-reveal-96cf9e9bd5.mp3",
+        "startSeconds": 28.428,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/voice/06-classroom-context-f578ccc587.mp3",
+        "startSeconds": 36.484,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/voice/07-four-resources-e9cfecb908.mp3",
+        "startSeconds": 44.252,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/voice/08-teach-and-export-beafe3e501.mp3",
+        "startSeconds": 54.228,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/voice/09-students-connected-370ab6a3b4.mp3",
+        "startSeconds": 63.148,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/voice/10-evidence-next-step-26fbb96286.mp3",
+        "startSeconds": 71.036,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/voice/11-families-connected-e25b79dbbf.mp3",
+        "startSeconds": 79.356,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      },
+      {
+        "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/voice/12-connected-loop-cta-445ae02566.mp3",
+        "startSeconds": 87.196,
+        "volume": 1,
+        "licenseId": "microsoft-edge-neural-speech"
+      }
+    ],
+    "music": {
+      "source": "../.work/edulabsai-built-for-teachers-cinematic-ad/connected-light.wav",
+      "loop": false,
+      "volume": 0.145,
+      "fadeInSeconds": 2.2,
+      "fadeOutSeconds": 3.2,
+      "licenseId": "connected-light-score"
+    },
+    "soundEffects": [],
+    "mode": "voice",
+    "keepClipAudio": false,
+    "duckMusic": true,
+    "duckingThreshold": 0.03,
+    "targetLufs": -16,
+    "truePeak": -2
+  },
+  "chapters": [
+    {
+      "title": "EDULABSAI",
+      "startSeconds": 0
+    },
+    {
+      "title": "THE TEACHER'S REALITY",
+      "startSeconds": 4.6
+    },
+    {
+      "title": "TOOL BY TOOL",
+      "startSeconds": 11.8
+    },
+    {
+      "title": "THE COST OF DISCONNECTION",
+      "startSeconds": 20.648
+    },
+    {
+      "title": "INTRODUCING EDULABSAI",
+      "startSeconds": 27.848
+    },
+    {
+      "title": "START WITH YOUR CLASSROOM",
+      "startSeconds": 35.904
+    },
+    {
+      "title": "READY IN ABOUT TWO MINUTES",
+      "startSeconds": 43.672
+    },
+    {
+      "title": "CLASSROOM-READY RESOURCES",
+      "startSeconds": 53.648
+    },
+    {
+      "title": "THE SAME LEARNING STORY",
+      "startSeconds": 62.568
+    },
+    {
+      "title": "TEACHER-REVIEWED EVIDENCE",
+      "startSeconds": 70.456
+    },
+    {
+      "title": "CONSENT-BASED CONTROLLED BETA",
+      "startSeconds": 78.776
+    },
+    {
+      "title": "EDULABSAI",
+      "startSeconds": 86.616
+    }
+  ],
+  "exports": [
+    {
+      "id": "master",
+      "preset": "reels",
+      "fileName": "edulabsai-ad-vertical",
+      "title": "Built for teachers. Everything connected. - EdulabsAI",
+      "description": "A story-led EdulabsAI advertisement that turns a fragmented teacher workday into one connected learning loop.",
+      "tags": [
+        "EdulabsAI",
+        "AI for teachers",
+        "teacher tools",
+        "lesson planning",
+        "education technology"
+      ],
+      "quality": 18,
+      "burnCaptions": true,
+      "thumbnailAtSeconds": 25.6
+    }
+  ],
+  "licenses": [
+    {
+      "id": "edulabsai-brand",
+      "source": "EdulabsAI authoritative brand directory",
+      "title": "EdulabsAI Sprout mark",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "https://www.edulabsai.com"
+    },
+    {
+      "id": "verified-product-stills",
+      "source": "Still frames extracted from verified EdulabsAI browser recordings",
+      "title": "EdulabsAI product UI",
+      "creator": "EdulabsAI",
+      "license": "Owner-provided",
+      "attribution": "EdulabsAI",
+      "proofUrl": "test-output/edulabs-v2/recorded-scenes.json"
+    },
+    {
+      "id": "fictional-teacher-artwork",
+      "source": "OpenAI built-in image generation",
+      "title": "Fragmented and connected teacher campaign illustrations",
+      "creator": "EdulabsAI with OpenAI image generation",
+      "license": "Original generated campaign artwork",
+      "attribution": "Fictional generated character; no real identity"
+    },
+    {
+      "id": "fictional-classroom-artwork",
+      "source": "OpenAI built-in image generation",
+      "title": "Connected classroom campaign illustration",
+      "creator": "EdulabsAI with OpenAI image generation",
+      "license": "Original generated campaign artwork",
+      "attribution": "Fictional generated people; no learner data"
+    },
+    {
+      "id": "campaign-motion-design",
+      "source": "Original local SVG and PNG composition",
+      "title": "Built for Teachers visual system",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original work",
+      "attribution": "EdulabsAI"
+    },
+    {
+      "id": "connected-light-score",
+      "source": "Original local procedural composition",
+      "title": "Connected Light",
+      "creator": "EdulabsAI with Agent Demo Studio",
+      "license": "Original work",
+      "attribution": "No samples or third-party cues"
+    },
+    {
+      "id": "microsoft-edge-neural-speech",
+      "source": "en-US-AndrewMultilingualNeural",
+      "title": "Andrew - warm, natural campaign narrator",
+      "creator": "Microsoft",
+      "license": "Provider terms",
+      "attribution": "Synthetic neural narration"
+    }
+  ],
+  "metadata": {
+    "campaign": "EdulabsAI - Built for Teachers",
+    "campaignVersion": 1,
+    "productionId": "edulabsai-built-for-teachers-cinematic-ad",
+    "format": "vertical",
+    "nativeCanvas": true,
+    "mobileFirst": true,
+    "productionPlan": "../production-plan.json",
+    "creativeDirection": "../CREATIVE-DIRECTION.md",
+    "stableBackgrounds": true,
+    "continuousMotion": false,
+    "animationPolicy": "One-time entrances and scene transitions only; no shake, bounce, drift, or float loops.",
+    "originalMusic": true,
+    "soundEffects": false,
+    "syntheticVoice": true,
+    "controlledBetaClaims": [
+      "Snap-and-Mark",
+      "Family Learning Digest"
+    ],
+    "sceneTimeline": [
+      {
+        "id": "brand-arrival",
+        "startSeconds": 0,
+        "endSeconds": 4.6
+      },
+      {
+        "id": "teacher-fragmented",
+        "startSeconds": 4.6,
+        "endSeconds": 11.8
+      },
+      {
+        "id": "tool-by-tool",
+        "startSeconds": 11.8,
+        "endSeconds": 20.648000000000003
+      },
+      {
+        "id": "fragmentation-cost",
+        "startSeconds": 20.648000000000003,
+        "endSeconds": 27.848000000000003
+      },
+      {
+        "id": "connected-reveal",
+        "startSeconds": 27.848000000000003,
+        "endSeconds": 35.904
+      },
+      {
+        "id": "classroom-context",
+        "startSeconds": 35.904,
+        "endSeconds": 43.672000000000004
+      },
+      {
+        "id": "four-resources",
+        "startSeconds": 43.672000000000004,
+        "endSeconds": 53.648
+      },
+      {
+        "id": "teach-and-export",
+        "startSeconds": 53.648,
+        "endSeconds": 62.568000000000005
+      },
+      {
+        "id": "students-connected",
+        "startSeconds": 62.568000000000005,
+        "endSeconds": 70.456
+      },
+      {
+        "id": "evidence-next-step",
+        "startSeconds": 70.456,
+        "endSeconds": 78.77600000000001
+      },
+      {
+        "id": "families-connected",
+        "startSeconds": 78.77600000000001,
+        "endSeconds": 86.61600000000001
+      },
+      {
+        "id": "connected-loop-cta",
+        "startSeconds": 86.61600000000001,
+        "endSeconds": 95.82400000000001
+      }
+    ]
+  }
+}

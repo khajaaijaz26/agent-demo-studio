@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 2,
+  "campaign": "EdulabsAI - Built for Teachers",
+  "productionId": "edulabsai-built-for-teachers-cinematic-ad",
+  "title": "Built for teachers. Everything connected. - EdulabsAI",
+  "generatedAt": "2026-08-28T18:23:20.375Z",
+  "durationSeconds": 95.824,
+  "outputs": [
+    {
+      "format": "landscape",
+      "preset": "youtube-4k",
+      "width": 3840,
+      "height": 2160,
+      "fps": 30,
+      "durationSeconds": 95.873333,
+      "videoPath": "landscape/youtube-4k-master/edulabsai-ad-4k.mp4",
+      "captions": "landscape/youtube-4k-master/edulabsai-ad-4k.srt",
+      "animationAudit": {
+        "passed": true,
+        "policy": "Native format layouts, stable backgrounds, deliberate one-time motion, smooth original music, and no isolated sound effects.",
+        "checks": {
+          "correctPreset": true,
+          "nativeCanvasOverlays": true,
+          "stableBackgrounds": true,
+          "noLoopingOverlayMotion": true,
+          "noShakeAnimation": true,
+          "noOverlayExitMotion": true,
+          "transitionsAreShort": true,
+          "noSoundEffects": true,
+          "musicDoesNotLoop": true,
+          "narrationPresentEveryScene": true,
+          "captionsBurnAndSidecar": true
+        }
+      }
+    },
+    {
+      "format": "vertical",
+      "preset": "reels",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "durationSeconds": 95.873333,
+      "videoPath": "vertical/reels-master/edulabsai-ad-vertical.mp4",
+      "captions": "vertical/reels-master/edulabsai-ad-vertical.srt",
+      "animationAudit": {
+        "passed": true,
+        "policy": "Native format layouts, stable backgrounds, deliberate one-time motion, smooth original music, and no isolated sound effects.",
+        "checks": {
+          "correctPreset": true,
+          "nativeCanvasOverlays": true,
+          "stableBackgrounds": true,
+          "noLoopingOverlayMotion": true,
+          "noShakeAnimation": true,
+          "noOverlayExitMotion": true,
+          "transitionsAreShort": true,
+          "noSoundEffects": true,
+          "musicDoesNotLoop": true,
+          "narrationPresentEveryScene": true,
+          "captionsBurnAndSidecar": true
+        }
+      }
+    }
+  ],
+  "audio": {
+    "narrator": "Andrew - warm, natural campaign narrator",
+    "rate": "-7%",
+    "score": "Connected Light - original smooth cinematic score",
+    "sampledAudio": false,
+    "isolatedSoundEffects": false,
+    "targetLufs": -16,
+    "truePeakDbtp": -2
+  },
+  "sceneTimeline": [
+    {
+      "id": "brand-arrival",
+      "startSeconds": 0,
+      "endSeconds": 4.6,
+      "narration": "Teaching deserves a better kind of day."
+    },
+    {
+      "id": "teacher-fragmented",
+      "startSeconds": 4.6,
+      "endSeconds": 11.8,
+      "narration": "But too often, a teacher's day becomes a maze of disconnected tools."
+    },
+    {
+      "id": "tool-by-tool",
+      "startSeconds": 11.8,
+      "endSeconds": 20.648,
+      "narration": "Plan in one place. Build slides in another. Make quizzes, worksheets, and downloads one by one."
+    },
+    {
+      "id": "fragmentation-cost",
+      "startSeconds": 20.648,
+      "endSeconds": 27.848,
+      "narration": "Every handoff steals time, students wait, and the learning story breaks apart."
+    },
+    {
+      "id": "connected-reveal",
+      "startSeconds": 27.848,
+      "endSeconds": 35.904,
+      "narration": "Introducing EdulabsAI, built for teachers so every step stays connected."
+    },
+    {
+      "id": "classroom-context",
+      "startSeconds": 35.904,
+      "endSeconds": 43.672,
+      "narration": "Choose the curriculum, class, topic, language, and the source material you trust."
+    },
+    {
+      "id": "four-resources",
+      "startSeconds": 43.672,
+      "endSeconds": 53.648,
+      "narration": "From one brief, create an editable lesson plan, visual slides, a quiz, and a worksheet in about two minutes."
+    },
+    {
+      "id": "teach-and-export",
+      "startSeconds": 53.648,
+      "endSeconds": 62.568,
+      "narration": "Teach with clear visuals, edit what you need, and export classroom-ready PowerPoint and PDF resources."
+    },
+    {
+      "id": "students-connected",
+      "startSeconds": 62.568,
+      "endSeconds": 70.456,
+      "narration": "Students join, practise, and see their work in one focused learning space."
+    },
+    {
+      "id": "evidence-next-step",
+      "startSeconds": 70.456,
+      "endSeconds": 78.776,
+      "narration": "Teachers review evidence, spot the gap, and shape the next teaching move while staying in control."
+    },
+    {
+      "id": "families-connected",
+      "startSeconds": 78.776,
+      "endSeconds": 86.616,
+      "narration": "And teacher-approved progress can become a clear, consent-based update for families."
+    },
+    {
+      "id": "connected-loop-cta",
+      "startSeconds": 86.616,
+      "endSeconds": 95.824,
+      "narration": "Less rebuilding. More time to teach. Create your first lesson free during beta at edulabsai dot com."
+    }
+  ],
+  "alignmentSpec": "../../assets/generated/ALIGNMENT-SPEC.json",
+  "rights": [
+    "EdulabsAI owner-provided brand and verified product recordings",
+    "Original generated fictional teacher and classroom artwork",
+    "Original local motion design and procedural music",
+    "Microsoft Edge neural narration under provider terms"
+  ],
+  "reviewRequiredBeforeExternalPublishing": true
+}

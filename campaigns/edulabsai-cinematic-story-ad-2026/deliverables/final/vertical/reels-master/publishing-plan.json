@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-28T18:23:20.364Z",
+  "platform": "instagram",
+  "preset": "reels",
+  "video": "edulabsai-ad-vertical.mp4",
+  "thumbnail": "edulabsai-ad-vertical-thumbnail.jpg",
+  "captions": "edulabsai-ad-vertical.srt",
+  "title": "Built for teachers. Everything connected. - EdulabsAI",
+  "description": "A story-led EdulabsAI advertisement that turns a fragmented teacher workday into one connected learning loop.",
+  "tags": [
+    "EdulabsAI",
+    "AI for teachers",
+    "teacher tools",
+    "lesson planning",
+    "education technology"
+  ],
+  "reviewRequired": true,
+  "api": "Instagram Platform Content Publishing",
+  "flow": [
+    "Host the rendered file at a public URL",
+    "Create a REELS media container",
+    "Poll container status",
+    "Publish after review"
+  ],
+  "mediaType": "REELS",
+  "publicVideoUrl": "REPLACE_WITH_PUBLIC_VIDEO_URL"
+}

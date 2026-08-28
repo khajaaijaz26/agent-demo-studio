@@ -1,0 +1,78 @@
+{
+  "campaign": "Built for teachers. Everything connected. - EdulabsAI",
+  "startedAt": "2026-08-28T18:15:47.680Z",
+  "completedAt": "2026-08-28T18:23:20.399Z",
+  "elapsedSeconds": 452.7,
+  "durationSeconds": 95.824,
+  "packageDirectory": "deliverables/final",
+  "outputs": [
+    {
+      "format": "landscape",
+      "preset": "youtube-4k",
+      "width": 3840,
+      "height": 2160,
+      "fps": 30,
+      "durationSeconds": 95.873333,
+      "videoPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\deliverables\\final\\landscape\\youtube-4k-master\\edulabsai-ad-4k.mp4",
+      "validation": [
+        {
+          "level": "info",
+          "code": "PROFILE_OK",
+          "exportId": "master",
+          "message": "YouTube 4K dimensions, duration advisory, and frame rate checks passed."
+        }
+      ],
+      "animationAudit": {
+        "passed": true,
+        "policy": "Native format layouts, stable backgrounds, deliberate one-time motion, smooth original music, and no isolated sound effects.",
+        "checks": {
+          "correctPreset": true,
+          "nativeCanvasOverlays": true,
+          "stableBackgrounds": true,
+          "noLoopingOverlayMotion": true,
+          "noShakeAnimation": true,
+          "noOverlayExitMotion": true,
+          "transitionsAreShort": true,
+          "noSoundEffects": true,
+          "musicDoesNotLoop": true,
+          "narrationPresentEveryScene": true,
+          "captionsBurnAndSidecar": true
+        }
+      }
+    },
+    {
+      "format": "vertical",
+      "preset": "reels",
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "durationSeconds": 95.873333,
+      "videoPath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\deliverables\\final\\vertical\\reels-master\\edulabsai-ad-vertical.mp4",
+      "validation": [
+        {
+          "level": "info",
+          "code": "PROFILE_OK",
+          "exportId": "master",
+          "message": "Instagram Reels dimensions, duration advisory, and frame rate checks passed."
+        }
+      ],
+      "animationAudit": {
+        "passed": true,
+        "policy": "Native format layouts, stable backgrounds, deliberate one-time motion, smooth original music, and no isolated sound effects.",
+        "checks": {
+          "correctPreset": true,
+          "nativeCanvasOverlays": true,
+          "stableBackgrounds": true,
+          "noLoopingOverlayMotion": true,
+          "noShakeAnimation": true,
+          "noOverlayExitMotion": true,
+          "transitionsAreShort": true,
+          "noSoundEffects": true,
+          "musicDoesNotLoop": true,
+          "narrationPresentEveryScene": true,
+          "captionsBurnAndSidecar": true
+        }
+      }
+    }
+  ]
+}

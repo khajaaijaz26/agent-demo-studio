@@ -1,0 +1,24 @@
+{
+  "campaign": "Built for teachers. Everything connected. - EdulabsAI",
+  "mode": "assets-only",
+  "completedAt": "2026-08-28T11:48:02.490Z",
+  "formats": [
+    "landscape",
+    "vertical"
+  ],
+  "scenes": [
+    "brand-arrival",
+    "teacher-fragmented",
+    "tool-by-tool",
+    "fragmentation-cost",
+    "connected-reveal",
+    "classroom-context",
+    "four-resources",
+    "teach-and-export",
+    "students-connected",
+    "evidence-next-step",
+    "families-connected",
+    "connected-loop-cta"
+  ],
+  "alignmentSpec": "assets/generated/ALIGNMENT-SPEC.json"
+}

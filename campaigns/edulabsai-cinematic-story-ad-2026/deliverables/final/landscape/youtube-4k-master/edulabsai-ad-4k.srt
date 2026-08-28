@@ -1,0 +1,103 @@
+1
+00:00:00,460 --> 00:00:02,788
+Teaching deserves a better kind of day.
+
+2
+00:00:05,180 --> 00:00:08,668
+But too often, a teacher's day becomes a
+
+3
+00:00:08,668 --> 00:00:10,412
+maze of disconnected tools.
+
+4
+00:00:12,380 --> 00:00:16,064
+Plan in one place. Build slides in another.
+
+5
+00:00:16,064 --> 00:00:19,748
+Make quizzes, worksheets, and downloads one by one.
+
+6
+00:00:21,228 --> 00:00:23,904
+Every handoff steals time, students wait,
+
+7
+00:00:23,904 --> 00:00:26,580
+and the learning story breaks apart.
+
+8
+00:00:28,428 --> 00:00:33,031
+Introducing EdulabsAI, built for teachers so every
+
+9
+00:00:33,031 --> 00:00:35,004
+step stays connected.
+
+10
+00:00:36,484 --> 00:00:39,628
+Choose the curriculum, class, topic, language,
+
+11
+00:00:39,628 --> 00:00:42,772
+and the source material you trust.
+
+12
+00:00:44,252 --> 00:00:47,829
+From one brief, create an editable lesson plan,
+
+13
+00:00:47,829 --> 00:00:51,407
+visual slides, a quiz, and a worksheet in
+
+14
+00:00:51,407 --> 00:00:52,748
+about two minutes.
+
+15
+00:00:54,228 --> 00:00:58,196
+Teach with clear visuals, edit what you need,
+
+16
+00:00:58,196 --> 00:01:01,668
+and export classroom-ready PowerPoint and PDF resources.
+
+17
+00:01:03,148 --> 00:01:07,420
+Students join, practise, and see their work in
+
+18
+00:01:07,420 --> 00:01:09,556
+one focused learning space.
+
+19
+00:01:11,036 --> 00:01:13,601
+Teachers review evidence, spot the gap,
+
+20
+00:01:13,601 --> 00:01:16,594
+and shape the next teaching move while
+
+21
+00:01:16,594 --> 00:01:17,876
+staying in control.
+
+22
+00:01:19,356 --> 00:01:23,403
+And teacher-approved progress can become a clear,
+
+23
+00:01:23,403 --> 00:01:25,716
+consent-based update for families.
+
+24
+00:01:27,196 --> 00:01:29,924
+Less rebuilding. More time to teach.
+
+25
+00:01:29,924 --> 00:01:33,560
+Create your first lesson free during beta at
+
+26
+00:01:33,560 --> 00:01:34,924
+edulabsai dot com.

@@ -1,0 +1,374 @@
+{
+  "generatedAt": "2026-08-28T18:25:42.399Z",
+  "previews": {
+    "landscape": {
+      "frames": [
+        {
+          "id": "brand-arrival",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\landscape\\brand-arrival.png"
+        },
+        {
+          "id": "teacher-fragmented",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\landscape\\teacher-fragmented.png"
+        },
+        {
+          "id": "tool-by-tool",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\landscape\\tool-by-tool.png"
+        },
+        {
+          "id": "fragmentation-cost",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\landscape\\fragmentation-cost.png"
+        },
+        {
+          "id": "connected-reveal",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\landscape\\connected-reveal.png"
+        },
+        {
+          "id": "classroom-context",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\landscape\\classroom-context.png"
+        },
+        {
+          "id": "four-resources",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\landscape\\four-resources.png"
+        },
+        {
+          "id": "teach-and-export",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\landscape\\teach-and-export.png"
+        },
+        {
+          "id": "students-connected",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\landscape\\students-connected.png"
+        },
+        {
+          "id": "evidence-next-step",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\landscape\\evidence-next-step.png"
+        },
+        {
+          "id": "families-connected",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\landscape\\families-connected.png"
+        },
+        {
+          "id": "connected-loop-cta",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\landscape\\connected-loop-cta.png"
+        }
+      ],
+      "contactSheet": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\CONTACT-SHEET-LANDSCAPE.png"
+    },
+    "vertical": {
+      "frames": [
+        {
+          "id": "brand-arrival",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\vertical\\brand-arrival.png"
+        },
+        {
+          "id": "teacher-fragmented",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\vertical\\teacher-fragmented.png"
+        },
+        {
+          "id": "tool-by-tool",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\vertical\\tool-by-tool.png"
+        },
+        {
+          "id": "fragmentation-cost",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\vertical\\fragmentation-cost.png"
+        },
+        {
+          "id": "connected-reveal",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\vertical\\connected-reveal.png"
+        },
+        {
+          "id": "classroom-context",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\vertical\\classroom-context.png"
+        },
+        {
+          "id": "four-resources",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\vertical\\four-resources.png"
+        },
+        {
+          "id": "teach-and-export",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\vertical\\teach-and-export.png"
+        },
+        {
+          "id": "students-connected",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\vertical\\students-connected.png"
+        },
+        {
+          "id": "evidence-next-step",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\vertical\\evidence-next-step.png"
+        },
+        {
+          "id": "families-connected",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\vertical\\families-connected.png"
+        },
+        {
+          "id": "connected-loop-cta",
+          "path": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\frames\\vertical\\connected-loop-cta.png"
+        }
+      ],
+      "contactSheet": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\qa\\CONTACT-SHEET-VERTICAL.png"
+    }
+  },
+  "alignment": [
+    {
+      "format": "landscape",
+      "scene": "brand-arrival",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "landscape",
+      "scene": "teacher-fragmented",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "landscape",
+      "scene": "tool-by-tool",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "landscape",
+      "scene": "fragmentation-cost",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "landscape",
+      "scene": "connected-reveal",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "landscape",
+      "scene": "classroom-context",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "landscape",
+      "scene": "four-resources",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "landscape",
+      "scene": "teach-and-export",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "landscape",
+      "scene": "students-connected",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "landscape",
+      "scene": "evidence-next-step",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "landscape",
+      "scene": "families-connected",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "landscape",
+      "scene": "connected-loop-cta",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "vertical",
+      "scene": "brand-arrival",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "vertical",
+      "scene": "teacher-fragmented",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "vertical",
+      "scene": "tool-by-tool",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "vertical",
+      "scene": "fragmentation-cost",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "vertical",
+      "scene": "connected-reveal",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "vertical",
+      "scene": "classroom-context",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "vertical",
+      "scene": "four-resources",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "vertical",
+      "scene": "teach-and-export",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "vertical",
+      "scene": "students-connected",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "vertical",
+      "scene": "evidence-next-step",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "vertical",
+      "scene": "families-connected",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    },
+    {
+      "format": "vertical",
+      "scene": "connected-loop-cta",
+      "copySafe": true,
+      "ctaSafe": true,
+      "passed": true
+    }
+  ],
+  "videos": {
+    "results": [
+      {
+        "format": "landscape",
+        "filePath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\deliverables\\final\\landscape\\youtube-4k-master\\edulabsai-ad-4k.mp4",
+        "relativePath": "deliverables/final/landscape/youtube-4k-master/edulabsai-ad-4k.mp4",
+        "width": 3840,
+        "height": 2160,
+        "fps": 30,
+        "durationSeconds": 95.873333,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "sizeBytes": 12844807,
+        "loudness": {
+          "input_i": "-15.30",
+          "input_tp": "-1.50",
+          "input_lra": "4.00",
+          "input_thresh": "-25.43",
+          "output_i": "-15.91",
+          "output_tp": "-2.00",
+          "output_lra": "3.60",
+          "output_thresh": "-25.98",
+          "normalization_type": "dynamic",
+          "target_offset": "-0.09"
+        },
+        "signal": {
+          "blackSegments": 0,
+          "silenceSegments": 0
+        },
+        "sha256": "73e24d950291f416700e70be53da5e9f1c4347e333b400ea1600895f90e431ff",
+        "checks": {
+          "width": true,
+          "height": true,
+          "frameRate": true,
+          "videoCodec": true,
+          "audioCodec": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "noBlackSegments": true,
+          "noLongSilence": true,
+          "githubSize": true
+        },
+        "passed": true
+      },
+      {
+        "format": "vertical",
+        "filePath": "C:\\Users\\khaja\\Projects\\agent-demo-studio\\campaigns\\edulabsai-cinematic-story-ad-2026\\deliverables\\final\\vertical\\reels-master\\edulabsai-ad-vertical.mp4",
+        "relativePath": "deliverables/final/vertical/reels-master/edulabsai-ad-vertical.mp4",
+        "width": 1080,
+        "height": 1920,
+        "fps": 30,
+        "durationSeconds": 95.873333,
+        "videoCodec": "h264",
+        "audioCodec": "aac",
+        "sizeBytes": 7565052,
+        "loudness": {
+          "input_i": "-15.30",
+          "input_tp": "-1.49",
+          "input_lra": "4.00",
+          "input_thresh": "-25.44",
+          "output_i": "-15.91",
+          "output_tp": "-2.00",
+          "output_lra": "3.60",
+          "output_thresh": "-25.98",
+          "normalization_type": "dynamic",
+          "target_offset": "-0.09"
+        },
+        "signal": {
+          "blackSegments": 0,
+          "silenceSegments": 0
+        },
+        "sha256": "83b40f84eab10003a9e71c9dfdea3db2b6e6e63cfe66f9c35921eca15fd76109",
+        "checks": {
+          "width": true,
+          "height": true,
+          "frameRate": true,
+          "videoCodec": true,
+          "audioCodec": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "noBlackSegments": true,
+          "noLongSilence": true,
+          "githubSize": true
+        },
+        "passed": true
+      }
+    ],
+    "durationMatch": true,
+    "passed": true
+  },
+  "passed": true
+}
