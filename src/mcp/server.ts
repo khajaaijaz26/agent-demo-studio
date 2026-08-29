@@ -32,7 +32,7 @@ import { createSocialPackage } from "../creator/social.js";
 import { publishMetadataFromOutput, publishToInstagram, publishToTikTok, publishToYouTube } from "../creator/publish.js";
 import { listCreatorAssets } from "../creator/assets.js";
 import { getLocalAiStatus, warmLocalPlanner } from "../creator/local-ai.js";
-import { createPromptVideoProject, createSmartPromptVideoPlan } from "../creator/prompt.js";
+import { createPromptVideoProject, createSmartPromptVideoPlan, inferPromptMode } from "../creator/prompt.js";
 import {
   CREATOR_IMAGE_MOTIONS,
   CREATOR_LOOP_ANIMATIONS,
@@ -464,6 +464,7 @@ export function createAgentDemoMcpServer(): McpServer {
         plannerProfile: z.enum(["fast", "quality"]).default("fast"),
         plannerModel: z.string().optional(),
         plannerBaseUrl: z.string().optional(),
+        visualQuality: z.enum(["auto", "generative", "motion-graphics"]).default("auto").describe("Generative requires a model-backed provider and must never fall back to motion graphics."),
         mediaProvider: z.enum(["auto", "ltx-desktop", "animated", "comfyui", "local-adapter", "builtin"]).default("auto"),
         mediaAdapterUrl: z.string().optional(),
         ltxDesktopUrl: z.string().optional(),
@@ -531,7 +532,7 @@ export function createAgentDemoMcpServer(): McpServer {
       description: "Turn a user request into a local-Qwen-assisted requirements brief, open-cast storyboard, resource/provenance list, fixed production rules, staged workflow, assumptions, and quality checklist without generating media.",
       inputSchema: z.object({
         prompt: z.string().min(1),
-        mode: z.enum(["product-launch", "cartoon", "story", "asmr", "vfx"]).default("product-launch"),
+        mode: z.enum(["auto", "product-launch", "cartoon", "story", "asmr", "vfx"]).default("auto").describe("Auto infers only the editing/audio treatment; it never limits prompt subject matter."),
         title: z.string().optional(),
         source: z.string().optional(),
         sceneSources: z.array(z.string().min(1)).optional(),
@@ -541,7 +542,9 @@ export function createAgentDemoMcpServer(): McpServer {
         narration: z.string().optional(),
         durationSeconds: z.number().min(6).max(600).optional(),
         presenter: z.enum(["none", "aria", "leo", "nova", "milo"]).optional(),
+        voice: z.string().optional(),
         voiceProvider: z.enum(["local", "neural", "local-clone"]).default("local"),
+        language: z.string().min(2).max(35).optional(),
         voiceReference: z.string().optional(),
         voiceConsent: z.object({ speakerName: z.string().min(1), confirmed: z.boolean(), scope: z.string().optional() }).optional(),
         presets: z.array(z.enum(["youtube-1080p", "youtube-4k", "shorts", "reels", "tiktok", "story", "square", "portrait", "linkedin", "podcast-vertical"])).min(1).default(["youtube-1080p"]),
@@ -551,6 +554,7 @@ export function createAgentDemoMcpServer(): McpServer {
         plannerProfile: z.enum(["fast", "quality"]).default("fast"),
         plannerModel: z.string().optional(),
         plannerBaseUrl: z.string().optional(),
+        visualQuality: z.enum(["auto", "generative", "motion-graphics"]).default("auto").describe("Generative requires a model-backed provider and must never fall back to motion graphics."),
         mediaProvider: z.enum(["auto", "ltx-desktop", "animated", "comfyui", "local-adapter", "builtin"]).default("auto"),
         mediaTask: z.enum(["auto", "text-to-image", "image-to-video", "text-to-video", "speech-to-video", "character-animation"]).default("auto"),
         mediaAdapterUrl: z.string().optional(),
@@ -563,17 +567,17 @@ export function createAgentDemoMcpServer(): McpServer {
       }),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
-    async (input) => result({ plan: await createSmartPromptVideoPlan({ ...input, presets: input.presets as CreatorPresetId[] }) }),
+    async (input) => result({ plan: await createSmartPromptVideoPlan({ ...input, mode: inferPromptMode(input.prompt, input.mode), presets: input.presets as CreatorPresetId[] }) }),
   );
 
   server.registerTool(
     "demo_creator_from_prompt",
     {
       title: "Create a complete video project from a prompt",
-      description: "Plan first, then generate an editable product-launch, cartoon, narrated-story, ASMR, or VFX timeline with LTX Desktop, ComfyUI, a custom loopback generator, or real local 2D animation. Real-video tasks reject still images and frozen clips. Supports open characters, scene-aligned local/neural/consented-clone voice, captions, music, and immediate multi-format rendering. Saves production-plan.json before media generation.",
+      description: "Plan first, then generate an editable product-launch, cartoon, narrated-story, ASMR, or VFX timeline. Generative quality requires LTX Desktop, ComfyUI/Wan, or a model-backed loopback generator and never silently falls back to graphics. The explicit motion-graphics tier uses prompt-conditioned 2D scenes with semantic QA. Supports open characters, aligned voice, captions, music, and immediate multi-format rendering. Saves production-plan.json before media generation.",
       inputSchema: z.object({
         prompt: z.string().min(1),
-        mode: z.enum(["product-launch", "cartoon", "story", "asmr", "vfx"]).default("product-launch"),
+        mode: z.enum(["auto", "product-launch", "cartoon", "story", "asmr", "vfx"]).default("auto").describe("Auto infers only the editing/audio treatment; it never limits prompt subject matter."),
         title: z.string().optional(),
         source: z.string().optional(),
         sceneSources: z.array(z.string().min(1)).optional(),
@@ -586,6 +590,7 @@ export function createAgentDemoMcpServer(): McpServer {
         presenter: z.enum(["none", "aria", "leo", "nova", "milo"]).optional(),
         voice: z.string().optional(),
         voiceProvider: z.enum(["local", "neural", "local-clone"]).default("local"),
+        language: z.string().min(2).max(35).optional(),
         voiceRate: z.number().min(-10).max(10).optional(),
         voiceReference: z.string().optional(),
         voiceConsent: z.object({ speakerName: z.string().min(1), confirmed: z.boolean(), scope: z.string().optional() }).optional(),
@@ -597,6 +602,7 @@ export function createAgentDemoMcpServer(): McpServer {
         plannerProfile: z.enum(["fast", "quality"]).default("fast"),
         plannerModel: z.string().optional(),
         plannerBaseUrl: z.string().optional(),
+        visualQuality: z.enum(["auto", "generative", "motion-graphics"]).default("auto").describe("Generative requires a model-backed provider and must never fall back to motion graphics."),
         mediaProvider: z.enum(["auto", "ltx-desktop", "animated", "comfyui", "local-adapter", "builtin"]).default("auto"),
         mediaTask: z.enum(["auto", "text-to-image", "image-to-video", "text-to-video", "speech-to-video", "character-animation"]).default("auto"),
         mediaAdapterUrl: z.string().optional(),
@@ -610,7 +616,10 @@ export function createAgentDemoMcpServer(): McpServer {
       }),
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true },
     },
-    async (input) => result(jobs.start(`creator-prompt-${input.mode}`, (report) => createPromptVideoProject({ ...input, presets: input.presets as CreatorPresetId[] }, report))),
+    async (input) => {
+      const mode = inferPromptMode(input.prompt, input.mode);
+      return result(jobs.start(`creator-prompt-${mode}`, (report) => createPromptVideoProject({ ...input, mode, presets: input.presets as CreatorPresetId[] }, report)));
+    },
   );
 
   server.registerTool(

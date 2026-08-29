@@ -26,7 +26,7 @@ import { createSocialPackage } from "../creator/social.js";
 import { listCreatorAssets } from "../creator/assets.js";
 import { getLocalAiStatus, warmLocalPlanner } from "../creator/local-ai.js";
 import { getLtxDesktopStatus } from "../creator/ltx-desktop.js";
-import { createPromptVideoProject, createSmartPromptVideoPlan } from "../creator/prompt.js";
+import { createPromptVideoProject, createSmartPromptVideoPlan, inferPromptMode } from "../creator/prompt.js";
 import {
   CREATOR_IMAGE_MOTIONS,
   CREATOR_LOOP_ANIMATIONS,
@@ -35,9 +35,10 @@ import {
   CREATOR_OVERLAY_ANIMATIONS,
   CREATOR_PROMPT_MODES,
   CREATOR_TRANSITIONS,
+  CREATOR_VISUAL_QUALITIES,
   CREATOR_VFX_PRESETS,
 } from "../creator/types.js";
-import type { CreatorManifest, CreatorMediaProvider, CreatorMediaTask, CreatorPlannerProfile, CreatorPlannerProvider, CreatorPresetId, CreatorPromptCharacterInput, CreatorPromptMode, CreatorPromptVideoInput, CreatorRenderResult, CreatorTemplateId } from "../creator/types.js";
+import type { CreatorManifest, CreatorMediaProvider, CreatorMediaTask, CreatorPlannerProfile, CreatorPlannerProvider, CreatorPresetId, CreatorPromptCharacterInput, CreatorPromptMode, CreatorPromptModeChoice, CreatorPromptVideoInput, CreatorRenderResult, CreatorTemplateId, CreatorVisualQuality } from "../creator/types.js";
 
 export interface StudioServerOptions {
   root?: string;
@@ -102,18 +103,17 @@ function promptCharacters(value: unknown): CreatorPromptCharacterInput[] | undef
 
 function promptMode(body: Record<string, unknown>): CreatorPromptMode {
   const requested = String(body.mode || "auto");
-  if (CREATOR_PROMPT_MODES.includes(requested as CreatorPromptMode)) return requested as CreatorPromptMode;
   const prompt = String(body.prompt || "");
-  if (/\b(asmr|whisper|satisfying|tapping|crackle)\b/i.test(prompt)) return "asmr";
-  if (/\b(vfx|visual effects?|glitch|transformation|cinematic effects?)\b/i.test(prompt)) return "vfx";
-  if (/\b(cartoon|classroom|animated|animation|teacher|students?)\b/i.test(prompt)) return "cartoon";
-  if (/\b(story|narrative|fairy tale|bedtime)\b/i.test(prompt)) return "story";
-  return "product-launch";
+  const choice: CreatorPromptModeChoice = requested === "auto" || CREATOR_PROMPT_MODES.includes(requested as CreatorPromptMode)
+    ? requested as CreatorPromptModeChoice
+    : "auto";
+  return inferPromptMode(prompt, choice);
 }
 
 function creatorPromptInput(body: Record<string, unknown>, render: boolean): CreatorPromptVideoInput {
   const provider = String(body.mediaProvider || "auto") as CreatorMediaProvider;
   const task = String(body.mediaTask || "auto") as CreatorMediaTask;
+  const visualQuality = String(body.visualQuality || "auto") as CreatorVisualQuality;
   return {
     prompt: String(body.prompt || ""),
     mode: promptMode(body),
@@ -128,6 +128,7 @@ function creatorPromptInput(body: Record<string, unknown>, render: boolean): Cre
     durationSeconds: typeof body.durationSeconds === "number" ? body.durationSeconds : undefined,
     presenter: ["none", "aria", "leo", "nova", "milo"].includes(String(body.presenter)) ? body.presenter as "none" | "aria" | "leo" | "nova" | "milo" : undefined,
     voice: typeof body.voice === "string" && body.voice.trim() ? body.voice : undefined,
+    language: typeof body.language === "string" && body.language.trim() ? body.language.trim() : undefined,
     voiceProvider: body.voiceProvider === "neural" ? "neural" : body.voiceProvider === "local-clone" ? "local-clone" : "local",
     voiceRate: typeof body.voiceRate === "number" ? body.voiceRate : undefined,
     voiceReference: typeof body.voiceReference === "string" && body.voiceReference.trim() ? body.voiceReference : undefined,
@@ -145,6 +146,7 @@ function creatorPromptInput(body: Record<string, unknown>, render: boolean): Cre
     plannerModel: typeof body.plannerModel === "string" && body.plannerModel.trim() ? body.plannerModel : undefined,
     plannerBaseUrl: typeof body.plannerBaseUrl === "string" && body.plannerBaseUrl.trim() ? body.plannerBaseUrl : undefined,
     mediaProvider: CREATOR_MEDIA_PROVIDERS.includes(provider) ? provider : "auto",
+    visualQuality: CREATOR_VISUAL_QUALITIES.includes(visualQuality) ? visualQuality : "auto",
     mediaTask: CREATOR_MEDIA_TASKS.includes(task) ? task : "auto",
     mediaAdapterUrl: typeof body.mediaAdapterUrl === "string" && body.mediaAdapterUrl.trim() ? body.mediaAdapterUrl : undefined,
     comfyuiUrl: typeof body.comfyuiUrl === "string" && body.comfyuiUrl.trim() ? body.comfyuiUrl : undefined,

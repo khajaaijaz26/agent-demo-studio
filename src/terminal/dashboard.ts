@@ -4,11 +4,23 @@ import { stdin as input, stdout as output } from "node:process";
 import { inspectCapabilities } from "../capabilities.js";
 import { generateAmbientMusic, generateAsmrSoundscape } from "../audio/music.js";
 import { getLocalAiStatus, warmLocalPlanner } from "../creator/local-ai.js";
-import { createPromptVideoProject, createSmartPromptVideoPlan } from "../creator/prompt.js";
+import { createPromptVideoProject, createSmartPromptVideoPlan, inferPromptMode } from "../creator/prompt.js";
 import { CREATOR_PRESETS } from "../creator/presets.js";
-import type { CreatorPlannerProfile, CreatorPromptMode, CreatorPromptVideoInput, CreatorPresetId } from "../creator/types.js";
+import type {
+  CreatorMediaProvider,
+  CreatorMediaTask,
+  CreatorPlannerProfile,
+  CreatorPromptMode,
+  CreatorPromptModeChoice,
+  CreatorPromptVideoInput,
+  CreatorPresetId,
+  CreatorVisualQuality,
+} from "../creator/types.js";
 
-const MODES: CreatorPromptMode[] = ["product-launch", "cartoon", "story", "asmr", "vfx"];
+const MODES: CreatorPromptModeChoice[] = ["auto", "product-launch", "cartoon", "story", "asmr", "vfx"];
+const VISUAL_QUALITIES: CreatorVisualQuality[] = ["generative", "motion-graphics", "auto"];
+const MEDIA_PROVIDERS: CreatorMediaProvider[] = ["auto", "ltx-desktop", "comfyui", "local-adapter", "animated", "builtin"];
+const MEDIA_TASKS: CreatorMediaTask[] = ["auto", "text-to-video", "image-to-video", "speech-to-video", "character-animation", "text-to-image"];
 
 function color(code: number, value: string): string {
   return output.isTTY ? `\u001b[${code}m${value}\u001b[0m` : value;
@@ -45,8 +57,9 @@ async function videoRequest(terminal: Interface, render: boolean): Promise<Creat
   const prompt = await ask(terminal, "Describe the video");
   if (!prompt) throw new Error("A video description is required.");
   const narration = await ask(terminal, "Exact narration script (optional; sentences are aligned across scenes)", "");
-  const mode = await ask(terminal, `Mode (${MODES.join("/")})`, "cartoon") as CreatorPromptMode;
-  if (!MODES.includes(mode)) throw new Error(`Unknown mode '${mode}'.`);
+  const requestedMode = await ask(terminal, `Treatment (${MODES.join("/")})`, "auto") as CreatorPromptModeChoice;
+  if (!MODES.includes(requestedMode)) throw new Error(`Unknown treatment '${requestedMode}'.`);
+  const mode: CreatorPromptMode = inferPromptMode(prompt, requestedMode);
   const duration = Number(await ask(terminal, "Target seconds", mode === "cartoon" ? "45" : "30"));
   if (!Number.isFinite(duration) || duration < 6 || duration > 600) throw new Error("Duration must be between 6 and 600 seconds.");
   const profileChoice = (await ask(terminal, "Planner (fast/quality/instant)", "fast")).toLowerCase();
@@ -55,15 +68,29 @@ async function videoRequest(terminal: Interface, render: boolean): Promise<Creat
   const characterSources = paths(await ask(terminal, "Character image paths, comma-separated (optional)", ""));
   const logoValue = await ask(terminal, "Logo image path (optional)", "");
   const musicValue = await ask(terminal, "Authorized music/ambience path (optional)", "");
-  const mediaChoice = (await ask(terminal, "Visual generation (uploads/local-adapter)", "uploads")).toLowerCase();
-  if (!(["uploads", "local-adapter"].includes(mediaChoice))) throw new Error("Visual generation must be uploads or local-adapter.");
-  const mediaTask = mediaChoice === "local-adapter"
-    ? await ask(terminal, "Local task (auto/text-to-image/image-to-video/text-to-video)", "auto") as CreatorPromptVideoInput["mediaTask"]
-    : "auto";
-  const mediaAdapterUrl = mediaChoice === "local-adapter" ? await ask(terminal, "Loopback media adapter URL", process.env.AGENT_DEMO_MEDIA_ADAPTER_URL || "") : undefined;
+  const requestedQuality = (await ask(terminal, `Visual quality (${VISUAL_QUALITIES.join("/")})`, "generative")).toLowerCase() as CreatorVisualQuality;
+  if (!VISUAL_QUALITIES.includes(requestedQuality)) throw new Error("Visual quality must be generative, motion-graphics, or auto.");
+  const mediaProvider = (await ask(terminal, `Visual engine (${MEDIA_PROVIDERS.join("/")})`, "auto")).toLowerCase() as CreatorMediaProvider;
+  if (!MEDIA_PROVIDERS.includes(mediaProvider)) throw new Error(`Unknown visual engine '${mediaProvider}'.`);
+  const mediaTask = (await ask(terminal, `Generation task (${MEDIA_TASKS.join("/")})`, "auto")).toLowerCase() as CreatorMediaTask;
+  if (!MEDIA_TASKS.includes(mediaTask)) throw new Error(`Unknown generation task '${mediaTask}'.`);
+  const mediaAdapterUrl = mediaProvider === "local-adapter"
+    ? await ask(terminal, "Loopback media adapter URL", process.env.AGENT_DEMO_MEDIA_ADAPTER_URL || process.env.AGENT_DEMO_WAN_VIDEO_ADAPTER_URL || "")
+    : undefined;
+  const ltxDesktopUrl = mediaProvider === "ltx-desktop"
+    ? await ask(terminal, "LTX Desktop URL", process.env.AGENT_DEMO_LTX_DESKTOP_URL || "http://127.0.0.1:41954")
+    : undefined;
+  const comfyuiUrl = mediaProvider === "comfyui"
+    ? await ask(terminal, "ComfyUI URL", process.env.AGENT_DEMO_COMFYUI_URL || "http://127.0.0.1:8188")
+    : undefined;
+  const comfyuiWorkflow = mediaProvider === "comfyui"
+    ? await ask(terminal, "ComfyUI API workflow path", process.env.AGENT_DEMO_COMFYUI_WORKFLOW || "")
+    : undefined;
   const generateVoice = mode !== "asmr" && await yes(terminal, "Generate narration", true);
   const voiceChoice = generateVoice ? (await ask(terminal, "Voice (local/local-clone/neural)", "local")).toLowerCase() : "local";
   if (!(["local", "local-clone", "neural"].includes(voiceChoice))) throw new Error("Voice must be local, local-clone, or neural.");
+  const voice = generateVoice ? await ask(terminal, "Voice name (optional; any installed/provider voice)", "") : "";
+  const language = generateVoice ? await ask(terminal, "Narration/caption language (for example en-US or ar-AE)", "en") : "en";
   let voiceReference: string | undefined;
   let voiceConsent: CreatorPromptVideoInput["voiceConsent"];
   let voiceCloneUrl: string | undefined;
@@ -99,6 +126,8 @@ async function videoRequest(terminal: Interface, render: boolean): Promise<Creat
     presenter: "none",
     presets: selectedPresets,
     generateVoice,
+    voice: voice || undefined,
+    language,
     voiceProvider: voiceChoice as "local" | "local-clone" | "neural",
     voiceReference,
     voiceConsent,
@@ -106,9 +135,17 @@ async function videoRequest(terminal: Interface, render: boolean): Promise<Creat
     generateMusic,
     plannerProvider: profileChoice === "instant" ? "deterministic" : "auto",
     plannerProfile: (profileChoice === "quality" ? "quality" : "fast") as CreatorPlannerProfile,
-    mediaProvider: mediaChoice === "local-adapter" ? "local-adapter" : "builtin",
+    visualQuality: mediaProvider === "animated" || mediaProvider === "builtin"
+      ? "motion-graphics"
+      : mediaProvider === "auto"
+        ? requestedQuality
+        : "generative",
+    mediaProvider,
     mediaTask,
     mediaAdapterUrl,
+    ltxDesktopUrl,
+    comfyuiUrl,
+    comfyuiWorkflow: comfyuiWorkflow ? path.resolve(comfyuiWorkflow) : undefined,
     render,
   };
 }
@@ -142,7 +179,6 @@ async function showCapabilities(): Promise<void> {
   const report = await inspectCapabilities({
     plannerProvider: "auto",
     plannerProfile: "fast",
-    mediaProvider: "builtin",
     generateVoice: true,
     voiceProvider: "local",
     generateMusic: true,

@@ -46,6 +46,11 @@ tool is missing, and returns the plan and local artifact resource links.
 
 ## Prompt modes
 
+`auto` is the recommended control-surface choice. It infers one of the following
+editing/audio treatments while preserving the complete unrestricted prompt for
+the selected visual backend. The table is not a list of allowed subjects or
+characters.
+
 | Mode | Default direction | Bundled visual | Typical audio |
 |---|---|---|---|
 | `product-launch` | Cinematic reveal, benefit, proof, CTA | Launch stage plus optional Aria or Leo | Narration and procedural score |
@@ -78,6 +83,12 @@ media adapter can instead supply text-to-image, image-to-video, or text-to-video
 outputs from an installed generation backend. Agent Demo Studio does not label
 Qwen as the media generator. See [`LOCAL-AI.md`](LOCAL-AI.md) for the batch
 adapter contract and fastest-path recommendations.
+
+Generative requests never fall back to those cutouts or to the vector renderer.
+Use `--visual-quality generative` for Wan/LTX-class model output, or explicitly
+choose `--visual-quality motion-graphics` when the fast deterministic look is
+acceptable. Uploaded character references and arbitrary voice names are open
+inputs, not entries in a fixed repository cast.
 
 ## VFX looks
 

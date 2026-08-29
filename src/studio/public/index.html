@@ -124,7 +124,8 @@
       <section class="drawer-panel" data-panel="voice" hidden>
         <h3>Voice</h3>
         <label>Voice engine<select id="prompt-voice-provider"><option value="local">System voice · local/free</option><option value="neural">Neural voice · network/provider terms</option><option value="local-clone">Consented local clone</option></select></label>
-        <label>Voice name<input id="voice-name" type="text" placeholder="Automatic"></label>
+        <label>Voice name<input id="voice-name" type="text" placeholder="Any installed or provider voice"></label>
+        <label>Language<input id="voice-language" type="text" placeholder="Automatic · e.g. en-US, ar-AE, hi-IN"></label>
         <label>Reference recording<input id="prompt-voice-reference-file" type="file" accept="audio/*"></label>
         <label>Authorized speaker<input id="voice-speaker" type="text" placeholder="Speaker's full name"></label>
         <div class="toggle-row"><div><b>Speaker consent confirmed</b><small>Required for voice cloning</small></div><input id="voice-consent" type="checkbox"></div>
@@ -147,6 +148,8 @@
 
       <section class="drawer-panel" data-panel="advanced" hidden>
         <h3>Advanced</h3>
+        <label>Visual quality<select id="prompt-visual-quality"><option value="generative" selected>Generative AI video · Wan/LTX class</option><option value="motion-graphics">Local motion graphics · prompt-conditioned 2D</option><option value="auto">Auto from wording</option></select></label>
+        <div class="warning-box">Generative quality requires a healthy model-backed engine. It will stop with a hardware/setup blocker instead of silently substituting motion graphics.</div>
         <label>Visual engine<select id="prompt-media-provider"><option value="auto">Auto · honest routing</option><option value="ltx-desktop">LTX Desktop · real AI video</option><option value="animated">Local 2D animation</option><option value="comfyui">ComfyUI workflow</option><option value="local-adapter">Custom local adapter</option><option value="builtin">Legacy locked stills</option></select></label>
         <label>Generation task<select id="prompt-media-task"><option value="auto">Auto</option><option value="text-to-video">Text to video</option><option value="image-to-video">Image to video</option><option value="speech-to-video">Speech to video</option><option value="character-animation">Character animation</option><option value="text-to-image">Text to image</option></select></label>
         <label>LTX Desktop URL<input id="ltx-url" type="text" value="http://127.0.0.1:41954"></label>

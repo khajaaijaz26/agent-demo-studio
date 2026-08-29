@@ -20,8 +20,10 @@ const elements = {
   musicMirror: $("#music-toggle-mirror"),
   voiceProvider: $("#prompt-voice-provider"),
   voiceName: $("#voice-name"),
+  language: $("#voice-language"),
   voiceSpeaker: $("#voice-speaker"),
   voiceConsent: $("#voice-consent"),
+  visualQuality: $("#prompt-visual-quality"),
   mediaProvider: $("#prompt-media-provider"),
   mediaTask: $("#prompt-media-task"),
   ltxUrl: $("#ltx-url"),
@@ -245,6 +247,8 @@ function showCompleted(article, job) {
       result.captionsPath && `Captions: ${result.captionsPath}`,
       result.musicPath && `Music: ${result.musicPath}`,
       ...(result.voicePaths || []).map((item, index) => `Voice ${index + 1}: ${item}`),
+      result.manifest?.metadata?.localMediaGeneration?.semanticReportPath && `Scene semantics: ${result.manifest.metadata.localMediaGeneration.semanticReportPath}`,
+      result.manifest?.metadata?.localMediaGeneration?.qualityReportPath && `Motion QA: ${result.manifest.metadata.localMediaGeneration.qualityReportPath}`,
       ...(result.renderResult?.outputs || []).map((item) => `Video ${item.id}: ${item.videoPath}`),
       result.renderResult?.licenseReportPath && `Rights: ${result.renderResult.licenseReportPath}`,
     ].filter(Boolean);
@@ -295,6 +299,7 @@ function requestedPayload(prompt) {
     generateMusic: elements.generateMusic.checked && !state.musicSource,
     voiceProvider: elements.voiceProvider.value,
     voice: elements.voiceName.value.trim() || undefined,
+    language: elements.language.value.trim() || undefined,
     voiceReference: state.voiceReference,
     voiceConsent: elements.voiceProvider.value === "local-clone" ? {
       speakerName: elements.voiceSpeaker.value.trim(),
@@ -304,6 +309,7 @@ function requestedPayload(prompt) {
     plannerProvider: "auto",
     plannerProfile: elements.plannerProfile.value,
     mediaProvider: provider,
+    visualQuality: elements.visualQuality.value,
     mediaTask: elements.mediaTask.value,
     ltxDesktopUrl: provider === "ltx-desktop" ? elements.ltxUrl.value.trim() || undefined : undefined,
     allowCloudMedia: provider === "ltx-desktop" && elements.allowCloudMedia.checked,
@@ -496,7 +502,9 @@ function syncChips() {
   $("#mode-chip-value").textContent = modeOption?.textContent?.replace(" / education", "") || "Auto";
   $("#format-chip-value").textContent = currentFormat().label;
   const engineOption = elements.mediaProvider.options[elements.mediaProvider.selectedIndex];
-  $("#engine-chip-value").textContent = (engineOption?.textContent || "Auto").split("·")[0].trim();
+  $("#engine-chip-value").textContent = elements.mediaProvider.value === "auto"
+    ? elements.visualQuality.value === "generative" ? "Generative AI" : elements.visualQuality.value === "motion-graphics" ? "Motion graphics" : "Auto"
+    : (engineOption?.textContent || "Auto").split("·")[0].trim();
 }
 
 $$(".nav-item").forEach((button) => button.addEventListener("click", () => openTool(button.dataset.tool)));
@@ -529,6 +537,7 @@ $("#format-chip").addEventListener("click", () => {
 });
 elements.mode.addEventListener("change", syncChips);
 elements.mediaProvider.addEventListener("change", syncChips);
+elements.visualQuality.addEventListener("change", syncChips);
 elements.generateMusic.addEventListener("change", () => { elements.musicMirror.checked = elements.generateMusic.checked; });
 elements.musicMirror.addEventListener("change", () => { elements.generateMusic.checked = elements.musicMirror.checked; });
 elements.prompt.addEventListener("keydown", (event) => {

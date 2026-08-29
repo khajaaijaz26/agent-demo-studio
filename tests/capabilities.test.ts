@@ -87,6 +87,24 @@ describe("provider capability registry", () => {
     ]);
   });
 
+  it("recognizes the dedicated Wan video adapter alias", async () => {
+    const testRuntime = runtime([]);
+    testRuntime.env = { AGENT_DEMO_WAN_VIDEO_ADAPTER_URL: "http://127.0.0.1:9000/v1/media/generate" };
+    const report = await inspectCapabilities({
+      plannerProvider: "deterministic",
+      mediaProvider: "auto",
+      generateVoice: false,
+      generateMusic: false,
+      render: false,
+    }, testRuntime);
+
+    expect(report.capabilities.find((item) => item.id === "visuals.local-adapter")).toMatchObject({
+      selected: true,
+      available: true,
+      metadata: { endpoint: "http://127.0.0.1:9000/v1/media/generate" },
+    });
+  });
+
   it("marks a selected network voice clearly without treating it as fully local", async () => {
     const report = await inspectCapabilities({
       plannerProvider: "deterministic",

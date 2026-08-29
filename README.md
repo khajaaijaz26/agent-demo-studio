@@ -99,12 +99,14 @@ and voice profiles](docs/LOCAL-AI.md).
 
 ## Honest video-engine routing
 
-Agent Demo Studio never labels a moving photograph as generated character video.
-`auto` selects a configured true-video backend when the brief or uploaded
-reference requires one; if that required backend is unavailable, the saved plan
-reports the blocker instead of faking the result. Ordinary animation briefs use
-the deterministic moving-vector engine. Every generated clip must pass a
-temporal-motion probe before it enters the timeline.
+Agent Demo Studio never labels a moving photograph or a reusable canvas loop as
+generated character video. `auto` interprets the requested quality first:
+ordinary requests for a film, cartoon, advertisement, Reel, or realistic motion
+require a configured model-video backend; if it is unavailable, the saved plan
+reports the blocker instead of faking the result. The deterministic vector engine
+is used only when motion graphics are explicitly requested. Every generated clip
+must pass a temporal-motion probe before it enters the timeline, and loopback
+backends must return a unique, scene-addressed video for every storyboard beat.
 
 | Engine | Best for | Readiness rule |
 |---|---|---|
@@ -118,7 +120,32 @@ temporal-motion probe before it enters the timeline.
 LTX and Wan are optional. Qwen plans text; it does not generate frames. On a
 machine without a compatible generative-video GPU, the built-in engine still
 creates actual changing frames with independently animated subjects and stable
-backgrounds instead of camera shake or fake photo motion.
+backgrounds instead of camera shake or fake photo motion. Select that honest
+fallback with `--visual-quality motion-graphics`; it is not represented as a
+Wan/LTX-quality foundation-model render.
+
+## Universal prompts, open characters, and voices
+
+The five named treatments control editing, pacing, music, captions, and VFX; they
+do not define an allowed subject list. `--mode auto` (the default) can plan an
+educational diagram, anime scene, documentary, fictional creature, product film,
+music video, scientific visualization, or another brief without discarding the
+original prompt. Model-backed routes receive the complete scene prompts,
+negative prompt, deterministic seed, language, scene audio, export targets, and
+every authorized character and scene reference.
+
+The provider-neutral loopback contract is deliberately open: a local Wan,
+ComfyUI, LTX, or future engine can implement text-to-video, image-to-video,
+speech-to-video, or character animation without adding the character or style to
+this repository. Voice names are also open strings supported by the selected
+system/neural engine; narration and captions accept a BCP-47 language such as
+`en-US`, `ar-AE`, or `hi-IN`, and consented voice references remain available
+through the local clone adapter.
+
+“Universal” here means the orchestrator does not impose a closed cast, style, or
+topic vocabulary. Actual visual fidelity still depends on the connected model
+and its hardware; the lightweight motion-graphics fallback cannot truthfully
+invent every possible person, creature, object, or art style like Wan or LTX.
 
 ## Give the work to an AI agent
 
@@ -151,11 +178,17 @@ Then create the editable project and its videos:
 ```bash
 agent-demo creator prompt \
   "Launch a privacy-first AI lesson planner for busy teachers" \
-  --mode product-launch --presenter aria \
+  --mode auto --visual-quality motion-graphics --presenter aria \
   --presets youtube-1080p,shorts,reels --render
 ```
 
-Modes are `product-launch`, `cartoon`, `story`, `asmr`, and `vfx`. Every job writes the plan first, resolves a rights-aware resource list, generates enabled audio/captions, builds the schema-v2 timeline, and only then renders. Bundled fictional presenters Aria and Leo, original cartoon hosts Nova and Milo, and four original scene environments provide an offline starting point. See the [plan-first prompt-video guide](docs/PROMPT-VIDEO-AND-VFX.md) and [asset provenance](assets/README.md).
+`--mode auto` is the default and resolves to the most suitable editing treatment;
+explicit treatments are `product-launch`, `cartoon`, `story`, `asmr`, and `vfx`.
+Every job writes the plan first, resolves a rights-aware resource list, generates
+enabled audio/captions, builds the schema-v2 timeline, and only then renders.
+Bundled fictional presenters Aria and Leo, original cartoon hosts Nova and Milo,
+and four original scene environments provide an offline starting point. See the
+[plan-first prompt-video guide](docs/PROMPT-VIDEO-AND-VFX.md) and [asset provenance](assets/README.md).
 
 Those bundled characters are optional starters, not a fixed cast. The Studio and
 CLI accept any number of authorized scene images/videos and character images,

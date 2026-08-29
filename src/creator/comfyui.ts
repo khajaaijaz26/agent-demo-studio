@@ -104,6 +104,7 @@ function replaceTemplate(value: unknown, variables: Record<string, string | numb
 
 function denseMotionPrompt(input: CreatorPromptVideoInput, plan: CreatorProductionPlan, sceneIndex: number): string {
   const scene = plan.scenes[sceneIndex]!;
+  const references = (input.characters ?? []).map((item) => `${item.name}${item.style ? ` (${item.style})` : ""}`).join(", ");
   const character = input.mode === "cartoon"
     ? "Expressive original cartoon characters perform clear body gestures, blink naturally, and speak with visible mouth movement."
     : input.mode === "product-launch"
@@ -115,6 +116,8 @@ function denseMotionPrompt(input: CreatorPromptVideoInput, plan: CreatorProducti
     `Temporal action: establish ${scene.title.toLowerCase()}, develop the action, then settle into the next beat.`,
     "Camera: stabilized purposeful motion, coherent framing, no random zoom, no frame jitter.",
     `Visual style: ${plan.creativeDirection.visualStyle}.`,
+    references ? `Authorized character references: ${references}. Preserve their intended identity and design.` : "No fixed cast; create only the subjects named in this scene.",
+    `Narration/caption language: ${input.language ?? "en"}.`,
     `Narrative context: ${scene.narration}`,
   ].join(" ");
 }
@@ -195,7 +198,9 @@ export async function generateComfyUiSceneMedia(
   const outputRoot = path.resolve(outputDirectory);
   await mkdir(outputRoot, { recursive: true });
   const task = selectLocalMediaTask(input);
-  const sources = [...new Set([...(input.source ? [input.source] : []), ...(input.sceneSources ?? [])])];
+  const sceneSources = [...new Set([...(input.source ? [input.source] : []), ...(input.sceneSources ?? [])])];
+  const characterSources = [...new Set((input.characters ?? []).map((item) => item.source))];
+  const sources = sceneSources.length ? sceneSources : characterSources;
   const quality: MotionQualityReport[] = [];
   const outputs: SceneMediaGenerationResult["outputs"] = [];
   for (const [index, scene] of plan.scenes.entries()) {

@@ -2,6 +2,42 @@
 
 All notable changes to Agent Demo Studio are documented here.
 
+## 0.6.1 - 2026-08-29
+
+### Added
+
+- An honest visual-quality contract: generative requests now require LTX,
+  ComfyUI/Wan, or a model-backed loopback worker and never silently become the
+  deterministic motion-graphics renderer.
+- Open prompt concepts and semantic scene graphs so explicit laptop motion
+  graphics remain scene-specific even when a subject is outside the bundled
+  starter vocabulary.
+- Automatic production-treatment inference across Studio, CLI, and MCP while
+  retaining unrestricted prompts, uploaded casts, and media-model inputs.
+- BCP-47 narration/caption language selection and automatic multilingual neural
+  voice defaults while keeping arbitrary provider voice names and consented local
+  clones available.
+- A general `AGENT_DEMO_WAN_VIDEO_ADAPTER_URL` alias and expanded scene-batch
+  request containing character references, style, negative prompt, seed,
+  language, audio, camera, transitions, and export targets.
+
+### Fixed
+
+- Replaced the repeated mode-level cartoon/story loop with prompt-conditioned
+  settings, articulated people and animals, planned actions, moving props, open
+  concept visuals, and scene semantic QA.
+- Prevented running characters from leaving the frame, strengthened celebration
+  and treasure motion, and faded title ribbons clear of scene transitions.
+- Required local generative workers to return exactly one uniquely addressed,
+  moving, non-duplicate video per planned scene before timeline assembly.
+- Forwarded uploaded character references to LTX Desktop and ComfyUI instead of
+  dropping them from model generation.
+- Rejected local-Qwen scenes whose visual and narration disagree or whose content
+  belongs to a different storyboard beat, while preserving useful single-topic
+  expansions such as evaporation, clouds, and rain.
+- Brought the terminal dashboard to parity with universal auto-treatment,
+  model-engine/task selection, language, and arbitrary provider voice names.
+
 ## 0.6.0 - 2026-08-29
 
 ### Added

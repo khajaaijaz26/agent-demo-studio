@@ -15,12 +15,14 @@ It uses the same engine as the MCP server and browser Studio. The menu can:
 5. warm the fastest installed local Qwen model;
 6. show how to open the visual Studio.
 
-The video wizard covers mode, duration, an optional exact narration script,
+The video wizard accepts any subject and uses automatic treatment detection by
+default. It covers duration, an optional exact narration script,
 fast/quality/instant planning, scene image/video paths, any authorized character
-images, a logo, supplied or generated music, built-in versus local generation,
-text/image/video task, local or consented-clone voice, free procedural music,
-export profiles, and output directory. Local jobs continue from the saved plan
-without asking for another approval.
+images, a logo, supplied or generated music, explicit generative versus motion-
+graphics quality, LTX/ComfyUI/Wan-compatible loopback engines, every supported
+text/image/speech/video/character task, arbitrary installed/provider voice names,
+language, consented local voice references, export profiles, and output directory.
+Local jobs continue from the saved plan without asking for another approval.
 
 For scripts or an AI agent, use the equivalent non-interactive commands:
 

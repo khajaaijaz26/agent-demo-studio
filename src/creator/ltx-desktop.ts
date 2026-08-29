@@ -216,6 +216,7 @@ function chooseGenerationSpec(specs: LtxModelSpecs, apiOnly: boolean, desiredSec
 
 function scenePrompt(input: CreatorPromptVideoInput, plan: CreatorProductionPlan, index: number): string {
   const scene = plan.scenes[index]!;
+  const references = (input.characters ?? []).map((item) => `${item.name}${item.style ? ` (${item.style})` : ""}`).join(", ");
   return [
     scene.visual,
     `Continuous temporal action for ${scene.durationSeconds.toFixed(1)} seconds with natural subject movement, stable identity, coherent anatomy, and synchronized environmental motion.`,
@@ -223,6 +224,8 @@ function scenePrompt(input: CreatorPromptVideoInput, plan: CreatorProductionPlan
       ? "Original expressive animated characters gesture, blink, change pose, and visibly speak; this is a continuous animated shot, not a still illustration."
       : "Subjects perform purposeful physical actions throughout the shot; avoid frozen poses and slideshow motion.",
     `Camera remains stabilized and intentional. Visual style: ${plan.creativeDirection.visualStyle}.`,
+    references ? `Authorized character references: ${references}. Preserve their intended identity and design.` : "No fixed cast; create only the subjects named in this scene.",
+    `Narration/caption language: ${input.language ?? "en"}.`,
     `Narrative beat: ${scene.narration}`,
   ].join(" ");
 }
@@ -258,7 +261,9 @@ export async function generateLtxDesktopSceneMedia(
   const specs = await getJson<LtxModelSpecs>(fetchImpl, baseUrl, "/api/generate/models-specs", 10_000);
   const outputRoot = path.resolve(outputDirectory);
   await mkdir(outputRoot, { recursive: true });
-  const sources = [...new Set([...(input.source ? [input.source] : []), ...(input.sceneSources ?? [])])];
+  const sceneSources = [...new Set([...(input.source ? [input.source] : []), ...(input.sceneSources ?? [])])];
+  const characterSources = [...new Set((input.characters ?? []).map((item) => item.source))];
+  const sources = sceneSources.length ? sceneSources : characterSources;
   const outputs: SceneMediaGenerationResult["outputs"] = [];
   const quality: MotionQualityReport[] = [];
   for (const [index, scene] of plan.scenes.entries()) {

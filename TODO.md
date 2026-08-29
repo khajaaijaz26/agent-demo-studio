@@ -30,6 +30,12 @@ The comparison is architectural and product research. No MoneyPrinterTurbo sourc
   true-video scene contracts, and explicit local/API cost gating.
 - [x] Detect Wan-Animate-2 metadata, materialized weights, and loopback adapter
   state separately so an 82.5 GB pointer-only clone is never reported as ready.
+- [x] Make `auto` infer only a production treatment while preserving arbitrary
+  subjects, characters, styles, locations, diagrams, and prompts for model
+  backends; keep the motion-graphics vocabulary explicitly non-generative.
+- [x] Pass all scene and character references, negative prompt, seed, language,
+  narration audio, camera, style, and export context to the loopback video worker;
+  reject missing scene IDs, frozen clips, and identical reused scene files.
 
 ## Existing strengths to preserve
 
@@ -66,6 +72,9 @@ The comparison is architectural and product research. No MoneyPrinterTurbo sourc
 - [ ] Add optional semantic ranking and video QA adapters, including TwelveLabs-compatible reranking/analysis, behind explicit provider configuration.
 - [x] Add pluggable image-to-video and text-to-video providers through LTX
   Desktop, ComfyUI API workflows, and the generic loopback scene-batch adapter.
+- [x] Add a dedicated `AGENT_DEMO_WAN_VIDEO_ADAPTER_URL` alias for a general Wan
+  text/image-to-video worker without confusing it with Wan-Animate-2's specialized
+  reference-image plus driving-video task.
 - [ ] Add a generic asynchronous hosted-job adapter and optional
   WaveSpeed-compatible implementation with explicit cost/terms reporting.
 - [ ] Ship and test a dedicated Wan-Animate-2 loopback worker for reference image

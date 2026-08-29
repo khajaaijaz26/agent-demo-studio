@@ -1,7 +1,10 @@
+import { createHash } from "node:crypto";
+import { createReadStream } from "node:fs";
 import path from "node:path";
-import { access, mkdir } from "node:fs/promises";
+import { access, mkdir, writeFile } from "node:fs/promises";
 import { constants } from "node:fs";
 import { mediaTaskRequiresVideo, type GeneratedSceneMedia, type SceneMediaGenerationResult } from "./generated-media.js";
+import { requireMovingVideo, type MotionQualityReport } from "./motion-quality.js";
 import type { CreatorMediaTask, CreatorProductionPlan, CreatorPromptVideoInput } from "./types.js";
 
 export type LocalGeneratedMedia = GeneratedSceneMedia;
@@ -26,8 +29,8 @@ interface AdapterResponse {
 }
 
 function adapterEndpoint(value?: string): string {
-  const raw = value || process.env.AGENT_DEMO_MEDIA_ADAPTER_URL;
-  if (!raw) throw new Error("A local media adapter is not configured. Set AGENT_DEMO_MEDIA_ADAPTER_URL to its loopback /v1/media/generate endpoint.");
+  const raw = value || process.env.AGENT_DEMO_MEDIA_ADAPTER_URL || process.env.AGENT_DEMO_WAN_VIDEO_ADAPTER_URL;
+  if (!raw) throw new Error("A local media adapter is not configured. Set AGENT_DEMO_MEDIA_ADAPTER_URL or AGENT_DEMO_WAN_VIDEO_ADAPTER_URL to its loopback /v1/media/generate endpoint.");
   let url: URL;
   try {
     url = new URL(raw);
@@ -46,11 +49,22 @@ export function selectLocalMediaTask(input: CreatorPromptVideoInput): Exclude<Cr
   if (input.mediaTask && input.mediaTask !== "auto") return input.mediaTask;
   // A request for a video must never silently become a collection of stills.
   // Source media becomes I2V; a text-only request becomes true T2V.
-  return input.source || input.sceneSources?.length ? "image-to-video" : "text-to-video";
+  return input.source || input.sceneSources?.length || input.characters?.length ? "image-to-video" : "text-to-video";
 }
 
 function sourcePath(source: string): string {
   return source.startsWith("builtin:") || /^[a-z][a-z\d+.-]*:\/\//i.test(source) ? source : path.resolve(source);
+}
+
+async function fileDigest(filePath: string): Promise<string> {
+  const hash = createHash("sha256");
+  await new Promise<void>((resolve, reject) => {
+    const stream = createReadStream(filePath);
+    stream.on("data", (chunk) => hash.update(chunk));
+    stream.on("error", reject);
+    stream.on("end", resolve);
+  });
+  return hash.digest("hex");
 }
 
 /**
@@ -86,6 +100,24 @@ export async function generateLocalSceneMedia(
         brief: plan.originalPrompt,
         targetDurationSeconds: plan.requirements.targetDurationSeconds,
         sourcePaths: [...new Set([...(input.source ? [sourcePath(input.source)] : []), ...(input.sceneSources ?? []).map(sourcePath)])],
+        characterReferences: (input.characters ?? []).map((character, index) => ({
+          id: character.id?.trim() || `character-${index + 1}`,
+          name: character.name,
+          sourcePath: sourcePath(character.source),
+          role: character.role ?? "character",
+          style: character.style,
+          rights: character.rights,
+        })),
+        generation: {
+          visualQuality: plan.requirements.visualQuality ?? "generative",
+          negativePrompt: input.negativePrompt,
+          seed: input.seed,
+          language: input.language ?? "en",
+          outputPresets: plan.requirements.outputPresets,
+          visualStyle: plan.creativeDirection.visualStyle,
+          pacing: plan.creativeDirection.pacing,
+          composition: plan.creativeDirection.composition,
+        },
         scenes: plan.scenes.map((scene, index) => ({
           id: scene.id,
           title: scene.title,
@@ -94,6 +126,9 @@ export async function generateLocalSceneMedia(
           narration: scene.narration,
           onScreenText: scene.onScreenText,
           audioPath: options.audioPaths?.[index],
+          animation: scene.animation,
+          camera: scene.animation?.camera ?? (index === 0 ? "wide" : "medium"),
+          transition: scene.transition,
         })),
         performance: input.plannerProfile === "quality" ? "quality" : "fast",
       }),
@@ -110,14 +145,38 @@ export async function generateLocalSceneMedia(
       outputs.push({ path: outputPath, kind: item.kind, sceneId: item.sceneId, model: item.model, prompt: item.prompt, rights: item.rights });
     }
     if (!outputs.length) throw new Error("The local media adapter returned no readable image or video outputs.");
+    let qualityReportPath: string | undefined;
     if (mediaTaskRequiresVideo(task)) {
       const stills = outputs.filter((item) => item.kind !== "video");
       if (stills.length) {
         throw new Error(`The ${task} adapter returned ${stills.length} still image${stills.length === 1 ? "" : "s"}. A real video task must return video files; Agent Demo Studio will not fake motion by shaking photos.`);
       }
-      if (outputs.length < plan.scenes.length) {
-        throw new Error(`The ${task} adapter returned ${outputs.length} video${outputs.length === 1 ? "" : "s"} for ${plan.scenes.length} planned scenes. Return one generated video per scene so narration and motion stay synchronized.`);
+      if (outputs.length !== plan.scenes.length) {
+        throw new Error(`The ${task} adapter returned ${outputs.length} video${outputs.length === 1 ? "" : "s"} for ${plan.scenes.length} planned scenes. Return exactly one generated video per scene so narration and motion stay synchronized.`);
       }
+      const byScene = new Map(outputs.map((item) => [item.sceneId, item]));
+      const missingSceneIds = plan.scenes.filter((scene) => !byScene.has(scene.id)).map((scene) => scene.id);
+      if (outputs.some((item) => !item.sceneId) || byScene.size !== outputs.length || missingSceneIds.length) {
+        throw new Error(`The ${task} adapter must return one unique sceneId for every planned scene. Missing or duplicated: ${missingSceneIds.join(", ") || "sceneId metadata"}.`);
+      }
+      const ordered = plan.scenes.map((scene) => byScene.get(scene.id)!);
+      outputs.splice(0, outputs.length, ...ordered);
+      const quality: MotionQualityReport[] = [];
+      const digests: string[] = [];
+      for (const output of outputs) {
+        const motion = await requireMovingVideo(output.path);
+        quality.push(motion);
+        digests.push(await fileDigest(output.path));
+        output.durationSeconds = motion.durationSeconds;
+        output.width = motion.width;
+        output.height = motion.height;
+        output.fps = motion.fps;
+      }
+      if (new Set(digests).size !== digests.length) {
+        throw new Error(`The ${task} adapter reused an identical video for multiple planned scenes. Every scene must be generated from its own visual beat.`);
+      }
+      qualityReportPath = path.join(outputRoot, "motion-quality.json");
+      await writeFile(qualityReportPath, `${JSON.stringify({ passed: true, uniqueSceneFiles: true, clips: quality }, null, 2)}\n`, "utf8");
     }
     return {
       provider: "local-adapter",
@@ -126,6 +185,7 @@ export async function generateLocalSceneMedia(
       qualityTier: "generative-video",
       durationMs: Math.max(0, now() - startedAt),
       outputs,
+      qualityReportPath,
       backend: { name: "Agent Demo local media adapter", endpoint },
     };
   } finally {

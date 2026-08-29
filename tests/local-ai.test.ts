@@ -58,6 +58,44 @@ describe("local Qwen planning", () => {
     expect(fetchImpl.mock.calls.filter(([request]) => String(request).endsWith("/api/chat"))).toHaveLength(1);
   });
 
+  it("rejects locally planned scenes that are internally coherent but assigned to the wrong storyboard beat", async () => {
+    const fetchImpl = vi.fn(async (request: string | URL | Request) => {
+      const url = String(request);
+      if (url.endsWith("/api/tags")) return new Response(JSON.stringify({ models: [{ name: "qwen3.5:0.8b" }] }), { status: 200 });
+      if (url.endsWith("/api/version")) return new Response(JSON.stringify({ version: "0.32.15" }), { status: 200 });
+      if (url.endsWith("/api/chat")) {
+        return new Response(JSON.stringify({
+          model: "qwen3.5:0.8b",
+          message: {
+            content: JSON.stringify({
+              title: "Magic Sky Adventure",
+              audience: "Families who enjoy animated stories",
+              scenes: [
+                { visual: "A gold box floats above clouds and glowing lights.", narration: "The magic box glows in the sky.", onScreenText: "Magic Box" },
+                { visual: "A family opens a treasure chest under a giant tree.", narration: "The family celebrates its treasure discovery.", onScreenText: "Treasure Found" },
+                { visual: "Characters run through a meadow of mushrooms and butterflies.", narration: "Friends chase butterflies while they run.", onScreenText: "Adventure Begins" },
+              ],
+            }),
+          },
+        }), { status: 200 });
+      }
+      return new Response("Not found", { status: 404 });
+    }) as typeof fetch;
+    const input = {
+      prompt: "Create a cartoon video. A colorful box floats in the sky with glowing lights. Characters run through a meadow with floating mushrooms and butterflies. A family finds a hidden treasure chest under a giant tree.",
+      mode: "cartoon" as const,
+      visualQuality: "motion-graphics" as const,
+      plannerProvider: "auto" as const,
+    };
+    const baseline = createPromptVideoPlan(input);
+    const plan = await enhancePromptVideoPlan(input, baseline, { fetchImpl });
+
+    expect(plan.scenes[0]?.visual).toBe("A gold box floats above clouds and glowing lights.");
+    expect(plan.scenes[1]).toEqual(baseline.scenes[1]);
+    expect(plan.scenes[2]).toEqual(baseline.scenes[2]);
+    expect(plan.intelligence?.fallbackReason).toMatch(/2 Qwen scenes failed visual\/narration alignment or uniqueness QA/i);
+  });
+
   it("falls back instantly without losing the plan when Ollama is unavailable", async () => {
     const input = { prompt: "Create a calm local story video.", mode: "story" as const, plannerProvider: "auto" as const };
     const baseline = createPromptVideoPlan(input);

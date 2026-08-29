@@ -20,6 +20,10 @@ describe("loopback local media generation", () => {
         mediaTask: "text-to-image" as const,
         mediaAdapterUrl: "http://127.0.0.1:8188/v1/media/generate",
         plannerProfile: "fast" as const,
+        language: "ar-AE",
+        negativePrompt: "jitter, duplicate characters",
+        seed: 73,
+        characters: [{ name: "Any User Character", source: path.join(directory, "open-character.png"), style: "user-defined style", rights: "Authorized test asset" }],
       };
       const plan = createPromptVideoPlan(input);
       const fetchImpl = vi.fn(async (_request, init) => {
@@ -27,6 +31,15 @@ describe("loopback local media generation", () => {
         expect(body.protocol).toBe("agent-demo-local-media-v2");
         expect(body.scenes).toHaveLength(3);
         expect(body.performance).toBe("fast");
+        expect(body.characterReferences).toEqual([expect.objectContaining({ name: "Any User Character", style: "user-defined style" })]);
+        expect(body.generation).toMatchObject({
+          language: "ar-AE",
+          negativePrompt: "jitter, duplicate characters",
+          seed: 73,
+          visualQuality: "generative",
+          outputPresets: ["youtube-1080p", "shorts", "reels", "tiktok"],
+        });
+        expect(body.scenes[0]).toEqual(expect.objectContaining({ camera: expect.any(String), transition: expect.any(String) }));
         return new Response(JSON.stringify({ outputs: outputs.map((output) => ({ path: output, kind: "image", model: "local-test-model" })) }), { status: 200 });
       }) as typeof fetch;
       const result = await generateLocalSceneMedia(input, plan, generatedDirectory, { fetchImpl });

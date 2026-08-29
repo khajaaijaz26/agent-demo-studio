@@ -21,6 +21,7 @@ export interface SceneMediaGenerationResult {
   durationMs: number;
   outputs: GeneratedSceneMedia[];
   qualityReportPath?: string;
+  semanticReportPath?: string;
   backend?: {
     name: string;
     endpoint?: string;

@@ -54,6 +54,9 @@ export const CREATOR_PROMPT_MODES = [
 
 export type CreatorPromptMode = typeof CREATOR_PROMPT_MODES[number];
 
+/** External control surfaces may ask the planner to infer a production treatment. */
+export type CreatorPromptModeChoice = CreatorPromptMode | "auto";
+
 export const CREATOR_MEDIA_PROVIDERS = [
   "auto", "ltx-desktop", "animated", "comfyui", "local-adapter", "builtin",
 ] as const;
@@ -65,6 +68,12 @@ export const CREATOR_MEDIA_TASKS = [
 ] as const;
 
 export type CreatorMediaTask = typeof CREATOR_MEDIA_TASKS[number];
+
+export const CREATOR_VISUAL_QUALITIES = [
+  "auto", "generative", "motion-graphics",
+] as const;
+
+export type CreatorVisualQuality = typeof CREATOR_VISUAL_QUALITIES[number];
 
 export type ReframeMode = "fit" | "fill" | "blur-background";
 
@@ -378,6 +387,8 @@ export interface CreatorPromptVideoInput {
   voice?: string;
   voiceProvider?: "local" | "neural" | "local-clone";
   voiceRate?: number;
+  /** BCP-47 narration/caption language; the selected voice engine must support it. */
+  language?: string;
   /** Reference recording for a consented, loopback-only voice-clone adapter. */
   voiceReference?: string;
   voiceConsent?: CreatorVoiceConsent;
@@ -401,11 +412,18 @@ export interface CreatorPromptVideoInput {
   logoSource?: string;
   musicSource?: string;
   /**
-   * Visual engine. `auto` prefers a configured real video backend and otherwise
-   * uses the built-in vector animation engine. `builtin` is the legacy still-
-   * image compositor and is never selected automatically.
+   * Visual engine. `auto` honors the requested visual quality: model-video
+   * requests require a configured real-video backend, while explicitly requested
+   * motion graphics use the built-in vector engine. `builtin` is the legacy
+   * still-image compositor and is never selected automatically.
    */
   mediaProvider?: CreatorMediaProvider;
+  /**
+   * The visual promise requested by the user. Generative quality must be
+   * fulfilled by a model-backed video provider and may never fall back to the
+   * deterministic motion-graphics renderer.
+   */
+  visualQuality?: CreatorVisualQuality;
   mediaTask?: CreatorMediaTask;
   mediaAdapterUrl?: string;
   /** Loopback ComfyUI server and an exported API-format workflow template. */
@@ -469,7 +487,24 @@ export interface CreatorProductionPlanScene {
   visual: string;
   narration: string;
   onScreenText?: string;
+  /** Deterministic scene graph used only by the explicit motion-graphics engine. */
+  animation?: CreatorSceneAnimationSpec;
   transition: TransitionType;
+}
+
+export interface CreatorSceneAnimationSpec {
+  setting: "classroom" | "laboratory" | "forest" | "garden" | "sky" | "space" | "ocean" | "home" | "city" | "stage" | "abstract";
+  subjects: Array<{
+    kind: "teacher" | "scientist" | "student" | "child" | "family" | "friend" | "rabbit" | "bear" | "cat" | "dragon" | "bird" | "butterfly" | "ball" | "character";
+    label: string;
+  }>;
+  actions: Array<"present" | "teach" | "experiment" | "build" | "grow" | "run" | "chase" | "jump" | "fly" | "float" | "roll" | "climb" | "sleep" | "hug" | "celebrate" | "hold">;
+  props: Array<"board" | "table" | "beaker" | "water" | "bubbles" | "box" | "mushroom" | "lantern" | "treasure" | "tree" | "plant" | "blocks" | "sun" | "cloud" | "bridge" | "lights">;
+  /** Open prompt concepts not covered by the optional built-in starter vocabulary. */
+  concepts: Array<{ label: string; source: "prompt" | "planner" }>;
+  camera: "wide" | "medium" | "close";
+  matchedTerms: string[];
+  semanticSignature: string;
 }
 
 export interface CreatorProductionPlan {
@@ -482,7 +517,10 @@ export interface CreatorProductionPlan {
     audience: string;
     targetDurationSeconds: number;
     outputPresets: CreatorPresetId[];
+    language?: string;
     sourceStrategy: string;
+    /** User-visible distinction between diffusion/model video and local graphics. */
+    visualQuality?: "generative" | "motion-graphics";
     /** The visual promise shown to the user before generation starts. */
     motionStandard?: "still-composite" | "animated-2d" | "generative-video";
     narration: boolean;

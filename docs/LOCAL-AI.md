@@ -83,11 +83,14 @@ voice-cloning, or diffusion-video model.
 
 ## True-video providers and hardware truth
 
-The visual provider defaults to `auto`:
+The visual provider and visual-quality policy default to `auto`:
 
-- `animated` is the zero-download fallback. It records actual 1080p/30fps canvas
-  animation with separate limbs, gestures, blinking, mouth motion, diagrams,
-  particles, and stable backgrounds.
+- Model-video wording such as “video”, “cartoon”, “advertisement”, “realistic”,
+  “Wan”, or “LTX” selects a real generative provider. If none is ready, the plan
+  is saved with a blocker; motion graphics are never substituted silently.
+- `animated` is the explicit zero-download motion-graphics tier. It records actual
+  1080p/30fps canvas animation with separate limbs, gestures, blinking, mouth
+  motion, diagrams, open prompt-concept cards, particles, and stable backgrounds.
 - `ltx-desktop` calls the [official LTX Desktop](https://github.com/Lightricks/ltx-desktop)
   loopback API for text-, image-,
   or audio-to-video. Local Windows generation requires a supported NVIDIA CUDA
@@ -119,6 +122,17 @@ AGENT_DEMO_WAN_ANIMATE_ADAPTER_URL=http://127.0.0.1:9000/v1/media/generate
 The status card will remain `configured`, not `ready`, when only model pointers
 are present. This prevents an agent from silently downloading tens of gigabytes
 or claiming generation succeeded on unsupported hardware.
+
+For a general Wan text/image-to-video worker implementing the batch contract
+below (distinct from the specialized Animate-2 model), use the descriptive alias:
+
+```dotenv
+AGENT_DEMO_WAN_VIDEO_ADAPTER_URL=http://127.0.0.1:9000/v1/media/generate
+```
+
+This alias and `AGENT_DEMO_MEDIA_ADAPTER_URL` are equivalent. The worker may wrap
+Wan, LTX, ComfyUI, or another model, but it must return one unique moving video
+with the matching `sceneId` for every planned scene.
 
 ## No fixed cast or subject
 
@@ -184,9 +198,28 @@ The loopback adapter receives JSON shaped like:
       "durationSeconds": 10.08,
       "narration": "...",
       "onScreenText": "...",
-      "audioPath": "C:/.../voiceover-scene-01.wav"
+      "audioPath": "C:/.../voiceover-scene-01.wav",
+      "camera": "wide",
+      "transition": "fade"
     }
   ],
+  "characterReferences": [
+    {
+      "id": "character-1",
+      "name": "Any authorized uploaded character",
+      "sourcePath": "C:/.../character.png",
+      "role": "character",
+      "style": "user-defined"
+    }
+  ],
+  "generation": {
+    "visualQuality": "generative",
+    "negativePrompt": "jitter, duplicate characters",
+    "seed": 73,
+    "language": "ar-AE",
+    "outputPresets": ["youtube-1080p"],
+    "visualStyle": "the planned unrestricted style"
+  },
   "performance": "fast"
 }
 ```
@@ -211,6 +244,8 @@ It writes files locally and responds with:
 Only loopback endpoints are accepted. Agent Demo Studio verifies that every
 returned path is readable, remains inside the requested output directory, and
 meets the task's media and motion requirements before adding it to the timeline.
+For video tasks it also requires exact scene-ID coverage, rejects duplicate scene
+files, and writes `motion-quality.json` after checking every clip.
 
 Direct ComfyUI configuration uses:
 

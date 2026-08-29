@@ -6,7 +6,7 @@ import { generateNeuralSpeech } from "../audio/neural-tts.js";
 import { generateLocalSpeech } from "../audio/tts.js";
 import { generateLocalClonedSpeech } from "../audio/voice-clone.js";
 import { slugify } from "../utils/text.js";
-import { generateAnimatedSceneMedia } from "./animated-media.js";
+import { analyzeAnimatedScene, generateAnimatedSceneMedia } from "./animated-media.js";
 import { bundledAssetLicense } from "./assets.js";
 import { serializeSrt } from "./captions.js";
 import { generateComfyUiSceneMedia } from "./comfyui.js";
@@ -23,6 +23,8 @@ import {
   type CreatorManifest,
   type CreatorOverlay,
   type CreatorProductionPlan,
+  type CreatorPromptMode,
+  type CreatorPromptModeChoice,
   type CreatorPromptVideoInput,
   type CreatorPromptVideoResult,
 } from "./types.js";
@@ -41,13 +43,35 @@ const DEFAULT_DURATIONS = {
   vfx: 18,
 } as const;
 
-function requestsGenerativeVideo(input: CreatorPromptVideoInput): boolean {
-  if (["text-to-video", "image-to-video", "speech-to-video", "character-animation"].includes(input.mediaTask ?? "")) return true;
+/**
+ * Chooses an editing/audio treatment without limiting the subject matter sent to
+ * the visual model. `auto` is intentionally a control-surface choice; persisted
+ * plans always contain one concrete treatment.
+ */
+export function inferPromptMode(prompt: string, requested: CreatorPromptModeChoice = "auto"): CreatorPromptMode {
+  if (requested !== "auto") return requested;
+  if (/\b(asmr|whisper(?:ed|ing)?|satisfying|tapping|crackle|close[- ]?mic|sensory)\b/i.test(prompt)) return "asmr";
+  if (/\b(vfx|visual effects?|glitch|transformation reel|compositing|neon effects?|cinematic effects?)\b/i.test(prompt)) return "vfx";
+  if (/\b(product launch|advert(?:isement)?|commercial|brand film|promo|saas demo|app demo|website demo|call to action|cta)\b/i.test(prompt)
+    || /\blaunch\b.*\b(product|platform|app|website|service|tool)\b/i.test(prompt)) return "product-launch";
+  if (/\b(cartoon|classroom|animated lesson|animation|teacher|students?|education(?:al)?|explainer|diagram|infographic|whiteboard)\b/i.test(prompt)) return "cartoon";
+  if (/\b(story|narrative|fairy tale|bedtime|documentary|short film|music video|anime|cinematic scene)\b/i.test(prompt)) return "story";
+  return "story";
+}
+
+export function resolveRequestedVisualQuality(input: CreatorPromptVideoInput): "generative" | "motion-graphics" {
+  if (input.mediaProvider && input.mediaProvider !== "auto") {
+    return input.mediaProvider === "animated" || input.mediaProvider === "builtin" ? "motion-graphics" : "generative";
+  }
+  if (input.visualQuality === "generative" || input.visualQuality === "motion-graphics") return input.visualQuality;
+  if (["text-to-video", "image-to-video", "speech-to-video", "character-animation"].includes(input.mediaTask ?? "")) return "generative";
   const suppliedImages = [input.source, ...(input.sceneSources ?? []), ...(input.characters ?? []).map((character) => character.source)]
     .filter((source): source is string => Boolean(source))
     .some((source) => /\.(?:avif|gif|jpe?g|png|webp)$/i.test(source));
-  if (suppliedImages) return true;
-  return /\b(seedance|photoreal(?:istic)?|diffusion|realistic human|foundation video model|text[- ]to[- ]video|image[- ]to[- ]video|speech[- ]to[- ]video)\b/i.test(input.prompt);
+  if (suppliedImages) return "generative";
+  if (/\b(vector|motion graphics?|infographic|diagram animation|simple 2d|lightweight 2d)\b/i.test(input.prompt)) return "motion-graphics";
+  if (/\b(video|film|reel|short|advert(?:isement)?|commercial|cartoon|animated|animation|characters?|seedance|wan|ltx|photoreal(?:istic)?|diffusion|realistic human|foundation video model|text[- ]to[- ]video|image[- ]to[- ]video|speech[- ]to[- ]video)\b/i.test(input.prompt)) return "generative";
+  return "motion-graphics";
 }
 
 export function resolvePromptMediaProvider(
@@ -55,15 +79,16 @@ export function resolvePromptMediaProvider(
   env: NodeJS.ProcessEnv = process.env,
 ): Exclude<NonNullable<CreatorPromptVideoInput["mediaProvider"]>, "auto"> {
   if (input.mediaProvider && input.mediaProvider !== "auto") return input.mediaProvider;
+  const quality = resolveRequestedVisualQuality(input);
+  if (quality === "motion-graphics") return "animated";
   if (input.ltxDesktopUrl || env.AGENT_DEMO_LTX_DESKTOP_URL) return "ltx-desktop";
   if ((input.comfyuiUrl || env.AGENT_DEMO_COMFYUI_URL) && (input.comfyuiWorkflow || env.AGENT_DEMO_COMFYUI_WORKFLOW)) return "comfyui";
-  if (input.mediaAdapterUrl || env.AGENT_DEMO_MEDIA_ADAPTER_URL) return "local-adapter";
+  if (input.mediaAdapterUrl || env.AGENT_DEMO_MEDIA_ADAPTER_URL || env.AGENT_DEMO_WAN_VIDEO_ADAPTER_URL) return "local-adapter";
   // Never promise Seedance-style generation and quietly return moving photos.
   // LTX Desktop has an official typed localhost API. Selecting it here makes
   // the persisted capability gate explain hardware/API-only limitations rather
   // than silently turning a generative request into a moving slideshow.
-  if (requestsGenerativeVideo(input)) return "ltx-desktop";
-  return "animated";
+  return "ltx-desktop";
 }
 
 function motionStandard(provider: ReturnType<typeof resolvePromptMediaProvider>): NonNullable<CreatorProductionPlan["requirements"]["motionStandard"]> {
@@ -165,6 +190,9 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
   const duration = Math.max(6, Math.min(600, input.durationSeconds ?? DEFAULT_DURATIONS[input.mode]));
   const presets = input.presets ?? (input.mode === "asmr" ? ["youtube-1080p", "reels"] : ["youtube-1080p", "shorts", "reels", "tiktok"]);
   const beats = promptBeats(prompt);
+  const visualBeats = beats.length > 3 && /^(?:create|generate|make|produce)\b.*\b(?:video|film|cartoon|story|advert|reel|short)\b/i.test(beats[0] ?? "")
+    ? beats.slice(1)
+    : beats;
   const presenter = plannedPresenter(input);
   const suppliedCharacters = (input.characters ?? []).filter((character) => cleanText(character.name) && character.source.trim());
   const selectedCartoonCast = input.mode === "cartoon" ? cartoonCast(presenter) : [];
@@ -182,7 +210,7 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
   const sceneWeights = [0.28, 0.4, 0.32];
   const sceneTitles = ["Hook and establish", "Develop and demonstrate", "Resolve and remember"];
   const transitions = input.mode === "cartoon" || input.mode === "asmr" ? ["fade", "dissolve", "dissolve"] as const : ["fade", "fade-black", "fade-black"] as const;
-  const sceneVisuals = input.mode === "cartoon"
+  const sceneDirections = input.mode === "cartoon"
     ? cartoonCastNames.length > 1
       ? [`Reveal the workshop and introduce ${cartoonCastLabel}`, `Let ${cartoonCastLabel} exchange the central idea`, "Land both characters on the final lesson or CTA"]
       : cartoonCastNames.length === 1
@@ -195,6 +223,14 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
         : input.mode === "vfx"
           ? ["Establish a clean cinematic source image", "Escalate neon, VHS, glow, and glitch treatments", "Resolve the transformation into a readable final frame"]
           : ["Open with the product promise and brand stage", "Explain the strongest benefit with presenter support", "End on proof and a clear next action"];
+  const sceneBeatValues = sceneDirections.map((_, index) => {
+    const beatIndex = visualBeats.length <= 1 ? 0 : Math.round(index * (visualBeats.length - 1) / Math.max(1, sceneDirections.length - 1));
+    return visualBeats[beatIndex] ?? visualBeats.at(-1) ?? prompt;
+  });
+  // `visual` is the literal on-screen beat, not a production instruction. Camera,
+  // style, and staging already live in creativeDirection and should not be parsed
+  // as visible subjects (for example, the word "lesson" becoming a classroom).
+  const sceneVisuals = sceneBeatValues;
   const narrationEnabled = input.generateVoice !== false && input.mode !== "asmr";
   const musicEnabled = input.generateMusic !== false || Boolean(input.musicSource);
   const sceneNarration = narrationEnabled ? cleanText(input.narration ?? prompt) : "No narration; visuals and sound carry this scene.";
@@ -286,7 +322,7 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
     {
       id: "voiceover",
       category: "voice",
-      requirement: "Paced narration matched to the planned story",
+      requirement: `Paced narration matched to the planned story${input.language ? ` in ${input.language}` : ""}`,
       source: input.voiceProvider === "neural"
         ? `neural:${input.voice ?? "automatic voice"}`
         : input.voiceProvider === "local-clone"
@@ -328,12 +364,14 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
       audience: "The intended product or story audience; refine this field when the brief names a specific viewer.",
       targetDurationSeconds: duration,
       outputPresets: presets,
+      language: input.language?.trim() || "en",
+      visualQuality: resolveRequestedVisualQuality(input),
       sourceStrategy: (mediaProvider === "ltx-desktop" || mediaProvider === "local-adapter" || mediaProvider === "comfyui") && visualSources.length
         ? `Transform ${visualSources.length} supplied source${visualSources.length === 1 ? "" : "s"} into moving video through the configured loopback-only ${mediaProvider === "ltx-desktop" ? "LTX Desktop engine" : mediaProvider === "comfyui" ? "ComfyUI workflow" : "adapter"} and preserve source and model provenance.`
         : visualSources.length
         ? `Use ${visualSources.length} supplied or locally generated scene source${visualSources.length === 1 ? "" : "s"}, preserving aspect and provenance.`
         : mediaProvider === "animated"
-          ? "Generate one continuous-motion 1080p vector clip per scene with independently moving characters, props, particles, and stable backgrounds."
+          ? "Generate one prompt-conditioned 1080p motion-graphics clip per scene with a distinct setting, cast, props, actions, and stable background. Do not represent it as Wan/LTX diffusion output."
           : mediaProvider === "ltx-desktop" || mediaProvider === "local-adapter" || mediaProvider === "comfyui"
             ? `Generate one true motion-video clip per scene through the configured loopback-only ${mediaProvider === "ltx-desktop" ? "LTX Desktop engine" : mediaProvider === "comfyui" ? "ComfyUI workflow" : "adapter"}, then preserve model and prompt provenance.`
             : `Use locked still artwork only because the legacy still compositor was explicitly selected.`,
@@ -343,7 +381,7 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
     },
     creativeDirection: {
       visualStyle: input.mode === "cartoon" && mediaProvider === "animated"
-        ? "Polished 2D vector cartoon animation with articulated bodies, blinking, gestures, mouth movement, moving props, and stable 1080p backgrounds"
+        ? "Prompt-conditioned 2D motion graphics with scene-specific subjects, props, actions, articulated bodies, and stable 1080p backgrounds"
         : direction.visualStyle,
       pacing: direction.pacing,
       composition: direction.composition,
@@ -358,7 +396,7 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
       const narration = narrationEnabled
         ? authoredNarration
           ? authoredNarration[index] || "No narration; visuals carry this scene."
-          : (index === 1 ? sceneNarration : beats[index] ?? sceneNarration)
+          : sceneBeatValues[index] ?? sceneNarration
         : sceneNarration;
       // Authored narration is the source of truth for visible teaching copy.
       // Using raw prompt beats here can expose production directions such as
@@ -367,8 +405,8 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
         ? (index === 0 ? title : undefined)
         : authoredNarration?.[index]
           ? narrationOverlayText(authoredNarration[index]!, index)
-          : compactOverlayText(index === 0 ? title : sceneTitles[index]!, 64);
-      return {
+          : narrationOverlayText(sceneBeatValues[index] ?? narration, index);
+      const plannedScene = {
         id: `scene-${index + 1}`,
         title: sceneTitles[index]!,
         purpose: index === 0 ? "Earn attention and establish context." : index === 1 ? "Deliver the core idea with visual progression." : "Resolve the message and leave a clear final impression.",
@@ -378,6 +416,9 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
         onScreenText,
         transition: transitions[index]!,
       };
+      return mediaProvider === "animated"
+        ? { ...plannedScene, animation: analyzeAnimatedScene(input.mode, plannedScene, index, prompt) }
+        : plannedScene;
     }),
     resources,
     productionRules: [
@@ -385,6 +426,7 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
       { id: "open-assets", rule: "Never lock a request to bundled characters or scenes; choose no character, supplied assets, or configured local generators according to the brief.", qualityGate: "Every cast and scene choice traces to the user brief and resource list." },
       { id: "rights-first", rule: "Track source, generation method, rights, consent, and required disclosure for every external or synthetic asset.", qualityGate: "No undeclared media enters the render timeline." },
       { id: "story-sync", rule: "Match each visual, caption, effect, and character action to the narration or intended sensory beat.", qualityGate: "Scene-to-audio review finds no topic drift or mistimed reveal." },
+      { id: "semantic-scenes", rule: "The motion-graphics engine must resolve every scene into its own setting, subjects, actions, and props; changing only words is a failed render.", qualityGate: "semantic-quality.json passes and scene semantic signatures are distinct." },
       { id: "real-motion", rule: "When animation or generative video is requested, use moving video clips and never imitate motion by shaking, panning, or zooming a still image.", qualityGate: "Every generated scene passes the temporal-motion probe and the generator returns one video per planned scene." },
       { id: "stable-generation", rule: "Keep subjects structurally consistent and camera movement intentional; reject frozen, flickering, jittering, or isolated-jump outputs.", qualityGate: "Motion QA passes and representative frames show continuous subject action without visible frame instability." },
       { id: "safe-layout", rule: "Keep text, faces, product UI, captions, logos, and CTAs inside each export's safe zones without overlap.", qualityGate: "Representative-frame QA passes for every aspect ratio." },
@@ -403,7 +445,7 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
       { order: 8, stage: "Delivery", action: "Package reviewed outputs and publishing metadata with synthetic-media disclosure.", output: "Review-first delivery package", qualityGate: "Human review remains required before external publishing." },
     ],
     assumptions: [
-      visualSources.length ? "The supplied or locally generated scene sources are authorized for use." : mediaProvider === "ltx-desktop" || mediaProvider === "local-adapter" || mediaProvider === "comfyui" ? "The configured generator, workflow, checkpoints, and models permit the intended use." : mediaProvider === "animated" ? "The requested style can be represented as original 2D vector animation on this device." : "The user explicitly selected a still-image composition rather than true animation.",
+      visualSources.length ? "The supplied or locally generated scene sources are authorized for use." : mediaProvider === "ltx-desktop" || mediaProvider === "local-adapter" || mediaProvider === "comfyui" ? "The configured generator, workflow, checkpoints, and models permit the intended use." : mediaProvider === "animated" ? "The user explicitly accepted prompt-conditioned 2D motion graphics rather than Wan/LTX-style model inference." : "The user explicitly selected a still-image composition rather than true animation.",
       "The prompt is treated as the creative brief; an agent may refine audience, claims, brand assets, and CTA before render.",
       narrationEnabled ? "Narration timing may extend the target duration so speech is not unnaturally rushed." : "The video intentionally uses no generated narration.",
       "Fictional synthetic characters are not real spokespersons and should be disclosed where platform rules require it.",
@@ -414,6 +456,7 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
       "Captions, titles, lower thirds, characters, and CTAs do not overlap.",
       "Motion feels intentional and contains no exposed transparent padding or black bands.",
       "Generated scenes contain continuous subject motion; no still-only, jittering, or shaking-photo substitute is accepted.",
+      "Every motion-graphics scene visibly contains its planned subjects, props, setting, and action instead of reusing a mode-level card or loop.",
       "Voice pacing is natural; music and ambience do not mask speech.",
       "Every external asset has provenance, rights, and attribution metadata.",
       "Each export matches its platform dimensions, frame rate, safe zones, and duration guidance.",
@@ -428,8 +471,17 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
  * workflow, timings, effects, and export settings.
  */
 export async function createSmartPromptVideoPlan(input: CreatorPromptVideoInput, runtime: PromptPlanningRuntime = {}): Promise<CreatorProductionPlan> {
-  const plan = await enhancePromptVideoPlan(input, createPromptVideoPlan(input), runtime);
   const mediaProvider = resolvePromptMediaProvider(input);
+  const enhancedPlan = await enhancePromptVideoPlan(input, createPromptVideoPlan(input), runtime);
+  const plan = mediaProvider === "animated"
+    ? {
+      ...enhancedPlan,
+      scenes: enhancedPlan.scenes.map((scene, index) => ({
+        ...scene,
+        animation: analyzeAnimatedScene(input.mode, scene, index, input.prompt),
+      })),
+    }
+    : enhancedPlan;
   const capabilities = await inspectCapabilities({
     plannerProvider: input.plannerProvider ?? "auto",
     plannerProfile: input.plannerProfile ?? "fast",
@@ -686,7 +738,7 @@ export function createPromptVideoManifest(input: CreatorPromptVideoInput, produc
     brand: { name: title, logo: input.logoSource, logoLicenseId: input.logoSource ? "provided-logo" : undefined, primary: "#8B5CF6", secondary: "#22D3EE", text: "#FFFFFF" },
     clips: sourceClips(input, duration, productionPlan.scenes),
     overlays: promptOverlays(input, title, duration, productionPlan),
-    captions: { burn: input.mode !== "asmr", sidecar: true, language: "en", style: { position: "bottom", accent: input.mode === "cartoon" ? "#F59E0B" : "#22D3EE" } },
+    captions: { burn: input.mode !== "asmr", sidecar: true, language: input.language ?? "en", style: { position: "bottom", accent: input.mode === "cartoon" ? "#F59E0B" : "#22D3EE" } },
     audio: {
       keepClipAudio: Boolean(input.source), clipVolume: input.mode === "asmr" ? 0.55 : 0.82,
       duckMusic: true, targetLufs: input.mode === "asmr" ? -20 : -14, truePeak: -1.5,
@@ -731,12 +783,35 @@ function resolveInputSource(source: string): string {
   return path.resolve(source);
 }
 
+function defaultNeuralVoice(language: string | undefined, masculine: boolean): string {
+  const base = (language || "en-US").toLowerCase().split("-")[0];
+  const voices: Record<string, [string, string]> = {
+    ar: ["ar-AE-FatimaNeural", "ar-AE-HamdanNeural"],
+    de: ["de-DE-KatjaNeural", "de-DE-ConradNeural"],
+    en: ["en-US-AvaMultilingualNeural", "en-US-AndrewMultilingualNeural"],
+    es: ["es-ES-ElviraNeural", "es-ES-AlvaroNeural"],
+    fr: ["fr-FR-DeniseNeural", "fr-FR-HenriNeural"],
+    hi: ["hi-IN-SwaraNeural", "hi-IN-MadhurNeural"],
+    it: ["it-IT-ElsaNeural", "it-IT-DiegoNeural"],
+    ja: ["ja-JP-NanamiNeural", "ja-JP-KeitaNeural"],
+    ko: ["ko-KR-SunHiNeural", "ko-KR-InJoonNeural"],
+    pt: ["pt-BR-FranciscaNeural", "pt-BR-AntonioNeural"],
+    ur: ["ur-PK-UzmaNeural", "ur-PK-AsadNeural"],
+    zh: ["zh-CN-XiaoxiaoNeural", "zh-CN-YunxiNeural"],
+  };
+  const pair = voices[base || "en"] ?? voices.en!;
+  return pair[masculine ? 1 : 0];
+}
+
 export async function createPromptVideoProject(input: CreatorPromptVideoInput, report: ProgressReporter = () => undefined): Promise<CreatorPromptVideoResult> {
   if (!cleanText(input.prompt)) throw new Error("A prompt is required.");
   const selectedMediaProvider = resolvePromptMediaProvider(input);
   const normalizedInput: CreatorPromptVideoInput = {
     ...input,
     mediaProvider: selectedMediaProvider,
+    mediaAdapterUrl: selectedMediaProvider === "local-adapter"
+      ? input.mediaAdapterUrl || process.env.AGENT_DEMO_MEDIA_ADAPTER_URL || process.env.AGENT_DEMO_WAN_VIDEO_ADAPTER_URL
+      : input.mediaAdapterUrl,
     source: input.source ? resolveInputSource(input.source) : undefined,
     sceneSources: input.sceneSources?.map(resolveInputSource),
     characters: input.characters?.map((character) => ({ ...character, source: resolveInputSource(character.source) })),
@@ -771,7 +846,7 @@ export async function createPromptVideoProject(input: CreatorPromptVideoInput, r
     if (projectInput.voiceProvider === "local-clone" && (!projectInput.voiceReference || !projectInput.voiceConsent)) {
       throw new Error("Local voice cloning requires a reference recording and named speaker consent metadata.");
     }
-    const defaultVoice = projectInput.presenter === "leo" || projectInput.presenter === "milo" ? "en-US-AndrewMultilingualNeural" : "en-US-AvaMultilingualNeural";
+    const defaultVoice = defaultNeuralVoice(projectInput.language, projectInput.presenter === "leo" || projectInput.presenter === "milo");
     const generateSceneVoice = async (text: string, sceneIndex: number): Promise<GeneratedSceneVoice | undefined> => {
       if (!text) return undefined;
       report(8 + sceneIndex * 3, `Generating narration for scene ${sceneIndex + 1}`);
@@ -786,6 +861,7 @@ export async function createPromptVideoProject(input: CreatorPromptVideoInput, r
           endpoint: projectInput.voiceCloneUrl,
           voice: projectInput.voice,
           rate: projectInput.voiceRate,
+          language: projectInput.language,
         });
       } else {
         await generateLocalSpeech(text, outputPath, { voice: projectInput.voice, rate: projectInput.voiceRate });
@@ -876,7 +952,7 @@ export async function createPromptVideoProject(input: CreatorPromptVideoInput, r
     cues.forEach((cue, index) => { cue.index = index + 1; });
     captionsPath = path.join(projectRoot, "captions.srt");
     await writeFile(captionsPath, serializeSrt(cues), "utf8");
-    manifest.captions = { ...(manifest.captions ?? {}), source: captionsPath, format: "srt" };
+    manifest.captions = { ...(manifest.captions ?? {}), source: captionsPath, format: "srt", language: projectInput.language ?? "en" };
   }
   let musicPath: string | undefined;
   if (projectInput.musicSource) {

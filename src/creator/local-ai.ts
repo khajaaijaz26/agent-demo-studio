@@ -1,8 +1,10 @@
 import { errorMessage } from "../errors.js";
+import { analyzeAnimatedScene } from "./animated-media.js";
 import type {
   CreatorPlannerProfile,
   CreatorPlannerProvider,
   CreatorProductionPlan,
+  CreatorProductionPlanScene,
   CreatorPromptVideoInput,
 } from "./types.js";
 
@@ -116,7 +118,7 @@ const PLAN_SCHEMA = {
 
 function clean(value: string, maximum: number): string {
   const normalized = value.replace(/\s+/g, " ").trim();
-  return normalized.length <= maximum ? normalized : `${normalized.slice(0, Math.max(1, maximum - 1)).trimEnd()}…`;
+  return normalized.length <= maximum ? normalized : `${normalized.slice(0, Math.max(1, maximum - 3)).trimEnd()}...`;
 }
 
 function normalizedProfile(value?: string): CreatorPlannerProfile {
@@ -277,6 +279,67 @@ function validDraft(value: unknown): value is LocalPlanDraft {
   ));
 }
 
+const ALIGNMENT_STOP_WORDS = new Set([
+  "about", "after", "again", "also", "before", "brightly", "complete", "create", "develop", "final", "first", "happily",
+  "into", "next", "scene", "show", "through", "together", "video", "while", "with", "without",
+]);
+const ALIGNMENT_GENERIC_TERMS = new Set([
+  "abstract", "character", "city", "classroom", "everyone", "forest", "garden", "home", "impliedcharacter", "laboratory",
+  "ocean", "person", "setting", "space", "stage", "storycharacter", "they", "together",
+]);
+
+function normalizedAlignmentWord(value: string): string {
+  const lower = value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+  if (lower.length > 6 && lower.endsWith("ing")) return lower.slice(0, -3);
+  if (lower.length > 5 && lower.endsWith("ed")) return lower.slice(0, -2);
+  if (lower.length > 5 && lower.endsWith("s")) return lower.slice(0, -1);
+  return lower;
+}
+
+function alignmentTerms(input: CreatorPromptVideoInput, scene: CreatorProductionPlanScene, index: number): Set<string> {
+  const spec = analyzeAnimatedScene(input.mode, scene, index);
+  const terms = [
+    ...spec.matchedTerms,
+    ...spec.concepts.map((item) => item.label),
+    ...(scene.visual + " " + scene.narration + " " + (scene.onScreenText ?? "")).match(/[\p{L}\p{N}][\p{L}\p{N}'-]{3,}/gu) ?? [],
+  ].map(normalizedAlignmentWord).filter((item) => item.length >= 3 && !ALIGNMENT_STOP_WORDS.has(item));
+  return new Set(terms);
+}
+
+function sceneIsAligned(
+  input: CreatorPromptVideoInput,
+  baseline: CreatorProductionPlanScene,
+  generated: LocalPlanDraft["scenes"][number],
+  index: number,
+  requireBeatMatch: boolean,
+): boolean {
+  const visualTerms = alignmentTerms(input, {
+    ...baseline,
+    title: "",
+    visual: generated.visual,
+    narration: "",
+    onScreenText: "",
+  }, index);
+  const spokenTerms = alignmentTerms(input, {
+    ...baseline,
+    title: "",
+    visual: "",
+    narration: input.narration ? baseline.narration : generated.narration,
+    onScreenText: generated.onScreenText,
+  }, index);
+  const plannedBeatTerms = alignmentTerms(input, { ...baseline, title: "" }, index);
+  const generatedTerms = new Set([...visualTerms, ...spokenTerms]);
+  const distinctivePlannedTerms = new Set([...plannedBeatTerms].filter((term) => !ALIGNMENT_GENERIC_TERMS.has(term)));
+  const beatTerms = distinctivePlannedTerms.size ? distinctivePlannedTerms : plannedBeatTerms;
+  const visualAndSpokenAgree = [...visualTerms].some((term) => spokenTerms.has(term));
+  // A one-beat brief (for example, "teach the water cycle") deliberately gives
+  // Qwen room to expand that topic into evaporation, clouds, and rain. A
+  // multi-beat brief already defines scene order, so every generated scene must
+  // also overlap its corresponding deterministic beat.
+  return visualAndSpokenAgree
+    && (!requireBeatMatch || [...generatedTerms].some((term) => beatTerms.has(term)));
+}
+
 function mergedPlan(
   input: CreatorPromptVideoInput,
   baseline: CreatorProductionPlan,
@@ -284,6 +347,27 @@ function mergedPlan(
   metadata: NonNullable<CreatorProductionPlan["intelligence"]>,
 ): CreatorProductionPlan {
   const narrationEnabled = baseline.requirements.narration;
+  let rejectedScenes = 0;
+  const acceptedVisuals = new Set<string>();
+  const requireBeatMatch = new Set(baseline.scenes.map((scene) => clean(scene.visual, 220).toLowerCase())).size > 1;
+  const scenes = baseline.scenes.map((scene, index) => {
+    const generated = draft.scenes[index];
+    if (!generated) return scene;
+    const normalizedVisual = clean(generated.visual, 220).toLowerCase();
+    if (!normalizedVisual || acceptedVisuals.has(normalizedVisual) || !sceneIsAligned(input, scene, generated, index, requireBeatMatch)) {
+      rejectedScenes += 1;
+      return scene;
+    }
+    acceptedVisuals.add(normalizedVisual);
+    return {
+      ...scene,
+      visual: clean(generated.visual, 220) || scene.visual,
+      // An explicitly authored narration is a locked script. Qwen may improve
+      // its visual treatment and on-screen text, but must not rewrite it.
+      narration: narrationEnabled && !input.narration ? (clean(generated.narration, 240) || scene.narration) : scene.narration,
+      onScreenText: clean(generated.onScreenText, 64) || scene.onScreenText,
+    };
+  });
   return {
     ...baseline,
     title: input.title?.trim() ? baseline.title : clean(draft.title, 80) || baseline.title,
@@ -291,19 +375,10 @@ function mergedPlan(
       ...baseline.requirements,
       audience: clean(draft.audience, 180) || baseline.requirements.audience,
     },
-    scenes: baseline.scenes.map((scene, index) => {
-      const generated = draft.scenes[index];
-      if (!generated) return scene;
-      return {
-        ...scene,
-        visual: clean(generated.visual, 220) || scene.visual,
-        // An explicitly authored narration is a locked script. Qwen may improve
-        // its visual treatment and on-screen text, but must not rewrite it.
-        narration: narrationEnabled && !input.narration ? (clean(generated.narration, 240) || scene.narration) : scene.narration,
-        onScreenText: clean(generated.onScreenText, 64) || scene.onScreenText,
-      };
-    }),
-    intelligence: metadata,
+    scenes,
+    intelligence: rejectedScenes
+      ? { ...metadata, fallbackReason: `${rejectedScenes} Qwen scene${rejectedScenes === 1 ? "" : "s"} failed visual/narration alignment or uniqueness QA and used the deterministic aligned beat.` }
+      : metadata,
   };
 }
 
@@ -329,6 +404,7 @@ function planCacheKey(input: CreatorPromptVideoInput, plan: CreatorProductionPla
     durationSeconds: plan.requirements.targetDurationSeconds,
     presenter: input.presenter,
     voiceProvider: input.voiceProvider,
+    language: input.language,
     presets: input.presets,
     generateVoice: input.generateVoice,
     generateMusic: input.generateMusic,
@@ -338,6 +414,7 @@ function planCacheKey(input: CreatorPromptVideoInput, plan: CreatorProductionPla
     logoSource: input.logoSource,
     musicSource: input.musicSource,
     mediaProvider: input.mediaProvider,
+    visualQuality: input.visualQuality,
     mediaTask: input.mediaTask,
   });
 }
@@ -403,7 +480,7 @@ export async function enhancePromptVideoPlan(
         messages: [
           {
             role: "system",
-            content: "Return only the compact video-plan JSON. Use supplied facts only; invent no claims. Write exactly three sequential scenes. Keep each visual under 14 words, narration under 18 words, and on-screen phrase under five words. Never request tools, credentials, network access, or approval.",
+            content: "Return only the compact video-plan JSON. Use supplied facts only; invent no claims. Write exactly three sequential scenes. Every visual must name a concrete setting, visible subjects, a physical action, and important props; no two scenes may reuse the same composition or action. Use the requested language for narration and on-screen text. Keep each visual under 18 words, narration under 18 words, and on-screen phrase under five words. Never request tools, credentials, network access, or approval.",
           },
           {
             role: "user",
@@ -413,6 +490,8 @@ export async function enhancePromptVideoPlan(
               mode: input.mode,
               targetSeconds: baseline.requirements.targetDurationSeconds,
               presenter: input.presenter ?? "automatic fictional host",
+              visualQuality: input.visualQuality ?? "auto",
+              language: input.language ?? "en",
               source: input.source || input.sceneSources?.length
                 ? "user-provided local scene media is available"
                 : input.mediaProvider === "local-adapter"

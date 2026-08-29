@@ -33,7 +33,7 @@ import { remixMedia, renderCreatorManifest } from "./creator/renderer.js";
 import { createSocialPackage } from "./creator/social.js";
 import { listCreatorAssets } from "./creator/assets.js";
 import { getLocalAiStatus, warmLocalPlanner } from "./creator/local-ai.js";
-import { createPromptVideoProject, createSmartPromptVideoPlan } from "./creator/prompt.js";
+import { createPromptVideoProject, createSmartPromptVideoPlan, inferPromptMode } from "./creator/prompt.js";
 import {
   CREATOR_IMAGE_MOTIONS,
   CREATOR_LOOP_ANIMATIONS,
@@ -42,6 +42,7 @@ import {
   CREATOR_OVERLAY_ANIMATIONS,
   CREATOR_PROMPT_MODES,
   CREATOR_TRANSITIONS,
+  CREATOR_VISUAL_QUALITIES,
   CREATOR_VFX_PRESETS,
 } from "./creator/types.js";
 import {
@@ -57,10 +58,12 @@ import type {
   CreatorPlannerProfile,
   CreatorPlannerProvider,
   CreatorPromptMode,
+  CreatorPromptModeChoice,
   CreatorPresetId,
   CreatorRenderResult,
   CreatorRenderedOutput,
   CreatorTemplateId,
+  CreatorVisualQuality,
 } from "./creator/types.js";
 
 const program = new Command();
@@ -121,6 +124,13 @@ function mediaTask(value: string): CreatorMediaTask {
     throw new Error(`Media task must be one of: ${CREATOR_MEDIA_TASKS.join(", ")}.`);
   }
   return value as CreatorMediaTask;
+}
+
+function visualQuality(value: string): CreatorVisualQuality {
+  if (!CREATOR_VISUAL_QUALITIES.includes(value as CreatorVisualQuality)) {
+    throw new Error(`Visual quality must be one of: ${CREATOR_VISUAL_QUALITIES.join(", ")}.`);
+  }
+  return value as CreatorVisualQuality;
 }
 
 async function readRenderResult(filePath: string): Promise<CreatorRenderResult> {
@@ -508,7 +518,7 @@ creator
   .command("plan")
   .description("Plan requirements, visual direction, storyboard, resources, workflow, and QA before creating a video.")
   .argument("<prompt>", "Creative brief")
-  .option("--mode <mode>", "product-launch, cartoon, story, asmr, or vfx", "product-launch")
+  .option("--mode <mode>", "auto, product-launch, cartoon, story, asmr, or vfx", "auto")
   .option("--title <title>", "Project title")
   .option("--source <path>", "Optional source image or video")
   .option("--scene-sources <paths>", "Comma-separated local scene images or videos")
@@ -518,7 +528,9 @@ creator
   .option("--narration <text>", "Exact narration script; sentences stay locked across planned scenes")
   .option("--duration <seconds>", "Target duration in seconds")
   .option("--presenter <id>", "none, aria, leo, nova, or milo")
+  .option("--voice-name <name>", "System or neural voice name")
   .option("--voice-provider <provider>", "local, neural, or local-clone", "local")
+  .option("--language <tag>", "Narration/caption language, for example en-US, ar-AE, or hi-IN")
   .option("--voice-reference <path>", "Authorized speaker reference audio for local-clone")
   .option("--voice-speaker <name>", "Name of the speaker who authorized local cloning")
   .option("--voice-consent", "Confirm the named speaker authorized this project's cloned voice", false)
@@ -527,6 +539,7 @@ creator
   .option("--planner-profile <profile>", "fast or quality", "fast")
   .option("--planner-model <name>", "Exact installed local Ollama model")
   .option("--planner-url <url>", "Loopback Ollama URL")
+  .option("--visual-quality <tier>", "auto, generative, or motion-graphics", "auto")
   .option("--media-provider <provider>", CREATOR_MEDIA_PROVIDERS.join(", "), "auto")
   .option("--media-task <task>", CREATOR_MEDIA_TASKS.join(", "), "auto")
   .option("--media-adapter-url <url>", "Loopback local media-generation adapter endpoint")
@@ -536,17 +549,19 @@ creator
   .option("--comfyui-workflow <path>", "ComfyUI API workflow template")
   .option("--no-voice", "Plan without narration")
   .option("--no-music", "Plan without music or ambience")
-  .action(async (promptText: string, options: { mode: string; title?: string; source?: string; sceneSources?: string; characters?: string; logo?: string; musicSource?: string; narration?: string; duration?: string; presenter?: string; voiceProvider: string; voiceReference?: string; voiceSpeaker?: string; voiceConsent: boolean; presets: string; planner: string; plannerProfile: string; plannerModel?: string; plannerUrl?: string; mediaProvider: string; mediaTask: string; mediaAdapterUrl?: string; ltxUrl?: string; allowCloudMedia: boolean; comfyuiUrl?: string; comfyuiWorkflow?: string; voice: boolean; music: boolean }) => {
-    if (!CREATOR_PROMPT_MODES.includes(options.mode as CreatorPromptMode)) throw new Error(`Unknown prompt mode '${options.mode}'. Available: ${CREATOR_PROMPT_MODES.join(", ")}.`);
+  .action(async (promptText: string, options: { mode: string; title?: string; source?: string; sceneSources?: string; characters?: string; logo?: string; musicSource?: string; narration?: string; duration?: string; presenter?: string; voiceName?: string; voiceProvider: string; language?: string; voiceReference?: string; voiceSpeaker?: string; voiceConsent: boolean; presets: string; planner: string; plannerProfile: string; plannerModel?: string; plannerUrl?: string; visualQuality: string; mediaProvider: string; mediaTask: string; mediaAdapterUrl?: string; ltxUrl?: string; allowCloudMedia: boolean; comfyuiUrl?: string; comfyuiWorkflow?: string; voice: boolean; music: boolean }) => {
+    if (options.mode !== "auto" && !CREATOR_PROMPT_MODES.includes(options.mode as CreatorPromptMode)) throw new Error(`Unknown prompt mode '${options.mode}'. Available: auto, ${CREATOR_PROMPT_MODES.join(", ")}.`);
+    const selectedMode = inferPromptMode(promptText, options.mode as CreatorPromptModeChoice);
     const selectedMedia = mediaProvider(options.mediaProvider);
     const selectedTask = mediaTask(options.mediaTask);
+    const selectedQuality = visualQuality(options.visualQuality);
     if (!(["local", "neural", "local-clone"] as const).includes(options.voiceProvider as "local" | "neural" | "local-clone")) throw new Error("Voice provider must be 'local', 'neural', or 'local-clone'.");
     if (options.presenter && !["none", "aria", "leo", "nova", "milo"].includes(options.presenter)) throw new Error(`Unknown presenter '${options.presenter}'. Run 'agent-demo creator assets'.`);
     const durationSeconds = options.duration === undefined ? undefined : Number(options.duration);
     if (durationSeconds !== undefined && !Number.isFinite(durationSeconds)) throw new Error("Duration must be a number of seconds.");
     output(await createSmartPromptVideoPlan({
       prompt: promptText,
-      mode: options.mode as CreatorPromptMode,
+      mode: selectedMode,
       title: options.title,
       source: options.source ? path.resolve(options.source) : undefined,
       sceneSources: sourceList(options.sceneSources),
@@ -556,7 +571,9 @@ creator
       narration: options.narration,
       durationSeconds,
       presenter: options.presenter as "none" | "aria" | "leo" | "nova" | "milo" | undefined,
+      voice: options.voiceName,
       voiceProvider: options.voiceProvider as "local" | "neural" | "local-clone",
+      language: options.language,
       voiceReference: options.voiceReference ? path.resolve(options.voiceReference) : undefined,
       voiceConsent: options.voiceProvider === "local-clone" ? { speakerName: options.voiceSpeaker || "", confirmed: options.voiceConsent, scope: "this video project" } : undefined,
       presets: presetList(options.presets),
@@ -566,6 +583,7 @@ creator
       plannerProfile: options.plannerProfile as CreatorPlannerProfile,
       plannerModel: options.plannerModel,
       plannerBaseUrl: options.plannerUrl,
+      visualQuality: selectedQuality,
       mediaProvider: selectedMedia,
       mediaTask: selectedTask,
       mediaAdapterUrl: options.mediaAdapterUrl,
@@ -580,7 +598,7 @@ creator
   .command("prompt")
   .description("Create a product launch, cartoon, narrated story, ASMR, or VFX project from one prompt.")
   .argument("<prompt>", "Creative direction or narration")
-  .option("--mode <mode>", "product-launch, cartoon, story, asmr, or vfx", "product-launch")
+  .option("--mode <mode>", "auto, product-launch, cartoon, story, asmr, or vfx", "auto")
   .option("--title <title>", "Project title")
   .option("--source <path>", "Optional source image or video")
   .option("--scene-sources <paths>", "Comma-separated local scene images or videos")
@@ -593,6 +611,7 @@ creator
   .option("--presenter <id>", "none, aria, leo, nova, or milo")
   .option("--voice-name <name>", "System or neural voice name")
   .option("--voice-provider <provider>", "local, neural, or local-clone", "local")
+  .option("--language <tag>", "Narration/caption language, for example en-US, ar-AE, or hi-IN")
   .option("--voice-rate <number>", "Speech rate adjustment")
   .option("--voice-reference <path>", "Authorized speaker reference audio for local-clone")
   .option("--voice-speaker <name>", "Name of the speaker who authorized local cloning")
@@ -603,6 +622,7 @@ creator
   .option("--planner-profile <profile>", "fast or quality", "fast")
   .option("--planner-model <name>", "Exact installed local Ollama model")
   .option("--planner-url <url>", "Loopback Ollama URL")
+  .option("--visual-quality <tier>", "auto, generative, or motion-graphics", "auto")
   .option("--media-provider <provider>", CREATOR_MEDIA_PROVIDERS.join(", "), "auto")
   .option("--media-task <task>", CREATOR_MEDIA_TASKS.join(", "), "auto")
   .option("--media-adapter-url <url>", "Loopback local media-generation adapter endpoint")
@@ -627,6 +647,7 @@ creator
     presenter?: string;
     voiceName?: string;
     voiceProvider: string;
+    language?: string;
     voiceRate?: string;
     voiceReference?: string;
     voiceSpeaker?: string;
@@ -637,6 +658,7 @@ creator
     plannerProfile: string;
     plannerModel?: string;
     plannerUrl?: string;
+    visualQuality: string;
     mediaProvider: string;
     mediaTask: string;
     mediaAdapterUrl?: string;
@@ -648,9 +670,11 @@ creator
     voice: boolean;
     music: boolean;
   }) => {
-    if (!CREATOR_PROMPT_MODES.includes(options.mode as CreatorPromptMode)) throw new Error(`Unknown prompt mode '${options.mode}'. Available: ${CREATOR_PROMPT_MODES.join(", ")}.`);
+    if (options.mode !== "auto" && !CREATOR_PROMPT_MODES.includes(options.mode as CreatorPromptMode)) throw new Error(`Unknown prompt mode '${options.mode}'. Available: auto, ${CREATOR_PROMPT_MODES.join(", ")}.`);
+    const selectedMode = inferPromptMode(promptText, options.mode as CreatorPromptModeChoice);
     const selectedMedia = mediaProvider(options.mediaProvider);
     const selectedTask = mediaTask(options.mediaTask);
+    const selectedQuality = visualQuality(options.visualQuality);
     if (options.presenter && !["none", "aria", "leo", "nova", "milo"].includes(options.presenter)) throw new Error(`Unknown presenter '${options.presenter}'. Run 'agent-demo creator assets'.`);
     if (!(["local", "neural", "local-clone"] as const).includes(options.voiceProvider as "local" | "neural" | "local-clone")) throw new Error("Voice provider must be 'local', 'neural', or 'local-clone'.");
     const durationSeconds = options.duration === undefined ? undefined : Number(options.duration);
@@ -659,7 +683,7 @@ creator
     if (voiceRate !== undefined && !Number.isFinite(voiceRate)) throw new Error("Voice rate must be a number.");
     output(await createPromptVideoProject({
       prompt: promptText,
-      mode: options.mode as CreatorPromptMode,
+      mode: selectedMode,
       title: options.title,
       source: options.source ? path.resolve(options.source) : undefined,
       sceneSources: sourceList(options.sceneSources),
@@ -672,6 +696,7 @@ creator
       presenter: options.presenter as "none" | "aria" | "leo" | "nova" | "milo" | undefined,
       voice: options.voiceName,
       voiceProvider: options.voiceProvider as "local" | "neural" | "local-clone",
+      language: options.language,
       voiceRate,
       voiceReference: options.voiceReference ? path.resolve(options.voiceReference) : undefined,
       voiceConsent: options.voiceProvider === "local-clone" ? { speakerName: options.voiceSpeaker || "", confirmed: options.voiceConsent, scope: "this video project" } : undefined,
@@ -683,6 +708,7 @@ creator
       plannerProfile: options.plannerProfile as CreatorPlannerProfile,
       plannerModel: options.plannerModel,
       plannerBaseUrl: options.plannerUrl,
+      visualQuality: selectedQuality,
       mediaProvider: selectedMedia,
       mediaTask: selectedTask,
       mediaAdapterUrl: options.mediaAdapterUrl,

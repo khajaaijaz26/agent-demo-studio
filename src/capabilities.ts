@@ -140,7 +140,7 @@ function selectedMediaProvider(request: CapabilityRequest, env: NodeJS.ProcessEn
   if (request.mediaProvider !== "auto") return request.mediaProvider;
   if (request.ltxDesktopUrl || env.AGENT_DEMO_LTX_DESKTOP_URL) return "ltx-desktop";
   if ((request.comfyuiUrl || env.AGENT_DEMO_COMFYUI_URL) && (request.comfyuiWorkflow || env.AGENT_DEMO_COMFYUI_WORKFLOW)) return "comfyui";
-  if (request.mediaAdapterUrl || env.AGENT_DEMO_MEDIA_ADAPTER_URL) return "local-adapter";
+  if (request.mediaAdapterUrl || env.AGENT_DEMO_MEDIA_ADAPTER_URL || env.AGENT_DEMO_WAN_VIDEO_ADAPTER_URL) return "local-adapter";
   return "animated";
 }
 
@@ -162,7 +162,10 @@ export async function inspectCapabilities(
   const selectedVoice = voiceEnabled ? (request.voiceProvider ?? "local") : undefined;
   const selectedVisuals = selectedMediaProvider(request, env);
   const selectedMusic = request.generateMusic === true && !request.suppliedMusic;
-  const localMedia = loopbackEndpoint(request.mediaAdapterUrl || env.AGENT_DEMO_MEDIA_ADAPTER_URL, "Local media adapter");
+  const localMedia = loopbackEndpoint(
+    request.mediaAdapterUrl || env.AGENT_DEMO_MEDIA_ADAPTER_URL || env.AGENT_DEMO_WAN_VIDEO_ADAPTER_URL,
+    "Local media adapter",
+  );
   const localVoice = loopbackEndpoint(request.voiceCloneUrl || env.AGENT_DEMO_VOICE_CLONE_URL, "Local voice-clone adapter");
   const comfyPromise = runtime.comfyUiStatus
     ? runtime.comfyUiStatus()
@@ -287,7 +290,7 @@ export async function inspectCapabilities(
     capability({
       id: "visuals.animated",
       category: "visuals",
-      label: "Built-in moving cartoon engine",
+      label: "Prompt-conditioned motion graphics",
       status: browserReady && ffmpeg.available ? "ready" : "unavailable",
       selected: selectedVisuals === "animated",
       required: selectedVisuals === "animated",
@@ -295,9 +298,9 @@ export async function inspectCapabilities(
       requiresNetwork: false,
       cost: "free-local",
       detail: browserReady && ffmpeg.available
-        ? "Real 1080p vector scenes, articulated characters, blinking, gestures, lip motion, particles, and stable backgrounds are ready."
-        : "The moving cartoon engine requires Playwright Chromium and FFmpeg.",
-      features: ["moving-characters", "talking-mouths", "articulated-gestures", "stable-1080p", "no-photo-shake"],
+        ? "Scene-specific 1080p vector graphics, articulated characters, planned actions, props, settings, and stable backgrounds are ready. This is not Wan/LTX diffusion inference."
+        : "The prompt-conditioned motion-graphics engine requires Playwright Chromium and FFmpeg.",
+      features: ["semantic-scene-graph", "moving-characters", "planned-actions", "scene-specific-props", "stable-1080p", "no-photo-shake"],
       setup: "Run agent-demo setup and install FFmpeg.",
     }),
     capability({
@@ -367,7 +370,7 @@ export async function inspectCapabilities(
       cost: "free-local",
       detail: localMedia.detail,
       features: ["text-to-image", "image-to-video", "text-to-video", "speech-to-video", "character-animation", "batch-scenes"],
-      setup: "Set AGENT_DEMO_MEDIA_ADAPTER_URL to a loopback /v1/media/generate endpoint.",
+      setup: "Set AGENT_DEMO_MEDIA_ADAPTER_URL (or AGENT_DEMO_WAN_VIDEO_ADAPTER_URL) to a loopback /v1/media/generate endpoint.",
       metadata: localMedia.endpoint ? { endpoint: localMedia.endpoint } : undefined,
     }),
     capability({
