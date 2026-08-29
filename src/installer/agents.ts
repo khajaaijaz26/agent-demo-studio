@@ -4,6 +4,7 @@ import { createRequire } from "node:module";
 import { chromium } from "playwright";
 import { ffmpegCommand, ffprobeCommand, pathExists } from "../config.js";
 import { AgentDemoError } from "../errors.js";
+import { getLocalAiStatus } from "../creator/local-ai.js";
 import { commandExists, runCommand, type CommandResult } from "../utils/process.js";
 
 export type AgentTarget = "codex" | "claude";
@@ -137,6 +138,7 @@ export interface DoctorCheck {
   name: string;
   ok: boolean;
   detail: string;
+  optional?: boolean;
 }
 
 export async function ensureChromiumInstalled(): Promise<boolean> {
@@ -158,6 +160,7 @@ export async function ensureChromiumInstalled(): Promise<boolean> {
 
 export async function runDoctor(): Promise<DoctorCheck[]> {
   const browserPath = chromium.executablePath();
+  const localAi = await getLocalAiStatus();
   const checks: DoctorCheck[] = [
     {
       name: "Node.js",
@@ -183,11 +186,19 @@ export async function runDoctor(): Promise<DoctorCheck[]> {
       name: "Codex",
       ok: await commandExists("codex"),
       detail: "codex",
+      optional: true,
     },
     {
       name: "Claude Code",
       ok: await commandExists("claude"),
       detail: "claude",
+      optional: true,
+    },
+    {
+      name: "Local Qwen",
+      ok: localAi.available,
+      detail: localAi.available ? `${localAi.selectedModel} via ${localAi.baseUrl}` : localAi.message,
+      optional: true,
     },
   ];
   return checks;

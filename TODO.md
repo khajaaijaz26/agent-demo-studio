@@ -1,10 +1,12 @@
 # Agent Demo Studio roadmap
 
-This backlog records the work that follows the v0.3 animation, character, prompt-video, ASMR, product-launch, and VFX milestone. It includes a feature audit of [MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo) at commit `0df0ef4ac2d725c79fa53bfe072063ee9cdfba80` (2026-08-26).
+This backlog records the work that follows the v0.4 local-Qwen, open-assets,
+terminal-dashboard, prompt-video, ASMR, product-launch, and VFX milestone. It
+includes a feature audit of [MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo) at commit `0df0ef4ac2d725c79fa53bfe072063ee9cdfba80` (2026-08-26).
 
 The comparison is architectural and product research. No MoneyPrinterTurbo source or bundled media is copied into Agent Demo Studio. MoneyPrinterTurbo is MIT licensed, but any future direct code reuse must retain its copyright and license notice. External media, voice, music, model, and publishing providers keep their own terms and costs.
 
-## P0 — finish v0.3 first
+## P0 — shipped foundation
 
 - [x] Make every prompt-video request produce requirements, visual direction, a
   storyboard, resource/provenance list, workflow, assumptions, and QA gates before
@@ -15,6 +17,8 @@ The comparison is architectural and product research. No MoneyPrinterTurbo sourc
 - [x] Add generated-asset provenance, synthetic-character disclosure, examples, and manifest documentation.
 - [x] Run unit, smoke, package, install, security, and visual QA checks.
 - [x] Push, tag, and verify v0.3.0 plus the v0.3.1 dense-timeline compatibility patch; reinstall Codex and Claude Code integrations.
+- [x] Align authored narration and captions to their matching scene starts,
+  preserve locked uploaded plates, and rasterize SVG sources portably.
 
 ## Existing strengths to preserve
 
@@ -30,6 +34,15 @@ The comparison is architectural and product research. No MoneyPrinterTurbo sourc
 
 ## P1 — content intelligence and material pipeline
 
+- [x] Add a zero-token loopback Ollama/Qwen planner with strict structured output,
+  one-call fast mode, model keep-alive, transparent timing/token metadata, and an
+  instant deterministic fallback.
+- [x] Remove the fixed-cast assumption: accept unlimited authorized character and
+  scene uploads, plus logos and music, across the shared prompt contract.
+- [x] Add one-batch loopback handoff contracts for local text-to-image,
+  image-to-video, and text-to-video engines while keeping rendering vendor-neutral.
+- [x] Add an interactive free terminal dashboard and standalone original local
+  ambient/ASMR music generation alongside MCP and visual Studio controls.
 - [ ] Add a provider-neutral LLM interface for structured scripts, hooks, scenes, search terms, narration, CTAs, titles, descriptions, and hashtags.
 - [ ] Support OpenAI-compatible endpoints first, then optional Anthropic, Gemini, Ollama, LiteLLM, Azure, Qwen, DeepSeek, Groq, and other adapters without coupling the core renderer to any vendor.
 - [ ] Upgrade the deterministic three-act production plan into a provider-neutral,
@@ -41,10 +54,12 @@ The comparison is architectural and product research. No MoneyPrinterTurbo sourc
 - [ ] Add material search/download caching, cache statistics, safe cleanup, proxy configuration, retry/backoff, and API-key rotation.
 - [ ] Add optional semantic ranking and video QA adapters, including TwelveLabs-compatible reranking/analysis, behind explicit provider configuration.
 - [ ] Add pluggable image-to-video and text-to-video providers, starting with a generic asynchronous job adapter and an optional WaveSpeed-compatible implementation.
-- [ ] Let image-generation agents create per-shot art through a documented asset handoff instead of limiting prompt videos to bundled scenes.
+- [x] Let local image/video-generation agents create per-shot art through a documented batch asset handoff instead of limiting prompt videos to bundled scenes.
 
 ## P2 — voice, captions, music, and audio direction
 
+- [x] Add a loopback-only local voice-profile adapter with mandatory named-speaker
+  consent metadata and support for uploaded reference audio.
 - [ ] Introduce a TTS provider registry with voice discovery, preview, credential checks, retries, and normalized rate/pitch/volume controls.
 - [ ] Keep local OS speech and Edge TTS, then add optional Azure Speech, Gemini TTS, ElevenLabs, Fish Audio, Chatterbox-compatible, SiliconFlow, MiniMax, and MiMo adapters.
 - [ ] Use provider speech-boundary timestamps when available and forced alignment/Whisper when they are not.

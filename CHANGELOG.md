@@ -2,7 +2,34 @@
 
 All notable changes to Agent Demo Studio are documented here.
 
-## Unreleased
+## 0.4.0 - 2026-08-29
+
+### Added
+
+- Zero-token loopback Ollama/Qwen planning with a speed-first 0.8B profile, one
+  structured generation call, 30-minute keep-alive, quality profile, diagnostics,
+  warmup, and an instant deterministic fallback across CLI, MCP, and Studio.
+- Open prompt assets: unlimited uploaded scene and character media, logos, music,
+  image-to-video motion, resource provenance, and optional bundled starter assets.
+- Loopback batch adapter contract for locally installed text-to-image,
+  image-to-video, and text-to-video engines.
+- Consent-gated local voice-profile adapter and Studio reference-audio uploads.
+- Interactive free terminal dashboard plus standalone ambient/ASMR music creation
+  through CLI, MCP, Studio, and the dashboard.
+- Machine-readable fixed production rules covering plan-first creation, open
+  assets, rights, scene/audio alignment, safe layout, natural audio, local-first
+  execution, QA, and review-before-publish.
+
+### Changed
+
+- Prompt narration is now derived from the locally refined scene plan and that
+  same plan is retimed after speech synthesis instead of being regenerated.
+- Narration is synthesized per scene and placed at the matching visual beat;
+  captions use those same scene offsets, and authored scripts remain locked.
+- Bundled characters are optional starters; prompt creation defaults to no fixed
+  host and accepts an open cast.
+- Uploaded scene plates remain stable by default so authored UI, labels, and
+  faces are not cropped by automatic pan or zoom motion.
 
 ### Fixed
 
@@ -10,6 +37,8 @@ All notable changes to Agent Demo Studio are documented here.
   canvas instead of applying decorative-overlay size caps. This keeps native
   scene plates, product screens, and brand artwork locked to their designed
   positions in the encoded video.
+- Rasterize SVG scene inputs automatically before FFmpeg encoding for consistent
+  Windows, macOS, and Linux rendering.
 
 ## 0.3.1 - 2026-08-26
 

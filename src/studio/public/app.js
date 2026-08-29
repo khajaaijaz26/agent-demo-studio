@@ -8,6 +8,13 @@ const state = {
   creatorManifest: null,
   creatorResult: null,
   creatorJobId: null,
+  promptUploads: {
+    sceneSources: [],
+    characters: [],
+    logoSource: null,
+    musicSource: null,
+    voiceReference: null,
+  },
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -46,8 +53,13 @@ const elements = {
   presetGrid: $("#preset-grid"),
   templateSelect: $("#template-select"),
   promptText: $("#prompt-text"),
+  promptNarration: $("#prompt-narration"),
   promptMode: $("#prompt-mode"),
   promptPresenter: $("#prompt-presenter"),
+  promptPlannerProvider: $("#prompt-planner-provider"),
+  promptPlannerProfile: $("#prompt-planner-profile"),
+  promptMediaProvider: $("#prompt-media-provider"),
+  promptMediaTask: $("#prompt-media-task"),
   promptVoiceProvider: $("#prompt-voice-provider"),
   promptDuration: $("#prompt-duration"),
   promptVoice: $("#prompt-voice"),
@@ -58,6 +70,28 @@ const elements = {
   promptPlanPreview: $("#prompt-plan-preview"),
   promptPlanSummary: $("#prompt-plan-summary"),
   promptPlanResources: $("#prompt-plan-resources"),
+  localAiTitle: $("#local-ai-title"),
+  localAiDetail: $("#local-ai-detail"),
+  localAiWarm: $("#local-ai-warm"),
+  localAiCard: $(".local-ai-card"),
+  promptSceneFiles: $("#prompt-scene-files"),
+  promptCharacterFiles: $("#prompt-character-files"),
+  promptLogoFile: $("#prompt-logo-file"),
+  promptMusicFile: $("#prompt-music-file"),
+  promptVoiceReferenceFile: $("#prompt-voice-reference-file"),
+  promptSceneUploadStatus: $("#prompt-scene-upload-status"),
+  promptCharacterUploadStatus: $("#prompt-character-upload-status"),
+  promptLogoUploadStatus: $("#prompt-logo-upload-status"),
+  promptMusicUploadStatus: $("#prompt-music-upload-status"),
+  promptVoiceUploadStatus: $("#prompt-voice-upload-status"),
+  promptVoiceSpeaker: $("#prompt-voice-speaker"),
+  promptVoiceConsent: $("#prompt-voice-consent"),
+  promptMediaAdapterUrl: $("#prompt-media-adapter-url"),
+  promptVoiceCloneUrl: $("#prompt-voice-clone-url"),
+  promptMusicStyle: $("#prompt-music-style"),
+  promptMusicDuration: $("#prompt-music-duration"),
+  promptGenerateMusic: $("#prompt-generate-music"),
+  promptGeneratedMusicStatus: $("#prompt-generated-music-status"),
   creatorTitle: $("#creator-title"),
   creatorSource: $("#creator-source"),
   creatorOutput: $("#creator-output"),
@@ -101,6 +135,48 @@ async function api(path, options) {
   const payload = await response.json();
   if (!response.ok) throw new Error(payload?.error?.message || payload?.error || "Request failed");
   return payload;
+}
+
+function renderLocalAiStatus(status) {
+  const ready = Boolean(status?.available && status?.selectedModel);
+  elements.localAiCard.classList.toggle("unavailable", !ready);
+  elements.localAiTitle.textContent = ready ? `${status.selectedModel} · ${status.profile} · local` : "Instant local planner ready";
+  elements.localAiDetail.textContent = ready ? "0 paid API tokens · loopback only · 30 minute keep-alive" : (status?.message || "Qwen is optional; deterministic planning never blocks creation");
+  elements.localAiWarm.disabled = !ready;
+}
+
+async function refreshLocalAiStatus() {
+  const profile = elements.promptPlannerProfile?.value || "fast";
+  const status = await api(`/api/local-ai/status?profile=${encodeURIComponent(profile)}`);
+  renderLocalAiStatus(status);
+  return status;
+}
+
+async function uploadFile(file, kind) {
+  const response = await fetch(`/api/uploads?kind=${encodeURIComponent(kind)}&name=${encodeURIComponent(file.name)}`, {
+    method: "POST",
+    headers: { "Content-Type": file.type || "application/octet-stream" },
+    body: file,
+  });
+  const payload = await response.json();
+  if (!response.ok) throw new Error(payload?.error?.message || payload?.error || `Could not upload ${file.name}`);
+  return payload;
+}
+
+async function uploadSelection(input, kind, statusElement, apply) {
+  const files = [...(input.files || [])];
+  if (!files.length) return;
+  input.disabled = true;
+  statusElement.textContent = `Uploading ${files.length} local file${files.length === 1 ? "" : "s"}…`;
+  try {
+    const uploaded = [];
+    for (const file of files) uploaded.push({ file, result: await uploadFile(file, kind) });
+    apply(uploaded);
+    statusElement.textContent = `${uploaded.length} local file${uploaded.length === 1 ? "" : "s"} ready`;
+    creatorFeedback("Uploads are ready and will be recorded in the production resource list.", "success");
+  } finally {
+    input.disabled = false;
+  }
 }
 
 function feedback(message, kind = "") {
@@ -256,7 +332,7 @@ async function loadTemplate() {
 }
 
 async function initializeCreator() {
-  const [presets, templates, creatorAssets] = await Promise.all([api("/api/creator/presets"), api("/api/creator/templates"), api("/api/creator/assets")]);
+  const [presets, templates, creatorAssets, localAi] = await Promise.all([api("/api/creator/presets"), api("/api/creator/templates"), api("/api/creator/assets"), api("/api/local-ai/status?profile=fast")]);
   state.presets = presets;
   state.templates = templates;
   state.creatorAssets = creatorAssets;
@@ -265,36 +341,21 @@ async function initializeCreator() {
   elements.promptMode.innerHTML = creatorAssets.promptModes.map((mode) => `<option value="${escapeHtml(mode)}">${escapeHtml(mode.split("-").map((part) => part[0].toUpperCase() + part.slice(1)).join(" "))}</option>`).join("");
   const characters = creatorAssets.assets.filter((asset) => asset.kind === "presenter" || asset.kind === "character");
   elements.promptPresenter.innerHTML = '<option value="none">No character</option>' + characters.map((asset) => `<option value="${escapeHtml(asset.id)}">${escapeHtml(asset.label)} · ${escapeHtml(asset.style)}</option>`).join("");
-  elements.promptPresenter.value = "aria";
+  elements.promptPresenter.options[0].textContent = "No starter character";
+  elements.promptPresenter.value = "none";
+  renderLocalAiStatus(localAi);
   if (!state.creatorManifest) await loadTemplate();
   else renderPresetGrid();
 }
 
 function syncPromptCharacterToMode() {
-  const defaults = { "product-launch": "aria", cartoon: "nova", story: "nova", asmr: "none", vfx: "none" };
-  elements.promptPresenter.value = defaults[elements.promptMode.value] || "none";
+  if (elements.promptMode.value === "asmr") elements.promptPresenter.value = "none";
 }
 
 async function createFromPrompt(render) {
-  const prompt = elements.promptText.value.trim();
-  if (!prompt) throw new Error("Describe the video you want to create first.");
-  const duration = elements.promptDuration.value ? Number(elements.promptDuration.value) : undefined;
   const job = await api("/api/creator/prompt", {
     method: "POST",
-    body: JSON.stringify({
-      prompt,
-      mode: elements.promptMode.value,
-      title: elements.creatorTitle.value || undefined,
-      source: elements.creatorSource.value || undefined,
-      outputDirectory: elements.creatorOutput.value || undefined,
-      presenter: elements.promptPresenter.value,
-      voiceProvider: elements.promptVoiceProvider.value,
-      durationSeconds: duration,
-      presets: selectedPresetIds().length ? selectedPresetIds() : ["youtube-1080p"],
-      generateVoice: elements.promptVoice.checked,
-      generateMusic: elements.promptMusic.checked,
-      render,
-    }),
+    body: JSON.stringify(promptRequest(render)),
   });
   state.creatorJobId = job.id;
   const created = await waitForJob(job, render ? "Creating and rendering prompt video" : "Creating prompt video project");
@@ -310,18 +371,39 @@ async function createFromPrompt(render) {
 function promptRequest(render) {
   const prompt = elements.promptText.value.trim();
   if (!prompt) throw new Error("Describe the video you want to create first.");
+  if (elements.promptVoiceProvider.value === "local-clone") {
+    if (!state.promptUploads.voiceReference) throw new Error("Upload the authorized speaker's voice reference first.");
+    if (!elements.promptVoiceSpeaker.value.trim() || !elements.promptVoiceConsent.checked) throw new Error("Record the speaker name and voice permission before using a local clone.");
+  }
   return {
     prompt,
+    narration: elements.promptNarration.value.trim() || undefined,
     mode: elements.promptMode.value,
     title: elements.creatorTitle.value || undefined,
     source: elements.creatorSource.value || undefined,
+    sceneSources: state.promptUploads.sceneSources,
+    characters: state.promptUploads.characters,
+    logoSource: state.promptUploads.logoSource || undefined,
+    musicSource: state.promptUploads.musicSource || undefined,
     outputDirectory: elements.creatorOutput.value || undefined,
     presenter: elements.promptPresenter.value,
     voiceProvider: elements.promptVoiceProvider.value,
+    voiceReference: state.promptUploads.voiceReference || undefined,
+    voiceConsent: elements.promptVoiceProvider.value === "local-clone" ? {
+      speakerName: elements.promptVoiceSpeaker.value.trim(),
+      confirmed: elements.promptVoiceConsent.checked,
+      scope: "this video project",
+    } : undefined,
+    voiceCloneUrl: elements.promptVoiceCloneUrl.value.trim() || undefined,
     durationSeconds: elements.promptDuration.value ? Number(elements.promptDuration.value) : undefined,
     presets: selectedPresetIds().length ? selectedPresetIds() : ["youtube-1080p"],
     generateVoice: elements.promptVoice.checked,
     generateMusic: elements.promptMusic.checked,
+    plannerProvider: elements.promptPlannerProvider.value,
+    plannerProfile: elements.promptPlannerProfile.value,
+    mediaProvider: elements.promptMediaProvider.value,
+    mediaTask: elements.promptMediaTask.value,
+    mediaAdapterUrl: elements.promptMediaAdapterUrl.value.trim() || undefined,
     render,
   };
 }
@@ -331,6 +413,11 @@ function showProductionPlan(plan) {
   elements.promptPlanPreview.classList.remove("hidden");
   elements.promptPlanSummary.textContent = `${plan.scenes.length} scenes · ${plan.requirements.targetDurationSeconds}s · ${plan.requirements.outputPresets.join(", ")}`;
   elements.promptPlanResources.textContent = plan.resources.map((resource) => `${resource.status.toUpperCase()}  ${resource.category}\n${resource.requirement}\n${resource.source}`).join("\n\n");
+  const intelligence = plan.intelligence?.provider === "ollama" ? `${plan.intelligence.model} local` : "instant local rules";
+  elements.promptPlanSummary.textContent = `${plan.scenes.length} scenes · ${plan.requirements.targetDurationSeconds}s · ${intelligence}`;
+  const resources = plan.resources.map((resource) => `${resource.status.toUpperCase()}  ${resource.category}\n${resource.requirement}\n${resource.source}`).join("\n\n");
+  const rules = (plan.productionRules || []).map((rule) => `${rule.id.toUpperCase()}\n${rule.rule}\nGate: ${rule.qualityGate}`).join("\n\n");
+  elements.promptPlanResources.textContent = `${resources}\n\nFIXED PRODUCTION RULES\n\n${rules}`;
 }
 
 async function reviewPromptPlan() {
@@ -430,6 +517,58 @@ elements.render.addEventListener("click", async () => {
 
 elements.templateButton.addEventListener("click", () => loadTemplate().catch((error) => creatorFeedback(error.message, "error")));
 elements.promptMode.addEventListener("change", syncPromptCharacterToMode);
+elements.promptPlannerProfile.addEventListener("change", () => refreshLocalAiStatus().catch((error) => creatorFeedback(error.message, "error")));
+elements.localAiWarm.addEventListener("click", async () => {
+  elements.localAiWarm.disabled = true;
+  elements.localAiDetail.textContent = "Loading the model into memory…";
+  try {
+    const result = await api("/api/local-ai/warm", { method: "POST", body: JSON.stringify({ profile: elements.promptPlannerProfile.value }) });
+    await refreshLocalAiStatus();
+    creatorFeedback(`${result.model} is warm for ${result.keepAlive}; the next plan starts faster.`, "success");
+  } catch (error) { creatorFeedback(error.message, "error"); }
+  finally { elements.localAiWarm.disabled = false; }
+});
+elements.promptSceneFiles.addEventListener("change", () => uploadSelection(elements.promptSceneFiles, "scene", elements.promptSceneUploadStatus, (uploaded) => {
+  state.promptUploads.sceneSources = uploaded.map(({ result }) => result.path);
+}).catch((error) => creatorFeedback(error.message, "error")));
+elements.promptCharacterFiles.addEventListener("change", () => uploadSelection(elements.promptCharacterFiles, "character", elements.promptCharacterUploadStatus, (uploaded) => {
+  state.promptUploads.characters = uploaded.map(({ file, result }, index) => ({
+    id: `uploaded-character-${index + 1}`,
+    name: file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " "),
+    source: result.path,
+    role: "character",
+    rights: "Teacher-uploaded or locally generated authorized character",
+  }));
+  elements.promptPresenter.value = "none";
+}).catch((error) => creatorFeedback(error.message, "error")));
+elements.promptLogoFile.addEventListener("change", () => uploadSelection(elements.promptLogoFile, "logo", elements.promptLogoUploadStatus, (uploaded) => {
+  state.promptUploads.logoSource = uploaded[0]?.result.path || null;
+}).catch((error) => creatorFeedback(error.message, "error")));
+elements.promptMusicFile.addEventListener("change", () => uploadSelection(elements.promptMusicFile, "music", elements.promptMusicUploadStatus, (uploaded) => {
+  state.promptUploads.musicSource = uploaded[0]?.result.path || null;
+}).catch((error) => creatorFeedback(error.message, "error")));
+elements.promptVoiceReferenceFile.addEventListener("change", () => uploadSelection(elements.promptVoiceReferenceFile, "voice-reference", elements.promptVoiceUploadStatus, (uploaded) => {
+  state.promptUploads.voiceReference = uploaded[0]?.result.path || null;
+  if (state.promptUploads.voiceReference) elements.promptVoiceProvider.value = "local-clone";
+}).catch((error) => creatorFeedback(error.message, "error")));
+elements.promptGenerateMusic.addEventListener("click", async () => {
+  elements.promptGenerateMusic.disabled = true;
+  try {
+    const style = elements.promptMusicStyle.value;
+    const durationSeconds = Number(elements.promptMusicDuration.value || elements.promptDuration.value || 45);
+    const directory = (elements.creatorOutput.value || "./creator-output").replace(/[\\/]$/, "");
+    const job = await api("/api/creator/music", {
+      method: "POST",
+      body: JSON.stringify({ style, durationSeconds, outputPath: `${directory}/${style}-music.wav` }),
+    });
+    const generated = await waitForJob(job, "Generating free local music");
+    state.promptUploads.musicSource = generated.outputPath;
+    elements.promptGeneratedMusicStatus.textContent = `${style} ready · ${durationSeconds}s · attached to this video`;
+    elements.promptMusicUploadStatus.textContent = "Generated local music ready";
+    creatorFeedback(`Original local music created at ${generated.outputPath}.`, "success");
+  } catch (error) { creatorFeedback(error.message, "error"); }
+  finally { elements.promptGenerateMusic.disabled = false; }
+});
 elements.promptPlanButton.addEventListener("click", async () => {
   elements.promptPlanButton.disabled = true;
   try { await reviewPromptPlan(); }

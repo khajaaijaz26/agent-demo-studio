@@ -40,7 +40,7 @@
         <div class="sidebar-footer">
           <div class="agent-state"><i></i> MCP engine online</div>
           <p>Codex, Claude Code, and compatible agents share this local production engine.</p>
-          <div class="version">OPEN SOURCE · v0.3</div>
+          <div class="version">OPEN SOURCE · v0.4</div>
         </div>
       </aside>
 
@@ -148,13 +148,25 @@
               <div class="inspector-tabs"><button class="active">Create</button><button>Automate</button><button>Deliver</button></div>
               <section class="panel-section prompt-panel">
                 <div class="section-title"><span>Create from one prompt</span><small>AGENT VIDEO</small></div>
+                <div class="local-ai-card"><span class="local-ai-dot"></span><div><b id="local-ai-title">Checking local Qwen…</b><small id="local-ai-detail">No hosted model or paid API tokens</small></div><button id="local-ai-warm" class="button tiny">Warm</button></div>
                 <label>Describe the complete video<textarea id="prompt-text" rows="5" placeholder="Launch a collaborative lesson planner with a cinematic reveal, clear benefits, and a confident final CTA..."></textarea></label>
                 <div class="prompt-grid">
                   <label>Mode<select id="prompt-mode"></select></label>
-                  <label>Character<select id="prompt-presenter"></select></label>
-                  <label>Voice<select id="prompt-voice-provider"><option value="local">Local voice</option><option value="neural">Neural voice</option></select></label>
+                  <label>Planner<select id="prompt-planner-provider"><option value="auto">Local Qwen + fallback</option><option value="deterministic">Instant rules</option><option value="ollama">Require local Qwen</option></select></label>
+                  <label>Speed<select id="prompt-planner-profile"><option value="fast">Fastest</option><option value="quality">Quality</option></select></label>
+                  <label>Visual engine<select id="prompt-media-provider"><option value="builtin">Built-in / uploads</option><option value="local-adapter">Local AI adapter</option></select></label>
+                  <label>Generation<select id="prompt-media-task"><option value="auto">Automatic</option><option value="text-to-image">Text → image scenes</option><option value="image-to-video">Images → video</option><option value="text-to-video">Text → diffusion video</option></select></label>
+                  <label>Starter character<select id="prompt-presenter"></select></label>
+                  <label>Voice<select id="prompt-voice-provider"><option value="local">Local system voice</option><option value="local-clone">Consented local clone</option><option value="neural">Neural voice (online)</option></select></label>
                   <label>Seconds<input id="prompt-duration" type="number" min="6" max="600" placeholder="Auto" /></label>
                 </div>
+                <details class="prompt-assets"><summary>Exact script, uploads, characters, logo, music, and voice</summary><label>Exact narration script<textarea id="prompt-narration" rows="5" placeholder="Optional: paste the final narration. Its sentences stay locked and align scene by scene."></textarea><small>Leave empty to let the local planner write prompt-matched narration.</small></label><div class="upload-grid">
+                  <label class="upload-control"><span>Scene images/videos</span><input id="prompt-scene-files" type="file" accept="image/*,video/*" multiple /><small id="prompt-scene-upload-status">Text-to-video works without uploads</small></label>
+                  <label class="upload-control"><span>Character images</span><input id="prompt-character-files" type="file" accept="image/*" multiple /><small id="prompt-character-upload-status">Any authorized character design</small></label>
+                  <label class="upload-control"><span>Logo</span><input id="prompt-logo-file" type="file" accept="image/*" /><small id="prompt-logo-upload-status">Optional</small></label>
+                  <label class="upload-control"><span>Music / ambience</span><input id="prompt-music-file" type="file" accept="audio/*" /><small id="prompt-music-upload-status">Optional; local score is built in</small></label>
+                  <label class="upload-control"><span>Voice reference</span><input id="prompt-voice-reference-file" type="file" accept="audio/*" /><small id="prompt-voice-upload-status">Kept local and never published</small></label>
+                </div><div class="voice-consent-grid"><label>Local media endpoint<input id="prompt-media-adapter-url" type="text" placeholder="http://127.0.0.1:8188/v1/media/generate" /></label><label>Local voice endpoint<input id="prompt-voice-clone-url" type="text" placeholder="http://127.0.0.1:8020/v1/voice/clone" /></label><label>Authorized speaker<input id="prompt-voice-speaker" type="text" placeholder="Speaker name" /></label><label class="switch-row"><span><b>Voice permission recorded</b><small>Required only for local clone</small></span><input id="prompt-voice-consent" type="checkbox" /></label></div><div class="local-music-row"><select id="prompt-music-style"><option value="ambient">Ambient score</option><option value="asmr">ASMR soundscape</option></select><input id="prompt-music-duration" type="number" min="1" max="600" value="45" aria-label="Music duration seconds" /><button id="prompt-generate-music" class="button tiny">Generate free music</button><small id="prompt-generated-music-status">Original procedural audio · local · no samples</small></div></details>
                 <div class="prompt-switches">
                   <label class="switch-row"><span><b>Narration</b><small>Prompt-matched voice</small></span><input id="prompt-voice" type="checkbox" checked /></label>
                   <label class="switch-row"><span><b>Score / ambience</b><small>Original local audio</small></span><input id="prompt-music" type="checkbox" checked /></label>

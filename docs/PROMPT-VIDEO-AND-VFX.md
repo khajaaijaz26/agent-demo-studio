@@ -22,6 +22,12 @@ timeline scene by scene. Interactive users can use `creator plan` or the Studio'
 **Review plan** action. Fully autonomous jobs still persist the plan and use it as
 the build contract; no approval prompt is required merely to continue locally.
 
+The plan also contains non-modifiable production rules for open asset selection,
+rights and consent, scene-to-narration alignment, safe layout, natural audio,
+local-first execution, and review-before-publish. Optional local Qwen intelligence
+can refine the audience and story beats, but it cannot replace or bypass those
+rules.
+
 ```bash
 agent-demo creator plan \
   "Launch a privacy-first lesson planner for busy teachers" \
@@ -47,10 +53,12 @@ creating any media and returns the plan and local artifact resource links.
 | `asmr` | Slow tactile progression, minimal text | Macro glass/water scene | Procedural stereo soundscape, no default voice |
 | `vfx` | Fast transformation and final reveal | Supplied media or launch stage | Narration and cinematic score |
 
-The included characters and scenes are documented in
+The included characters and scenes are optional offline starters documented in
 [`assets/README.md`](../assets/README.md). A `builtin:` URI resolves inside both a
 source checkout and the packaged CLI, so agents do not need to locate installation
-paths.
+paths. They are not a fixed cast: prompt jobs accept any number of authorized
+character images and scene images/videos. The Studio can upload these files into
+its own local data directory.
 
 ## Animation and compositing
 
@@ -64,9 +72,11 @@ paths.
 - Twenty-eight clip transitions cover fades, wipes, slides, smooth motion, shapes,
   zoom, squeeze, diagonal, blur, and directional reveals.
 
-Still presenter/character assets receive 2D/2.5D cutout motion. They do not have
-phoneme lip sync, skeletal animation, or independently generated acting. Generated
-video and avatar providers can be added later through the documented media handoff.
+Still presenter/character assets receive 2D/2.5D cutout motion. A loopback local
+media adapter can instead supply text-to-image, image-to-video, or text-to-video
+outputs from an installed generation backend. Agent Demo Studio does not label
+Qwen as the media generator. See [`LOCAL-AI.md`](LOCAL-AI.md) for the batch
+adapter contract and fastest-path recommendations.
 
 ## VFX looks
 
@@ -99,7 +109,10 @@ are present where required.
 
 ## Current scope
 
-This release is a local plan, recording, editing, animation, compositing, audio,
-and delivery engine. It can consume generated images/video but does not bundle a
-cloud text-to-video model, stock-media account, or identity-cloning service. The
-provider-neutral backlog is tracked in [`TODO.md`](../TODO.md).
+The built-in path covers local planning, recording, stable uploaded-image scenes,
+editing, animation, compositing, system speech, procedural audio, and delivery.
+Optional loopback adapters connect installed text-to-image, image-to-video,
+text-to-video, and consented voice-profile engines without a hosted token. Large
+diffusion checkpoints are not bundled, and no identity can be cloned without
+named authorization metadata. See [`LOCAL-AI.md`](LOCAL-AI.md) and the
+provider-neutral backlog in [`TODO.md`](../TODO.md).

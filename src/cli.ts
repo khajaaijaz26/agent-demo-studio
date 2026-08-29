@@ -11,6 +11,8 @@ import { generateVoiceover } from "./audio/tts.js";
 import { renderDemo } from "./render/renderer.js";
 import { renderSynchronizedManifest } from "./render/synchronized.js";
 import { startStudioServer } from "./studio/server.js";
+import { runTerminalDashboard } from "./terminal/dashboard.js";
+import { generateAmbientMusic, generateAsmrSoundscape } from "./audio/music.js";
 import {
   ensureChromiumInstalled,
   installAgentIntegrations,
@@ -29,7 +31,8 @@ import { loadCreatorManifest, validateCreatorManifest } from "./creator/schema.j
 import { remixMedia, renderCreatorManifest } from "./creator/renderer.js";
 import { createSocialPackage } from "./creator/social.js";
 import { listCreatorAssets } from "./creator/assets.js";
-import { createPromptVideoPlan, createPromptVideoProject } from "./creator/prompt.js";
+import { getLocalAiStatus, warmLocalPlanner } from "./creator/local-ai.js";
+import { createPromptVideoProject, createSmartPromptVideoPlan } from "./creator/prompt.js";
 import {
   CREATOR_IMAGE_MOTIONS,
   CREATOR_LOOP_ANIMATIONS,
@@ -46,6 +49,8 @@ import {
 } from "./creator/publish.js";
 import type {
   CreatorManifest,
+  CreatorPlannerProfile,
+  CreatorPlannerProvider,
   CreatorPromptMode,
   CreatorPresetId,
   CreatorRenderResult,
@@ -83,6 +88,20 @@ function presetList(value: string): CreatorPresetId[] {
     if (!(item in CREATOR_PRESETS)) throw new Error(`Unknown preset '${item}'. Run 'agent-demo creator presets'.`);
   }
   return values as CreatorPresetId[];
+}
+
+function sourceList(value?: string): string[] | undefined {
+  const sources = value?.split(",").map((item) => item.trim()).filter(Boolean);
+  return sources?.length ? sources.map((source) => path.resolve(source)) : undefined;
+}
+
+function characterList(value?: string) {
+  return sourceList(value)?.map((source, index) => ({
+    id: `custom-character-${index + 1}`,
+    name: path.basename(source, path.extname(source)).replace(/[-_]+/g, " ") || `Character ${index + 1}`,
+    source,
+    role: "character" as const,
+  }));
 }
 
 async function readRenderResult(filePath: string): Promise<CreatorRenderResult> {
@@ -131,7 +150,7 @@ program
     checks.forEach((check) =>
       process.stdout.write(`${check.ok ? "✓" : "✗"} ${check.name}: ${check.detail}\n`),
     );
-    if (checks.some((check) => !check.ok && !["Codex", "Claude Code"].includes(check.name))) {
+    if (checks.some((check) => !check.ok && !check.optional)) {
       process.exitCode = 1;
     }
   });
@@ -309,6 +328,11 @@ program
   );
 
 program
+  .command("dashboard")
+  .description("Open the free interactive local terminal video dashboard.")
+  .action(() => runTerminalDashboard());
+
+program
   .command("studio")
   .description("Open the local all-in-one visual editor.")
   .option("--port <number>", "Local port", "4545")
@@ -363,6 +387,37 @@ creator
   .action(() => output({ templates: listCreatorTemplates() }));
 
 creator
+  .command("local-ai")
+  .description("Inspect or warm the loopback-only Ollama/Qwen planner.")
+  .option("--profile <profile>", "fast or quality", "fast")
+  .option("--model <name>", "Exact installed Ollama model")
+  .option("--url <url>", "Loopback Ollama URL")
+  .option("--warm", "Load the selected model and keep it ready for fast planning", false)
+  .action(async (options: { profile: string; model?: string; url?: string; warm: boolean }) => {
+    const status = await getLocalAiStatus({
+      profile: options.profile as CreatorPlannerProfile,
+      model: options.model,
+      baseUrl: options.url,
+    });
+    output(options.warm ? { status, warmup: await warmLocalPlanner({ profile: options.profile as CreatorPlannerProfile, model: options.model, baseUrl: options.url }) } : { status });
+  });
+
+creator
+  .command("music")
+  .description("Generate a free original local ambient score or ASMR soundscape.")
+  .option("--style <style>", "ambient or asmr", "ambient")
+  .option("--duration <seconds>", "Duration from 1 to 600 seconds", "45")
+  .option("--out <path>", "Output WAV path", "creator-output/ambient-music.wav")
+  .action(async (options: { style: string; duration: string; out: string }) => {
+    if (options.style !== "ambient" && options.style !== "asmr") throw new Error("Music style must be 'ambient' or 'asmr'.");
+    const durationSeconds = Number(options.duration);
+    if (!Number.isFinite(durationSeconds) || durationSeconds < 1 || durationSeconds > 600) throw new Error("Music duration must be between 1 and 600 seconds.");
+    const outputPath = path.resolve(options.out);
+    await (options.style === "asmr" ? generateAsmrSoundscape(outputPath, durationSeconds) : generateAmbientMusic(outputPath, durationSeconds));
+    output({ style: options.style, durationSeconds, outputPath, local: true, rights: "Original procedural Agent Demo Studio audio" });
+  });
+
+creator
   .command("init")
   .description("Create an editable creator manifest from a template.")
   .argument("<template>", "Template id")
@@ -391,26 +446,60 @@ creator
   .option("--mode <mode>", "product-launch, cartoon, story, asmr, or vfx", "product-launch")
   .option("--title <title>", "Project title")
   .option("--source <path>", "Optional source image or video")
+  .option("--scene-sources <paths>", "Comma-separated local scene images or videos")
+  .option("--characters <paths>", "Comma-separated custom character images")
+  .option("--logo <path>", "Optional local logo")
+  .option("--music-source <path>", "Optional authorized local music or ambience")
+  .option("--narration <text>", "Exact narration script; sentences stay locked across planned scenes")
   .option("--duration <seconds>", "Target duration in seconds")
   .option("--presenter <id>", "none, aria, leo, nova, or milo")
+  .option("--voice-provider <provider>", "local, neural, or local-clone", "local")
+  .option("--voice-reference <path>", "Authorized speaker reference audio for local-clone")
+  .option("--voice-speaker <name>", "Name of the speaker who authorized local cloning")
+  .option("--voice-consent", "Confirm the named speaker authorized this project's cloned voice", false)
   .option("--presets <ids>", "Comma-separated export presets", "youtube-1080p")
+  .option("--planner <provider>", "auto, deterministic, or ollama", "auto")
+  .option("--planner-profile <profile>", "fast or quality", "fast")
+  .option("--planner-model <name>", "Exact installed local Ollama model")
+  .option("--planner-url <url>", "Loopback Ollama URL")
+  .option("--media-provider <provider>", "builtin or local-adapter", "builtin")
+  .option("--media-task <task>", "auto, text-to-image, image-to-video, or text-to-video", "auto")
+  .option("--media-adapter-url <url>", "Loopback local media-generation adapter endpoint")
   .option("--no-voice", "Plan without narration")
   .option("--no-music", "Plan without music or ambience")
-  .action((promptText: string, options: { mode: string; title?: string; source?: string; duration?: string; presenter?: string; presets: string; voice: boolean; music: boolean }) => {
+  .action(async (promptText: string, options: { mode: string; title?: string; source?: string; sceneSources?: string; characters?: string; logo?: string; musicSource?: string; narration?: string; duration?: string; presenter?: string; voiceProvider: string; voiceReference?: string; voiceSpeaker?: string; voiceConsent: boolean; presets: string; planner: string; plannerProfile: string; plannerModel?: string; plannerUrl?: string; mediaProvider: string; mediaTask: string; mediaAdapterUrl?: string; voice: boolean; music: boolean }) => {
     if (!CREATOR_PROMPT_MODES.includes(options.mode as CreatorPromptMode)) throw new Error(`Unknown prompt mode '${options.mode}'. Available: ${CREATOR_PROMPT_MODES.join(", ")}.`);
+    if (!["builtin", "local-adapter"].includes(options.mediaProvider)) throw new Error("Media provider must be 'builtin' or 'local-adapter'.");
+    if (!["auto", "text-to-image", "image-to-video", "text-to-video"].includes(options.mediaTask)) throw new Error("Media task must be 'auto', 'text-to-image', 'image-to-video', or 'text-to-video'.");
+    if (!(["local", "neural", "local-clone"] as const).includes(options.voiceProvider as "local" | "neural" | "local-clone")) throw new Error("Voice provider must be 'local', 'neural', or 'local-clone'.");
     if (options.presenter && !["none", "aria", "leo", "nova", "milo"].includes(options.presenter)) throw new Error(`Unknown presenter '${options.presenter}'. Run 'agent-demo creator assets'.`);
     const durationSeconds = options.duration === undefined ? undefined : Number(options.duration);
     if (durationSeconds !== undefined && !Number.isFinite(durationSeconds)) throw new Error("Duration must be a number of seconds.");
-    output(createPromptVideoPlan({
+    output(await createSmartPromptVideoPlan({
       prompt: promptText,
       mode: options.mode as CreatorPromptMode,
       title: options.title,
       source: options.source ? path.resolve(options.source) : undefined,
+      sceneSources: sourceList(options.sceneSources),
+      characters: characterList(options.characters),
+      logoSource: options.logo ? path.resolve(options.logo) : undefined,
+      musicSource: options.musicSource ? path.resolve(options.musicSource) : undefined,
+      narration: options.narration,
       durationSeconds,
       presenter: options.presenter as "none" | "aria" | "leo" | "nova" | "milo" | undefined,
+      voiceProvider: options.voiceProvider as "local" | "neural" | "local-clone",
+      voiceReference: options.voiceReference ? path.resolve(options.voiceReference) : undefined,
+      voiceConsent: options.voiceProvider === "local-clone" ? { speakerName: options.voiceSpeaker || "", confirmed: options.voiceConsent, scope: "this video project" } : undefined,
       presets: presetList(options.presets),
       generateVoice: options.voice,
       generateMusic: options.music,
+      plannerProvider: options.planner as CreatorPlannerProvider,
+      plannerProfile: options.plannerProfile as CreatorPlannerProfile,
+      plannerModel: options.plannerModel,
+      plannerBaseUrl: options.plannerUrl,
+      mediaProvider: options.mediaProvider as "builtin" | "local-adapter",
+      mediaTask: options.mediaTask as "auto" | "text-to-image" | "image-to-video" | "text-to-video",
+      mediaAdapterUrl: options.mediaAdapterUrl,
     }));
   });
 
@@ -421,14 +510,29 @@ creator
   .option("--mode <mode>", "product-launch, cartoon, story, asmr, or vfx", "product-launch")
   .option("--title <title>", "Project title")
   .option("--source <path>", "Optional source image or video")
+  .option("--scene-sources <paths>", "Comma-separated local scene images or videos")
+  .option("--characters <paths>", "Comma-separated custom character images")
+  .option("--logo <path>", "Optional local logo")
+  .option("--music-source <path>", "Optional authorized local music or ambience")
   .option("--output-directory <path>", "Project and render directory")
   .option("--narration <text>", "Narration text; defaults to the prompt")
   .option("--duration <seconds>", "Target duration in seconds")
   .option("--presenter <id>", "none, aria, leo, nova, or milo")
   .option("--voice-name <name>", "System or neural voice name")
-  .option("--voice-provider <provider>", "local or neural", "local")
+  .option("--voice-provider <provider>", "local, neural, or local-clone", "local")
   .option("--voice-rate <number>", "Speech rate adjustment")
+  .option("--voice-reference <path>", "Authorized speaker reference audio for local-clone")
+  .option("--voice-speaker <name>", "Name of the speaker who authorized local cloning")
+  .option("--voice-consent", "Confirm the named speaker authorized this project's cloned voice", false)
+  .option("--voice-clone-url <url>", "Loopback local voice-clone adapter endpoint")
   .option("--presets <ids>", "Comma-separated export presets", "youtube-1080p")
+  .option("--planner <provider>", "auto, deterministic, or ollama", "auto")
+  .option("--planner-profile <profile>", "fast or quality", "fast")
+  .option("--planner-model <name>", "Exact installed local Ollama model")
+  .option("--planner-url <url>", "Loopback Ollama URL")
+  .option("--media-provider <provider>", "builtin or local-adapter", "builtin")
+  .option("--media-task <task>", "auto, text-to-image, image-to-video, or text-to-video", "auto")
+  .option("--media-adapter-url <url>", "Loopback local media-generation adapter endpoint")
   .option("--render", "Render the selected outputs immediately", false)
   .option("--no-voice", "Skip narration synthesis")
   .option("--no-music", "Skip generated score or ASMR soundscape")
@@ -436,6 +540,10 @@ creator
     mode: string;
     title?: string;
     source?: string;
+    sceneSources?: string;
+    characters?: string;
+    logo?: string;
+    musicSource?: string;
     outputDirectory?: string;
     narration?: string;
     duration?: string;
@@ -443,14 +551,27 @@ creator
     voiceName?: string;
     voiceProvider: string;
     voiceRate?: string;
+    voiceReference?: string;
+    voiceSpeaker?: string;
+    voiceConsent: boolean;
+    voiceCloneUrl?: string;
     presets: string;
+    planner: string;
+    plannerProfile: string;
+    plannerModel?: string;
+    plannerUrl?: string;
+    mediaProvider: string;
+    mediaTask: string;
+    mediaAdapterUrl?: string;
     render: boolean;
     voice: boolean;
     music: boolean;
   }) => {
     if (!CREATOR_PROMPT_MODES.includes(options.mode as CreatorPromptMode)) throw new Error(`Unknown prompt mode '${options.mode}'. Available: ${CREATOR_PROMPT_MODES.join(", ")}.`);
+    if (!["builtin", "local-adapter"].includes(options.mediaProvider)) throw new Error("Media provider must be 'builtin' or 'local-adapter'.");
+    if (!["auto", "text-to-image", "image-to-video", "text-to-video"].includes(options.mediaTask)) throw new Error("Media task must be 'auto', 'text-to-image', 'image-to-video', or 'text-to-video'.");
     if (options.presenter && !["none", "aria", "leo", "nova", "milo"].includes(options.presenter)) throw new Error(`Unknown presenter '${options.presenter}'. Run 'agent-demo creator assets'.`);
-    if (!(["local", "neural"] as const).includes(options.voiceProvider as "local" | "neural")) throw new Error("Voice provider must be 'local' or 'neural'.");
+    if (!(["local", "neural", "local-clone"] as const).includes(options.voiceProvider as "local" | "neural" | "local-clone")) throw new Error("Voice provider must be 'local', 'neural', or 'local-clone'.");
     const durationSeconds = options.duration === undefined ? undefined : Number(options.duration);
     const voiceRate = options.voiceRate === undefined ? undefined : Number(options.voiceRate);
     if (durationSeconds !== undefined && !Number.isFinite(durationSeconds)) throw new Error("Duration must be a number of seconds.");
@@ -460,16 +581,30 @@ creator
       mode: options.mode as CreatorPromptMode,
       title: options.title,
       source: options.source ? path.resolve(options.source) : undefined,
+      sceneSources: sourceList(options.sceneSources),
+      characters: characterList(options.characters),
+      logoSource: options.logo ? path.resolve(options.logo) : undefined,
+      musicSource: options.musicSource ? path.resolve(options.musicSource) : undefined,
       outputDirectory: options.outputDirectory ? path.resolve(options.outputDirectory) : undefined,
       narration: options.narration,
       durationSeconds,
       presenter: options.presenter as "none" | "aria" | "leo" | "nova" | "milo" | undefined,
       voice: options.voiceName,
-      voiceProvider: options.voiceProvider as "local" | "neural",
+      voiceProvider: options.voiceProvider as "local" | "neural" | "local-clone",
       voiceRate,
+      voiceReference: options.voiceReference ? path.resolve(options.voiceReference) : undefined,
+      voiceConsent: options.voiceProvider === "local-clone" ? { speakerName: options.voiceSpeaker || "", confirmed: options.voiceConsent, scope: "this video project" } : undefined,
+      voiceCloneUrl: options.voiceCloneUrl,
       presets: presetList(options.presets),
       generateVoice: options.voice,
       generateMusic: options.music,
+      plannerProvider: options.planner as CreatorPlannerProvider,
+      plannerProfile: options.plannerProfile as CreatorPlannerProfile,
+      plannerModel: options.plannerModel,
+      plannerBaseUrl: options.plannerUrl,
+      mediaProvider: options.mediaProvider as "builtin" | "local-adapter",
+      mediaTask: options.mediaTask as "auto" | "text-to-image" | "image-to-video" | "text-to-video",
+      mediaAdapterUrl: options.mediaAdapterUrl,
       render: options.render,
     }, progress));
   });

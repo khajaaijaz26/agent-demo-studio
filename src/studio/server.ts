@@ -1,13 +1,18 @@
 import http, { type IncomingMessage, type ServerResponse } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { readFile, stat } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import { createWriteStream } from "node:fs";
+import { readFile, mkdir, stat, unlink } from "node:fs/promises";
+import { Transform } from "node:stream";
+import { pipeline } from "node:stream/promises";
 import { spawn } from "node:child_process";
-import { AGENT_DEMO_VERSION } from "../config.js";
+import { AGENT_DEMO_VERSION, getStudioRoot } from "../config.js";
 import { errorMessage, serializeError } from "../errors.js";
 import { listProjects, loadProject, resolveArtifact } from "../project-store.js";
 import { renderDemo } from "../render/renderer.js";
 import { generateVoiceover } from "../audio/tts.js";
+import { generateAmbientMusic, generateAsmrSoundscape } from "../audio/music.js";
 import type { RenderDemoInput } from "../types.js";
 import { jobs } from "../jobs.js";
 import { listCreatorPresets } from "../creator/presets.js";
@@ -18,7 +23,8 @@ import { analyzeMedia } from "../creator/media.js";
 import { transcribeMedia } from "../creator/captions.js";
 import { createSocialPackage } from "../creator/social.js";
 import { listCreatorAssets } from "../creator/assets.js";
-import { createPromptVideoPlan, createPromptVideoProject } from "../creator/prompt.js";
+import { getLocalAiStatus, warmLocalPlanner } from "../creator/local-ai.js";
+import { createPromptVideoProject, createSmartPromptVideoPlan } from "../creator/prompt.js";
 import {
   CREATOR_IMAGE_MOTIONS,
   CREATOR_LOOP_ANIMATIONS,
@@ -27,7 +33,7 @@ import {
   CREATOR_TRANSITIONS,
   CREATOR_VFX_PRESETS,
 } from "../creator/types.js";
-import type { CreatorManifest, CreatorPresetId, CreatorPromptMode, CreatorRenderResult, CreatorTemplateId } from "../creator/types.js";
+import type { CreatorManifest, CreatorPlannerProfile, CreatorPlannerProvider, CreatorPresetId, CreatorPromptCharacterInput, CreatorPromptMode, CreatorRenderResult, CreatorTemplateId } from "../creator/types.js";
 
 export interface StudioServerOptions {
   root?: string;
@@ -62,6 +68,59 @@ async function readJson(request: IncomingMessage): Promise<Record<string, unknow
   }
   if (!chunks.length) return {};
   return JSON.parse(Buffer.concat(chunks).toString("utf8")) as Record<string, unknown>;
+}
+
+function stringArray(value: unknown): string[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const values = value.filter((item): item is string => typeof item === "string" && Boolean(item.trim()));
+  return values.length ? values : undefined;
+}
+
+function promptCharacters(value: unknown): CreatorPromptCharacterInput[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const characters = value.flatMap((item, index) => {
+    if (!item || typeof item !== "object") return [];
+    const record = item as Record<string, unknown>;
+    if (typeof record.name !== "string" || !record.name.trim() || typeof record.source !== "string" || !record.source.trim()) return [];
+    return [{
+      id: typeof record.id === "string" ? record.id : `custom-character-${index + 1}`,
+      name: record.name,
+      source: record.source,
+      role: record.role === "presenter" ? "presenter" as const : "character" as const,
+      style: typeof record.style === "string" ? record.style : undefined,
+      rights: typeof record.rights === "string" ? record.rights : undefined,
+      x: typeof record.x === "number" ? record.x : undefined,
+      y: typeof record.y === "number" ? record.y : undefined,
+    }];
+  });
+  return characters.length ? characters : undefined;
+}
+
+const uploadExtensions = new Set([".aac", ".avif", ".flac", ".gif", ".jpeg", ".jpg", ".m4a", ".mkv", ".mov", ".mp3", ".mp4", ".ogg", ".png", ".svg", ".wav", ".webm", ".webp"]);
+
+async function receiveUpload(request: IncomingMessage, uploadsRoot: string, originalName: string, kind: string): Promise<{ path: string; sizeBytes: number; kind: string }> {
+  const extension = path.extname(originalName).toLowerCase();
+  if (!uploadExtensions.has(extension)) throw new Error(`Unsupported upload type '${extension || "unknown"}'.`);
+  const safeKind = ["scene", "character", "logo", "music", "voice-reference"].includes(kind) ? kind : "scene";
+  const safeStem = path.basename(originalName, extension).replace(/[^a-z0-9_-]+/gi, "-").replace(/^-+|-+$/g, "").slice(0, 60) || safeKind;
+  const directory = path.resolve(uploadsRoot, safeKind);
+  await mkdir(directory, { recursive: true });
+  const target = path.join(directory, `${safeStem}-${randomUUID()}${extension}`);
+  const maximumBytes = 2 * 1024 * 1024 * 1024;
+  let sizeBytes = 0;
+  const limiter = new Transform({
+    transform(chunk: Buffer, _encoding, callback) {
+      sizeBytes += chunk.length;
+      callback(sizeBytes > maximumBytes ? new Error("Upload exceeds the 2 GB local Studio limit.") : undefined, chunk);
+    },
+  });
+  try {
+    await pipeline(request, limiter, createWriteStream(target, { flags: "wx" }));
+    return { path: target, sizeBytes, kind: safeKind };
+  } catch (error) {
+    await unlink(target).catch(() => undefined);
+    throw error;
+  }
 }
 
 async function serveFile(
@@ -132,6 +191,12 @@ export async function startStudioServer(
         sendJson(response, 200, jobs.list());
         return;
       }
+      if (request.method === "POST" && url.pathname === "/api/uploads") {
+        const name = url.searchParams.get("name") || "upload.bin";
+        const kind = url.searchParams.get("kind") || "scene";
+        sendJson(response, 201, await receiveUpload(request, path.join(getStudioRoot(options.root), "uploads"), name, kind));
+        return;
+      }
       const jobMatch = /^\/api\/jobs\/([a-f0-9-]+)$/.exec(url.pathname);
       if (request.method === "GET" && jobMatch) {
         const job = jobs.get(jobMatch[1]!);
@@ -156,6 +221,34 @@ export async function startStudioServer(
           vfx: CREATOR_VFX_PRESETS,
           promptModes: CREATOR_PROMPT_MODES,
         });
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/local-ai/status") {
+        sendJson(response, 200, await getLocalAiStatus({
+          profile: (url.searchParams.get("profile") || "fast") as CreatorPlannerProfile,
+          model: url.searchParams.get("model") || undefined,
+        }));
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/local-ai/warm") {
+        const body = await readJson(request);
+        sendJson(response, 200, await warmLocalPlanner({
+          profile: (body.profile === "quality" ? "quality" : "fast") as CreatorPlannerProfile,
+          model: typeof body.model === "string" && body.model.trim() ? body.model : undefined,
+          baseUrl: typeof body.baseUrl === "string" && body.baseUrl.trim() ? body.baseUrl : undefined,
+        }));
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/creator/music") {
+        const body = await readJson(request);
+        const style = body.style === "asmr" ? "asmr" : "ambient";
+        const durationSeconds = typeof body.durationSeconds === "number" ? Math.max(1, Math.min(600, body.durationSeconds)) : 45;
+        const outputPath = path.resolve(typeof body.outputPath === "string" && body.outputPath.trim() ? body.outputPath : `creator-output/${style}-music.wav`);
+        const job = jobs.start(`creator-music-${style}`, async () => {
+          await (style === "asmr" ? generateAsmrSoundscape(outputPath, durationSeconds) : generateAmbientMusic(outputPath, durationSeconds));
+          return { style, durationSeconds, outputPath, local: true, rights: "Original procedural Agent Demo Studio audio" };
+        });
+        sendJson(response, 202, job);
         return;
       }
       const creatorArtifactMatch = /^\/api\/creator\/jobs\/([a-f0-9-]+)\/outputs\/([^/]+)\/(video|thumbnail)$/.exec(url.pathname);
@@ -196,16 +289,34 @@ export async function startStudioServer(
           mode,
           title: typeof body.title === "string" ? body.title : undefined,
           source: typeof body.source === "string" && body.source.trim() ? body.source : undefined,
+          sceneSources: stringArray(body.sceneSources),
+          characters: promptCharacters(body.characters),
+          logoSource: typeof body.logoSource === "string" && body.logoSource.trim() ? body.logoSource : undefined,
+          musicSource: typeof body.musicSource === "string" && body.musicSource.trim() ? body.musicSource : undefined,
           outputDirectory: typeof body.outputDirectory === "string" && body.outputDirectory.trim() ? body.outputDirectory : undefined,
           narration: typeof body.narration === "string" ? body.narration : undefined,
           durationSeconds: typeof body.durationSeconds === "number" ? body.durationSeconds : undefined,
           presenter: ["none", "aria", "leo", "nova", "milo"].includes(String(body.presenter)) ? body.presenter as "none" | "aria" | "leo" | "nova" | "milo" : undefined,
           voice: typeof body.voice === "string" ? body.voice : undefined,
-          voiceProvider: body.voiceProvider === "neural" ? "neural" : "local",
+          voiceProvider: body.voiceProvider === "neural" ? "neural" : body.voiceProvider === "local-clone" ? "local-clone" : "local",
           voiceRate: typeof body.voiceRate === "number" ? body.voiceRate : undefined,
+          voiceReference: typeof body.voiceReference === "string" && body.voiceReference.trim() ? body.voiceReference : undefined,
+          voiceConsent: body.voiceConsent && typeof body.voiceConsent === "object" ? {
+            speakerName: typeof (body.voiceConsent as Record<string, unknown>).speakerName === "string" ? String((body.voiceConsent as Record<string, unknown>).speakerName) : "",
+            confirmed: (body.voiceConsent as Record<string, unknown>).confirmed === true,
+            scope: typeof (body.voiceConsent as Record<string, unknown>).scope === "string" ? String((body.voiceConsent as Record<string, unknown>).scope) : undefined,
+          } : undefined,
+          voiceCloneUrl: typeof body.voiceCloneUrl === "string" && body.voiceCloneUrl.trim() ? body.voiceCloneUrl : undefined,
           presets,
           generateVoice: body.generateVoice !== false,
           generateMusic: body.generateMusic !== false,
+          plannerProvider: (["auto", "deterministic", "ollama"].includes(String(body.plannerProvider)) ? body.plannerProvider : "auto") as CreatorPlannerProvider,
+          plannerProfile: (body.plannerProfile === "quality" ? "quality" : "fast") as CreatorPlannerProfile,
+          plannerModel: typeof body.plannerModel === "string" && body.plannerModel.trim() ? body.plannerModel : undefined,
+          plannerBaseUrl: typeof body.plannerBaseUrl === "string" && body.plannerBaseUrl.trim() ? body.plannerBaseUrl : undefined,
+          mediaProvider: body.mediaProvider === "local-adapter" ? "local-adapter" : "builtin",
+          mediaTask: (["text-to-image", "image-to-video", "text-to-video"].includes(String(body.mediaTask)) ? body.mediaTask : "auto") as "auto" | "text-to-image" | "image-to-video" | "text-to-video",
+          mediaAdapterUrl: typeof body.mediaAdapterUrl === "string" && body.mediaAdapterUrl.trim() ? body.mediaAdapterUrl : undefined,
           render: body.render === true,
         }, report));
         sendJson(response, 202, job);
@@ -215,16 +326,35 @@ export async function startStudioServer(
         const body = await readJson(request);
         const mode = String(body.mode || "product-launch") as CreatorPromptMode;
         if (!CREATOR_PROMPT_MODES.includes(mode)) throw new Error(`Unknown prompt mode '${mode}'.`);
-        sendJson(response, 200, createPromptVideoPlan({
+        sendJson(response, 200, await createSmartPromptVideoPlan({
           prompt: String(body.prompt || ""),
           mode,
           title: typeof body.title === "string" ? body.title : undefined,
           source: typeof body.source === "string" && body.source.trim() ? body.source : undefined,
+          sceneSources: stringArray(body.sceneSources),
+          characters: promptCharacters(body.characters),
+          logoSource: typeof body.logoSource === "string" && body.logoSource.trim() ? body.logoSource : undefined,
+          musicSource: typeof body.musicSource === "string" && body.musicSource.trim() ? body.musicSource : undefined,
+          narration: typeof body.narration === "string" && body.narration.trim() ? body.narration : undefined,
           durationSeconds: typeof body.durationSeconds === "number" ? body.durationSeconds : undefined,
           presenter: ["none", "aria", "leo", "nova", "milo"].includes(String(body.presenter)) ? body.presenter as "none" | "aria" | "leo" | "nova" | "milo" : undefined,
+          voiceProvider: body.voiceProvider === "neural" ? "neural" : body.voiceProvider === "local-clone" ? "local-clone" : "local",
+          voiceReference: typeof body.voiceReference === "string" && body.voiceReference.trim() ? body.voiceReference : undefined,
+          voiceConsent: body.voiceConsent && typeof body.voiceConsent === "object" ? {
+            speakerName: typeof (body.voiceConsent as Record<string, unknown>).speakerName === "string" ? String((body.voiceConsent as Record<string, unknown>).speakerName) : "",
+            confirmed: (body.voiceConsent as Record<string, unknown>).confirmed === true,
+            scope: typeof (body.voiceConsent as Record<string, unknown>).scope === "string" ? String((body.voiceConsent as Record<string, unknown>).scope) : undefined,
+          } : undefined,
           presets: (Array.isArray(body.presets) ? body.presets : ["youtube-1080p"]) as CreatorPresetId[],
           generateVoice: body.generateVoice !== false,
           generateMusic: body.generateMusic !== false,
+          plannerProvider: (["auto", "deterministic", "ollama"].includes(String(body.plannerProvider)) ? body.plannerProvider : "auto") as CreatorPlannerProvider,
+          plannerProfile: (body.plannerProfile === "quality" ? "quality" : "fast") as CreatorPlannerProfile,
+          plannerModel: typeof body.plannerModel === "string" && body.plannerModel.trim() ? body.plannerModel : undefined,
+          plannerBaseUrl: typeof body.plannerBaseUrl === "string" && body.plannerBaseUrl.trim() ? body.plannerBaseUrl : undefined,
+          mediaProvider: body.mediaProvider === "local-adapter" ? "local-adapter" : "builtin",
+          mediaTask: (["text-to-image", "image-to-video", "text-to-video"].includes(String(body.mediaTask)) ? body.mediaTask : "auto") as "auto" | "text-to-image" | "image-to-video" | "text-to-video",
+          mediaAdapterUrl: typeof body.mediaAdapterUrl === "string" && body.mediaAdapterUrl.trim() ? body.mediaAdapterUrl : undefined,
         }));
         return;
       }

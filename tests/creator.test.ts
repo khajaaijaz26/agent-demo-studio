@@ -143,6 +143,81 @@ describe("creator manifests", () => {
     expect(miloManifest.overlays?.filter((overlay) => overlay.type === "character").map((overlay) => overlay.id)).toEqual(["milo", "nova"]);
   });
 
+  it("keeps bundled characters optional and supports an open uploaded cast and scene set", () => {
+    const plan = createPromptVideoPlan({
+      prompt: "A teacher and two original helpers explain fractions with paper shapes.",
+      mode: "cartoon",
+      sceneSources: ["lesson-board.png", "paper-shapes.png"],
+      characters: [
+        { name: "Teacher Sam", source: "teacher-sam.png", role: "presenter", rights: "Original authorized character" },
+        { name: "Fraction Fox", source: "fraction-fox.png", role: "character", rights: "Original authorized character" },
+      ],
+      logoSource: "school-logo.png",
+      musicSource: "gentle-score.wav",
+      presenter: "none",
+    });
+    expect(plan.productionRules.map((rule) => rule.id)).toEqual(expect.arrayContaining(["plan-first", "open-assets", "story-sync", "safe-layout", "local-first"]));
+    expect(plan.resources.filter((resource) => resource.category === "character").map((resource) => resource.requirement)).toEqual(expect.arrayContaining([
+      expect.stringContaining("Teacher Sam"),
+      expect.stringContaining("Fraction Fox"),
+    ]));
+    const manifest = createPromptVideoManifest({
+      prompt: "A teacher and two original helpers explain fractions with paper shapes.",
+      mode: "cartoon",
+      sceneSources: ["lesson-board.png", "paper-shapes.png"],
+      characters: [
+        { name: "Teacher Sam", source: "teacher-sam.png", role: "presenter" },
+        { name: "Fraction Fox", source: "fraction-fox.png", role: "character" },
+      ],
+      logoSource: "school-logo.png",
+      presenter: "none",
+    }, plan);
+    expect(manifest.clips.map((clip) => clip.source)).toEqual(["lesson-board.png", "paper-shapes.png"]);
+    expect(manifest.overlays?.filter((overlay) => overlay.type === "character" || overlay.type === "presenter").map((overlay) => overlay.source)).toEqual(["teacher-sam.png", "fraction-fox.png"]);
+    expect(manifest.licenses?.map((license) => license.id)).toEqual(expect.arrayContaining(["provided-scene-1", "provided-character-1", "provided-logo"]));
+  });
+
+  it("locks authored plates and preserves scene-by-scene narration timing", () => {
+    const narration = [
+      "Sunlight warms water in oceans and lakes. Liquid water becomes invisible vapor.",
+      "High in the sky, that vapor cools. Tiny droplets gather into clouds.",
+      "Heavy droplets fall as rain or snow. Collected water begins the cycle again.",
+    ].join(" ");
+    const input = {
+      prompt: "Teach the water cycle in three clear scenes.",
+      narration,
+      mode: "cartoon" as const,
+      durationSeconds: 42,
+      presenter: "none" as const,
+      sceneSources: ["evaporation.svg", "condensation.svg", "precipitation.svg"],
+    };
+    const plan = createPromptVideoPlan(input);
+    expect(plan.scenes.map((scene) => scene.narration)).toEqual([
+      "Sunlight warms water in oceans and lakes. Liquid water becomes invisible vapor.",
+      "High in the sky, that vapor cools. Tiny droplets gather into clouds.",
+      "Heavy droplets fall as rain or snow. Collected water begins the cycle again.",
+    ]);
+    const manifest = createPromptVideoManifest(input, plan);
+    expect(manifest.clips.map((clip) => clip.motion)).toEqual(["none", "none", "none"]);
+    expect(manifest.clips.map((clip) => clip.durationSeconds)).toEqual([
+      plan.scenes[0]!.durationSeconds + 0.5,
+      plan.scenes[1]!.durationSeconds + 0.5,
+      plan.scenes[2]!.durationSeconds,
+    ]);
+    expect(manifest.overlays?.find((overlay) => overlay.id === "opening-title")?.animation?.loop).toBe("none");
+
+    const shortScript = createPromptVideoPlan({
+      prompt: "A two-line lesson.",
+      narration: "Introduce the idea. Finish with the result.",
+      mode: "story",
+    });
+    expect(shortScript.scenes.map((scene) => scene.narration)).toEqual([
+      "Introduce the idea.",
+      "Finish with the result.",
+      "No narration; visuals carry this scene.",
+    ]);
+  });
+
   it("ships resolvable fictional characters, presenters, scenes, and effect catalogs", () => {
     const assets = listCreatorAssets();
     expect(assets).toHaveLength(8);

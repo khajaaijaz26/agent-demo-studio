@@ -76,6 +76,23 @@ function isImageSource(clip: CreatorClip): boolean {
   return /\.(?:avif|gif|jpe?g|png|svg|webp)$/i.test(clip.source);
 }
 
+async function prepareVisualSource(source: string, clip: CreatorClip, index: number, preset: CreatorPreset, outputDirectory: string): Promise<string> {
+  if (path.extname(source).toLowerCase() !== ".svg") return source;
+  const rasterPath = path.join(outputDirectory, `${String(index + 1).padStart(3, "0")}-${safeOutputName(clip.id)}-source.png`);
+  try {
+    // FFmpeg SVG support varies by distribution. Rasterize vectors with the
+    // bundled Sharp dependency so the same project renders on Windows, macOS,
+    // and Linux while keeping dimensions bounded to the selected export.
+    await sharp(source, { limitInputPixels: 100_000_000 })
+      .resize({ width: preset.width, height: preset.height, fit: "inside" })
+      .png({ compressionLevel: 9 })
+      .toFile(rasterPath);
+    return rasterPath;
+  } catch (error) {
+    throw new AgentDemoError("SVG_RASTERIZE_FAILED", `Could not prepare SVG clip '${clip.id}': ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+
 function atempoFilters(speed: number): string[] {
   const filters: string[] = [];
   let remaining = speed;
@@ -210,8 +227,10 @@ function vfxFilters(presets: CreatorVfxPreset[] | undefined): string[] {
 }
 
 async function renderClipSegment(clip: CreatorClip, index: number, preset: CreatorPreset, baseDirectory: string, outputDirectory: string): Promise<SegmentResult> {
-  const source = resolveFrom(baseDirectory, clip.source);
-  if (!(await pathExists(source))) throw new AgentDemoError("CLIP_MISSING", `Clip '${clip.id}' is missing: ${source}`);
+  const resolvedSource = resolveFrom(baseDirectory, clip.source);
+  if (!(await pathExists(resolvedSource))) throw new AgentDemoError("CLIP_MISSING", `Clip '${clip.id}' is missing: ${resolvedSource}`);
+  await mkdir(outputDirectory, { recursive: true });
+  const source = await prepareVisualSource(resolvedSource, clip, index, preset, outputDirectory);
   const image = isImageSource(clip);
   const probe = await probeMediaInfo(source);
   if (!probe.hasVideo) throw new AgentDemoError("VIDEO_STREAM_REQUIRED", `Clip '${clip.id}' has no visual stream.`);
@@ -219,7 +238,6 @@ async function renderClipSegment(clip: CreatorClip, index: number, preset: Creat
   const trimEnd = image ? (clip.durationSeconds ?? 3) : Math.max(trimStart + 0.02, Math.min(clip.trimEndSeconds ?? probe.durationSeconds, probe.durationSeconds));
   const rawDuration = Math.max(0.02, image ? (clip.durationSeconds ?? 3) : trimEnd - trimStart);
   const outputPath = path.join(outputDirectory, `${String(index + 1).padStart(3, "0")}-${safeOutputName(clip.id)}.mp4`);
-  await mkdir(outputDirectory, { recursive: true });
   const args = ["-y"];
   if (image) args.push("-loop", "1", "-framerate", String(preset.fps), "-t", ffNumber(rawDuration), "-i", source);
   else args.push("-ss", ffNumber(trimStart), "-t", ffNumber(rawDuration), "-i", source);

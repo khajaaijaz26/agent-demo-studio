@@ -9,12 +9,15 @@ flowchart LR
   U[Local browser] --> S[Studio UI]
   M --> Q[Pre-production planner]
   C --> Q
+  Q --> L[Local Qwen or instant fallback]
   Q --> E[Shared TypeScript engine]
   S --> J[Local job server]
   J --> Q
   E --> R[Playwright recorder]
   E --> T[Creator timeline]
   E --> V[Voice and captions]
+  E --> G[Loopback media / consented voice adapters]
+  G --> T
   E --> P[Packaging and publishers]
   R --> F[FFmpeg + Sharp]
   T --> F
@@ -29,7 +32,8 @@ flowchart LR
 |---|---|---|
 | Browser capture | `src/browser/recorder.ts` | Visible/headless Chromium sessions, semantic actions, raw screencast |
 | Demo workflow | `src/workflow.ts` | Project creation, capture, voice, and classic polished demo render |
-| Pre-production | `src/creator/prompt.ts`, `assets.ts` | Requirements, storyboard, resources/provenance, prompt modes, and plan-first project creation |
+| Pre-production | `src/creator/prompt.ts`, `local-ai.ts`, `assets.ts` | Fixed production rules, deterministic plan, optional one-call local Qwen refinement, resources/provenance, and plan-first creation |
+| Open local generation | `src/creator/local-media.ts`, `src/audio/voice-clone.ts` | Loopback batch handoff for installed text/image/video engines and consent-gated local voice profiles |
 | Classic renderer | `src/render/` | Branded browser frame, design assets, synchronized scene narration |
 | Creator contract | `src/creator/types.ts`, `schema.ts` | Portable timeline, validation, and versioning |
 | Creator renderer | `src/creator/renderer.ts` | Clip normalization, speed, transitions, compositing, audio, exports |
@@ -42,8 +46,9 @@ flowchart LR
 1. For a prompt request, write requirements, creative direction, timed storyboard,
    resource/provenance list, assumptions, workflow, and QA gates to
    `production-plan.json` before media creation.
-2. Resolve supplied, bundled, generated, and optional resources; generate enabled
-   narration, captions, score, ambience, or ASMR audio.
+2. Resolve uploaded, supplied, bundled, generated, and optional resources. When
+   configured, make one batch request to a loopback media adapter; then generate
+   enabled narration, captions, score, ambience, or ASMR audio.
 3. Build, parse, and semantically validate the editable schema-v2 manifest.
 4. Resolve sources relative to the manifest or through stable `builtin:` URIs.
 5. Probe streams, duration, frame rate, and audio availability.
@@ -64,5 +69,9 @@ Intermediate media lives under the selected output's `.work` directory and is re
 - Add an editing operation to the creator schema and compile it in the segment or final-composite stage.
 - Keep the plan as the contract between an ambiguous prompt and a concrete timeline; never silently discard its resource or QA requirements.
 - Keep provider integrations optional and isolated from the local rendering path.
+- Accept open uploaded/generated characters and scenes; bundled assets are starter
+  resources, never a closed cast or mandatory style.
+- Restrict local AI, media, and voice adapters to loopback endpoints. Require named
+  authorization metadata before a cloned voice can enter the timeline.
 - Never carry large media through model context; MCP returns local resource links.
 - Preserve schema compatibility within a minor version or include an explicit migration.

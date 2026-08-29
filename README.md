@@ -25,7 +25,7 @@ Agent Demo Studio is an open-source MCP server, CLI, browser recorder, plan-firs
 |---|---|
 | Record | Visible or headless Chromium, semantic click/fill/scroll/press/hover actions, live snapshots, chapters, click highlights, smooth cursor, scripted or adaptive agent control |
 | Edit | Ordered clips, trims, image clips, constant speed, audio-synchronized stepped speed ramps, freeze frames, volume/mute, fit/fill/blur-background reframing, focus point, color/effect controls |
-| Plan | Requirements, audience assumption, creative direction, timed storyboard, narration intent, complete resource/provenance list, eight-stage workflow, and QA gates before media creation |
+| Plan | Optional one-call local Qwen intelligence plus an instant fallback, requirements, audience, creative direction, timed storyboard, resource/provenance list, fixed production rules, workflow, and QA gates before media creation |
 | Transition | 28 cut, fade, dissolve, wipe, slide, smooth, shape, zoom, squeeze, diagonal, blur, and reveal options—with matching audio crossfades |
 | Design | Brand palette, logo, text, lower thirds, calls to action, speech bubbles, image/video layers, chroma key, fictional presenters/cartoon characters, safe zones, and thumbnails |
 | Animate/VFX | Ken Burns and pan motion, 9 entrance/exit animations, 7 continuous loops, and 10 composable cinematic, glow, neon, glitch, VHS, dream, vintage, noir, comic, and ASMR looks |
@@ -39,7 +39,7 @@ Everything runs on the creator's machine. No Agent Demo Studio account or hosted
 
 ## Quick start
 
-Requirements: Node.js 20.12 or newer, FFmpeg/FFprobe on `PATH`, and Codex or Claude Code if you want agent control.
+Requirements: Node.js 20.12 or newer, FFmpeg/FFprobe on `PATH`, and Codex or Claude Code if you want agent control. Ollama with Qwen is optional; prompt creation still works without it.
 
 ```bash
 npm install --global github:khajaaijaz26/agent-demo-studio
@@ -62,6 +62,31 @@ agent-demo studio
 ```
 
 The Studio binds to `127.0.0.1` and opens in the default browser.
+
+Prefer to stay in the terminal? The free interactive dashboard exposes the same
+plan, build/render, local media paths, characters, voices, formats, Qwen warmup, and
+standalone music creation flow:
+
+```bash
+agent-demo dashboard
+```
+
+See the [terminal dashboard and another-laptop setup](docs/TERMINAL-DASHBOARD.md).
+
+For the fastest zero-token local planning, install the small Qwen model once and
+keep it warm:
+
+```bash
+ollama pull qwen3.5:0.8b
+agent-demo creator local-ai --warm --profile fast
+```
+
+The planner makes at most one bounded local model call per video and falls back
+to instant deterministic planning instead of blocking. Use
+`--planner-profile quality` to prefer an installed `qwen3.5:4b`, or
+`--planner deterministic` for no inference. Ollama endpoints are loopback-only
+and cloud-tagged models are rejected. See [local AI, uploads, generation adapters,
+and voice profiles](docs/LOCAL-AI.md).
 
 ## Give the work to an AI agent
 
@@ -98,6 +123,14 @@ agent-demo creator prompt \
 ```
 
 Modes are `product-launch`, `cartoon`, `story`, `asmr`, and `vfx`. Every job writes the plan first, resolves a rights-aware resource list, generates enabled audio/captions, builds the schema-v2 timeline, and only then renders. Bundled fictional presenters Aria and Leo, original cartoon hosts Nova and Milo, and four original scene environments provide an offline starting point. See the [plan-first prompt-video guide](docs/PROMPT-VIDEO-AND-VFX.md) and [asset provenance](assets/README.md).
+
+Those bundled characters are optional starters, not a fixed cast. The Studio and
+CLI accept any number of authorized scene images/videos and character images,
+plus a logo, music, and a consented local voice reference. Uploaded stills become
+stable image-to-video shots through transitions, reframing, and VFX; optional
+timeline motion remains available for artwork without locked text or UI. A documented
+loopback adapter supports local text-to-image, image-to-video, and text-to-video
+engines without coupling the renderer to one model.
 
 Repository-native Codex and Claude Code instructions in [AGENTS.md](AGENTS.md) and
 [CLAUDE.md](CLAUDE.md) enforce the same plan-first contract when an agent works from
@@ -219,8 +252,8 @@ The architectural boundaries and render stages are documented in [docs/ARCHITECT
 | Live browser | `demo_browser_start`, `demo_browser_snapshot`, `demo_browser_act`, `demo_browser_finish` |
 | Product demos | `demo_record_flow`, `demo_generate_voice`, `demo_render`, `demo_render_synchronized` |
 | Creator discovery | `demo_creator_presets`, `demo_creator_assets`, `demo_creator_templates`, `demo_creator_validate` |
-| Plan-first creation | `demo_creator_plan`, `demo_creator_from_prompt` |
-| Creator production | `demo_creator_render`, `demo_creator_remix`, `demo_creator_analyze`, `demo_creator_transcribe` |
+| Plan-first creation | `demo_local_ai`, `demo_creator_plan`, `demo_creator_from_prompt` |
+| Creator production | `demo_creator_music`, `demo_creator_render`, `demo_creator_remix`, `demo_creator_analyze`, `demo_creator_transcribe` |
 | Delivery | `demo_creator_package`, `demo_creator_publish` |
 | Operations | `demo_job_status`, `demo_open_studio`, `demo_doctor` |
 
@@ -314,7 +347,14 @@ CI runs the unit/build matrix on Windows and Linux plus separate real creator-en
 
 ## Project status and contribution
 
-Version 0.3 is a local-first browser, plan-first prompt-video, animation, VFX, and creator production toolkit. It is not a generative foundation video model, cloud collaboration service, identity-cloning tool, or full native-desktop capture system. Still characters use 2D/2.5D cutout motion rather than phoneme lip sync. The [roadmap](TODO.md) tracks provider-neutral script intelligence, stock/generated media, richer speech, lip-sync adapters, batch production, and deployment work without coupling the core renderer to one hosted vendor.
+Agent Demo Studio is a local-first browser, plan-first prompt-video, animation,
+VFX, and creator-production toolkit. Qwen provides optional local script
+intelligence; uploaded media, built-in motion, FFmpeg, local speech/music, and
+optional loopback media/voice adapters provide the production layers. The package
+does not bundle multi-gigabyte diffusion checkpoints or claim that Qwen itself
+generates images/video. Still characters use 2D/2.5D cutout motion unless a local
+adapter supplies generated animation. The [roadmap](TODO.md) tracks additional
+native backends, lip sync, hardware encoding, batch production, and deployment.
 
 Issues and pull requests are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), use the repository templates, and include a small fixture or screenshot for visible behavior changes.
 

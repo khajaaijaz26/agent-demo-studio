@@ -24,6 +24,9 @@ Persist the plan as `production-plan.json`. `demo_creator_from_prompt` and
 ## Build from the plan
 
 - Resolve required resources before the scene that needs them.
+- Treat bundled characters and scenes as optional starters, never a fixed cast.
+  Accept any authorized uploaded or locally generated characters and scene media
+  required by the brief, and record their provenance.
 - Build the editable manifest scene by scene; do not discard plan requirements.
 - Keep narration at a natural pace and adjust scene duration instead of speeding
   speech unnaturally.
@@ -31,6 +34,11 @@ Persist the plan as `production-plan.json`. `demo_creator_from_prompt` and
   regions and within each export's safe zones.
 - Inspect representative frames and transitions for overlap, clipping, black bands,
   mismatched narration, and disclosure issues before declaring completion.
+- Use a voice clone only through a loopback local adapter and only when the plan
+  records the authorized speaker's name, confirmed consent, and intended scope.
+- Prefer the smallest suitable local Qwen model for speed, make at most one
+  planning inference per video, and preserve the deterministic fallback and fixed
+  production rules.
 - Return the plan, manifest, videos, captions, thumbnails, chapters, and rights
   report as local artifact paths.
 

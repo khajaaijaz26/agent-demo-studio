@@ -19,6 +19,7 @@ try {
   const music = path.join(temporaryRoot, "music.m4a");
   const captions = path.join(temporaryRoot, "captions.srt");
   const logo = path.join(temporaryRoot, "logo.png");
+  const vectorScene = path.join(temporaryRoot, "vector-scene.svg");
   const outputDirectory = path.join(temporaryRoot, "output");
 
   await command("ffmpeg", [
@@ -40,6 +41,7 @@ try {
   ]);
   await writeFile(captions, "1\n00:00:00,050 --> 00:00:01,000\nCreator engine smoke test\n\n2\n00:00:01,050 --> 00:00:02,200\nOne edit, every format.\n", "utf8");
   await sharp(Buffer.from('<svg width="240" height="80" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="80" rx="20" fill="#7C3AED"/><text x="120" y="51" text-anchor="middle" font-family="Arial" font-size="28" font-weight="700" fill="white">DEMO</text></svg>')).png().toFile(logo);
+  await writeFile(vectorScene, '<svg width="640" height="360" xmlns="http://www.w3.org/2000/svg"><rect width="640" height="360" fill="#10172A"/><circle cx="320" cy="160" r="96" fill="#22D3EE"/><text x="320" y="300" text-anchor="middle" font-family="Arial" font-size="38" font-weight="700" fill="white">VECTOR SCENE</text></svg>', "utf8");
 
   const analysis = await analyzeMedia(first, { sceneThreshold: 0.2 });
   if (!analysis.hasVideo || !analysis.hasAudio || analysis.durationSeconds < 1) throw new Error(`Unexpected media analysis: ${JSON.stringify(analysis)}`);
@@ -52,7 +54,7 @@ try {
     clips: [
       { id: "landscape", source: first, speedRamp: { from: 1, to: 1.35, steps: 3 }, reframe: "blur-background", effects: { saturation: 1.08, vfx: ["cinematic"] }, chapter: "Landscape source", licenseId: "generated-fixture" },
       { id: "portrait", source: second, reframe: "fill", transition: { type: "blur", durationSeconds: 0.25 }, chapter: "Portrait source", licenseId: "generated-fixture-2" },
-      { id: "image-finale", source: logo, kind: "image", durationSeconds: 0.8, motion: "ken-burns-in", reframe: "blur-background", effects: { vfx: ["glow"] }, transition: { type: "zoom-in", durationSeconds: 0.2 }, chapter: "Animated image", licenseId: "generated-logo" },
+      { id: "image-finale", source: vectorScene, kind: "image", durationSeconds: 0.8, motion: "ken-burns-in", reframe: "blur-background", effects: { vfx: ["glow"] }, transition: { type: "zoom-in", durationSeconds: 0.2 }, chapter: "Animated vector image", licenseId: "generated-vector" },
     ],
     overlays: [
       { id: "cta", type: "cta", text: "Create everywhere", startSeconds: 0.2, endSeconds: 1.9, x: 0.5, y: 0.24 },
@@ -75,6 +77,7 @@ try {
       { id: "generated-fixture-2", source: second, license: "Generated test fixture" },
       { id: "generated-music", source: music, license: "Generated test fixture" },
       { id: "generated-logo", source: logo, license: "Generated test fixture" },
+      { id: "generated-vector", source: vectorScene, license: "Generated test fixture" },
     ],
   };
   const result = await renderCreatorManifest(manifest, (progress, message) => process.stderr.write(`\r[creator ${String(Math.round(progress)).padStart(3)}%] ${message.padEnd(54)}`), { baseDirectory: temporaryRoot });

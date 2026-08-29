@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#102A56"/><stop offset="1" stop-color="#1B6A9B"/></linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#16B8D4"/><stop offset="1" stop-color="#075985"/></linearGradient>
+    <radialGradient id="sun"><stop stop-color="#FFF8B0"/><stop offset=".55" stop-color="#FDBA2D"/><stop offset="1" stop-color="#F97316"/></radialGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="18" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#CFFAFE"/></marker>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <circle cx="1510" cy="250" r="142" fill="url(#sun)" filter="url(#glow)"/>
+  <g opacity=".22" fill="none" stroke="#FFF7C2" stroke-width="12"><circle cx="1510" cy="250" r="190"/><circle cx="1510" cy="250" r="235"/></g>
+  <path d="M0 730 C220 660 390 790 610 720 S1020 700 1230 735 S1630 650 1920 730 V1080 H0Z" fill="url(#sea)"/>
+  <g fill="none" stroke="#8BE8F3" stroke-width="12" opacity=".52">
+    <path d="M0 820 Q120 770 240 820 T480 820 T720 820 T960 820 T1200 820 T1440 820 T1680 820 T1920 820"/>
+    <path d="M0 900 Q120 850 240 900 T480 900 T720 900 T960 900 T1200 900 T1440 900 T1680 900 T1920 900"/>
+  </g>
+  <g fill="none" stroke="#CFFAFE" stroke-width="14" stroke-linecap="round" marker-end="url(#arrow)" opacity=".92">
+    <path d="M650 750 C620 650 650 565 635 470"/><path d="M920 730 C890 625 930 540 910 435"/><path d="M1185 745 C1165 630 1200 555 1190 460"/>
+  </g>
+  <g fill="#E0F7FF" opacity=".82"><circle cx="635" cy="560" r="18"/><circle cx="910" cy="535" r="14"/><circle cx="1190" cy="570" r="17"/><circle cx="1025" cy="470" r="11"/></g>
+  <g transform="translate(90 330)"><rect width="270" height="62" rx="31" fill="#07152F" opacity=".78"/><circle cx="35" cy="31" r="14" fill="#22D3EE"/><text x="66" y="41" fill="#E6FBFF" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="2">STEP ONE</text></g>
+  <g transform="translate(116 545)"><text fill="#FFFFFF" font-family="Arial, sans-serif" font-size="80" font-weight="800">Water warms.</text><text y="92" fill="#BDEEFF" font-family="Arial, sans-serif" font-size="42">Invisible vapor rises into the air.</text></g>
+</svg>

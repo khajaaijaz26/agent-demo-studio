@@ -362,12 +362,67 @@ export interface CreatorPromptVideoInput {
   durationSeconds?: number;
   presenter?: "none" | "aria" | "leo" | "nova" | "milo";
   voice?: string;
-  voiceProvider?: "local" | "neural";
+  voiceProvider?: "local" | "neural" | "local-clone";
   voiceRate?: number;
+  /** Reference recording for a consented, loopback-only voice-clone adapter. */
+  voiceReference?: string;
+  voiceConsent?: CreatorVoiceConsent;
+  voiceCloneUrl?: string;
   presets?: CreatorPresetId[];
   generateVoice?: boolean;
   generateMusic?: boolean;
   render?: boolean;
+  /** Selects the local planning engine. Auto prefers an installed local Qwen model. */
+  plannerProvider?: CreatorPlannerProvider;
+  /** Fast prefers the smallest useful local model; quality prefers a larger installed model. */
+  plannerProfile?: CreatorPlannerProfile;
+  /** Optional exact Ollama model name. Cloud-tagged models are rejected. */
+  plannerModel?: string;
+  /** Optional loopback-only Ollama endpoint. */
+  plannerBaseUrl?: string;
+  /** Any number of user-provided or locally generated scene images/videos. */
+  sceneSources?: string[];
+  /** Open character contract; bundled characters are only optional examples. */
+  characters?: CreatorPromptCharacterInput[];
+  logoSource?: string;
+  musicSource?: string;
+  /** Optional loopback media adapter for local diffusion/image/video engines. */
+  mediaProvider?: "builtin" | "local-adapter";
+  mediaTask?: "auto" | "text-to-image" | "image-to-video" | "text-to-video";
+  mediaAdapterUrl?: string;
+}
+
+export interface CreatorPromptCharacterInput {
+  id?: string;
+  name: string;
+  source: string;
+  role?: "presenter" | "character";
+  style?: string;
+  rights?: string;
+  x?: number;
+  y?: number;
+}
+
+export interface CreatorVoiceConsent {
+  speakerName: string;
+  confirmed: boolean;
+  scope?: string;
+}
+
+export type CreatorPlannerProvider = "auto" | "deterministic" | "ollama";
+
+export type CreatorPlannerProfile = "fast" | "quality";
+
+export interface CreatorPlanIntelligence {
+  provider: "deterministic" | "ollama";
+  local: true;
+  profile: CreatorPlannerProfile;
+  model?: string;
+  promptTokens?: number;
+  outputTokens?: number;
+  durationMs?: number;
+  cacheHit?: boolean;
+  fallbackReason?: string;
 }
 
 export interface CreatorProductionPlanResource {
@@ -413,9 +468,12 @@ export interface CreatorProductionPlan {
   };
   scenes: CreatorProductionPlanScene[];
   resources: CreatorProductionPlanResource[];
+  productionRules: Array<{ id: string; rule: string; qualityGate: string }>;
   workflow: Array<{ order: number; stage: string; action: string; output: string; qualityGate: string }>;
   assumptions: string[];
   qualityChecklist: string[];
+  /** Transparent provenance for the optional local planning pass. */
+  intelligence?: CreatorPlanIntelligence;
 }
 
 export interface CreatorPromptVideoResult {
@@ -426,7 +484,10 @@ export interface CreatorPromptVideoResult {
   plan: CreatorProductionPlan;
   manifestPath: string;
   manifest: CreatorManifest;
+  /** First narration file retained for backward compatibility. */
   voicePath?: string;
+  /** Scene-aligned narration files in timeline order. */
+  voicePaths?: string[];
   captionsPath?: string;
   musicPath?: string;
   renderResult?: CreatorRenderResult;

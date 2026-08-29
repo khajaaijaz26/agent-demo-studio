@@ -1,4 +1,5 @@
 import { pathToFileURL } from "node:url";
+import path from "node:path";
 import { readFile } from "node:fs/promises";
 import { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
@@ -13,6 +14,7 @@ import {
   startBrowserSession,
 } from "../browser/recorder.js";
 import { generateVoiceover } from "../audio/tts.js";
+import { generateAmbientMusic, generateAsmrSoundscape } from "../audio/music.js";
 import { renderDemo } from "../render/renderer.js";
 import { renderSynchronizedManifest } from "../render/synchronized.js";
 import { recordDemoFlow } from "../workflow.js";
@@ -28,7 +30,8 @@ import { remixMedia, renderCreatorManifest } from "../creator/renderer.js";
 import { createSocialPackage } from "../creator/social.js";
 import { publishMetadataFromOutput, publishToInstagram, publishToTikTok, publishToYouTube } from "../creator/publish.js";
 import { listCreatorAssets } from "../creator/assets.js";
-import { createPromptVideoPlan, createPromptVideoProject } from "../creator/prompt.js";
+import { getLocalAiStatus, warmLocalPlanner } from "../creator/local-ai.js";
+import { createPromptVideoProject, createSmartPromptVideoPlan } from "../creator/prompt.js";
 import {
   CREATOR_IMAGE_MOTIONS,
   CREATOR_LOOP_ANIMATIONS,
@@ -82,6 +85,17 @@ const actionSchema = z.object({
   milliseconds: z.number().int().min(0).max(60_000).optional(),
   deltaX: z.number().optional(),
   deltaY: z.number().optional(),
+});
+
+const promptCharacterSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(1),
+  source: z.string().min(1),
+  role: z.enum(["presenter", "character"]).default("character"),
+  style: z.string().optional(),
+  rights: z.string().optional(),
+  x: z.number().min(0).max(1).optional(),
+  y: z.number().min(0).max(1).optional(),
 });
 
 function jsonSafe<T>(value: T): T {
@@ -440,46 +454,113 @@ export function createAgentDemoMcpServer(): McpServer {
   );
 
   server.registerTool(
+    "demo_local_ai",
+    {
+      title: "Inspect or warm local Qwen",
+      description: "Check the loopback-only Ollama planner, choose the fastest or quality Qwen model, and optionally keep it warm. Never calls a hosted model or uses API tokens.",
+      inputSchema: z.object({
+        profile: z.enum(["fast", "quality"]).default("fast"),
+        model: z.string().optional(),
+        baseUrl: z.string().optional(),
+        warm: z.boolean().default(false),
+      }),
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async (input) => {
+      const status = await getLocalAiStatus(input);
+      return result(input.warm ? { status, warmup: await warmLocalPlanner(input) } : { status });
+    },
+  );
+
+  server.registerTool(
+    "demo_creator_music",
+    {
+      title: "Generate free local music",
+      description: "Generate an original procedural ambient score or stereo ASMR soundscape locally with no samples, account, network service, or paid token.",
+      inputSchema: z.object({
+        style: z.enum(["ambient", "asmr"]).default("ambient"),
+        durationSeconds: z.number().min(1).max(600).default(45),
+        outputPath: z.string().default("creator-output/ambient-music.wav"),
+      }),
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async (input) => result(jobs.start(`creator-music-${input.style}`, async () => {
+      const outputPath = path.resolve(input.outputPath);
+      await (input.style === "asmr" ? generateAsmrSoundscape(outputPath, input.durationSeconds) : generateAmbientMusic(outputPath, input.durationSeconds));
+      return { style: input.style, durationSeconds: input.durationSeconds, outputPath, local: true, rights: "Original procedural Agent Demo Studio audio" };
+    })),
+  );
+
+  server.registerTool(
     "demo_creator_plan",
     {
       title: "Plan a video before production",
-      description: "Turn a user request into a detailed requirements brief, creative direction, timed storyboard, resource/provenance list, staged workflow, assumptions, and quality checklist without generating media.",
+      description: "Turn a user request into a local-Qwen-assisted requirements brief, open-cast storyboard, resource/provenance list, fixed production rules, staged workflow, assumptions, and quality checklist without generating media.",
       inputSchema: z.object({
         prompt: z.string().min(1),
         mode: z.enum(["product-launch", "cartoon", "story", "asmr", "vfx"]).default("product-launch"),
         title: z.string().optional(),
         source: z.string().optional(),
+        sceneSources: z.array(z.string().min(1)).optional(),
+        characters: z.array(promptCharacterSchema).optional(),
+        logoSource: z.string().optional(),
+        musicSource: z.string().optional(),
+        narration: z.string().optional(),
         durationSeconds: z.number().min(6).max(600).optional(),
         presenter: z.enum(["none", "aria", "leo", "nova", "milo"]).optional(),
+        voiceProvider: z.enum(["local", "neural", "local-clone"]).default("local"),
+        voiceReference: z.string().optional(),
+        voiceConsent: z.object({ speakerName: z.string().min(1), confirmed: z.boolean(), scope: z.string().optional() }).optional(),
         presets: z.array(z.enum(["youtube-1080p", "youtube-4k", "shorts", "reels", "tiktok", "story", "square", "portrait", "linkedin", "podcast-vertical"])).min(1).default(["youtube-1080p"]),
         generateVoice: z.boolean().default(true),
         generateMusic: z.boolean().default(true),
+        plannerProvider: z.enum(["auto", "deterministic", "ollama"]).default("auto"),
+        plannerProfile: z.enum(["fast", "quality"]).default("fast"),
+        plannerModel: z.string().optional(),
+        plannerBaseUrl: z.string().optional(),
+        mediaProvider: z.enum(["builtin", "local-adapter"]).default("builtin"),
+        mediaTask: z.enum(["auto", "text-to-image", "image-to-video", "text-to-video"]).default("auto"),
+        mediaAdapterUrl: z.string().optional(),
       }),
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
-    async (input) => result({ plan: createPromptVideoPlan({ ...input, presets: input.presets as CreatorPresetId[] }) }),
+    async (input) => result({ plan: await createSmartPromptVideoPlan({ ...input, presets: input.presets as CreatorPresetId[] }) }),
   );
 
   server.registerTool(
     "demo_creator_from_prompt",
     {
       title: "Create a complete video project from a prompt",
-      description: "Plan first, then generate an editable product-launch, cartoon, narrated-story, ASMR, or VFX timeline with optional local/neural voice, captions, original score or soundscape, fictional characters, and immediate multi-format rendering. Saves production-plan.json before media generation.",
+      description: "Plan first, then generate an editable product-launch, cartoon, narrated-story, ASMR, or VFX timeline from bundled, uploaded, or loopback-generated media; supports open characters, local/neural/consented-clone voice, captions, music, and immediate multi-format rendering. Saves production-plan.json before media generation.",
       inputSchema: z.object({
         prompt: z.string().min(1),
         mode: z.enum(["product-launch", "cartoon", "story", "asmr", "vfx"]).default("product-launch"),
         title: z.string().optional(),
         source: z.string().optional(),
+        sceneSources: z.array(z.string().min(1)).optional(),
+        characters: z.array(promptCharacterSchema).optional(),
+        logoSource: z.string().optional(),
+        musicSource: z.string().optional(),
         outputDirectory: z.string().optional(),
         narration: z.string().optional(),
         durationSeconds: z.number().min(6).max(600).optional(),
         presenter: z.enum(["none", "aria", "leo", "nova", "milo"]).optional(),
         voice: z.string().optional(),
-        voiceProvider: z.enum(["local", "neural"]).default("local"),
+        voiceProvider: z.enum(["local", "neural", "local-clone"]).default("local"),
         voiceRate: z.number().min(-10).max(10).optional(),
+        voiceReference: z.string().optional(),
+        voiceConsent: z.object({ speakerName: z.string().min(1), confirmed: z.boolean(), scope: z.string().optional() }).optional(),
+        voiceCloneUrl: z.string().optional(),
         presets: z.array(z.enum(["youtube-1080p", "youtube-4k", "shorts", "reels", "tiktok", "story", "square", "portrait", "linkedin", "podcast-vertical"])).min(1).default(["youtube-1080p"]),
         generateVoice: z.boolean().default(true),
         generateMusic: z.boolean().default(true),
+        plannerProvider: z.enum(["auto", "deterministic", "ollama"]).default("auto"),
+        plannerProfile: z.enum(["fast", "quality"]).default("fast"),
+        plannerModel: z.string().optional(),
+        plannerBaseUrl: z.string().optional(),
+        mediaProvider: z.enum(["builtin", "local-adapter"]).default("builtin"),
+        mediaTask: z.enum(["auto", "text-to-image", "image-to-video", "text-to-video"]).default("auto"),
+        mediaAdapterUrl: z.string().optional(),
         render: z.boolean().default(false),
       }),
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true },
