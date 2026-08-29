@@ -8,6 +8,7 @@ import { Transform } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { spawn } from "node:child_process";
 import { AGENT_DEMO_VERSION, getStudioRoot } from "../config.js";
+import { inspectCapabilities } from "../capabilities.js";
 import { errorMessage, serializeError } from "../errors.js";
 import { listProjects, loadProject, resolveArtifact } from "../project-store.js";
 import { renderDemo } from "../render/renderer.js";
@@ -184,7 +185,41 @@ export async function startStudioServer(
       const url = new URL(request.url || "/", "http://127.0.0.1");
 
       if (request.method === "GET" && url.pathname === "/api/health") {
-        sendJson(response, 200, { ok: true, product: "Agent Demo Studio", version: AGENT_DEMO_VERSION, creatorEngine: true, promptVideo: true, vfx: true });
+        sendJson(response, 200, { ok: true, product: "Agent Demo Studio", version: AGENT_DEMO_VERSION, creatorEngine: true, promptVideo: true, capabilityRegistry: true, vfx: true });
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/capabilities") {
+        sendJson(response, 200, await inspectCapabilities({
+          plannerProvider: "auto",
+          plannerProfile: (url.searchParams.get("profile") === "quality" ? "quality" : "fast") as CreatorPlannerProfile,
+          mediaProvider: "builtin",
+          generateVoice: true,
+          voiceProvider: "local",
+          generateMusic: true,
+          render: true,
+        }));
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/capabilities") {
+        const body = await readJson(request);
+        sendJson(response, 200, await inspectCapabilities({
+          plannerProvider: (["auto", "deterministic", "ollama"].includes(String(body.plannerProvider)) ? body.plannerProvider : "auto") as CreatorPlannerProvider,
+          plannerProfile: (body.plannerProfile === "quality" ? "quality" : "fast") as CreatorPlannerProfile,
+          plannerModel: typeof body.plannerModel === "string" ? body.plannerModel : undefined,
+          plannerBaseUrl: typeof body.plannerBaseUrl === "string" ? body.plannerBaseUrl : undefined,
+          mediaProvider: body.mediaProvider === "local-adapter" ? "local-adapter" : "builtin",
+          mediaAdapterUrl: typeof body.mediaAdapterUrl === "string" ? body.mediaAdapterUrl : undefined,
+          generateVoice: body.generateVoice !== false,
+          voiceProvider: body.voiceProvider === "neural" ? "neural" : body.voiceProvider === "local-clone" ? "local-clone" : "local",
+          voiceCloneUrl: typeof body.voiceCloneUrl === "string" ? body.voiceCloneUrl : undefined,
+          voiceReferenceAvailable: body.voiceReferenceAvailable === true,
+          voiceConsentConfirmed: body.voiceConsentConfirmed === true,
+          voiceSpeakerName: typeof body.voiceSpeakerName === "string" ? body.voiceSpeakerName : undefined,
+          generateMusic: body.generateMusic !== false,
+          suppliedMusic: body.suppliedMusic === true,
+          render: body.render !== false,
+          browserRecording: body.browserRecording === true,
+        }));
         return;
       }
       if (request.method === "GET" && url.pathname === "/api/jobs") {

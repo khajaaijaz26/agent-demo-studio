@@ -4,6 +4,7 @@ import path from "node:path";
 import { Command } from "commander";
 import { serveStdio } from "@modelcontextprotocol/server/stdio";
 import { AGENT_DEMO_VERSION } from "./config.js";
+import { inspectCapabilities } from "./capabilities.js";
 import { createAgentDemoMcpServer } from "./mcp/server.js";
 import { createProject, listProjects, loadProject } from "./project-store.js";
 import { recordDemoFlow } from "./workflow.js";
@@ -153,6 +154,44 @@ program
     if (checks.some((check) => !check.ok && !check.optional)) {
       process.exitCode = 1;
     }
+  });
+
+program
+  .command("capabilities")
+  .description("Inspect the local/free video stack before an agent plans production.")
+  .option("--planner <provider>", "auto, deterministic, or ollama", "auto")
+  .option("--profile <profile>", "fast or quality", "fast")
+  .option("--media-provider <provider>", "builtin or local-adapter", "builtin")
+  .option("--media-adapter-url <url>", "Loopback local media adapter")
+  .option("--voice-provider <provider>", "local, neural, or local-clone", "local")
+  .option("--voice-clone-url <url>", "Loopback local voice-clone adapter")
+  .option("--voice-reference <path>", "Authorized local voice reference")
+  .option("--voice-speaker <name>", "Named speaker who authorized cloning")
+  .option("--voice-consent", "Confirm authorization for this capability check", false)
+  .option("--no-voice", "Do not require narration")
+  .option("--no-music", "Do not require generated music")
+  .option("--no-render", "Do not require FFmpeg rendering")
+  .option("--browser", "Require live browser recording", false)
+  .action(async (options: { planner: string; profile: string; mediaProvider: string; mediaAdapterUrl?: string; voiceProvider: string; voiceCloneUrl?: string; voiceReference?: string; voiceSpeaker?: string; voiceConsent: boolean; voice: boolean; music: boolean; render: boolean; browser: boolean }) => {
+    if (!(["auto", "deterministic", "ollama"] as const).includes(options.planner as CreatorPlannerProvider)) throw new Error("Planner must be 'auto', 'deterministic', or 'ollama'.");
+    if (!(["fast", "quality"] as const).includes(options.profile as CreatorPlannerProfile)) throw new Error("Profile must be 'fast' or 'quality'.");
+    if (!(["builtin", "local-adapter"] as const).includes(options.mediaProvider as "builtin" | "local-adapter")) throw new Error("Media provider must be 'builtin' or 'local-adapter'.");
+    if (!(["local", "neural", "local-clone"] as const).includes(options.voiceProvider as "local" | "neural" | "local-clone")) throw new Error("Voice provider must be 'local', 'neural', or 'local-clone'.");
+    output(await inspectCapabilities({
+      plannerProvider: options.planner as CreatorPlannerProvider,
+      plannerProfile: options.profile as CreatorPlannerProfile,
+      mediaProvider: options.mediaProvider as "builtin" | "local-adapter",
+      mediaAdapterUrl: options.mediaAdapterUrl,
+      generateVoice: options.voice,
+      voiceProvider: options.voiceProvider as "local" | "neural" | "local-clone",
+      voiceCloneUrl: options.voiceCloneUrl,
+      voiceReferenceAvailable: Boolean(options.voiceReference),
+      voiceConsentConfirmed: options.voiceConsent,
+      voiceSpeakerName: options.voiceSpeaker,
+      generateMusic: options.music,
+      render: options.render,
+      browserRecording: options.browser,
+    }));
   });
 
 program

@@ -1,3 +1,5 @@
+import type { CapabilityReport } from "../capabilities.js";
+
 export const CREATOR_SCHEMA_VERSION = 2;
 
 export type CreatorPresetId =
@@ -472,6 +474,8 @@ export interface CreatorProductionPlan {
   workflow: Array<{ order: number; stage: string; action: string; output: string; qualityGate: string }>;
   assumptions: string[];
   qualityChecklist: string[];
+  /** Request-aware inventory captured before media generation begins. */
+  capabilities?: CapabilityReport;
   /** Transparent provenance for the optional local planning pass. */
   intelligence?: CreatorPlanIntelligence;
 }

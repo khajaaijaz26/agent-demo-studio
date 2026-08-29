@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
 import { AGENT_DEMO_VERSION } from "../config.js";
+import { inspectCapabilities } from "../capabilities.js";
 import { createProject, listProjects, loadProject, resolveArtifact } from "../project-store.js";
 import { jobs } from "../jobs.js";
 import {
@@ -185,7 +186,7 @@ export function createAgentDemoMcpServer(): McpServer {
     {
       capabilities: { tools: {} },
       instructions:
-        "Agent Demo Studio records websites and creates product launches, fictional presenter videos, cartoons, narrated stories, ASMR, VFX edits, long-form videos, Shorts, Reels, TikTok, square/portrait posts, and 4K masters. Before producing a requested video, use demo_creator_plan to define requirements, visual direction, storyboard, resources, workflow, assumptions, and quality gates; demo_creator_from_prompt also saves this plan automatically before generation. Use demo_creator_assets for bundled characters and effects, and demo_browser_* for live capture. Editing tools include templates, validate, render, remix, analyze, transcribe, and package. Long jobs return job_id; poll demo_job_status. Never put passwords, access tokens, or secrets in tool arguments; publishing tools read tokens from environment variables and require confirmPublish=true.",
+        "Agent Demo Studio records websites and creates product launches, fictional presenter videos, cartoons, narrated stories, ASMR, VFX edits, long-form videos, Shorts, Reels, TikTok, square/portrait posts, and 4K masters. Before producing a requested video, use demo_capabilities to discover the installed local/free stack, then demo_creator_plan to define requirements, visual direction, storyboard, resources, workflow, assumptions, and quality gates; demo_creator_from_prompt also saves both automatically before generation. Use demo_creator_assets for bundled characters and effects, and demo_browser_* for live capture. Editing tools include templates, validate, render, remix, analyze, transcribe, and package. Long jobs return job_id; poll demo_job_status. Never put passwords, access tokens, or secrets in tool arguments; publishing tools read tokens from environment variables and require confirmPublish=true.",
     },
   );
 
@@ -451,6 +452,34 @@ export function createAgentDemoMcpServer(): McpServer {
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     async (input) => result(input.templateId ? { template: createTemplateManifest(input.templateId, input) } : { templates: listCreatorTemplates() }),
+  );
+
+  server.registerTool(
+    "demo_capabilities",
+    {
+      title: "Inspect local video capabilities",
+      description: "Discover which planners, recorders, visual engines, voices, captions, music tools, renderers, and agent CLIs are ready, configured, or unavailable before planning production.",
+      inputSchema: z.object({
+        plannerProvider: z.enum(["auto", "deterministic", "ollama"]).default("auto"),
+        plannerProfile: z.enum(["fast", "quality"]).default("fast"),
+        plannerModel: z.string().optional(),
+        plannerBaseUrl: z.string().optional(),
+        mediaProvider: z.enum(["builtin", "local-adapter"]).default("builtin"),
+        mediaAdapterUrl: z.string().optional(),
+        generateVoice: z.boolean().default(true),
+        voiceProvider: z.enum(["local", "neural", "local-clone"]).default("local"),
+        voiceCloneUrl: z.string().optional(),
+        voiceReferenceAvailable: z.boolean().default(false),
+        voiceConsentConfirmed: z.boolean().default(false),
+        voiceSpeakerName: z.string().optional(),
+        generateMusic: z.boolean().default(true),
+        suppliedMusic: z.boolean().default(false),
+        render: z.boolean().default(true),
+        browserRecording: z.boolean().default(false),
+      }),
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async (input) => result(await inspectCapabilities(input)),
   );
 
   server.registerTool(

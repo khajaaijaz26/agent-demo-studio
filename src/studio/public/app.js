@@ -8,6 +8,7 @@ const state = {
   creatorManifest: null,
   creatorResult: null,
   creatorJobId: null,
+  capabilities: null,
   promptUploads: {
     sceneSources: [],
     characters: [],
@@ -74,6 +75,10 @@ const elements = {
   localAiDetail: $("#local-ai-detail"),
   localAiWarm: $("#local-ai-warm"),
   localAiCard: $(".local-ai-card"),
+  capabilityCard: $("#capability-card"),
+  capabilityTitle: $("#capability-title"),
+  capabilityDetail: $("#capability-detail"),
+  capabilityRefresh: $("#capability-refresh"),
   promptSceneFiles: $("#prompt-scene-files"),
   promptCharacterFiles: $("#prompt-character-files"),
   promptLogoFile: $("#prompt-logo-file"),
@@ -150,6 +155,43 @@ async function refreshLocalAiStatus() {
   const status = await api(`/api/local-ai/status?profile=${encodeURIComponent(profile)}`);
   renderLocalAiStatus(status);
   return status;
+}
+
+function selectedCapabilityRequest() {
+  return {
+    plannerProvider: elements.promptPlannerProvider.value,
+    plannerProfile: elements.promptPlannerProfile.value,
+    mediaProvider: elements.promptMediaProvider.value,
+    mediaAdapterUrl: elements.promptMediaAdapterUrl.value.trim() || undefined,
+    generateVoice: elements.promptVoice.checked && elements.promptMode.value !== "asmr",
+    voiceProvider: elements.promptVoiceProvider.value,
+    voiceCloneUrl: elements.promptVoiceCloneUrl.value.trim() || undefined,
+    voiceReferenceAvailable: Boolean(state.promptUploads.voiceReference),
+    voiceConsentConfirmed: elements.promptVoiceConsent.checked,
+    voiceSpeakerName: elements.promptVoiceSpeaker.value.trim() || undefined,
+    generateMusic: elements.promptMusic.checked,
+    suppliedMusic: Boolean(state.promptUploads.musicSource),
+    render: true,
+  };
+}
+
+function renderCapabilityStatus(report) {
+  if (!report) return;
+  state.capabilities = report;
+  const ready = Boolean(report.readyForRequest);
+  elements.capabilityCard.classList.toggle("blocked", !ready);
+  elements.capabilityTitle.textContent = ready
+    ? `${report.summary.selected} selected production tools ready`
+    : `${report.blockers.length} required production ${report.blockers.length === 1 ? "tool" : "tools"} missing`;
+  elements.capabilityDetail.textContent = ready
+    ? `${report.fullyLocalForRequest ? "Fully local" : "Network/provider terms selected"} · 0 paid model tokens required`
+    : `${report.blockers[0]?.detail || "Scan the selected production stack before creating"}`;
+}
+
+async function refreshCapabilityStatus() {
+  const report = await api("/api/capabilities", { method: "POST", body: JSON.stringify(selectedCapabilityRequest()) });
+  renderCapabilityStatus(report);
+  return report;
 }
 
 async function uploadFile(file, kind) {
@@ -332,7 +374,7 @@ async function loadTemplate() {
 }
 
 async function initializeCreator() {
-  const [presets, templates, creatorAssets, localAi] = await Promise.all([api("/api/creator/presets"), api("/api/creator/templates"), api("/api/creator/assets"), api("/api/local-ai/status?profile=fast")]);
+  const [presets, templates, creatorAssets, localAi, capabilities] = await Promise.all([api("/api/creator/presets"), api("/api/creator/templates"), api("/api/creator/assets"), api("/api/local-ai/status?profile=fast"), api("/api/capabilities?profile=fast")]);
   state.presets = presets;
   state.templates = templates;
   state.creatorAssets = creatorAssets;
@@ -344,6 +386,7 @@ async function initializeCreator() {
   elements.promptPresenter.options[0].textContent = "No starter character";
   elements.promptPresenter.value = "none";
   renderLocalAiStatus(localAi);
+  renderCapabilityStatus(capabilities);
   if (!state.creatorManifest) await loadTemplate();
   else renderPresetGrid();
 }
@@ -411,13 +454,15 @@ function promptRequest(render) {
 function showProductionPlan(plan) {
   if (!plan) return;
   elements.promptPlanPreview.classList.remove("hidden");
-  elements.promptPlanSummary.textContent = `${plan.scenes.length} scenes · ${plan.requirements.targetDurationSeconds}s · ${plan.requirements.outputPresets.join(", ")}`;
-  elements.promptPlanResources.textContent = plan.resources.map((resource) => `${resource.status.toUpperCase()}  ${resource.category}\n${resource.requirement}\n${resource.source}`).join("\n\n");
   const intelligence = plan.intelligence?.provider === "ollama" ? `${plan.intelligence.model} local` : "instant local rules";
   elements.promptPlanSummary.textContent = `${plan.scenes.length} scenes · ${plan.requirements.targetDurationSeconds}s · ${intelligence}`;
   const resources = plan.resources.map((resource) => `${resource.status.toUpperCase()}  ${resource.category}\n${resource.requirement}\n${resource.source}`).join("\n\n");
+  const capabilityGate = plan.capabilities
+    ? plan.capabilities.capabilities.filter((item) => item.selected).map((item) => `${item.available ? "READY" : "BLOCKED"}  ${item.label}\n${item.detail}`).join("\n\n")
+    : "Capability inventory was not attached.";
   const rules = (plan.productionRules || []).map((rule) => `${rule.id.toUpperCase()}\n${rule.rule}\nGate: ${rule.qualityGate}`).join("\n\n");
-  elements.promptPlanResources.textContent = `${resources}\n\nFIXED PRODUCTION RULES\n\n${rules}`;
+  elements.promptPlanResources.textContent = `CAPABILITY GATE\n\n${capabilityGate}\n\nRESOURCES\n\n${resources}\n\nFIXED PRODUCTION RULES\n\n${rules}`;
+  renderCapabilityStatus(plan.capabilities);
 }
 
 async function reviewPromptPlan() {
@@ -516,8 +561,23 @@ elements.render.addEventListener("click", async () => {
 });
 
 elements.templateButton.addEventListener("click", () => loadTemplate().catch((error) => creatorFeedback(error.message, "error")));
-elements.promptMode.addEventListener("change", syncPromptCharacterToMode);
-elements.promptPlannerProfile.addEventListener("change", () => refreshLocalAiStatus().catch((error) => creatorFeedback(error.message, "error")));
+elements.promptMode.addEventListener("change", () => {
+  syncPromptCharacterToMode();
+  refreshCapabilityStatus().catch((error) => creatorFeedback(error.message, "error"));
+});
+elements.promptPlannerProfile.addEventListener("change", () => Promise.all([refreshLocalAiStatus(), refreshCapabilityStatus()]).catch((error) => creatorFeedback(error.message, "error")));
+for (const control of [elements.promptPlannerProvider, elements.promptMediaProvider, elements.promptVoiceProvider, elements.promptVoice, elements.promptMusic]) {
+  control.addEventListener("change", () => refreshCapabilityStatus().catch((error) => creatorFeedback(error.message, "error")));
+}
+elements.capabilityRefresh.addEventListener("click", async () => {
+  elements.capabilityRefresh.disabled = true;
+  elements.capabilityDetail.textContent = "Inspecting local tools without generating media…";
+  try {
+    const report = await refreshCapabilityStatus();
+    creatorFeedback(report.readyForRequest ? "The selected production stack is ready." : report.blockers.map((item) => item.setup || item.detail).join(" "), report.readyForRequest ? "success" : "error");
+  } catch (error) { creatorFeedback(error.message, "error"); }
+  finally { elements.capabilityRefresh.disabled = false; }
+});
 elements.localAiWarm.addEventListener("click", async () => {
   elements.localAiWarm.disabled = true;
   elements.localAiDetail.textContent = "Loading the model into memory…";

@@ -1,5 +1,6 @@
 import path from "node:path";
 import { mkdir, writeFile } from "node:fs/promises";
+import { inspectCapabilities, type CapabilityRuntime } from "../capabilities.js";
 import { generateAmbientMusic, generateAsmrSoundscape } from "../audio/music.js";
 import { generateNeuralSpeech } from "../audio/neural-tts.js";
 import { generateLocalSpeech } from "../audio/tts.js";
@@ -23,6 +24,10 @@ import {
 } from "./types.js";
 
 type ProgressReporter = (progress: number, message: string) => void;
+
+export interface PromptPlanningRuntime extends LocalAiRuntime {
+  capabilityRuntime?: CapabilityRuntime;
+}
 
 const DEFAULT_DURATIONS = {
   "product-launch": 24,
@@ -330,8 +335,29 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
  * The deterministic plan remains the trusted source for resources, rights,
  * workflow, timings, effects, and export settings.
  */
-export async function createSmartPromptVideoPlan(input: CreatorPromptVideoInput, runtime: LocalAiRuntime = {}): Promise<CreatorProductionPlan> {
-  return enhancePromptVideoPlan(input, createPromptVideoPlan(input), runtime);
+export async function createSmartPromptVideoPlan(input: CreatorPromptVideoInput, runtime: PromptPlanningRuntime = {}): Promise<CreatorProductionPlan> {
+  const plan = await enhancePromptVideoPlan(input, createPromptVideoPlan(input), runtime);
+  const capabilities = await inspectCapabilities({
+    plannerProvider: input.plannerProvider ?? "auto",
+    plannerProfile: input.plannerProfile ?? "fast",
+    plannerModel: input.plannerModel,
+    plannerBaseUrl: input.plannerBaseUrl,
+    mediaProvider: input.mediaProvider ?? "builtin",
+    mediaAdapterUrl: input.mediaAdapterUrl,
+    generateVoice: input.generateVoice !== false && input.mode !== "asmr",
+    voiceProvider: input.voiceProvider ?? "local",
+    voiceCloneUrl: input.voiceCloneUrl,
+    voiceReferenceAvailable: Boolean(input.voiceReference),
+    voiceConsentConfirmed: input.voiceConsent?.confirmed === true,
+    voiceSpeakerName: input.voiceConsent?.speakerName,
+    generateMusic: input.generateMusic !== false,
+    suppliedMusic: Boolean(input.musicSource),
+    render: input.render === true,
+  }, {
+    ...runtime.capabilityRuntime,
+    fetchImpl: runtime.capabilityRuntime?.fetchImpl ?? runtime.fetchImpl,
+  });
+  return { ...plan, capabilities };
 }
 
 function retimeProductionPlan(plan: CreatorProductionPlan, durationSeconds: number, speechDurations: number[] = []): CreatorProductionPlan {
@@ -619,6 +645,11 @@ export async function createPromptVideoProject(input: CreatorPromptVideoInput, r
   let initialPlan = await createSmartPromptVideoPlan(normalizedInput);
   const title = initialPlan.title;
   await writeFile(planPath, `${JSON.stringify(initialPlan, null, 2)}\n`, "utf8");
+  if (!initialPlan.capabilities?.readyForRequest) {
+    const blockers = initialPlan.capabilities?.blockers.map((item) => `${item.id}: ${item.detail}`).join("; ") || "Unknown local capability";
+    report(100, "Production plan saved; required local capability is unavailable");
+    throw new Error(`Production plan saved at ${planPath}, but production cannot start until these requirements are resolved: ${blockers}`);
+  }
   let projectInput = normalizedInput;
   let mediaGeneration: LocalMediaGenerationResult | undefined;
   if (normalizedInput.mediaProvider === "local-adapter") {

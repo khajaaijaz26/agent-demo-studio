@@ -2,6 +2,28 @@
 
 All notable changes to Agent Demo Studio are documented here.
 
+## 0.5.0 - 2026-08-29
+
+### Added
+
+- Provider-neutral capability registry for planners, browser recording, built-in
+  and loopback visual engines, local/neural/cloned voices, captions, procedural
+  music, FFmpeg/FFprobe, and Codex/Claude integrations.
+- Request-aware readiness, local/network/cost classification, exact blockers,
+  and setup guidance through `agent-demo capabilities`, `demo_capabilities`, the
+  terminal dashboard, the Studio API, and the visual Creator panel.
+- Capability snapshots inside every smart `production-plan.json` so agents can
+  prove that selected resources are available before creating media.
+
+### Changed
+
+- Complete prompt jobs now save the production plan and stop before generation
+  when a selected required capability is unavailable. Missing local tools are
+  never silently replaced with hosted or paid providers.
+- MCP agent instructions now require capability discovery before production
+  planning, while the deterministic local planner remains the guaranteed
+  zero-token fallback for automatic planning.
+
 ## 0.4.0 - 2026-08-29
 
 ### Added

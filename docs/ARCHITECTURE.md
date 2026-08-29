@@ -7,8 +7,10 @@ flowchart LR
   A[Codex / Claude Code / MCP client] --> M[MCP tools]
   B[Terminal] --> C[CLI]
   U[Local browser] --> S[Studio UI]
-  M --> Q[Pre-production planner]
-  C --> Q
+  M --> K[Capability registry]
+  C --> K
+  S --> K
+  K --> Q[Pre-production planner]
   Q --> L[Local Qwen or instant fallback]
   Q --> E[Shared TypeScript engine]
   S --> J[Local job server]
@@ -32,6 +34,7 @@ flowchart LR
 |---|---|---|
 | Browser capture | `src/browser/recorder.ts` | Visible/headless Chromium sessions, semantic actions, raw screencast |
 | Demo workflow | `src/workflow.ts` | Project creation, capture, voice, and classic polished demo render |
+| Capability discovery | `src/capabilities.ts` | Request-aware inventory of local/free, configured, optional, networked, and unavailable production tools without generating media or exposing secrets |
 | Pre-production | `src/creator/prompt.ts`, `local-ai.ts`, `assets.ts` | Fixed production rules, deterministic plan, optional one-call local Qwen refinement, resources/provenance, and plan-first creation |
 | Open local generation | `src/creator/local-media.ts`, `src/audio/voice-clone.ts` | Loopback batch handoff for installed text/image/video engines and consent-gated local voice profiles |
 | Classic renderer | `src/render/` | Branded browser frame, design assets, synchronized scene narration |
@@ -43,23 +46,26 @@ flowchart LR
 
 ## Render stages
 
-1. For a prompt request, write requirements, creative direction, timed storyboard,
-   resource/provenance list, assumptions, workflow, and QA gates to
-   `production-plan.json` before media creation.
-2. Resolve uploaded, supplied, bundled, generated, and optional resources. When
+1. Inspect the selected planner, visuals, voice, music, caption, recording, and
+   rendering capabilities without invoking generation.
+2. Write requirements, creative direction, timed storyboard, resource/provenance
+   list, capability gate, assumptions, workflow, and QA gates to
+   `production-plan.json`. Stop here with setup guidance if a required selected
+   capability is unavailable.
+3. Resolve uploaded, supplied, bundled, generated, and optional resources. When
    configured, make one batch request to a loopback media adapter; then generate
    enabled narration, captions, score, ambience, or ASMR audio.
-3. Build, parse, and semantically validate the editable schema-v2 manifest.
-4. Resolve sources relative to the manifest or through stable `builtin:` URIs.
-5. Probe streams, duration, frame rate, and audio availability.
-6. Normalize each clip to the selected canvas, 48 kHz stereo, and a common frame rate.
-7. Apply trim, stepped speed ramp, reframe, freeze, image motion, VFX, and clip gain.
-8. Compose clips with 28 video transitions and matching audio transitions.
-9. Rasterize timed design/character assets, composite animated image/video/chroma
+4. Build, parse, and semantically validate the editable schema-v2 manifest.
+5. Resolve sources relative to the manifest or through stable `builtin:` URIs.
+6. Probe streams, duration, frame rate, and audio availability.
+7. Normalize each clip to the selected canvas, 48 kHz stereo, and a common frame rate.
+8. Apply trim, stepped speed ramp, reframe, freeze, image motion, VFX, and clip gain.
+9. Compose clips with 28 video transitions and matching audio transitions.
+10. Rasterize timed design/character assets, composite animated image/video/chroma
    layers, and compile captions to ASS.
-10. Mix clip audio, layered voices, music, ambience, and SFX with optional ducking.
-11. Normalize/limit audio, encode MP4, and add fast-start metadata.
-12. Extract a thumbnail, write captions/chapters, validate the result, and emit rights metadata.
+11. Mix clip audio, layered voices, music, ambience, and SFX with optional ducking.
+12. Normalize/limit audio, encode MP4, and add fast-start metadata.
+13. Extract a thumbnail, write captions/chapters, validate the result, and emit rights metadata.
 
 Intermediate media lives under the selected output's `.work` directory and is removed after a successful or failed run unless `keepWork` is enabled. Source media is never overwritten.
 

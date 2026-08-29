@@ -5,9 +5,11 @@ its MCP server to create a video.
 
 ## Never create blindly
 
-Before recording, generating audio, assembling a timeline, or rendering, create a
-production plan from the user's request. Use `demo_creator_plan`,
-`agent-demo creator plan`, or the equivalent library function. The plan must cover:
+Before recording, generating audio, assembling a timeline, or rendering, inspect
+the selected production stack with `demo_capabilities`, `agent-demo capabilities`,
+or `inspectCapabilities()`. Then create a production plan from the user's request
+with `demo_creator_plan`, `agent-demo creator plan`, or the equivalent library
+function. The plan must cover:
 
 1. The goal, intended audience, duration, output formats, narration, and source
    strategy.
@@ -19,11 +21,15 @@ production plan from the user's request. Use `demo_creator_plan`,
 5. The step-by-step production workflow, assumptions, and quality gates.
 
 Persist the plan as `production-plan.json`. `demo_creator_from_prompt` and
-`agent-demo creator prompt` do this automatically before media generation.
+`agent-demo creator prompt` do this automatically before media generation. They
+also attach the request-aware capability report to the plan and stop after saving
+it when a selected required tool is unavailable.
 
 ## Build from the plan
 
 - Resolve required resources before the scene that needs them.
+- Do not substitute a network or paid provider for a missing local capability.
+  Report the blocker and its setup instruction from the saved plan.
 - Treat bundled characters and scenes as optional starters, never a fixed cast.
   Accept any authorized uploaded or locally generated characters and scene media
   required by the brief, and record their provenance.

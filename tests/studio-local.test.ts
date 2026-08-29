@@ -18,6 +18,13 @@ describe("local Studio uploads", () => {
       expect(page).toContain("prompt-narration");
       expect(page).toContain("prompt-planner-profile");
       expect(page).toContain("prompt-generate-music");
+      expect(page).toContain("capability-refresh");
+      const capabilityResponse = await fetch(`${handle.url}/api/capabilities`);
+      expect(capabilityResponse.status).toBe(200);
+      const capabilities = await capabilityResponse.json() as { paidApiTokensRequired: boolean; capabilities: Array<{ id: string }>; summary: { selected: number } };
+      expect(capabilities.paidApiTokensRequired).toBe(false);
+      expect(capabilities.summary.selected).toBeGreaterThan(0);
+      expect(capabilities.capabilities.map((item) => item.id)).toEqual(expect.arrayContaining(["planner.deterministic", "music.procedural", "rendering.ffmpeg"]));
       const response = await fetch(`${handle.url}/api/uploads?kind=character&name=teacher-guide.png`, {
         method: "POST",
         headers: { "Content-Type": "image/png" },

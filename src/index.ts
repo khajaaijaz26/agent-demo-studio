@@ -1,6 +1,7 @@
 export * from "./types.js";
 export * from "./project-store.js";
 export * from "./jobs.js";
+export * from "./capabilities.js";
 export * from "./workflow.js";
 export * from "./browser/recorder.js";
 export * from "./audio/tts.js";

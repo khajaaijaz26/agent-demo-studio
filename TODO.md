@@ -95,7 +95,10 @@ The comparison is architectural and product research. No MoneyPrinterTurbo sourc
 - [ ] Add content QA: duplicate shots, mismatched narration/visuals, spelling, logo visibility, CTA timing, synthetic-media disclosures, and rights completeness.
 - [ ] Add project-level cost estimates and actual usage accounting for paid LLM, TTS, music, stock, semantic-analysis, and generated-video providers.
 - [ ] Add a plugin SDK for asset sources, script models, voices, music, image/video generation, VFX, exporters, and publishing destinations.
-- [ ] Add a provider capability registry so agents can discover what is local, installed, configured, paid, or unavailable before planning a render.
+- [x] Add a provider capability registry so agents can discover what is local,
+  installed, configured, network-dependent, governed by provider terms, or
+  unavailable before planning a render; persist the request-aware gate in every
+  smart production plan and expose it through CLI, MCP, Studio, and dashboard.
 
 ## Deliberate product differences
 

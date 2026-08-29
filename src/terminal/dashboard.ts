@@ -1,6 +1,7 @@
 import path from "node:path";
 import { createInterface, type Interface } from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
+import { inspectCapabilities } from "../capabilities.js";
 import { generateAmbientMusic, generateAsmrSoundscape } from "../audio/music.js";
 import { getLocalAiStatus, warmLocalPlanner } from "../creator/local-ai.js";
 import { createPromptVideoProject, createSmartPromptVideoPlan } from "../creator/prompt.js";
@@ -137,6 +138,29 @@ async function createMusic(terminal: Interface): Promise<void> {
   line(color(32, `Music ready: ${outputPath}`));
 }
 
+async function showCapabilities(): Promise<void> {
+  const report = await inspectCapabilities({
+    plannerProvider: "auto",
+    plannerProfile: "fast",
+    mediaProvider: "builtin",
+    generateVoice: true,
+    voiceProvider: "local",
+    generateMusic: true,
+    render: true,
+  });
+  line(color(36, "\nLocal production capabilities"));
+  line(`${report.summary.ready} ready · ${report.summary.configured} configured · ${report.summary.unavailable} optional/unavailable`);
+  for (const item of report.capabilities) {
+    const marker = item.available ? "READY" : item.required ? "BLOCK" : "OPTIONAL";
+    const markerColor = item.available ? 32 : item.required ? 31 : 90;
+    line(`  ${color(markerColor, marker.padEnd(8, " "))} ${item.label} · ${item.detail}`);
+  }
+  if (report.blockers.length) {
+    line(color(31, "\nRequired fixes before a standard local render:"));
+    for (const blocker of report.blockers) line(`  - ${blocker.setup || blocker.detail}`);
+  } else line(color(32, "\nThe standard local plan -> voice -> music -> render path is ready."));
+}
+
 async function header(): Promise<void> {
   const status = await getLocalAiStatus();
   line(color(35, "\n╭──────────────────────────────────────────────╮"));
@@ -158,8 +182,9 @@ export async function runTerminalDashboard(): Promise<void> {
       line("\n  1  Create and render a video");
       line("  2  Review a production plan");
       line("  3  Generate local music / ASMR");
-      line("  4  Warm the fastest local Qwen");
-      line("  5  Show visual Studio command");
+      line("  4  Scan installed video capabilities");
+      line("  5  Warm the fastest local Qwen");
+      line("  6  Show visual Studio command");
       line("  0  Exit\n");
       const choice = await ask(terminal, "Choose", "1");
       try {
@@ -174,10 +199,12 @@ export async function runTerminalDashboard(): Promise<void> {
         } else if (choice === "3") {
           await createMusic(terminal);
         } else if (choice === "4") {
+          await showCapabilities();
+        } else if (choice === "5") {
           const profile = await ask(terminal, "Profile (fast/quality)", "fast") as CreatorPlannerProfile;
           const warmed = await warmLocalPlanner({ profile });
           line(color(32, `${warmed.model} is warm for ${warmed.keepAlive}.`));
-        } else if (choice === "5") {
+        } else if (choice === "6") {
           line(color(36, "Run: agent-demo studio"));
           line("It opens the all-in-one local browser dashboard on this laptop.");
         } else if (choice === "0") running = false;

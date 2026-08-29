@@ -8,9 +8,9 @@ This prevents an agent from treating an underspecified prompt as a finished scri
 
 Every `creator prompt` job produces these artifacts in order:
 
-1. `production-plan.json` — interpreted requirements, creative direction, timed
-   storyboard, narration intent, resource/provenance list, workflow, assumptions,
-   and QA checklist.
+1. `production-plan.json` — interpreted requirements, request-aware capability
+   gate, creative direction, timed storyboard, narration intent,
+   resource/provenance list, workflow, assumptions, and QA checklist.
 2. Generated voice, captions, music, or ASMR ambience when enabled.
 3. `creator-project.json` — the editable schema-v2 timeline derived from the plan.
 4. `renders/` — platform videos, thumbnails, captions, chapters, validation data,
@@ -39,9 +39,10 @@ agent-demo creator prompt \
   --presets youtube-1080p,shorts,reels --render
 ```
 
-Equivalent MCP tools are `demo_creator_plan` and
-`demo_creator_from_prompt`. The latter completes the same planning stage before
-creating any media and returns the plan and local artifact resource links.
+Equivalent MCP tools are `demo_capabilities`, `demo_creator_plan`, and
+`demo_creator_from_prompt`. The latter completes capability discovery and the same
+planning stage before creating any media, stops after saving the plan if a selected
+tool is missing, and returns the plan and local artifact resource links.
 
 ## Prompt modes
 

@@ -4,6 +4,24 @@ Agent Demo Studio can run its planning, asset handoff, speech, music, editing,
 VFX, captions, and rendering on the creator's machine. Hosted LLM keys are not
 read by the local planner.
 
+## Inspect before producing
+
+Run the request-aware registry before a standard local render:
+
+```bash
+agent-demo capabilities
+```
+
+Agents use the equivalent `demo_capabilities` MCP tool and the Studio displays
+the same gate beside the Qwen status. The report distinguishes ready, configured,
+and unavailable planners, recording, visuals, voices, captions, music, renderers,
+and agent integrations. It also identifies the exact selected blockers and setup
+commands without probing generation endpoints, moving media, or exposing secrets.
+
+Every smart `production-plan.json` embeds this report. A complete prompt job saves
+the plan and stops before generation when a required selected capability is
+unavailable; it never silently replaces a missing local tool with a hosted one.
+
 ## Fast path
 
 The default `auto` / `fast` path is intentionally bounded:

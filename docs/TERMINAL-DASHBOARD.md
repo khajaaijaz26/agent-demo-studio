@@ -11,8 +11,9 @@ It uses the same engine as the MCP server and browser Studio. The menu can:
 1. plan, build, and render a complete video;
 2. review the fixed production plan without generating media;
 3. generate original ambient music or an ASMR soundscape;
-4. warm the fastest installed local Qwen model;
-5. show how to open the visual Studio.
+4. scan every installed or configured production capability;
+5. warm the fastest installed local Qwen model;
+6. show how to open the visual Studio.
 
 The video wizard covers mode, duration, an optional exact narration script,
 fast/quality/instant planning, scene image/video paths, any authorized character
@@ -24,6 +25,8 @@ without asking for another approval.
 For scripts or an AI agent, use the equivalent non-interactive commands:
 
 ```bash
+agent-demo capabilities
+
 agent-demo creator local-ai --warm --profile fast
 
 agent-demo creator plan \
@@ -48,6 +51,7 @@ Install Node.js 20.12 or newer and FFmpeg/FFprobe, then:
 npm install --global github:khajaaijaz26/agent-demo-studio
 agent-demo setup
 agent-demo doctor
+agent-demo capabilities
 agent-demo dashboard
 ```
 

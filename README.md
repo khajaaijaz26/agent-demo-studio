@@ -31,7 +31,7 @@ Agent Demo Studio is an open-source MCP server, CLI, browser recorder, plan-firs
 | Animate/VFX | Ken Burns and pan motion, 9 entrance/exit animations, 7 continuous loops, and 10 composable cinematic, glow, neon, glitch, VHS, dream, vintage, noir, comic, and ASMR looks |
 | Audio | Clip audio, multiple voices, music, ambience, SFX, pan, looping, trims, delays, fades, gain, automatic ducking, 48 kHz stereo, loudness normalization, and limiting |
 | Captions | SRT and WebVTT import, optional local Whisper transcription, scalable ASS burn-in, editable SRT sidecar, per-format safe zones |
-| Automate | Five prompt-video modes, silence/scene detection, suggested highlights, 13 editable templates, manifest validation, resource discovery, and background jobs |
+| Automate | Request-aware local capability discovery, five prompt-video modes, silence/scene detection, suggested highlights, 13 editable templates, manifest validation, resource discovery, and background jobs |
 | Export | YouTube 1080p/4K, Shorts, Reels, TikTok, Stories, square, portrait, LinkedIn, and podcast-vertical presets |
 | Deliver | MP4, thumbnail, captions, chapters, metadata, profile checks, asset-rights report, self-contained publishing package, explicit credentialed publishing adapters |
 
@@ -45,9 +45,15 @@ Requirements: Node.js 20.12 or newer, FFmpeg/FFprobe on `PATH`, and Codex or Cla
 npm install --global github:khajaaijaz26/agent-demo-studio
 agent-demo setup
 agent-demo doctor
+agent-demo capabilities
 ```
 
 `agent-demo setup` installs Playwright Chromium when needed and registers the local MCP server with detected Codex and Claude Code installations. For another MCP client, run `agent-demo mcp-config` and use the printed configuration.
+
+`agent-demo capabilities` checks the exact standard production path before a job
+starts. It reports planners, recording, visuals, voices, captions, music, FFmpeg,
+and agent integrations as ready, configured, or unavailable, identifies selected
+blockers, and never sends media or secrets to a provider.
 
 Create a browser demo immediately:
 
@@ -94,14 +100,15 @@ After setup, this is enough for Codex or Claude Code:
 
 ```text
 Plan and create a complete product demo for https://my-product.example.
-First write the requirements, visual direction, timed storyboard, resource list,
+First inspect the installed local capabilities. Then write the requirements,
+visual direction, timed storyboard, resource list,
 assumptions, and QA checklist. Then use a visible browser, show sign-in and the
 main workflow, add chapters, and build the video scene by scene. Render a 1080p
 master plus Shorts, Reels, and TikTok variants with natural narration, readable
 captions, and quiet music. Return the plan and local output files. Do not publish.
 ```
 
-For an adaptive recording, the agent can inspect each browser snapshot and decide the next semantic action. For a known flow, it can submit the complete action list in one job. Prompt-video jobs always persist `production-plan.json` before creating audio, a timeline, or renders. Media remains outside model context; MCP returns local file resources.
+For an adaptive recording, the agent can inspect each browser snapshot and decide the next semantic action. For a known flow, it can submit the complete action list in one job. Prompt-video jobs always persist `production-plan.json`, including the request-aware capability inventory, before creating audio, a timeline, or renders. If a selected required tool is missing, the saved plan explains the blocker and production stops before media generation. Media remains outside model context; MCP returns local file resources.
 
 ## Create from a prompt—plan first
 

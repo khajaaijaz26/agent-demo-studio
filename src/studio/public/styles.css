@@ -203,6 +203,13 @@ input[type="color"] { width: 100%; height: 33px; margin-top: 6px; padding: 3px; 
 .local-ai-dot { width: 8px; height: 8px; border-radius: 50%; background: #34d399; box-shadow: 0 0 12px rgba(52,211,153,.65); }
 .local-ai-card.unavailable { border-color: rgba(245,158,11,.2); background: rgba(245,158,11,.045); }
 .local-ai-card.unavailable .local-ai-dot { background: #f59e0b; box-shadow: 0 0 12px rgba(245,158,11,.55); }
+.capability-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 9px; margin: -3px 0 11px; padding: 9px 10px; border: 1px solid rgba(34,211,238,.18); border-radius: 11px; background: rgba(34,211,238,.04); }
+.capability-card b, .capability-card small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.capability-card b { color: #cffafe; font-size: 9px; }
+.capability-card small { margin-top: 2px; color: #7593a0; font-size: 7px; }
+.capability-dot { width: 8px; height: 8px; border-radius: 50%; background: #22d3ee; box-shadow: 0 0 12px rgba(34,211,238,.55); }
+.capability-card.blocked { border-color: rgba(248,113,113,.25); background: rgba(248,113,113,.05); }
+.capability-card.blocked .capability-dot { background: #f87171; box-shadow: 0 0 12px rgba(248,113,113,.5); }
 .prompt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
 .prompt-assets { margin-top: 8px; border: 1px solid var(--line); border-radius: 10px; background: rgba(3,5,13,.28); }
 .prompt-assets summary { padding: 9px 10px; color: #aeb6cd; font-size: 8px; font-weight: 750; cursor: pointer; }
@@ -264,4 +271,42 @@ input[type="color"] { width: 100%; height: 33px; margin-top: 6px; padding: 3px; 
   .workspace, .creator-grid { grid-template-columns: minmax(600px, 1fr) 318px; padding-inline: 18px; }
   .creator-summary { margin-inline: 18px; }
   .summary-stats div { min-width: 88px; }
+}
+
+@media (max-width: 720px) {
+  body { min-width: 0; overflow-x: hidden; }
+  .app-shell { display: block; min-height: 100vh; }
+  .sidebar { min-height: 0; padding: 14px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .brand { padding: 0 3px 13px; }
+  .brand-mark { width: 38px; height: 38px; border-radius: 12px; }
+  .brand strong { font-size: 14px; }
+  .mode-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin: 0; }
+  .mode-button { min-width: 0; padding: 8px; }
+  .mode-button b, .mode-button small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mode-icon { flex-basis: 28px; width: 28px; height: 28px; }
+  .section-label, .project-list, .capability-list, .sidebar-footer { display: none; }
+  .topbar { min-height: 0; align-items: flex-start; gap: 12px; padding: 16px 14px; }
+  .topbar h1 { font-size: 20px; }
+  .topbar p { max-width: 210px; line-height: 1.45; }
+  .top-actions { gap: 6px; }
+  .status-pill { padding: 7px 8px; letter-spacing: .8px; white-space: nowrap; }
+  .workspace, .creator-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 14px; }
+  .creator-summary { display: block; margin: 14px 14px 0; padding: 17px; }
+  .creator-summary h2 { font-size: 18px; }
+  .summary-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 14px; }
+  .summary-stats div { min-width: 0; padding: 10px; }
+  .summary-stats b { font-size: 16px; }
+  .creator-inspector { position: static; order: -1; }
+  .creator-video-wrap { height: auto; min-height: 220px; aspect-ratio: 16 / 9; }
+  .creator-stage .stage-toolbar, .stage-toolbar { grid-template-columns: 36px minmax(0, 1fr) auto; padding-inline: 11px; }
+  .resolution { letter-spacing: .6px; }
+  .surface-card { padding: 14px; }
+  .preset-grid, .prompt-grid, .upload-grid, .voice-consent-grid, .prompt-switches, .prompt-actions { grid-template-columns: minmax(0, 1fr); }
+  .upload-grid { padding-inline: 9px; }
+  .local-music-row { grid-template-columns: minmax(0, 1fr) 64px; }
+  .local-music-row .button { grid-column: 1 / -1; }
+  .manifest-card textarea { height: 300px; padding: 12px; font-size: 9px; }
+  .output-item { grid-template-columns: 72px minmax(0, 1fr); }
+  .output-thumb { width: 72px; height: 43px; }
+  .output-item > i { grid-column: 2; justify-self: start; }
 }
