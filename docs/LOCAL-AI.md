@@ -37,11 +37,12 @@ The default `auto` / `fast` path is intentionally bounded:
    returns invalid JSON.
 7. Generate local speech and procedural music, then render with FFmpeg.
 
-This makes the ordinary text-to-video path usable without a media foundation
-model: the plan drives bundled or uploaded visuals, typography, animation,
-characters, effects, voice, captions, and music. Uploaded still images become
-stable image-to-video shots through reframing, transitions, and VFX; optional
-timeline motion can be enabled for art that has no locked text, faces, or UI.
+This makes the ordinary prompt-video path usable without a media foundation
+model: the plan drives original vector scenes, independently moving characters,
+props, particles, effects, voice, captions, and music. Uploaded reference images
+route to a configured true image-to-video backend. If the legacy still
+compositor is explicitly selected, artwork stays locked; the system never shakes,
+pans, or zooms a photograph and calls it generated character motion.
 
 Narration is synthesized into separate scene tracks and placed at the start of
 the matching visual beat. Captions use the same offsets. If an exact narration
@@ -80,6 +81,45 @@ AGENT_DEMO_OLLAMA_KEEP_ALIVE=30m
 Qwen supplies text planning only. It is not presented as an image, animation,
 voice-cloning, or diffusion-video model.
 
+## True-video providers and hardware truth
+
+The visual provider defaults to `auto`:
+
+- `animated` is the zero-download fallback. It records actual 1080p/30fps canvas
+  animation with separate limbs, gestures, blinking, mouth motion, diagrams,
+  particles, and stable backgrounds.
+- `ltx-desktop` calls the [official LTX Desktop](https://github.com/Lightricks/ltx-desktop)
+  loopback API for text-, image-,
+  or audio-to-video. Local Windows generation requires a supported NVIDIA CUDA
+  system. API-only mode is never used unless `--allow-cloud-media` is explicit.
+- `comfyui` submits an exported API workflow through the
+  [official server routes](https://docs.comfy.org/development/comfyui-server/comms_routes)
+  and supports LTX, Wan, or another
+  installed video graph without hard-coding a checkpoint into Agent Demo Studio.
+- `local-adapter` implements the provider-neutral scene batch below.
+- `builtin` is a legacy locked-still compositor and is never auto-selected.
+
+All real-video routes require video files for video tasks and run a temporal
+motion check. Frozen clips, isolated frame jumps, too-short clips, low frame rate,
+and under-resolution output are rejected before timeline assembly.
+
+The [official Wan-Animate-2 model](https://huggingface.co/Wan-AI/Wan2.2-Animate-2-14B)
+is specialized character animation: it needs a reference character
+image and a driving video. It is not a general topic-to-video model. Its official
+full checkpoint is 82.5 GB and the published 720p default targets 8× A800 GPUs
+(480p was tested on 2× A800), so Agent Demo Studio distinguishes a tiny
+metadata-only Git/Xet clone from materialized weights and a ready loopback
+runtime. Point a GPU workstation adapter at the Studio with:
+
+```dotenv
+AGENT_DEMO_WAN_ANIMATE_MODEL_PATH=C:/models/Wan2.2-Animate-2-14B
+AGENT_DEMO_WAN_ANIMATE_ADAPTER_URL=http://127.0.0.1:9000/v1/media/generate
+```
+
+The status card will remain `configured`, not `ready`, when only model pointers
+are present. This prevents an agent from silently downloading tens of gigabytes
+or claiming generation succeeded on unsupported hardware.
+
 ## No fixed cast or subject
 
 Aria, Leo, Nova, Milo, and the bundled scenes are optional offline starter
@@ -105,8 +145,8 @@ repository. Each external asset receives a resource and rights record.
 ## Local text/image/video generation adapter
 
 For Stable Diffusion, FLUX, ComfyUI workflows, AnimateDiff, Stable Video
-Diffusion, or another installed generator, select `local-adapter`. Agent Demo
-Studio sends one batch request so the backend can optimize its queue:
+Diffusion, Wan, or another installed generator, select `local-adapter`. Agent
+Demo Studio sends one batch request so the backend can optimize its queue:
 
 ```bash
 agent-demo creator prompt \
@@ -118,17 +158,18 @@ agent-demo creator prompt \
   --render
 ```
 
-Tasks are `text-to-image`, `image-to-video`, and `text-to-video`. `auto` chooses
-image-to-video when source media exists and text-to-image otherwise. The fast
-recommendation is text-to-image plus Agent Demo Studio motion; full diffusion
-video is available through the adapter but is normally much slower.
+Tasks are `text-to-image`, `image-to-video`, `text-to-video`, `speech-to-video`,
+and `character-animation`. `auto` chooses image-to-video when source media exists
+and text-to-video otherwise. A video task must return at least one real video per
+planned scene; still output is rejected rather than animated with fake camera
+motion.
 
 The loopback adapter receives JSON shaped like:
 
 ```json
 {
-  "protocol": "agent-demo-local-media-v1",
-  "task": "text-to-image",
+  "protocol": "agent-demo-local-media-v2",
+  "task": "text-to-video",
   "outputDirectory": "C:/.../generated-media",
   "title": "Fraction Friends",
   "mode": "cartoon",
@@ -142,7 +183,8 @@ The loopback adapter receives JSON shaped like:
       "visual": "...",
       "durationSeconds": 10.08,
       "narration": "...",
-      "onScreenText": "..."
+      "onScreenText": "...",
+      "audioPath": "C:/.../voiceover-scene-01.wav"
     }
   ],
   "performance": "fast"
@@ -155,8 +197,9 @@ It writes files locally and responds with:
 {
   "outputs": [
     {
-      "path": "C:/.../scene-1.png",
-      "kind": "image",
+      "path": "C:/.../scene-1.mp4",
+      "kind": "video",
+      "sceneId": "scene-1",
       "model": "local-model-name",
       "prompt": "final generation prompt",
       "rights": "model and output license summary"
@@ -166,7 +209,21 @@ It writes files locally and responds with:
 ```
 
 Only loopback endpoints are accepted. Agent Demo Studio verifies that every
-returned path is readable before adding it to the timeline.
+returned path is readable, remains inside the requested output directory, and
+meets the task's media and motion requirements before adding it to the timeline.
+
+Direct ComfyUI configuration uses:
+
+```dotenv
+AGENT_DEMO_COMFYUI_URL=http://127.0.0.1:8188
+AGENT_DEMO_COMFYUI_WORKFLOW=C:/workflows/video-api.json
+```
+
+The API workflow may use `{{PROMPT}}`, `{{NEGATIVE_PROMPT}}`, `{{WIDTH}}`,
+`{{HEIGHT}}`, `{{FPS}}`, `{{FRAMES}}`, `{{DURATION}}`, `{{SEED}}`,
+`{{SCENE_ID}}`, `{{INPUT_IMAGE}}`, and `{{INPUT_AUDIO}}` placeholders. Agent
+Demo Studio uploads supplied image/audio inputs, submits `/prompt`, follows
+`/history`, downloads output through `/view`, and runs the same motion gate.
 
 ## Consented local voice profiles
 

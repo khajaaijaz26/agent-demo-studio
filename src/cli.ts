@@ -37,6 +37,8 @@ import { createPromptVideoProject, createSmartPromptVideoPlan } from "./creator/
 import {
   CREATOR_IMAGE_MOTIONS,
   CREATOR_LOOP_ANIMATIONS,
+  CREATOR_MEDIA_PROVIDERS,
+  CREATOR_MEDIA_TASKS,
   CREATOR_OVERLAY_ANIMATIONS,
   CREATOR_PROMPT_MODES,
   CREATOR_TRANSITIONS,
@@ -50,6 +52,8 @@ import {
 } from "./creator/publish.js";
 import type {
   CreatorManifest,
+  CreatorMediaProvider,
+  CreatorMediaTask,
   CreatorPlannerProfile,
   CreatorPlannerProvider,
   CreatorPromptMode,
@@ -103,6 +107,20 @@ function characterList(value?: string) {
     source,
     role: "character" as const,
   }));
+}
+
+function mediaProvider(value: string): CreatorMediaProvider {
+  if (!CREATOR_MEDIA_PROVIDERS.includes(value as CreatorMediaProvider)) {
+    throw new Error(`Media provider must be one of: ${CREATOR_MEDIA_PROVIDERS.join(", ")}.`);
+  }
+  return value as CreatorMediaProvider;
+}
+
+function mediaTask(value: string): CreatorMediaTask {
+  if (!CREATOR_MEDIA_TASKS.includes(value as CreatorMediaTask)) {
+    throw new Error(`Media task must be one of: ${CREATOR_MEDIA_TASKS.join(", ")}.`);
+  }
+  return value as CreatorMediaTask;
 }
 
 async function readRenderResult(filePath: string): Promise<CreatorRenderResult> {
@@ -161,8 +179,12 @@ program
   .description("Inspect the local/free video stack before an agent plans production.")
   .option("--planner <provider>", "auto, deterministic, or ollama", "auto")
   .option("--profile <profile>", "fast or quality", "fast")
-  .option("--media-provider <provider>", "builtin or local-adapter", "builtin")
+  .option("--media-provider <provider>", CREATOR_MEDIA_PROVIDERS.join(", "), "auto")
   .option("--media-adapter-url <url>", "Loopback local media adapter")
+  .option("--ltx-url <url>", "LTX Desktop loopback backend", "http://127.0.0.1:41954")
+  .option("--allow-cloud-media", "Allow LTX Desktop paid API mode", false)
+  .option("--comfyui-url <url>", "ComfyUI loopback server")
+  .option("--comfyui-workflow <path>", "ComfyUI API workflow template")
   .option("--voice-provider <provider>", "local, neural, or local-clone", "local")
   .option("--voice-clone-url <url>", "Loopback local voice-clone adapter")
   .option("--voice-reference <path>", "Authorized local voice reference")
@@ -172,16 +194,20 @@ program
   .option("--no-music", "Do not require generated music")
   .option("--no-render", "Do not require FFmpeg rendering")
   .option("--browser", "Require live browser recording", false)
-  .action(async (options: { planner: string; profile: string; mediaProvider: string; mediaAdapterUrl?: string; voiceProvider: string; voiceCloneUrl?: string; voiceReference?: string; voiceSpeaker?: string; voiceConsent: boolean; voice: boolean; music: boolean; render: boolean; browser: boolean }) => {
+  .action(async (options: { planner: string; profile: string; mediaProvider: string; mediaAdapterUrl?: string; ltxUrl?: string; allowCloudMedia: boolean; comfyuiUrl?: string; comfyuiWorkflow?: string; voiceProvider: string; voiceCloneUrl?: string; voiceReference?: string; voiceSpeaker?: string; voiceConsent: boolean; voice: boolean; music: boolean; render: boolean; browser: boolean }) => {
     if (!(["auto", "deterministic", "ollama"] as const).includes(options.planner as CreatorPlannerProvider)) throw new Error("Planner must be 'auto', 'deterministic', or 'ollama'.");
     if (!(["fast", "quality"] as const).includes(options.profile as CreatorPlannerProfile)) throw new Error("Profile must be 'fast' or 'quality'.");
-    if (!(["builtin", "local-adapter"] as const).includes(options.mediaProvider as "builtin" | "local-adapter")) throw new Error("Media provider must be 'builtin' or 'local-adapter'.");
+    const selectedMedia = mediaProvider(options.mediaProvider);
     if (!(["local", "neural", "local-clone"] as const).includes(options.voiceProvider as "local" | "neural" | "local-clone")) throw new Error("Voice provider must be 'local', 'neural', or 'local-clone'.");
     output(await inspectCapabilities({
       plannerProvider: options.planner as CreatorPlannerProvider,
       plannerProfile: options.profile as CreatorPlannerProfile,
-      mediaProvider: options.mediaProvider as "builtin" | "local-adapter",
+      mediaProvider: selectedMedia,
       mediaAdapterUrl: options.mediaAdapterUrl,
+      ltxDesktopUrl: selectedMedia === "ltx-desktop" ? options.ltxUrl : undefined,
+      allowCloudMedia: options.allowCloudMedia,
+      comfyuiUrl: options.comfyuiUrl,
+      comfyuiWorkflow: options.comfyuiWorkflow,
       generateVoice: options.voice,
       voiceProvider: options.voiceProvider as "local" | "neural" | "local-clone",
       voiceCloneUrl: options.voiceCloneUrl,
@@ -501,15 +527,19 @@ creator
   .option("--planner-profile <profile>", "fast or quality", "fast")
   .option("--planner-model <name>", "Exact installed local Ollama model")
   .option("--planner-url <url>", "Loopback Ollama URL")
-  .option("--media-provider <provider>", "builtin or local-adapter", "builtin")
-  .option("--media-task <task>", "auto, text-to-image, image-to-video, or text-to-video", "auto")
+  .option("--media-provider <provider>", CREATOR_MEDIA_PROVIDERS.join(", "), "auto")
+  .option("--media-task <task>", CREATOR_MEDIA_TASKS.join(", "), "auto")
   .option("--media-adapter-url <url>", "Loopback local media-generation adapter endpoint")
+  .option("--ltx-url <url>", "LTX Desktop loopback backend", "http://127.0.0.1:41954")
+  .option("--allow-cloud-media", "Allow LTX Desktop paid API mode", false)
+  .option("--comfyui-url <url>", "ComfyUI loopback server")
+  .option("--comfyui-workflow <path>", "ComfyUI API workflow template")
   .option("--no-voice", "Plan without narration")
   .option("--no-music", "Plan without music or ambience")
-  .action(async (promptText: string, options: { mode: string; title?: string; source?: string; sceneSources?: string; characters?: string; logo?: string; musicSource?: string; narration?: string; duration?: string; presenter?: string; voiceProvider: string; voiceReference?: string; voiceSpeaker?: string; voiceConsent: boolean; presets: string; planner: string; plannerProfile: string; plannerModel?: string; plannerUrl?: string; mediaProvider: string; mediaTask: string; mediaAdapterUrl?: string; voice: boolean; music: boolean }) => {
+  .action(async (promptText: string, options: { mode: string; title?: string; source?: string; sceneSources?: string; characters?: string; logo?: string; musicSource?: string; narration?: string; duration?: string; presenter?: string; voiceProvider: string; voiceReference?: string; voiceSpeaker?: string; voiceConsent: boolean; presets: string; planner: string; plannerProfile: string; plannerModel?: string; plannerUrl?: string; mediaProvider: string; mediaTask: string; mediaAdapterUrl?: string; ltxUrl?: string; allowCloudMedia: boolean; comfyuiUrl?: string; comfyuiWorkflow?: string; voice: boolean; music: boolean }) => {
     if (!CREATOR_PROMPT_MODES.includes(options.mode as CreatorPromptMode)) throw new Error(`Unknown prompt mode '${options.mode}'. Available: ${CREATOR_PROMPT_MODES.join(", ")}.`);
-    if (!["builtin", "local-adapter"].includes(options.mediaProvider)) throw new Error("Media provider must be 'builtin' or 'local-adapter'.");
-    if (!["auto", "text-to-image", "image-to-video", "text-to-video"].includes(options.mediaTask)) throw new Error("Media task must be 'auto', 'text-to-image', 'image-to-video', or 'text-to-video'.");
+    const selectedMedia = mediaProvider(options.mediaProvider);
+    const selectedTask = mediaTask(options.mediaTask);
     if (!(["local", "neural", "local-clone"] as const).includes(options.voiceProvider as "local" | "neural" | "local-clone")) throw new Error("Voice provider must be 'local', 'neural', or 'local-clone'.");
     if (options.presenter && !["none", "aria", "leo", "nova", "milo"].includes(options.presenter)) throw new Error(`Unknown presenter '${options.presenter}'. Run 'agent-demo creator assets'.`);
     const durationSeconds = options.duration === undefined ? undefined : Number(options.duration);
@@ -536,9 +566,13 @@ creator
       plannerProfile: options.plannerProfile as CreatorPlannerProfile,
       plannerModel: options.plannerModel,
       plannerBaseUrl: options.plannerUrl,
-      mediaProvider: options.mediaProvider as "builtin" | "local-adapter",
-      mediaTask: options.mediaTask as "auto" | "text-to-image" | "image-to-video" | "text-to-video",
+      mediaProvider: selectedMedia,
+      mediaTask: selectedTask,
       mediaAdapterUrl: options.mediaAdapterUrl,
+      ltxDesktopUrl: selectedMedia === "ltx-desktop" ? options.ltxUrl : undefined,
+      allowCloudMedia: options.allowCloudMedia,
+      comfyuiUrl: options.comfyuiUrl,
+      comfyuiWorkflow: options.comfyuiWorkflow,
     }));
   });
 
@@ -569,9 +603,13 @@ creator
   .option("--planner-profile <profile>", "fast or quality", "fast")
   .option("--planner-model <name>", "Exact installed local Ollama model")
   .option("--planner-url <url>", "Loopback Ollama URL")
-  .option("--media-provider <provider>", "builtin or local-adapter", "builtin")
-  .option("--media-task <task>", "auto, text-to-image, image-to-video, or text-to-video", "auto")
+  .option("--media-provider <provider>", CREATOR_MEDIA_PROVIDERS.join(", "), "auto")
+  .option("--media-task <task>", CREATOR_MEDIA_TASKS.join(", "), "auto")
   .option("--media-adapter-url <url>", "Loopback local media-generation adapter endpoint")
+  .option("--ltx-url <url>", "LTX Desktop loopback backend", "http://127.0.0.1:41954")
+  .option("--allow-cloud-media", "Allow LTX Desktop paid API mode", false)
+  .option("--comfyui-url <url>", "ComfyUI loopback server")
+  .option("--comfyui-workflow <path>", "ComfyUI API workflow template")
   .option("--render", "Render the selected outputs immediately", false)
   .option("--no-voice", "Skip narration synthesis")
   .option("--no-music", "Skip generated score or ASMR soundscape")
@@ -602,13 +640,17 @@ creator
     mediaProvider: string;
     mediaTask: string;
     mediaAdapterUrl?: string;
+    ltxUrl?: string;
+    allowCloudMedia: boolean;
+    comfyuiUrl?: string;
+    comfyuiWorkflow?: string;
     render: boolean;
     voice: boolean;
     music: boolean;
   }) => {
     if (!CREATOR_PROMPT_MODES.includes(options.mode as CreatorPromptMode)) throw new Error(`Unknown prompt mode '${options.mode}'. Available: ${CREATOR_PROMPT_MODES.join(", ")}.`);
-    if (!["builtin", "local-adapter"].includes(options.mediaProvider)) throw new Error("Media provider must be 'builtin' or 'local-adapter'.");
-    if (!["auto", "text-to-image", "image-to-video", "text-to-video"].includes(options.mediaTask)) throw new Error("Media task must be 'auto', 'text-to-image', 'image-to-video', or 'text-to-video'.");
+    const selectedMedia = mediaProvider(options.mediaProvider);
+    const selectedTask = mediaTask(options.mediaTask);
     if (options.presenter && !["none", "aria", "leo", "nova", "milo"].includes(options.presenter)) throw new Error(`Unknown presenter '${options.presenter}'. Run 'agent-demo creator assets'.`);
     if (!(["local", "neural", "local-clone"] as const).includes(options.voiceProvider as "local" | "neural" | "local-clone")) throw new Error("Voice provider must be 'local', 'neural', or 'local-clone'.");
     const durationSeconds = options.duration === undefined ? undefined : Number(options.duration);
@@ -641,9 +683,13 @@ creator
       plannerProfile: options.plannerProfile as CreatorPlannerProfile,
       plannerModel: options.plannerModel,
       plannerBaseUrl: options.plannerUrl,
-      mediaProvider: options.mediaProvider as "builtin" | "local-adapter",
-      mediaTask: options.mediaTask as "auto" | "text-to-image" | "image-to-video" | "text-to-video",
+      mediaProvider: selectedMedia,
+      mediaTask: selectedTask,
       mediaAdapterUrl: options.mediaAdapterUrl,
+      ltxDesktopUrl: selectedMedia === "ltx-desktop" ? options.ltxUrl : undefined,
+      allowCloudMedia: options.allowCloudMedia,
+      comfyuiUrl: options.comfyuiUrl,
+      comfyuiWorkflow: options.comfyuiWorkflow,
       render: options.render,
     }, progress));
   });

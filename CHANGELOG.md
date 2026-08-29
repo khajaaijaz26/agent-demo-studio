@@ -2,6 +2,46 @@
 
 All notable changes to Agent Demo Studio are documented here.
 
+## 0.6.0 - 2026-08-29
+
+### Added
+
+- Chat-first responsive Studio with one-prompt creation, attachment uploads,
+  sidebar production tools, engine status, in-chat plan/progress, preview,
+  downloads, and artifact paths.
+- Real local 1080p vector video generation with articulated characters, blinking,
+  gestures, mouth motion, moving props/particles, stable backgrounds, editable
+  scene HTML, and education-aware animated diagrams.
+- Official LTX Desktop localhost integration for text-, image-, and audio-to-video
+  with local/API-only detection and explicit paid-mode opt-in.
+- ComfyUI API-workflow integration with prompt/input placeholders, image/audio
+  upload, queue/history handling, and local output download.
+- Temporal motion QA that rejects frozen, low-resolution, low-frame-rate,
+  too-short, and isolated-jump outputs before timeline assembly.
+- Wan-Animate-2 discovery that distinguishes metadata-only Git/Xet clones,
+  materialized 82.5 GB weights, and loopback adapter configuration.
+
+### Changed
+
+- Automatic media routing now prefers true video for generative or reference-
+  image requests and uses the moving-vector engine as the ordinary-laptop
+  fallback. The legacy still compositor is explicit-only.
+- Local media protocol v2 supports text/image/speech-to-video and character
+  animation, scene audio inputs, and requires one real video per scene for video
+  tasks.
+- Authored narration now controls visible teaching copy; scene duration expands
+  around natural speech instead of accelerating narration.
+- Landscape captions are larger and character staging reserves their safe zone.
+- Audio limiting disables auto-level compensation and reserves AAC codec
+  headroom so decoded delivery masters respect the configured true-peak ceiling.
+
+### Fixed
+
+- Removed duplicated opening titles over provider-owned scene typography.
+- Prevented prompt production directions from appearing as lesson-board copy.
+- Removed camera-shake and pan/zoom substitution from still-image video requests.
+- Corrected LTX API-mode provenance so cloud generations are not labeled local.
+
 ## 0.5.0 - 2026-08-29
 
 ### Added

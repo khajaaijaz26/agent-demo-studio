@@ -1,126 +1,69 @@
-const state = {
-  mode: "projects",
-  projects: [],
-  selected: null,
-  presets: [],
-  templates: [],
-  creatorAssets: null,
-  creatorManifest: null,
-  creatorResult: null,
-  creatorJobId: null,
-  capabilities: null,
-  promptUploads: {
-    sceneSources: [],
-    characters: [],
-    logoSource: null,
-    musicSource: null,
-    voiceReference: null,
-  },
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+const elements = {
+  chat: $("#chat-stream"),
+  starters: $("#starter-grid"),
+  prompt: $("#prompt-text"),
+  generate: $("#generate-button"),
+  drawer: $("#tool-drawer"),
+  drawerTitle: $("#drawer-title"),
+  drawerKicker: $("#drawer-kicker"),
+  attachmentStrip: $("#attachment-strip"),
+  quickFile: $("#quick-file-input"),
+  mode: $("#prompt-mode"),
+  duration: $("#prompt-duration"),
+  narration: $("#prompt-narration"),
+  plannerProfile: $("#prompt-planner-profile"),
+  generateVoice: $("#prompt-voice"),
+  generateMusic: $("#prompt-generate-music"),
+  musicMirror: $("#music-toggle-mirror"),
+  voiceProvider: $("#prompt-voice-provider"),
+  voiceName: $("#voice-name"),
+  voiceSpeaker: $("#voice-speaker"),
+  voiceConsent: $("#voice-consent"),
+  mediaProvider: $("#prompt-media-provider"),
+  mediaTask: $("#prompt-media-task"),
+  ltxUrl: $("#ltx-url"),
+  allowCloudMedia: $("#allow-cloud-media"),
+  comfyUiUrl: $("#comfyui-url"),
+  comfyUiWorkflow: $("#comfyui-workflow"),
+  mediaAdapterUrl: $("#media-adapter-url"),
+  negativePrompt: $("#negative-prompt"),
+  seed: $("#generation-seed"),
+  soundDirection: $("#sound-direction"),
+  engineCards: $("#engine-cards"),
+  uploadState: $("#upload-state"),
+  mediaCount: $("#media-count"),
 };
 
-const $ = (selector) => document.querySelector(selector);
-const elements = {
-  modeButtons: [...document.querySelectorAll(".mode-button")],
-  projectNavigation: $("#project-navigation"),
-  creatorNavigation: $("#creator-navigation"),
-  projectsView: $("#projects-view"),
-  creatorView: $("#creator-view"),
-  workspaceEyebrow: $("#workspace-eyebrow"),
-  workspaceTitle: $("#workspace-title"),
-  workspaceDescription: $("#workspace-description"),
-  list: $("#project-list"),
-  workspace: $("#workspace"),
-  empty: $("#empty-state"),
-  status: $("#status-pill"),
-  video: $("#preview-video"),
-  placeholder: $("#video-placeholder"),
-  url: $("#browser-url"),
-  timeline: $("#timeline"),
-  eventCount: $("#event-count"),
-  titleInput: $("#title-input"),
-  subtitleInput: $("#subtitle-input"),
-  backgroundStart: $("#background-start"),
-  backgroundEnd: $("#background-end"),
-  accent: $("#accent"),
-  highlight: $("#highlight"),
-  narration: $("#narration"),
-  generatedMusic: $("#generated-music"),
-  captions: $("#captions"),
-  feedback: $("#feedback"),
-  render: $("#render-button"),
-  voice: $("#voice-button"),
-  refresh: $("#refresh-button"),
-  presetCount: $("#preset-count"),
-  presetGrid: $("#preset-grid"),
-  templateSelect: $("#template-select"),
-  promptText: $("#prompt-text"),
-  promptNarration: $("#prompt-narration"),
-  promptMode: $("#prompt-mode"),
-  promptPresenter: $("#prompt-presenter"),
-  promptPlannerProvider: $("#prompt-planner-provider"),
-  promptPlannerProfile: $("#prompt-planner-profile"),
-  promptMediaProvider: $("#prompt-media-provider"),
-  promptMediaTask: $("#prompt-media-task"),
-  promptVoiceProvider: $("#prompt-voice-provider"),
-  promptDuration: $("#prompt-duration"),
-  promptVoice: $("#prompt-voice"),
-  promptMusic: $("#prompt-music"),
-  promptPlanButton: $("#prompt-plan-button"),
-  promptButton: $("#prompt-button"),
-  promptRenderButton: $("#prompt-render-button"),
-  promptPlanPreview: $("#prompt-plan-preview"),
-  promptPlanSummary: $("#prompt-plan-summary"),
-  promptPlanResources: $("#prompt-plan-resources"),
-  localAiTitle: $("#local-ai-title"),
-  localAiDetail: $("#local-ai-detail"),
-  localAiWarm: $("#local-ai-warm"),
-  localAiCard: $(".local-ai-card"),
-  capabilityCard: $("#capability-card"),
-  capabilityTitle: $("#capability-title"),
-  capabilityDetail: $("#capability-detail"),
-  capabilityRefresh: $("#capability-refresh"),
-  promptSceneFiles: $("#prompt-scene-files"),
-  promptCharacterFiles: $("#prompt-character-files"),
-  promptLogoFile: $("#prompt-logo-file"),
-  promptMusicFile: $("#prompt-music-file"),
-  promptVoiceReferenceFile: $("#prompt-voice-reference-file"),
-  promptSceneUploadStatus: $("#prompt-scene-upload-status"),
-  promptCharacterUploadStatus: $("#prompt-character-upload-status"),
-  promptLogoUploadStatus: $("#prompt-logo-upload-status"),
-  promptMusicUploadStatus: $("#prompt-music-upload-status"),
-  promptVoiceUploadStatus: $("#prompt-voice-upload-status"),
-  promptVoiceSpeaker: $("#prompt-voice-speaker"),
-  promptVoiceConsent: $("#prompt-voice-consent"),
-  promptMediaAdapterUrl: $("#prompt-media-adapter-url"),
-  promptVoiceCloneUrl: $("#prompt-voice-clone-url"),
-  promptMusicStyle: $("#prompt-music-style"),
-  promptMusicDuration: $("#prompt-music-duration"),
-  promptGenerateMusic: $("#prompt-generate-music"),
-  promptGeneratedMusicStatus: $("#prompt-generated-music-status"),
-  creatorTitle: $("#creator-title"),
-  creatorSource: $("#creator-source"),
-  creatorOutput: $("#creator-output"),
-  templateButton: $("#template-button"),
-  creatorManifest: $("#creator-manifest"),
-  formatManifest: $("#format-manifest"),
-  copyManifest: $("#copy-manifest"),
-  validate: $("#validate-button"),
-  analyze: $("#analyze-button"),
-  transcribe: $("#transcribe-button"),
-  creatorRender: $("#creator-render-button"),
-  creatorFeedback: $("#creator-feedback"),
-  jobPanel: $("#job-panel"),
-  jobTitle: $("#job-title"),
-  jobPercent: $("#job-percent"),
-  jobProgress: $("#job-progress"),
-  jobMessage: $("#job-message"),
-  creatorVideo: $("#creator-video"),
-  creatorPlaceholder: $("#creator-placeholder"),
-  creatorPreviewLabel: $("#creator-preview-label"),
-  creatorResolution: $("#creator-resolution"),
-  results: $("#creator-results"),
-  outputList: $("#output-list"),
-  packageButton: $("#package-button"),
+const initialChat = elements.chat.innerHTML;
+const state = {
+  sceneSources: [],
+  characters: [],
+  logoSource: undefined,
+  musicSource: undefined,
+  voiceReference: undefined,
+  attachments: [],
+  currentJobId: undefined,
+  busy: false,
+  formatIndex: 0,
+  formats: [
+    { label: "16:9", presets: ["youtube-1080p"] },
+    { label: "9:16", presets: ["reels", "shorts", "tiktok"] },
+    { label: "1:1", presets: ["square"] },
+  ],
+};
+
+const toolLabels = {
+  create: ["CREATE", "Video setup"],
+  projects: ["WORKSPACE", "Projects"],
+  website: ["CAPTURE", "Website demos"],
+  media: ["PRODUCTION", "Media & characters"],
+  voice: ["PRODUCTION", "Voice"],
+  music: ["PRODUCTION", "Music & sound"],
+  engines: ["LOCAL STACK", "AI engines"],
+  advanced: ["CONTROL", "Advanced"],
 };
 
 function escapeHtml(value) {
@@ -132,592 +75,483 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-async function api(path, options) {
-  const response = await fetch(path, {
-    ...options,
-    headers: { "Content-Type": "application/json", ...(options?.headers || {}) },
-  });
-  const payload = await response.json();
-  if (!response.ok) throw new Error(payload?.error?.message || payload?.error || "Request failed");
+function asError(payload, fallback) {
+  const raw = payload?.error;
+  if (typeof raw === "string") return raw;
+  if (raw && typeof raw === "object") return raw.message || raw.detail || JSON.stringify(raw);
+  return fallback;
+}
+
+async function api(route, options = {}) {
+  const response = await fetch(route, options);
+  const text = await response.text();
+  let payload;
+  try {
+    payload = text ? JSON.parse(text) : {};
+  } catch {
+    payload = { error: text };
+  }
+  if (!response.ok) throw new Error(asError(payload, `Request failed with HTTP ${response.status}.`));
   return payload;
 }
 
-function renderLocalAiStatus(status) {
-  const ready = Boolean(status?.available && status?.selectedModel);
-  elements.localAiCard.classList.toggle("unavailable", !ready);
-  elements.localAiTitle.textContent = ready ? `${status.selectedModel} · ${status.profile} · local` : "Instant local planner ready";
-  elements.localAiDetail.textContent = ready ? "0 paid API tokens · loopback only · 30 minute keep-alive" : (status?.message || "Qwen is optional; deterministic planning never blocks creation");
-  elements.localAiWarm.disabled = !ready;
+function scrollToBottom() {
+  requestAnimationFrame(() => {
+    elements.chat.scrollTop = elements.chat.scrollHeight;
+  });
 }
 
-async function refreshLocalAiStatus() {
-  const profile = elements.promptPlannerProfile?.value || "fast";
-  const status = await api(`/api/local-ai/status?profile=${encodeURIComponent(profile)}`);
-  renderLocalAiStatus(status);
-  return status;
+function appendUserMessage(text) {
+  const article = document.createElement("article");
+  article.className = "message user";
+  article.innerHTML = `
+    <div class="avatar">YOU</div>
+    <div class="message-body">
+      <div class="message-meta"><b>You</b><span></span></div>
+      <p>${escapeHtml(text)}</p>
+    </div>`;
+  elements.chat.append(article);
+  scrollToBottom();
 }
 
-function selectedCapabilityRequest() {
+function appendAssistantShell() {
+  const article = document.createElement("article");
+  article.className = "message assistant";
+  article.innerHTML = `
+    <div class="avatar studio-avatar">✦</div>
+    <div class="message-body">
+      <div class="message-meta"><b>Agent Demo Studio</b><span>working</span></div>
+      <div class="progress-card">
+        <div class="progress-head"><b>Planning before production</b><span>0%</span></div>
+        <p>Turning the request into requirements, a timed storyboard, resources, rights, workflow, and quality gates.</p>
+        <progress class="progress-track" max="100" value="0"></progress>
+        <div class="stage-steps"><span class="active">Plan</span><span>Voice</span><span>Motion</span><span>Audio</span><span>Edit</span><span>QA</span></div>
+      </div>
+    </div>`;
+  elements.chat.append(article);
+  scrollToBottom();
+  return article;
+}
+
+function updateProgress(article, progress, message) {
+  const value = Math.max(0, Math.min(100, Number(progress) || 0));
+  const progressNode = article.querySelector("progress");
+  const percentNode = article.querySelector(".progress-head span");
+  const titleNode = article.querySelector(".progress-head b");
+  const copyNode = article.querySelector(".progress-card p");
+  if (progressNode) progressNode.value = value;
+  if (percentNode) percentNode.textContent = `${Math.round(value)}%`;
+  if (copyNode) copyNode.textContent = message || "Working locally…";
+  if (titleNode) {
+    titleNode.textContent = value < 8 ? "Planning before production"
+      : value < 25 ? "Creating natural scene-aligned narration"
+        : value < 68 ? "Generating moving scenes"
+          : value < 72 ? "Mixing music and sound"
+            : value < 99 ? "Editing, rendering, and validating"
+              : "Finishing quality checks";
+  }
+  const thresholds = [2, 8, 25, 68, 72, 95];
+  article.querySelectorAll(".stage-steps span").forEach((node, index) => {
+    node.classList.toggle("active", value >= thresholds[index]);
+  });
+  scrollToBottom();
+}
+
+function planCard(result) {
+  const plan = result?.plan;
+  if (!plan) return "";
+  const scenes = Array.isArray(plan.scenes) ? plan.scenes : [];
+  const motion = plan.requirements?.motionStandard || "planned";
+  const engine = plan.capabilities?.capabilities?.find((item) => item.category === "visuals" && item.selected)?.label || "Automatic";
+  return `
+    <section class="plan-card">
+      <h3>Production plan completed</h3>
+      <p>${escapeHtml(plan.requirements?.objective || plan.originalPrompt)}</p>
+      <div class="plan-summary">
+        <div><b>${escapeHtml(engine)}</b><small>Visual engine</small></div>
+        <div><b>${escapeHtml(motion)}</b><small>Motion standard</small></div>
+        <div><b>${escapeHtml(plan.requirements?.targetDurationSeconds || "—")} seconds</b><small>Planned duration</small></div>
+      </div>
+      <div class="scene-list">
+        ${scenes.map((scene, index) => `
+          <div class="scene-line">
+            <i>${String(index + 1).padStart(2, "0")}</i>
+            <div><b>${escapeHtml(scene.title)}</b><small>${escapeHtml(scene.visual)}</small></div>
+            <span>${escapeHtml(scene.durationSeconds)}s</span>
+          </div>`).join("")}
+      </div>
+    </section>`;
+}
+
+function outputVideoUrl(jobId, outputId) {
+  return `/api/creator/jobs/${encodeURIComponent(jobId)}/outputs/${encodeURIComponent(outputId)}/video`;
+}
+
+function resultCard(jobId, result) {
+  const render = result?.renderResult;
+  const outputs = Array.isArray(render?.outputs) ? render.outputs : [];
+  const output = outputs[0];
+  if (!output) {
+    return `
+      <section class="result-card">
+        <div class="result-copy">
+          <h3>Editable project is ready</h3>
+          <p>Rendering was disabled or no rendered output was returned.</p>
+          <div class="result-meta">
+            <div><span>Plan</span><b title="${escapeHtml(result?.planPath)}">${escapeHtml(result?.planPath || "—")}</b></div>
+            <div><span>Manifest</span><b title="${escapeHtml(result?.manifestPath)}">${escapeHtml(result?.manifestPath || "—")}</b></div>
+          </div>
+        </div>
+      </section>`;
+  }
+  const videoUrl = outputVideoUrl(jobId, output.id);
+  const sizeMb = Number.isFinite(output.fileSizeBytes) ? (output.fileSizeBytes / 1024 / 1024).toFixed(1) : "—";
+  return `
+    <section class="result-card" data-job-id="${escapeHtml(jobId)}">
+      <div class="result-video"><video controls playsinline preload="metadata" src="${videoUrl}"></video></div>
+      <div class="result-copy">
+        <h3>${escapeHtml(result.title || render.title || "Video ready")}</h3>
+        <p>Rendered locally and checked for dimensions, motion, audio, captions, and delivery settings.</p>
+        <div class="result-meta">
+          <div><span>Output</span><b>${escapeHtml(output.id)}</b></div>
+          <div><span>Format</span><b>${escapeHtml(output.width)}×${escapeHtml(output.height)} · ${escapeHtml(output.fps)} fps</b></div>
+          <div><span>Duration</span><b>${Number(output.durationSeconds || 0).toFixed(1)} sec</b></div>
+          <div><span>File size</span><b>${sizeMb} MB</b></div>
+          <div><span>Saved at</span><b title="${escapeHtml(output.videoPath)}">${escapeHtml(output.videoPath)}</b></div>
+        </div>
+        <div class="result-actions">
+          <a class="primary" href="${videoUrl}" download>Download MP4</a>
+          <button type="button" data-action="show-path">Show artifact paths</button>
+        </div>
+      </div>
+    </section>
+    ${outputs.length > 1 ? `<div class="result-actions output-switcher">${outputs.map((item, index) => `<button type="button" data-output-id="${escapeHtml(item.id)}" data-job-id="${escapeHtml(jobId)}">${index + 1}. ${escapeHtml(item.id)}</button>`).join("")}</div>` : ""}`;
+}
+
+function showCompleted(article, job) {
+  const result = job.result || {};
+  const body = article.querySelector(".message-body");
+  const meta = article.querySelector(".message-meta span");
+  if (meta) {
+    meta.textContent = "complete";
+    meta.style.color = "#74dcb7";
+  }
+  body.querySelector(".progress-card")?.remove();
+  body.insertAdjacentHTML("beforeend", planCard(result) + resultCard(job.id, result));
+  body.querySelector("[data-action='show-path']")?.addEventListener("click", () => {
+    const paths = [
+      result.planPath && `Plan: ${result.planPath}`,
+      result.manifestPath && `Manifest: ${result.manifestPath}`,
+      result.captionsPath && `Captions: ${result.captionsPath}`,
+      result.musicPath && `Music: ${result.musicPath}`,
+      ...(result.voicePaths || []).map((item, index) => `Voice ${index + 1}: ${item}`),
+      ...(result.renderResult?.outputs || []).map((item) => `Video ${item.id}: ${item.videoPath}`),
+      result.renderResult?.licenseReportPath && `Rights: ${result.renderResult.licenseReportPath}`,
+    ].filter(Boolean);
+    window.alert(paths.join("\n") || "No artifact paths were returned.");
+  });
+  body.querySelectorAll("[data-output-id]").forEach((button) => button.addEventListener("click", () => {
+    const card = body.querySelector(".result-card");
+    const video = card?.querySelector("video");
+    if (!video) return;
+    video.src = outputVideoUrl(button.dataset.jobId, button.dataset.outputId);
+    video.play().catch(() => undefined);
+  }));
+  scrollToBottom();
+}
+
+function showFailed(article, message) {
+  const body = article.querySelector(".message-body");
+  const meta = article.querySelector(".message-meta span");
+  if (meta) {
+    meta.textContent = "blocked";
+    meta.style.color = "#ffaaaa";
+  }
+  body.querySelector(".progress-card")?.remove();
+  body.insertAdjacentHTML("beforeend", `<section class="error-card"><b>Production stopped safely</b><p>${escapeHtml(message)}</p></section>`);
+  scrollToBottom();
+}
+
+function currentFormat() {
+  return state.formats[state.formatIndex];
+}
+
+function requestedPayload(prompt) {
+  const sound = elements.soundDirection.value.trim();
+  const completePrompt = sound ? `${prompt}\n\nSound direction: ${sound}` : prompt;
+  const provider = elements.mediaProvider.value;
+  const seed = Number(elements.seed.value);
   return {
-    plannerProvider: elements.promptPlannerProvider.value,
-    plannerProfile: elements.promptPlannerProfile.value,
-    mediaProvider: elements.promptMediaProvider.value,
-    mediaAdapterUrl: elements.promptMediaAdapterUrl.value.trim() || undefined,
-    generateVoice: elements.promptVoice.checked && elements.promptMode.value !== "asmr",
-    voiceProvider: elements.promptVoiceProvider.value,
-    voiceCloneUrl: elements.promptVoiceCloneUrl.value.trim() || undefined,
-    voiceReferenceAvailable: Boolean(state.promptUploads.voiceReference),
-    voiceConsentConfirmed: elements.promptVoiceConsent.checked,
-    voiceSpeakerName: elements.promptVoiceSpeaker.value.trim() || undefined,
-    generateMusic: elements.promptMusic.checked,
-    suppliedMusic: Boolean(state.promptUploads.musicSource),
+    prompt: completePrompt,
+    mode: elements.mode.value,
+    durationSeconds: Number(elements.duration.value) || undefined,
+    narration: elements.narration.value.trim() || undefined,
+    presets: currentFormat().presets,
+    sceneSources: state.sceneSources,
+    characters: state.characters,
+    logoSource: state.logoSource,
+    musicSource: state.musicSource,
+    generateVoice: elements.generateVoice.checked,
+    generateMusic: elements.generateMusic.checked && !state.musicSource,
+    voiceProvider: elements.voiceProvider.value,
+    voice: elements.voiceName.value.trim() || undefined,
+    voiceReference: state.voiceReference,
+    voiceConsent: elements.voiceProvider.value === "local-clone" ? {
+      speakerName: elements.voiceSpeaker.value.trim(),
+      confirmed: elements.voiceConsent.checked,
+      scope: "this Agent Demo Studio video project",
+    } : undefined,
+    plannerProvider: "auto",
+    plannerProfile: elements.plannerProfile.value,
+    mediaProvider: provider,
+    mediaTask: elements.mediaTask.value,
+    ltxDesktopUrl: provider === "ltx-desktop" ? elements.ltxUrl.value.trim() || undefined : undefined,
+    allowCloudMedia: provider === "ltx-desktop" && elements.allowCloudMedia.checked,
+    comfyuiUrl: provider === "comfyui" ? elements.comfyUiUrl.value.trim() || undefined : undefined,
+    comfyuiWorkflow: provider === "comfyui" ? elements.comfyUiWorkflow.value.trim() || undefined : undefined,
+    mediaAdapterUrl: provider === "local-adapter" ? elements.mediaAdapterUrl.value.trim() || undefined : undefined,
+    negativePrompt: elements.negativePrompt.value.trim() || undefined,
+    seed: Number.isFinite(seed) && elements.seed.value.trim() ? seed : undefined,
     render: true,
   };
 }
 
-function renderCapabilityStatus(report) {
-  if (!report) return;
-  state.capabilities = report;
-  const ready = Boolean(report.readyForRequest);
-  elements.capabilityCard.classList.toggle("blocked", !ready);
-  elements.capabilityTitle.textContent = ready
-    ? `${report.summary.selected} selected production tools ready`
-    : `${report.blockers.length} required production ${report.blockers.length === 1 ? "tool" : "tools"} missing`;
-  elements.capabilityDetail.textContent = ready
-    ? `${report.fullyLocalForRequest ? "Fully local" : "Network/provider terms selected"} · 0 paid model tokens required`
-    : `${report.blockers[0]?.detail || "Scan the selected production stack before creating"}`;
+async function pollJob(jobId, article) {
+  while (state.currentJobId === jobId) {
+    const job = await api(`/api/jobs/${encodeURIComponent(jobId)}`);
+    updateProgress(article, job.progress, job.message);
+    if (job.state === "completed") {
+      showCompleted(article, job);
+      return;
+    }
+    if (job.state === "failed") throw new Error(job.error || job.message || "The video job failed.");
+    await new Promise((resolve) => setTimeout(resolve, 800));
+  }
 }
 
-async function refreshCapabilityStatus() {
-  const report = await api("/api/capabilities", { method: "POST", body: JSON.stringify(selectedCapabilityRequest()) });
-  renderCapabilityStatus(report);
-  return report;
+async function generateVideo() {
+  const prompt = elements.prompt.value.trim();
+  if (!prompt || state.busy) {
+    if (!prompt) {
+      elements.prompt.focus();
+      elements.prompt.setAttribute("placeholder", "Tell me what should happen in the video first.");
+    }
+    return;
+  }
+  state.busy = true;
+  elements.generate.disabled = true;
+  elements.generate.querySelector("span").textContent = "Working…";
+  elements.starters?.setAttribute("hidden", "");
+  appendUserMessage(prompt);
+  const article = appendAssistantShell();
+  elements.prompt.value = "";
+  try {
+    const job = await api("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestedPayload(prompt)),
+    });
+    state.currentJobId = job.id;
+    await pollJob(job.id, article);
+  } catch (error) {
+    showFailed(article, error instanceof Error ? error.message : String(error));
+  } finally {
+    state.busy = false;
+    state.currentJobId = undefined;
+    elements.generate.disabled = false;
+    elements.generate.querySelector("span").textContent = "Generate video";
+    refreshProjects().catch(() => undefined);
+  }
+}
+
+function openTool(tool) {
+  const [kicker, title] = toolLabels[tool] || ["STUDIO", "Settings"];
+  elements.drawerKicker.textContent = kicker;
+  elements.drawerTitle.textContent = title;
+  $$(".drawer-panel").forEach((panel) => { panel.hidden = panel.dataset.panel !== tool; });
+  $$(".nav-item").forEach((button) => button.classList.toggle("active", button.dataset.tool === tool));
+  elements.drawer.classList.add("open");
+  elements.drawer.setAttribute("aria-hidden", "false");
+  if (tool === "projects") refreshProjects().catch(() => undefined);
+  if (tool === "engines") refreshEngines().catch(() => undefined);
+}
+
+function closeDrawer() {
+  elements.drawer.classList.remove("open");
+  elements.drawer.setAttribute("aria-hidden", "true");
 }
 
 async function uploadFile(file, kind) {
-  const response = await fetch(`/api/uploads?kind=${encodeURIComponent(kind)}&name=${encodeURIComponent(file.name)}`, {
+  const payload = await api(`/api/uploads?kind=${encodeURIComponent(kind)}&name=${encodeURIComponent(file.name)}`, {
     method: "POST",
     headers: { "Content-Type": file.type || "application/octet-stream" },
     body: file,
   });
-  const payload = await response.json();
-  if (!response.ok) throw new Error(payload?.error?.message || payload?.error || `Could not upload ${file.name}`);
-  return payload;
+  return { ...payload, name: file.name };
 }
 
-async function uploadSelection(input, kind, statusElement, apply) {
+function addAttachment(item, role) {
+  const id = `${role}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  state.attachments.push({ id, role, ...item });
+  if (role === "scene") state.sceneSources.push(item.path);
+  if (role === "character") state.characters.push({ id, name: item.name.replace(/\.[^.]+$/, ""), source: item.path, role: "character", rights: "User-provided authorized media" });
+  if (role === "logo") state.logoSource = item.path;
+  if (role === "music") state.musicSource = item.path;
+  if (role === "voice-reference") state.voiceReference = item.path;
+  renderAttachments();
+}
+
+function removeAttachment(id) {
+  const item = state.attachments.find((candidate) => candidate.id === id);
+  if (!item) return;
+  state.attachments = state.attachments.filter((candidate) => candidate.id !== id);
+  if (item.role === "scene") state.sceneSources = state.sceneSources.filter((value) => value !== item.path);
+  if (item.role === "character") state.characters = state.characters.filter((value) => value.id !== id);
+  if (item.role === "logo" && state.logoSource === item.path) state.logoSource = undefined;
+  if (item.role === "music" && state.musicSource === item.path) state.musicSource = undefined;
+  if (item.role === "voice-reference" && state.voiceReference === item.path) state.voiceReference = undefined;
+  renderAttachments();
+}
+
+function renderAttachments() {
+  elements.attachmentStrip.hidden = state.attachments.length === 0;
+  elements.attachmentStrip.innerHTML = state.attachments.map((item) => `
+    <div class="attachment-chip"><b>${escapeHtml(item.role)}</b><span>${escapeHtml(item.name)}</span><button type="button" data-remove-attachment="${escapeHtml(item.id)}">×</button></div>`).join("");
+  elements.attachmentStrip.querySelectorAll("[data-remove-attachment]").forEach((button) => button.addEventListener("click", () => removeAttachment(button.dataset.removeAttachment)));
+  elements.mediaCount.textContent = String(state.attachments.length);
+  elements.uploadState.textContent = state.attachments.length
+    ? `${state.attachments.length} local asset${state.attachments.length === 1 ? "" : "s"} ready. Their paths and declared rights will be preserved in the production plan.`
+    : "Nothing uploaded yet.";
+}
+
+async function uploadSelection(input, kind) {
   const files = [...(input.files || [])];
   if (!files.length) return;
-  input.disabled = true;
-  statusElement.textContent = `Uploading ${files.length} local file${files.length === 1 ? "" : "s"}…`;
+  elements.uploadState.textContent = `Uploading ${files.length} local file${files.length === 1 ? "" : "s"}…`;
   try {
-    const uploaded = [];
-    for (const file of files) uploaded.push({ file, result: await uploadFile(file, kind) });
-    apply(uploaded);
-    statusElement.textContent = `${uploaded.length} local file${uploaded.length === 1 ? "" : "s"} ready`;
-    creatorFeedback("Uploads are ready and will be recorded in the production resource list.", "success");
+    for (const file of files) addAttachment(await uploadFile(file, kind), kind);
+  } catch (error) {
+    elements.uploadState.textContent = error instanceof Error ? error.message : String(error);
   } finally {
-    input.disabled = false;
+    input.value = "";
   }
 }
 
-function feedback(message, kind = "") {
-  elements.feedback.textContent = message;
-  elements.feedback.className = `feedback ${kind}`;
-}
-
-function creatorFeedback(message, kind = "") {
-  elements.creatorFeedback.textContent = message;
-  elements.creatorFeedback.className = `feedback ${kind}`;
-}
-
-function setMode(mode) {
-  state.mode = mode;
-  const creator = mode === "creator";
-  elements.modeButtons.forEach((button) => button.classList.toggle("active", button.dataset.mode === mode));
-  elements.projectsView.classList.toggle("hidden", creator);
-  elements.creatorView.classList.toggle("hidden", !creator);
-  elements.projectNavigation.classList.toggle("hidden", creator);
-  elements.creatorNavigation.classList.toggle("hidden", !creator);
-  elements.workspaceEyebrow.textContent = creator ? "LOCAL CREATOR ENGINE" : "BROWSER DEMO WORKSPACE";
-  elements.workspaceTitle.textContent = creator ? "Creator Studio" : state.selected?.title || "Your demo projects";
-  elements.workspaceDescription.textContent = creator
-    ? "One non-destructive timeline for YouTube, Shorts, Reels, TikTok, feeds, stories, podcasts, and 4K."
-    : "Record a real product flow, then narrate and polish it locally.";
-  elements.status.textContent = creator ? "CREATOR READY" : (state.selected?.status || "READY").toUpperCase();
-  if (creator && !state.templates.length) initializeCreator().catch((error) => creatorFeedback(error.message, "error"));
-}
-
-function renderProjectList() {
-  elements.list.innerHTML = state.projects
-    .map((project) => `<button class="project-item ${state.selected?.id === project.id ? "active" : ""}" data-id="${escapeHtml(project.id)}">
-      <b>${escapeHtml(project.title)}</b><small>${escapeHtml(project.status)} · ${new Date(project.updatedAt).toLocaleDateString()}</small>
-    </button>`)
-    .join("");
-  elements.list.querySelectorAll("button").forEach((button) => button.addEventListener("click", () => selectProject(button.dataset.id)));
-}
-
-function renderSelectedProject() {
-  const project = state.selected;
-  if (!project) {
-    elements.workspace.classList.add("hidden");
-    elements.empty.classList.remove("hidden");
-    if (state.mode === "projects") elements.workspaceTitle.textContent = "Your demo projects";
+async function refreshProjects() {
+  const jobs = await api("/api/jobs");
+  const holder = $("#project-cards");
+  if (!jobs.length) {
+    holder.innerHTML = '<p class="empty-copy">No jobs yet. Your first generated video will appear here.</p>';
     return;
   }
-  elements.empty.classList.add("hidden");
-  elements.workspace.classList.remove("hidden");
-  if (state.mode === "projects") elements.workspaceTitle.textContent = project.title;
-  elements.status.textContent = project.status.toUpperCase();
-  elements.url.textContent = project.url.replace(/^https?:\/\//, "");
-  elements.titleInput.value = project.title;
-  elements.subtitleInput.value = project.subtitle;
-  elements.backgroundStart.value = project.theme.backgroundStart;
-  elements.backgroundEnd.value = project.theme.backgroundEnd;
-  elements.accent.value = project.theme.accent;
-  elements.highlight.value = project.theme.highlight;
-  elements.narration.value = project.audio.narration || "";
-  elements.generatedMusic.checked = project.audio.useGeneratedMusic;
-  elements.captions.checked = project.render.captions;
-  elements.eventCount.textContent = `${project.events.length} action${project.events.length === 1 ? "" : "s"}`;
-  elements.timeline.innerHTML = project.events.length
-    ? project.events.map((event) => `<div class="timeline-event"><b>${escapeHtml(event.label || event.type)}</b><small>${(event.startedAtMs / 1000).toFixed(1)}s · ${escapeHtml(event.pageUrl)}</small></div>`).join("")
-    : '<div class="timeline-event"><b>Overview</b><small>No scripted actions</small></div>';
-  if (project.artifacts.finalVideo) {
-    elements.placeholder.classList.add("hidden");
-    elements.video.classList.remove("hidden");
-    elements.video.src = `/api/projects/${project.id}/video?v=${Date.now()}`;
-  } else {
-    elements.video.removeAttribute("src");
-    elements.video.load();
-    elements.video.classList.add("hidden");
-    elements.placeholder.classList.remove("hidden");
-  }
-  renderProjectList();
+  holder.innerHTML = jobs.slice(0, 20).map((job) => `
+    <div class="project-card ${escapeHtml(job.state)}">
+      <span></span><div><b>${escapeHtml(job.type)}</b><small>${escapeHtml(job.message)}</small></div><i>${Math.round(job.progress || 0)}%</i>
+    </div>`).join("");
 }
 
-async function selectProject(id) {
-  state.selected = await api(`/api/projects/${id}`);
-  renderSelectedProject();
+function capabilityCard(item) {
+  return `
+    <div class="engine-card ${escapeHtml(item.status)}">
+      <span></span>
+      <div><b>${escapeHtml(item.label)}</b><small title="${escapeHtml(item.detail)}">${escapeHtml(item.detail)}</small></div>
+      <i>${item.available ? "READY" : item.status.toUpperCase()}</i>
+    </div>`;
 }
 
-async function refresh(preferredId) {
-  state.projects = await api("/api/projects");
-  const id = preferredId || state.selected?.id || state.projects[0]?.id;
-  if (id) await selectProject(id);
-  else {
-    state.selected = null;
-    renderProjectList();
-    renderSelectedProject();
-  }
+async function refreshEngines() {
+  elements.engineCards.innerHTML = '<div class="engine-card loading"><span></span><div><b>Inspecting local engines…</b><small>Checking Qwen, LTX, Wan, animation, voice, and render tools.</small></div></div>';
+  const status = await api("/api/engines/status");
+  const wanted = ["planner.ollama-qwen", "visuals.ltx-desktop", "visuals.wan-animate-2", "visuals.animated", "visuals.comfyui-video", "voice.system", "rendering.ffmpeg"];
+  const capabilities = status.capabilities?.capabilities || [];
+  elements.engineCards.innerHTML = wanted.map((id) => capabilities.find((item) => item.id === id)).filter(Boolean).map(capabilityCard).join("");
+  const qwenReady = status.planner?.available;
+  const ltxReady = status.ltx?.localGenerationAvailable;
+  const light = $("#sidebar-engine-light");
+  light.className = `engine-light ${qwenReady ? (ltxReady ? "" : "warning") : "warning"}`;
+  $("#sidebar-engine-title").textContent = qwenReady ? "Qwen planner ready" : "Deterministic planner ready";
+  $("#sidebar-engine-copy").textContent = ltxReady ? "LTX local video ready" : status.ltx?.installed ? "LTX installed · backend unavailable" : "Local 2D animation ready";
 }
 
-function readManifest() {
-  try {
-    return JSON.parse(elements.creatorManifest.value);
-  } catch (error) {
-    throw new Error(`Manifest JSON is invalid: ${error.message}`);
-  }
+function resetChat() {
+  if (state.busy) return;
+  elements.chat.innerHTML = initialChat;
+  elements.prompt.value = "";
+  bindStarters();
+  closeDrawer();
+  elements.prompt.focus();
 }
 
-function writeManifest(manifest) {
-  state.creatorManifest = manifest;
-  elements.creatorManifest.value = JSON.stringify(manifest, null, 2);
-  renderPresetGrid();
-}
-
-function selectedPresetIds() {
-  return [...elements.presetGrid.querySelectorAll("input:checked")].map((input) => input.value);
-}
-
-function syncSelectedPresets() {
-  const manifest = readManifest();
-  const existing = new Map((manifest.exports || []).map((item) => [item.preset, item]));
-  manifest.exports = selectedPresetIds().map((preset, index) => existing.get(preset) || { id: preset === "youtube-1080p" ? "youtube" : `${preset}-${index + 1}`, preset });
-  state.creatorManifest = manifest;
-  elements.creatorManifest.value = JSON.stringify(manifest, null, 2);
-}
-
-function renderPresetGrid() {
-  const selected = new Set((state.creatorManifest?.exports || []).map((item) => item.preset));
-  elements.presetGrid.innerHTML = state.presets.map((preset) => {
-    const ratioClass = preset.width === preset.height ? "square" : preset.width > preset.height ? "landscape" : preset.aspectRatio === "4:5" ? "portrait" : "vertical";
-    return `<label class="preset-option ${selected.has(preset.id) ? "selected" : ""}">
-    <input type="checkbox" value="${escapeHtml(preset.id)}" ${selected.has(preset.id) ? "checked" : ""} />
-    <span class="ratio-icon ratio-${ratioClass}"></span>
-    <span><b>${escapeHtml(preset.label)}</b><small>${preset.width}×${preset.height} · ${escapeHtml(preset.aspectRatio)}</small></span>
-    <i>✓</i>
-  </label>`;
-  }).join("");
-  elements.presetGrid.querySelectorAll("input").forEach((input) => input.addEventListener("change", () => {
-    input.closest("label").classList.toggle("selected", input.checked);
-    if (!selectedPresetIds().length) {
-      input.checked = true;
-      input.closest("label").classList.add("selected");
-    }
-    try { syncSelectedPresets(); } catch (error) { creatorFeedback(error.message, "error"); }
+function bindStarters() {
+  $$(".starter").forEach((button) => button.addEventListener("click", () => {
+    elements.prompt.value = button.dataset.prompt || "";
+    elements.mode.value = button.dataset.mode || "auto";
+    syncChips();
+    elements.prompt.focus();
   }));
 }
 
-async function loadTemplate() {
-  const manifest = await api("/api/creator/template", {
-    method: "POST",
-    body: JSON.stringify({
-      templateId: elements.templateSelect.value,
-      title: elements.creatorTitle.value || "My creator project",
-      source: elements.creatorSource.value || undefined,
-      outputDirectory: elements.creatorOutput.value || "./creator-output",
-    }),
-  });
-  writeManifest(manifest);
-  creatorFeedback("Editable timeline created. Choose output profiles or customize the JSON.", "success");
+function syncChips() {
+  const modeOption = elements.mode.options[elements.mode.selectedIndex];
+  $("#mode-chip-value").textContent = modeOption?.textContent?.replace(" / education", "") || "Auto";
+  $("#format-chip-value").textContent = currentFormat().label;
+  const engineOption = elements.mediaProvider.options[elements.mediaProvider.selectedIndex];
+  $("#engine-chip-value").textContent = (engineOption?.textContent || "Auto").split("·")[0].trim();
 }
 
-async function initializeCreator() {
-  const [presets, templates, creatorAssets, localAi, capabilities] = await Promise.all([api("/api/creator/presets"), api("/api/creator/templates"), api("/api/creator/assets"), api("/api/local-ai/status?profile=fast"), api("/api/capabilities?profile=fast")]);
-  state.presets = presets;
-  state.templates = templates;
-  state.creatorAssets = creatorAssets;
-  elements.presetCount.textContent = String(presets.length);
-  elements.templateSelect.innerHTML = templates.map((template) => `<option value="${escapeHtml(template.id)}">${escapeHtml(template.label)}</option>`).join("");
-  elements.promptMode.innerHTML = creatorAssets.promptModes.map((mode) => `<option value="${escapeHtml(mode)}">${escapeHtml(mode.split("-").map((part) => part[0].toUpperCase() + part.slice(1)).join(" "))}</option>`).join("");
-  const characters = creatorAssets.assets.filter((asset) => asset.kind === "presenter" || asset.kind === "character");
-  elements.promptPresenter.innerHTML = '<option value="none">No character</option>' + characters.map((asset) => `<option value="${escapeHtml(asset.id)}">${escapeHtml(asset.label)} · ${escapeHtml(asset.style)}</option>`).join("");
-  elements.promptPresenter.options[0].textContent = "No starter character";
-  elements.promptPresenter.value = "none";
-  renderLocalAiStatus(localAi);
-  renderCapabilityStatus(capabilities);
-  if (!state.creatorManifest) await loadTemplate();
-  else renderPresetGrid();
-}
-
-function syncPromptCharacterToMode() {
-  if (elements.promptMode.value === "asmr") elements.promptPresenter.value = "none";
-}
-
-async function createFromPrompt(render) {
-  const job = await api("/api/creator/prompt", {
-    method: "POST",
-    body: JSON.stringify(promptRequest(render)),
-  });
-  state.creatorJobId = job.id;
-  const created = await waitForJob(job, render ? "Creating and rendering prompt video" : "Creating prompt video project");
-  showProductionPlan(created.plan);
-  writeManifest(created.manifest);
-  if (created.renderResult) {
-    state.creatorResult = created.renderResult;
-    renderCreatorResults();
-    creatorFeedback(`${created.renderResult.outputs.length} prompt-video export${created.renderResult.outputs.length === 1 ? " is" : "s are"} ready.`, "success");
-  } else creatorFeedback(`Editable ${created.mode} project created at ${created.manifestPath}.`, "success");
-}
-
-function promptRequest(render) {
-  const prompt = elements.promptText.value.trim();
-  if (!prompt) throw new Error("Describe the video you want to create first.");
-  if (elements.promptVoiceProvider.value === "local-clone") {
-    if (!state.promptUploads.voiceReference) throw new Error("Upload the authorized speaker's voice reference first.");
-    if (!elements.promptVoiceSpeaker.value.trim() || !elements.promptVoiceConsent.checked) throw new Error("Record the speaker name and voice permission before using a local clone.");
+$$(".nav-item").forEach((button) => button.addEventListener("click", () => openTool(button.dataset.tool)));
+$("#drawer-close").addEventListener("click", closeDrawer);
+$("#open-engines-button").addEventListener("click", () => openTool("engines"));
+$("#capability-refresh").addEventListener("click", () => refreshEngines().catch((error) => {
+  elements.engineCards.innerHTML = `<div class="engine-card unavailable"><span></span><div><b>Engine check failed</b><small>${escapeHtml(error.message)}</small></div></div>`;
+}));
+$("#refresh-projects").addEventListener("click", () => refreshProjects().catch(() => undefined));
+$("#new-video-button").addEventListener("click", resetChat);
+$("#generate-button").addEventListener("click", generateVideo);
+$("#attach-button").addEventListener("click", () => elements.quickFile.click());
+$("#quick-file-input").addEventListener("change", async () => {
+  for (const file of [...(elements.quickFile.files || [])]) {
+    const kind = file.type.startsWith("audio/") ? "music" : "scene";
+    addAttachment(await uploadFile(file, kind), kind);
   }
-  return {
-    prompt,
-    narration: elements.promptNarration.value.trim() || undefined,
-    mode: elements.promptMode.value,
-    title: elements.creatorTitle.value || undefined,
-    source: elements.creatorSource.value || undefined,
-    sceneSources: state.promptUploads.sceneSources,
-    characters: state.promptUploads.characters,
-    logoSource: state.promptUploads.logoSource || undefined,
-    musicSource: state.promptUploads.musicSource || undefined,
-    outputDirectory: elements.creatorOutput.value || undefined,
-    presenter: elements.promptPresenter.value,
-    voiceProvider: elements.promptVoiceProvider.value,
-    voiceReference: state.promptUploads.voiceReference || undefined,
-    voiceConsent: elements.promptVoiceProvider.value === "local-clone" ? {
-      speakerName: elements.promptVoiceSpeaker.value.trim(),
-      confirmed: elements.promptVoiceConsent.checked,
-      scope: "this video project",
-    } : undefined,
-    voiceCloneUrl: elements.promptVoiceCloneUrl.value.trim() || undefined,
-    durationSeconds: elements.promptDuration.value ? Number(elements.promptDuration.value) : undefined,
-    presets: selectedPresetIds().length ? selectedPresetIds() : ["youtube-1080p"],
-    generateVoice: elements.promptVoice.checked,
-    generateMusic: elements.promptMusic.checked,
-    plannerProvider: elements.promptPlannerProvider.value,
-    plannerProfile: elements.promptPlannerProfile.value,
-    mediaProvider: elements.promptMediaProvider.value,
-    mediaTask: elements.promptMediaTask.value,
-    mediaAdapterUrl: elements.promptMediaAdapterUrl.value.trim() || undefined,
-    render,
-  };
-}
-
-function showProductionPlan(plan) {
-  if (!plan) return;
-  elements.promptPlanPreview.classList.remove("hidden");
-  const intelligence = plan.intelligence?.provider === "ollama" ? `${plan.intelligence.model} local` : "instant local rules";
-  elements.promptPlanSummary.textContent = `${plan.scenes.length} scenes · ${plan.requirements.targetDurationSeconds}s · ${intelligence}`;
-  const resources = plan.resources.map((resource) => `${resource.status.toUpperCase()}  ${resource.category}\n${resource.requirement}\n${resource.source}`).join("\n\n");
-  const capabilityGate = plan.capabilities
-    ? plan.capabilities.capabilities.filter((item) => item.selected).map((item) => `${item.available ? "READY" : "BLOCKED"}  ${item.label}\n${item.detail}`).join("\n\n")
-    : "Capability inventory was not attached.";
-  const rules = (plan.productionRules || []).map((rule) => `${rule.id.toUpperCase()}\n${rule.rule}\nGate: ${rule.qualityGate}`).join("\n\n");
-  elements.promptPlanResources.textContent = `CAPABILITY GATE\n\n${capabilityGate}\n\nRESOURCES\n\n${resources}\n\nFIXED PRODUCTION RULES\n\n${rules}`;
-  renderCapabilityStatus(plan.capabilities);
-}
-
-async function reviewPromptPlan() {
-  const plan = await api("/api/creator/plan", { method: "POST", body: JSON.stringify(promptRequest(false)) });
-  showProductionPlan(plan);
-  creatorFeedback("Plan ready. Review the storyboard and resources, then build the editable timeline or render.", "success");
-}
-
-function updateJob(job, title) {
-  elements.jobPanel.classList.remove("hidden");
-  elements.jobTitle.textContent = title;
-  elements.jobPercent.textContent = `${Math.round(job.progress || 0)}%`;
-  elements.jobProgress.value = Math.max(2, job.progress || 0);
-  elements.jobMessage.textContent = job.message || job.state;
-}
-
-async function waitForJob(job, title) {
-  updateJob(job, title);
-  let current = job;
-  while (current.state === "queued" || current.state === "running") {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    current = await api(`/api/jobs/${current.id}`);
-    updateJob(current, title);
+  elements.quickFile.value = "";
+});
+$("#prompt-scene-files").addEventListener("change", (event) => uploadSelection(event.currentTarget, "scene"));
+$("#prompt-character-files").addEventListener("change", (event) => uploadSelection(event.currentTarget, "character"));
+$("#prompt-logo-file").addEventListener("change", (event) => uploadSelection(event.currentTarget, "logo"));
+$("#prompt-music-file").addEventListener("change", (event) => uploadSelection(event.currentTarget, "music"));
+$("#prompt-voice-reference-file").addEventListener("change", (event) => uploadSelection(event.currentTarget, "voice-reference"));
+$("#mode-chip").addEventListener("click", () => openTool("create"));
+$("#engine-chip").addEventListener("click", () => openTool("advanced"));
+$("#format-chip").addEventListener("click", () => {
+  state.formatIndex = (state.formatIndex + 1) % state.formats.length;
+  syncChips();
+});
+elements.mode.addEventListener("change", syncChips);
+elements.mediaProvider.addEventListener("change", syncChips);
+elements.generateMusic.addEventListener("change", () => { elements.musicMirror.checked = elements.generateMusic.checked; });
+elements.musicMirror.addEventListener("change", () => { elements.generateMusic.checked = elements.musicMirror.checked; });
+elements.prompt.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    generateVideo();
   }
-  if (current.state === "failed") throw new Error(current.error || current.message || "Job failed");
-  return current.result;
-}
-
-function previewCreatorOutput(output) {
-  if (!state.creatorJobId) return;
-  elements.creatorPlaceholder.classList.add("hidden");
-  elements.creatorVideo.classList.remove("hidden");
-  elements.creatorVideo.src = `/api/creator/jobs/${state.creatorJobId}/outputs/${encodeURIComponent(output.id)}/video?v=${Date.now()}`;
-  elements.creatorPreviewLabel.textContent = output.id;
-  elements.creatorResolution.textContent = `${output.width}×${output.height} · ${output.fps.toFixed(0)} FPS`;
-  elements.outputList.querySelectorAll("button[data-output]").forEach((button) => button.classList.toggle("active", button.dataset.output === output.id));
-}
-
-function renderCreatorResults() {
-  const result = state.creatorResult;
-  if (!result?.outputs?.length) return;
-  elements.results.classList.remove("hidden");
-  elements.packageButton.classList.remove("hidden");
-  elements.outputList.innerHTML = result.outputs.map((output) => `<button class="output-item" data-output="${escapeHtml(output.id)}">
-    <span class="output-thumb"><img src="/api/creator/jobs/${state.creatorJobId}/outputs/${encodeURIComponent(output.id)}/thumbnail?v=${Date.now()}" alt="" /></span>
-    <span><b>${escapeHtml(output.id)}</b><small>${escapeHtml(output.preset)} · ${output.durationSeconds.toFixed(1)}s · ${(output.fileSizeBytes / 1048576).toFixed(1)} MB</small></span>
-    <i>${output.validation.some((issue) => issue.level === "error") ? "Review" : "Ready"}</i>
-  </button>`).join("");
-  elements.outputList.querySelectorAll("button").forEach((button) => button.addEventListener("click", () => previewCreatorOutput(result.outputs.find((item) => item.id === button.dataset.output))));
-  previewCreatorOutput(result.outputs[0]);
-}
-
-function renderValidation(validation) {
-  elements.results.classList.remove("hidden");
-  elements.packageButton.classList.add("hidden");
-  elements.outputList.innerHTML = validation.issues.length
-    ? validation.issues.map((issue) => `<div class="validation-item ${escapeHtml(issue.level)}"><i>${issue.level === "error" ? "!" : issue.level === "warning" ? "△" : "i"}</i><span><b>${escapeHtml(issue.code)}</b><small>${escapeHtml(issue.message)}</small></span></div>`).join("")
-    : '<div class="validation-item info"><i>✓</i><span><b>Timeline is valid</b><small>No schema or semantic issues found.</small></span></div>';
-}
-
-elements.modeButtons.forEach((button) => button.addEventListener("click", () => setMode(button.dataset.mode)));
-elements.refresh.addEventListener("click", () => (state.mode === "creator" ? initializeCreator() : refresh()).catch((error) => (state.mode === "creator" ? creatorFeedback(error.message, "error") : feedback(error.message, "error"))));
-
-elements.voice.addEventListener("click", async () => {
-  if (!state.selected) return;
-  elements.voice.disabled = true;
-  feedback("Generating voice-over with your system voice...");
-  try {
-    await api(`/api/projects/${state.selected.id}/voice`, { method: "POST", body: JSON.stringify({ narration: elements.narration.value }) });
-    await refresh(state.selected.id);
-    feedback("Voice-over generated successfully.", "success");
-  } catch (error) { feedback(error.message, "error"); }
-  finally { elements.voice.disabled = false; }
+});
+$("#website-prepare").addEventListener("click", () => {
+  const url = $("#website-url").value.trim();
+  const goal = $("#website-goal").value.trim();
+  if (!url) return $("#website-url").focus();
+  elements.prompt.value = `Create a polished website product demo for ${url}. ${goal || "Open with the landing page, scroll naturally, demonstrate the primary workflow, and finish with a clear recap."} Plan every page and interaction before recording. Use natural cursor movement, readable zoom, scene-aligned narration, captions, and soft music.`;
+  elements.mode.value = "product-launch";
+  syncChips();
+  closeDrawer();
+  elements.prompt.focus();
 });
 
-elements.render.addEventListener("click", async () => {
-  if (!state.selected) return;
-  elements.render.disabled = true;
-  feedback("Rendering the final 1080p demo...");
-  try {
-    await api(`/api/projects/${state.selected.id}/render`, {
-      method: "POST",
-      body: JSON.stringify({
-        title: elements.titleInput.value,
-        subtitle: elements.subtitleInput.value,
-        narration: elements.narration.value,
-        useGeneratedMusic: elements.generatedMusic.checked,
-        theme: { backgroundStart: elements.backgroundStart.value, backgroundEnd: elements.backgroundEnd.value, accent: elements.accent.value, highlight: elements.highlight.value },
-        render: { captions: elements.captions.checked },
-      }),
-    });
-    await refresh(state.selected.id);
-    feedback("1080p master rendered and ready to play.", "success");
-  } catch (error) { feedback(error.message, "error"); }
-  finally { elements.render.disabled = false; }
+bindStarters();
+syncChips();
+renderAttachments();
+refreshEngines().catch((error) => {
+  $("#sidebar-engine-title").textContent = "Local tools available";
+  $("#sidebar-engine-copy").textContent = error instanceof Error ? error.message : "Engine status unavailable";
 });
-
-elements.templateButton.addEventListener("click", () => loadTemplate().catch((error) => creatorFeedback(error.message, "error")));
-elements.promptMode.addEventListener("change", () => {
-  syncPromptCharacterToMode();
-  refreshCapabilityStatus().catch((error) => creatorFeedback(error.message, "error"));
-});
-elements.promptPlannerProfile.addEventListener("change", () => Promise.all([refreshLocalAiStatus(), refreshCapabilityStatus()]).catch((error) => creatorFeedback(error.message, "error")));
-for (const control of [elements.promptPlannerProvider, elements.promptMediaProvider, elements.promptVoiceProvider, elements.promptVoice, elements.promptMusic]) {
-  control.addEventListener("change", () => refreshCapabilityStatus().catch((error) => creatorFeedback(error.message, "error")));
-}
-elements.capabilityRefresh.addEventListener("click", async () => {
-  elements.capabilityRefresh.disabled = true;
-  elements.capabilityDetail.textContent = "Inspecting local tools without generating media…";
-  try {
-    const report = await refreshCapabilityStatus();
-    creatorFeedback(report.readyForRequest ? "The selected production stack is ready." : report.blockers.map((item) => item.setup || item.detail).join(" "), report.readyForRequest ? "success" : "error");
-  } catch (error) { creatorFeedback(error.message, "error"); }
-  finally { elements.capabilityRefresh.disabled = false; }
-});
-elements.localAiWarm.addEventListener("click", async () => {
-  elements.localAiWarm.disabled = true;
-  elements.localAiDetail.textContent = "Loading the model into memory…";
-  try {
-    const result = await api("/api/local-ai/warm", { method: "POST", body: JSON.stringify({ profile: elements.promptPlannerProfile.value }) });
-    await refreshLocalAiStatus();
-    creatorFeedback(`${result.model} is warm for ${result.keepAlive}; the next plan starts faster.`, "success");
-  } catch (error) { creatorFeedback(error.message, "error"); }
-  finally { elements.localAiWarm.disabled = false; }
-});
-elements.promptSceneFiles.addEventListener("change", () => uploadSelection(elements.promptSceneFiles, "scene", elements.promptSceneUploadStatus, (uploaded) => {
-  state.promptUploads.sceneSources = uploaded.map(({ result }) => result.path);
-}).catch((error) => creatorFeedback(error.message, "error")));
-elements.promptCharacterFiles.addEventListener("change", () => uploadSelection(elements.promptCharacterFiles, "character", elements.promptCharacterUploadStatus, (uploaded) => {
-  state.promptUploads.characters = uploaded.map(({ file, result }, index) => ({
-    id: `uploaded-character-${index + 1}`,
-    name: file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " "),
-    source: result.path,
-    role: "character",
-    rights: "Teacher-uploaded or locally generated authorized character",
-  }));
-  elements.promptPresenter.value = "none";
-}).catch((error) => creatorFeedback(error.message, "error")));
-elements.promptLogoFile.addEventListener("change", () => uploadSelection(elements.promptLogoFile, "logo", elements.promptLogoUploadStatus, (uploaded) => {
-  state.promptUploads.logoSource = uploaded[0]?.result.path || null;
-}).catch((error) => creatorFeedback(error.message, "error")));
-elements.promptMusicFile.addEventListener("change", () => uploadSelection(elements.promptMusicFile, "music", elements.promptMusicUploadStatus, (uploaded) => {
-  state.promptUploads.musicSource = uploaded[0]?.result.path || null;
-}).catch((error) => creatorFeedback(error.message, "error")));
-elements.promptVoiceReferenceFile.addEventListener("change", () => uploadSelection(elements.promptVoiceReferenceFile, "voice-reference", elements.promptVoiceUploadStatus, (uploaded) => {
-  state.promptUploads.voiceReference = uploaded[0]?.result.path || null;
-  if (state.promptUploads.voiceReference) elements.promptVoiceProvider.value = "local-clone";
-}).catch((error) => creatorFeedback(error.message, "error")));
-elements.promptGenerateMusic.addEventListener("click", async () => {
-  elements.promptGenerateMusic.disabled = true;
-  try {
-    const style = elements.promptMusicStyle.value;
-    const durationSeconds = Number(elements.promptMusicDuration.value || elements.promptDuration.value || 45);
-    const directory = (elements.creatorOutput.value || "./creator-output").replace(/[\\/]$/, "");
-    const job = await api("/api/creator/music", {
-      method: "POST",
-      body: JSON.stringify({ style, durationSeconds, outputPath: `${directory}/${style}-music.wav` }),
-    });
-    const generated = await waitForJob(job, "Generating free local music");
-    state.promptUploads.musicSource = generated.outputPath;
-    elements.promptGeneratedMusicStatus.textContent = `${style} ready · ${durationSeconds}s · attached to this video`;
-    elements.promptMusicUploadStatus.textContent = "Generated local music ready";
-    creatorFeedback(`Original local music created at ${generated.outputPath}.`, "success");
-  } catch (error) { creatorFeedback(error.message, "error"); }
-  finally { elements.promptGenerateMusic.disabled = false; }
-});
-elements.promptPlanButton.addEventListener("click", async () => {
-  elements.promptPlanButton.disabled = true;
-  try { await reviewPromptPlan(); }
-  catch (error) { creatorFeedback(error.message, "error"); }
-  finally { elements.promptPlanButton.disabled = false; }
-});
-elements.promptButton.addEventListener("click", async () => {
-  elements.promptButton.disabled = true;
-  try { await createFromPrompt(false); }
-  catch (error) { creatorFeedback(error.message, "error"); }
-  finally { elements.promptButton.disabled = false; }
-});
-elements.promptRenderButton.addEventListener("click", async () => {
-  elements.promptRenderButton.disabled = true;
-  try { await createFromPrompt(true); }
-  catch (error) { creatorFeedback(error.message, "error"); }
-  finally { elements.promptRenderButton.disabled = false; }
-});
-elements.formatManifest.addEventListener("click", () => {
-  try { writeManifest(readManifest()); creatorFeedback("Manifest formatted.", "success"); }
-  catch (error) { creatorFeedback(error.message, "error"); }
-});
-elements.copyManifest.addEventListener("click", async () => {
-  try { await navigator.clipboard.writeText(elements.creatorManifest.value); creatorFeedback("Manifest copied to clipboard.", "success"); }
-  catch { creatorFeedback("Clipboard access was unavailable. Select the JSON and copy it manually.", "error"); }
-});
-
-elements.validate.addEventListener("click", async () => {
-  elements.validate.disabled = true;
-  try {
-    const validation = await api("/api/creator/validate", { method: "POST", body: JSON.stringify({ manifest: readManifest() }) });
-    renderValidation(validation);
-    creatorFeedback(validation.valid ? "Timeline is render-ready." : "Fix the errors shown below before rendering.", validation.valid ? "success" : "error");
-  } catch (error) { creatorFeedback(error.message, "error"); }
-  finally { elements.validate.disabled = false; }
-});
-
-elements.creatorRender.addEventListener("click", async () => {
-  elements.creatorRender.disabled = true;
-  state.creatorResult = null;
-  creatorFeedback("Preparing selected formats. Large projects can take several minutes...");
-  try {
-    const job = await api("/api/creator/render", { method: "POST", body: JSON.stringify({ manifest: readManifest() }) });
-    state.creatorJobId = job.id;
-    state.creatorResult = await waitForJob(job, "Rendering creator timeline");
-    renderCreatorResults();
-    creatorFeedback(`${state.creatorResult.outputs.length} export${state.creatorResult.outputs.length === 1 ? " is" : "s are"} ready.`, "success");
-  } catch (error) { creatorFeedback(error.message, "error"); }
-  finally { elements.creatorRender.disabled = false; }
-});
-
-elements.analyze.addEventListener("click", async () => {
-  elements.analyze.disabled = true;
-  try {
-    const manifest = readManifest();
-    const source = elements.creatorSource.value || manifest.clips?.[0]?.source;
-    if (!source) throw new Error("Add a source media path first.");
-    const job = await api("/api/creator/analyze", { method: "POST", body: JSON.stringify({ source }) });
-    const analysis = await waitForJob(job, "Analyzing media");
-    manifest.metadata = { ...(manifest.metadata || {}), mediaAnalysis: analysis };
-    writeManifest(manifest);
-    creatorFeedback(`Found ${analysis.sceneChanges.length} scene changes, ${analysis.silence.length} silent ranges, and ${analysis.suggestedHighlights.length} highlight suggestions. Saved under metadata.mediaAnalysis.`, "success");
-  } catch (error) { creatorFeedback(error.message, "error"); }
-  finally { elements.analyze.disabled = false; }
-});
-
-elements.transcribe.addEventListener("click", async () => {
-  elements.transcribe.disabled = true;
-  try {
-    const manifest = readManifest();
-    const source = elements.creatorSource.value || manifest.clips?.[0]?.source;
-    if (!source) throw new Error("Add a source media path first.");
-    const job = await api("/api/creator/transcribe", { method: "POST", body: JSON.stringify({ source, format: "srt", model: "turbo" }) });
-    const transcription = await waitForJob(job, "Generating captions");
-    manifest.captions = { ...(manifest.captions || {}), source: transcription.captionsPath, format: "srt", burn: true, sidecar: true };
-    writeManifest(manifest);
-    creatorFeedback(`Captions generated at ${transcription.captionsPath}.`, "success");
-  } catch (error) { creatorFeedback(error.message, "error"); }
-  finally { elements.transcribe.disabled = false; }
-});
-
-elements.packageButton.addEventListener("click", async () => {
-  if (!state.creatorResult) return;
-  elements.packageButton.disabled = true;
-  try {
-    const packaged = await api("/api/creator/package", { method: "POST", body: JSON.stringify({ manifest: readManifest(), renderResult: state.creatorResult }) });
-    creatorFeedback(`Publishing package created at ${packaged.directory}.`, "success");
-  } catch (error) { creatorFeedback(error.message, "error"); }
-  finally { elements.packageButton.disabled = false; }
-});
-
-refresh().catch((error) => feedback(error.message, "error"));

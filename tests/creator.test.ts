@@ -147,6 +147,7 @@ describe("creator manifests", () => {
     const plan = createPromptVideoPlan({
       prompt: "A teacher and two original helpers explain fractions with paper shapes.",
       mode: "cartoon",
+      mediaProvider: "builtin",
       sceneSources: ["lesson-board.png", "paper-shapes.png"],
       characters: [
         { name: "Teacher Sam", source: "teacher-sam.png", role: "presenter", rights: "Original authorized character" },
@@ -164,6 +165,7 @@ describe("creator manifests", () => {
     const manifest = createPromptVideoManifest({
       prompt: "A teacher and two original helpers explain fractions with paper shapes.",
       mode: "cartoon",
+      mediaProvider: "builtin",
       sceneSources: ["lesson-board.png", "paper-shapes.png"],
       characters: [
         { name: "Teacher Sam", source: "teacher-sam.png", role: "presenter" },
@@ -187,6 +189,7 @@ describe("creator manifests", () => {
       prompt: "Teach the water cycle in three clear scenes.",
       narration,
       mode: "cartoon" as const,
+      mediaProvider: "builtin" as const,
       durationSeconds: 42,
       presenter: "none" as const,
       sceneSources: ["evaporation.svg", "condensation.svg", "precipitation.svg"],

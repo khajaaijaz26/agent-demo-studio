@@ -547,7 +547,12 @@ async function finalComposite(input: {
       ? "highpass=f=55,lowpass=f=16500,"
       : "";
   const defaultLufs = audioConfig?.mode === "asmr" ? -20 : audioConfig?.mode === "voice" ? -16 : -14;
-  filters.push(`[${mixed}]atrim=duration=${ffNumber(input.duration)},${audioTone}loudnorm=I=${ffNumber(audioConfig?.targetLufs ?? defaultLufs)}:LRA=9:TP=${ffNumber(audioConfig?.truePeak ?? -1.5)},alimiter=limit=0.95[aout]`);
+  const truePeak = audioConfig?.truePeak ?? -1.5;
+  // Lossy AAC encoding can introduce small inter-sample overshoots. Leave a
+  // half-decibel codec margin so the decoded delivery file still respects the
+  // requested true-peak ceiling.
+  const limiterCeiling = Math.pow(10, (truePeak - 0.5) / 20);
+  filters.push(`[${mixed}]atrim=duration=${ffNumber(input.duration)},${audioTone}loudnorm=I=${ffNumber(audioConfig?.targetLufs ?? defaultLufs)}:LRA=9:TP=${ffNumber(truePeak)},alimiter=limit=${ffNumber(limiterCeiling)}:attack=5:release=50:level=false[aout]`);
   const codec = input.exportConfig.videoCodec === "hevc" ? "libx265" : "libx264";
   // Rich timelines can contain dozens of animated overlays and audio layers.
   // Passing that graph inline exceeds Windows' command-line limit long before

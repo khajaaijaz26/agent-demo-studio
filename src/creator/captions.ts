@@ -71,7 +71,7 @@ function assTime(seconds: number): string {
 }
 
 export function serializeAss(cues: CaptionCue[], preset: CreatorPreset, style: CreatorCaptionStyle | undefined): string {
-  const fontSize = Math.round(style?.fontSize ?? (preset.height > preset.width ? 56 : 44));
+  const fontSize = Math.round(style?.fontSize ?? (preset.height > preset.width ? 58 : 52));
   const alignment = style?.position === "top" ? 8 : style?.position === "middle" ? 5 : 2;
   const marginV = Math.round(style?.margin ?? (alignment === 8 ? preset.safeZone.top : preset.safeZone.bottom));
   const maxCharacters = style?.maxCharactersPerLine ?? (preset.height > preset.width ? 30 : 54);

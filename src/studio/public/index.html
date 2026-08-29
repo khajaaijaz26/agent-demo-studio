@@ -1,205 +1,166 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark" />
-    <meta name="description" content="Local, agent-native browser recording and social video creation." />
-    <title>Agent Demo Studio</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="ambient ambient-one"></div>
-    <div class="ambient ambient-two"></div>
-    <div class="noise"></div>
-    <div class="app-shell">
-      <aside class="sidebar">
-        <div class="brand">
-          <div class="brand-mark"><span></span></div>
-          <div><strong>Agent Demo</strong><small>CREATOR STUDIO</small></div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Agent Demo Studio</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Studio tools">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span></span></div>
+        <div><strong>Agent Demo</strong><small>STUDIO</small></div>
+      </div>
+
+      <button class="new-video" id="new-video-button" type="button"><span>+</span> New video</button>
+
+      <nav class="tool-nav">
+        <p>WORKSPACE</p>
+        <button class="nav-item active" data-tool="create" type="button"><i>✦</i><span>Create</span></button>
+        <button class="nav-item" data-tool="projects" type="button"><i>▣</i><span>Projects</span></button>
+        <button class="nav-item" data-tool="website" type="button"><i>◎</i><span>Website demos</span></button>
+        <p>PRODUCTION</p>
+        <button class="nav-item" data-tool="media" type="button"><i>◇</i><span>Media & characters</span><b id="media-count">0</b></button>
+        <button class="nav-item" data-tool="voice" type="button"><i>◖</i><span>Voice</span></button>
+        <button class="nav-item" data-tool="music" type="button"><i>♫</i><span>Music & sound</span></button>
+        <button class="nav-item" data-tool="engines" type="button"><i>⌁</i><span>AI engines</span></button>
+        <button class="nav-item" data-tool="advanced" type="button"><i>⚙</i><span>Advanced</span></button>
+      </nav>
+
+      <div class="engine-mini">
+        <span class="engine-light checking" id="sidebar-engine-light"></span>
+        <div><b id="sidebar-engine-title">Checking engines</b><small id="sidebar-engine-copy">Qwen · LTX · local render</small></div>
+      </div>
+      <div class="sidebar-foot"><span>Local-first</span><span id="studio-version">v0.5</span></div>
+    </aside>
+
+    <main class="main-stage">
+      <header class="topbar">
+        <div>
+          <h1 id="workspace-title">Create a video</h1>
+          <p id="workspace-subtitle">Describe it naturally. The Studio plans every scene before it generates anything.</p>
+        </div>
+        <div class="topbar-actions">
+          <span class="privacy-pill"><i></i> Local by default</span>
+          <button class="icon-button" id="open-engines-button" type="button" aria-label="Open engine status">⌁</button>
+        </div>
+      </header>
+
+      <section class="chat-wrap" aria-live="polite">
+        <div class="chat-stream" id="chat-stream">
+          <article class="message assistant welcome-message">
+            <div class="avatar studio-avatar">✦</div>
+            <div class="message-body">
+              <div class="message-meta"><b>Agent Demo Studio</b><span>ready</span></div>
+              <h2>What should we make?</h2>
+              <p>Ask for a cartoon lesson, product launch, story, ASMR scene, VFX reel, or website demo. I’ll create the production plan, match visuals to narration, generate real motion with the selected engine, add voice and music, then render the video here.</p>
+              <div class="truth-note"><span>✓</span><div><b>No disguised slideshows</b><small>Real-video requests must return moving video and pass a temporal motion check.</small></div></div>
+            </div>
+          </article>
+
+          <div class="starter-grid" id="starter-grid">
+            <button class="starter" type="button" data-prompt="Create a 45 second cartoon science lesson where a teacher and students move, speak, gesture, and demonstrate the water cycle. Use friendly narration, captions, soft music, and a clear recap." data-mode="cartoon"><span class="starter-art orange">Aa</span><b>Cartoon lesson</b><small>Moving teacher and students</small></button>
+            <button class="starter" type="button" data-prompt="Create a premium 30 second product launch video with a strong hook, cinematic reveal, real subject motion, concise voice-over, tasteful VFX, and a clear call to action." data-mode="product-launch"><span class="starter-art violet">◆</span><b>Product launch</b><small>Cinematic reveal and CTA</small></button>
+            <button class="starter" type="button" data-prompt="Create a one minute animated educational story with expressive characters, continuous movement, natural narration, captions, and a memorable final lesson." data-mode="story"><span class="starter-art blue">☾</span><b>Animated story</b><small>Characters, voice and scenes</small></button>
+            <button class="starter" type="button" data-prompt="Create a 20 second vertical VFX reel with purposeful camera motion, neon energy, smooth transformations, punchy sound design, and no jitter or flashing artifacts." data-mode="vfx"><span class="starter-art cyan">✣</span><b>VFX reel</b><small>Vertical social edit</small></button>
+          </div>
         </div>
 
-        <nav class="mode-nav" aria-label="Workspace">
-          <button class="mode-button active" data-mode="projects"><span class="mode-icon">◫</span><span><b>Product demos</b><small>Record &amp; polish</small></span></button>
-          <button class="mode-button" data-mode="creator"><span class="mode-icon">✦</span><span><b>Creator engine</b><small>Videos &amp; social</small></span></button>
-        </nav>
-
-        <div id="project-navigation">
-          <div class="section-label">RECENT PROJECTS</div>
-          <nav id="project-list" class="project-list" aria-label="Demo projects"></nav>
+        <div class="composer-dock">
+          <div class="attachment-strip" id="attachment-strip" hidden></div>
+          <div class="composer">
+            <textarea id="prompt-text" rows="3" placeholder="Describe the video you want to create…" aria-label="Video request"></textarea>
+            <div class="composer-bottom">
+              <div class="composer-tools">
+                <button class="round-button" id="attach-button" type="button" aria-label="Attach media">＋</button>
+                <button class="setting-chip" id="mode-chip" type="button"><span>Style</span><b id="mode-chip-value">Auto</b></button>
+                <button class="setting-chip" id="format-chip" type="button"><span>Format</span><b id="format-chip-value">16:9</b></button>
+                <button class="setting-chip" id="engine-chip" type="button"><span>Engine</span><b id="engine-chip-value">Auto</b></button>
+              </div>
+              <button class="generate-button" id="generate-button" type="button"><span>Generate video</span><i>→</i></button>
+            </div>
+          </div>
+          <p class="composer-note">A complete <code>production-plan.json</code> is saved before voice, scene generation, editing, or rendering begins.</p>
         </div>
+      </section>
+    </main>
 
-        <div id="creator-navigation" class="hidden">
-          <div class="section-label">CREATOR CAPABILITIES</div>
-          <div class="capability-list">
-            <span>Prompt-to-video</span><span>28 transitions</span><span>10 VFX looks</span>
-            <span>Characters</span><span>Layered audio</span><span>Publish packages</span>
-          </div>
-        </div>
+    <aside class="drawer" id="tool-drawer" aria-label="Tool settings" aria-hidden="true">
+      <div class="drawer-head"><div><small id="drawer-kicker">PRODUCTION</small><h2 id="drawer-title">Settings</h2></div><button id="drawer-close" class="icon-button" type="button" aria-label="Close">×</button></div>
 
-        <div class="sidebar-footer">
-          <div class="agent-state"><i></i> MCP engine online</div>
-          <p>Codex, Claude Code, and compatible agents share this local production engine.</p>
-          <div class="version">OPEN SOURCE · v0.5</div>
-        </div>
-      </aside>
+      <section class="drawer-panel" data-panel="create">
+        <h3>Quick setup</h3>
+        <label>Video style<select id="prompt-mode"><option value="auto">Auto detect</option><option value="cartoon">Cartoon / education</option><option value="product-launch">Product launch</option><option value="story">Story</option><option value="asmr">ASMR</option><option value="vfx">VFX</option></select></label>
+        <div class="field-pair"><label>Duration<input id="prompt-duration" type="number" min="6" max="600" value="30"><small>seconds</small></label><label>Planning<select id="prompt-planner-profile"><option value="fast">Fast Qwen</option><option value="quality">Quality Qwen</option></select></label></div>
+        <label>Exact narration (optional)<textarea id="prompt-narration" rows="5" placeholder="Leave empty and the planner will write a scene-matched script."></textarea></label>
+        <div class="toggle-row"><div><b>Voice-over</b><small>Natural scene-aligned speech</small></div><input id="prompt-voice" type="checkbox" checked></div>
+        <div class="toggle-row"><div><b>Music</b><small>Original local score</small></div><input id="prompt-generate-music" type="checkbox" checked></div>
+      </section>
 
-      <main>
-        <header class="topbar">
-          <div>
-            <span id="workspace-eyebrow" class="eyebrow">BROWSER DEMO WORKSPACE</span>
-            <h1 id="workspace-title">Your demo projects</h1>
-            <p id="workspace-description">Record a real product flow, then narrate and polish it locally.</p>
-          </div>
-          <div class="top-actions">
-            <button id="refresh-button" class="button ghost">Refresh</button>
-            <span id="status-pill" class="status-pill">READY</span>
-          </div>
-        </header>
+      <section class="drawer-panel" data-panel="projects" hidden>
+        <div class="section-row"><div><h3>Recent jobs</h3><p>Projects generated in this running Studio.</p></div><button class="small-button" id="refresh-projects" type="button">Refresh</button></div>
+        <div class="project-cards" id="project-cards"><p class="empty-copy">No jobs yet.</p></div>
+      </section>
 
-        <section id="projects-view">
-          <div id="empty-state" class="empty-state hidden">
-            <div class="empty-icon">▶</div>
-            <h2>Create your first agent-powered demo</h2>
-            <p>Ask Codex or Claude Code to record a website, or run:</p>
-            <code>agent-demo quick https://example.com --title "Product tour"</code>
-          </div>
+      <section class="drawer-panel" data-panel="website" hidden>
+        <h3>Website demo</h3><p>Prepare a browser-tour brief here. For authenticated tours, use the MCP browser tools so the agent can inspect each page while recording.</p>
+        <label>Website URL<input id="website-url" type="text" placeholder="https://example.com"></label>
+        <label>Tour goal<textarea id="website-goal" rows="5" placeholder="Show the landing page, sign in, visit the dashboard, and demonstrate the main workflow."></textarea></label>
+        <button class="wide-button" id="website-prepare" type="button">Use this brief in chat</button>
+        <div class="info-box"><b>Live browser recording</b><small>Codex and Claude can use the same repository through MCP for clicks, typing, scrolling, chapters, and high-resolution capture.</small></div>
+      </section>
 
-          <div id="workspace" class="workspace hidden">
-            <section class="preview-column">
-              <div class="stage-card">
-                <div class="stage-toolbar">
-                  <div class="traffic"><i></i><i></i><i></i></div>
-                  <span id="browser-url">product.local</span>
-                  <span class="resolution">1080P · H.264</span>
-                </div>
-                <div class="video-wrap">
-                  <video id="preview-video" controls preload="metadata"></video>
-                  <div id="video-placeholder" class="video-placeholder"><span>Ready for a polished render</span></div>
-                </div>
-              </div>
-              <div class="timeline-card">
-                <div class="card-heading"><div><span class="eyebrow">SEMANTIC TIMELINE</span><h2>Recorded actions</h2></div><span id="event-count" class="muted">0 actions</span></div>
-                <div id="timeline" class="timeline"></div>
-              </div>
-            </section>
+      <section class="drawer-panel" data-panel="media" hidden>
+        <h3>Media & characters</h3><p>Uploads stay in the selected local Studio root and are recorded in the rights report.</p>
+        <label class="upload-box"><span>Scene images or videos</span><small>Multiple files are allowed</small><input id="prompt-scene-files" type="file" multiple accept="image/*,video/*"></label>
+        <label class="upload-box"><span>Characters</span><small>Any authorized person or character artwork</small><input id="prompt-character-files" type="file" multiple accept="image/*,video/*"></label>
+        <label class="upload-box"><span>Logo</span><small>PNG, SVG, WebP, or JPEG</small><input id="prompt-logo-file" type="file" accept="image/*,.svg"></label>
+        <div class="upload-state" id="upload-state">Nothing uploaded yet.</div>
+      </section>
 
-            <aside class="inspector">
-              <div class="inspector-tabs"><button class="active">Design</button><button>Audio</button><button>Export</button></div>
-              <section class="panel-section">
-                <div class="section-title"><span>Brand design</span><small>LIVE</small></div>
-                <label>Title<input id="title-input" type="text" /></label>
-                <label>Subtitle<input id="subtitle-input" type="text" /></label>
-                <div class="color-grid">
-                  <label>Background A<input id="background-start" type="color" /></label>
-                  <label>Background B<input id="background-end" type="color" /></label>
-                  <label>Accent<input id="accent" type="color" /></label>
-                  <label>Highlight<input id="highlight" type="color" /></label>
-                </div>
-              </section>
-              <section class="panel-section">
-                <div class="section-title"><span>Voice-over</span><small>LOCAL</small></div>
-                <label>Narration<textarea id="narration" rows="6" placeholder="Write or paste the voice-over script..."></textarea></label>
-                <button id="voice-button" class="button secondary full">Generate local voice</button>
-              </section>
-              <section class="panel-section compact">
-                <label class="switch-row"><span><b>Ambient music</b><small>Original, locally generated</small></span><input id="generated-music" type="checkbox" checked /></label>
-                <label class="switch-row"><span><b>Burned captions</b><small>Matched to narration</small></span><input id="captions" type="checkbox" checked /></label>
-              </section>
-              <button id="render-button" class="button primary full"><span>Render 1080p demo</span><b>→</b></button>
-              <p id="feedback" class="feedback">Changes remain in the portable project file.</p>
-            </aside>
-          </div>
-        </section>
+      <section class="drawer-panel" data-panel="voice" hidden>
+        <h3>Voice</h3>
+        <label>Voice engine<select id="prompt-voice-provider"><option value="local">System voice · local/free</option><option value="neural">Neural voice · network/provider terms</option><option value="local-clone">Consented local clone</option></select></label>
+        <label>Voice name<input id="voice-name" type="text" placeholder="Automatic"></label>
+        <label>Reference recording<input id="prompt-voice-reference-file" type="file" accept="audio/*"></label>
+        <label>Authorized speaker<input id="voice-speaker" type="text" placeholder="Speaker's full name"></label>
+        <div class="toggle-row"><div><b>Speaker consent confirmed</b><small>Required for voice cloning</small></div><input id="voice-consent" type="checkbox"></div>
+        <div class="warning-box">Voice cloning remains disabled until a reference, named speaker, and confirmed consent are all present.</div>
+      </section>
 
-        <section id="creator-view" class="creator-view hidden">
-          <div class="creator-summary">
-            <div><span class="eyebrow">ONE PROMPT · ONE TIMELINE · EVERY FORMAT</span><h2>Imagine it. Edit it. Publish it.</h2><p>Create launches, cartoons, stories, ASMR, VFX edits, product demos, and social cuts locally.</p></div>
-            <div class="summary-stats"><div><b id="preset-count">10</b><span>export profiles</span></div><div><b>28</b><span>transitions</span></div><div><b>10</b><span>VFX looks</span></div></div>
-          </div>
+      <section class="drawer-panel" data-panel="music" hidden>
+        <h3>Music & sound</h3>
+        <label>Authorized music or ambience<input id="prompt-music-file" type="file" accept="audio/*,video/*"></label>
+        <div class="toggle-row"><div><b>Generate original score</b><small>Local procedural audio, mixed below speech</small></div><input id="music-toggle-mirror" type="checkbox" checked></div>
+        <label>Sound direction<textarea id="sound-direction" rows="4" placeholder="Warm, gentle classroom music with no harsh hits."></textarea></label>
+        <div class="info-box"><b>Audio safety</b><small>Speech timing sets scene length. Music is ducked below narration and rendered with loudness and peak limits.</small></div>
+      </section>
 
-          <div class="creator-grid">
-            <section class="creator-main">
-              <div class="stage-card creator-stage">
-                <div class="stage-toolbar"><span class="creator-dot">✦</span><span id="creator-preview-label">Creator output preview</span><span class="resolution" id="creator-resolution">MULTI-FORMAT</span></div>
-                <div class="creator-video-wrap">
-                  <video id="creator-video" class="hidden" controls preload="metadata"></video>
-                  <div id="creator-placeholder" class="creator-placeholder"><div class="creator-orbit"><i></i><i></i><i></i><span>▶</span></div><b>Your next export appears here</b><small>Select a template, point to local media, and render.</small></div>
-                </div>
-              </div>
+      <section class="drawer-panel" data-panel="engines" hidden>
+        <div class="section-row"><div><h3>AI engines</h3><p>What is truly available on this device.</p></div><button id="capability-refresh" class="small-button" type="button">Refresh</button></div>
+        <div class="engine-cards" id="engine-cards"><div class="engine-card loading"><span></span><div><b>Inspecting local engines…</b><small>Please wait</small></div></div></div>
+        <div class="engine-explainer"><b>How routing works</b><ol><li>Qwen plans once.</li><li>LTX/ComfyUI generates true AI video when ready.</li><li>The local vector engine makes real 2D movement on lighter hardware.</li><li>Still-image composition is never selected automatically.</li></ol></div>
+      </section>
 
-              <div class="preset-card surface-card">
-                <div class="card-heading"><div><span class="eyebrow">DELIVERY MATRIX</span><h2>Output profiles</h2></div><span class="muted">Choose one or many</span></div>
-                <div id="preset-grid" class="preset-grid"></div>
-              </div>
+      <section class="drawer-panel" data-panel="advanced" hidden>
+        <h3>Advanced</h3>
+        <label>Visual engine<select id="prompt-media-provider"><option value="auto">Auto · honest routing</option><option value="ltx-desktop">LTX Desktop · real AI video</option><option value="animated">Local 2D animation</option><option value="comfyui">ComfyUI workflow</option><option value="local-adapter">Custom local adapter</option><option value="builtin">Legacy locked stills</option></select></label>
+        <label>Generation task<select id="prompt-media-task"><option value="auto">Auto</option><option value="text-to-video">Text to video</option><option value="image-to-video">Image to video</option><option value="speech-to-video">Speech to video</option><option value="character-animation">Character animation</option><option value="text-to-image">Text to image</option></select></label>
+        <label>LTX Desktop URL<input id="ltx-url" type="text" value="http://127.0.0.1:41954"></label>
+        <div class="toggle-row danger-toggle"><div><b>Allow paid LTX API mode</b><small>May upload inputs and spend credits</small></div><input id="allow-cloud-media" type="checkbox"></div>
+        <label>ComfyUI URL<input id="comfyui-url" type="text" placeholder="http://127.0.0.1:8188"></label>
+        <label>ComfyUI API workflow path<input id="comfyui-workflow" type="text" placeholder="C:\path\ltx-api-workflow.json"></label>
+        <label>Custom adapter URL<input id="media-adapter-url" type="text" placeholder="http://127.0.0.1:9000"></label>
+        <label>Negative prompt<textarea id="negative-prompt" rows="4" placeholder="jitter, frozen frame, warped anatomy…"></textarea></label>
+        <label>Seed<input id="generation-seed" type="number" placeholder="Random"></label>
+      </section>
+    </aside>
 
-              <div class="manifest-card surface-card">
-                <div class="card-heading"><div><span class="eyebrow">PORTABLE TIMELINE</span><h2>Creator manifest</h2></div><div class="inline-actions"><button id="format-manifest" class="button tiny">Format JSON</button><button id="copy-manifest" class="button tiny">Copy</button></div></div>
-                <textarea id="creator-manifest" spellcheck="false" aria-label="Creator manifest JSON"></textarea>
-              </div>
-
-              <div id="creator-results" class="results-card surface-card hidden">
-                <div class="card-heading"><div><span class="eyebrow">RENDERED MEDIA</span><h2>Ready exports</h2></div><button id="package-button" class="button secondary">Build publish package</button></div>
-                <div id="output-list" class="output-list"></div>
-              </div>
-            </section>
-
-            <aside class="creator-inspector inspector">
-              <div class="inspector-tabs"><button class="active">Create</button><button>Automate</button><button>Deliver</button></div>
-              <section class="panel-section prompt-panel">
-                <div class="section-title"><span>Create from one prompt</span><small>AGENT VIDEO</small></div>
-                <div class="local-ai-card"><span class="local-ai-dot"></span><div><b id="local-ai-title">Checking local Qwen…</b><small id="local-ai-detail">No hosted model or paid API tokens</small></div><button id="local-ai-warm" class="button tiny">Warm</button></div>
-                <div id="capability-card" class="capability-card"><span class="capability-dot"></span><div><b id="capability-title">Scanning local production tools…</b><small id="capability-detail">Planner, visuals, voice, music, captions, and renderer</small></div><button id="capability-refresh" class="button tiny">Scan</button></div>
-                <label>Describe the complete video<textarea id="prompt-text" rows="5" placeholder="Launch a collaborative lesson planner with a cinematic reveal, clear benefits, and a confident final CTA..."></textarea></label>
-                <div class="prompt-grid">
-                  <label>Mode<select id="prompt-mode"></select></label>
-                  <label>Planner<select id="prompt-planner-provider"><option value="auto">Local Qwen + fallback</option><option value="deterministic">Instant rules</option><option value="ollama">Require local Qwen</option></select></label>
-                  <label>Speed<select id="prompt-planner-profile"><option value="fast">Fastest</option><option value="quality">Quality</option></select></label>
-                  <label>Visual engine<select id="prompt-media-provider"><option value="builtin">Built-in / uploads</option><option value="local-adapter">Local AI adapter</option></select></label>
-                  <label>Generation<select id="prompt-media-task"><option value="auto">Automatic</option><option value="text-to-image">Text → image scenes</option><option value="image-to-video">Images → video</option><option value="text-to-video">Text → diffusion video</option></select></label>
-                  <label>Starter character<select id="prompt-presenter"></select></label>
-                  <label>Voice<select id="prompt-voice-provider"><option value="local">Local system voice</option><option value="local-clone">Consented local clone</option><option value="neural">Neural voice (online)</option></select></label>
-                  <label>Seconds<input id="prompt-duration" type="number" min="6" max="600" placeholder="Auto" /></label>
-                </div>
-                <details class="prompt-assets"><summary>Exact script, uploads, characters, logo, music, and voice</summary><label>Exact narration script<textarea id="prompt-narration" rows="5" placeholder="Optional: paste the final narration. Its sentences stay locked and align scene by scene."></textarea><small>Leave empty to let the local planner write prompt-matched narration.</small></label><div class="upload-grid">
-                  <label class="upload-control"><span>Scene images/videos</span><input id="prompt-scene-files" type="file" accept="image/*,video/*" multiple /><small id="prompt-scene-upload-status">Text-to-video works without uploads</small></label>
-                  <label class="upload-control"><span>Character images</span><input id="prompt-character-files" type="file" accept="image/*" multiple /><small id="prompt-character-upload-status">Any authorized character design</small></label>
-                  <label class="upload-control"><span>Logo</span><input id="prompt-logo-file" type="file" accept="image/*" /><small id="prompt-logo-upload-status">Optional</small></label>
-                  <label class="upload-control"><span>Music / ambience</span><input id="prompt-music-file" type="file" accept="audio/*" /><small id="prompt-music-upload-status">Optional; local score is built in</small></label>
-                  <label class="upload-control"><span>Voice reference</span><input id="prompt-voice-reference-file" type="file" accept="audio/*" /><small id="prompt-voice-upload-status">Kept local and never published</small></label>
-                </div><div class="voice-consent-grid"><label>Local media endpoint<input id="prompt-media-adapter-url" type="text" placeholder="http://127.0.0.1:8188/v1/media/generate" /></label><label>Local voice endpoint<input id="prompt-voice-clone-url" type="text" placeholder="http://127.0.0.1:8020/v1/voice/clone" /></label><label>Authorized speaker<input id="prompt-voice-speaker" type="text" placeholder="Speaker name" /></label><label class="switch-row"><span><b>Voice permission recorded</b><small>Required only for local clone</small></span><input id="prompt-voice-consent" type="checkbox" /></label></div><div class="local-music-row"><select id="prompt-music-style"><option value="ambient">Ambient score</option><option value="asmr">ASMR soundscape</option></select><input id="prompt-music-duration" type="number" min="1" max="600" value="45" aria-label="Music duration seconds" /><button id="prompt-generate-music" class="button tiny">Generate free music</button><small id="prompt-generated-music-status">Original procedural audio · local · no samples</small></div></details>
-                <div class="prompt-switches">
-                  <label class="switch-row"><span><b>Narration</b><small>Prompt-matched voice</small></span><input id="prompt-voice" type="checkbox" checked /></label>
-                  <label class="switch-row"><span><b>Score / ambience</b><small>Original local audio</small></span><input id="prompt-music" type="checkbox" checked /></label>
-                </div>
-                <div class="prompt-actions"><button id="prompt-plan-button" class="button secondary">Review plan</button><button id="prompt-button" class="button secondary">Build timeline</button><button id="prompt-render-button" class="button prompt-render">Build &amp; render</button></div>
-                <div id="prompt-plan-preview" class="prompt-plan-preview hidden"><div><b>Production plan</b><span id="prompt-plan-summary"></span></div><pre id="prompt-plan-resources"></pre></div>
-              </section>
-              <section class="panel-section">
-                <div class="section-title"><span>Or start from a template</span><small>13 TYPES</small></div>
-                <label>Template<select id="template-select"></select></label>
-                <label>Project title<input id="creator-title" type="text" value="My creator project" /></label>
-                <label>Primary media path<input id="creator-source" type="text" placeholder="C:\media\recording.mp4" /></label>
-                <label>Output directory<input id="creator-output" type="text" value="./creator-output" /></label>
-                <button id="template-button" class="button secondary full">Create editable timeline</button>
-              </section>
-              <section class="panel-section compact action-stack">
-                <button id="validate-button" class="action-button"><span><i>✓</i><b>Validate timeline</b></span><small>Schema, formats &amp; rights</small></button>
-                <button id="analyze-button" class="action-button"><span><i>⌁</i><b>Analyze source</b></span><small>Silence, scenes &amp; highlights</small></button>
-                <button id="transcribe-button" class="action-button"><span><i>CC</i><b>Generate captions</b></span><small>Optional local Whisper</small></button>
-              </section>
-              <section id="job-panel" class="panel-section job-panel hidden">
-                <div class="section-title"><span id="job-title">Creator job</span><small id="job-percent">0%</small></div>
-                <progress id="job-progress" class="progress-track" max="100" value="2" aria-label="Job progress"></progress>
-                <p id="job-message">Queued</p>
-              </section>
-              <button id="creator-render-button" class="button primary full creator-render"><span>Render selected formats</span><b>→</b></button>
-              <p id="creator-feedback" class="feedback">All processing stays on this device.</p>
-            </aside>
-          </div>
-        </section>
-      </main>
-    </div>
-    <script type="module" src="app.js"></script>
-  </body>
+    <input id="quick-file-input" type="file" multiple accept="image/*,video/*,audio/*" hidden>
+  </div>
+  <script src="/app.js" defer></script>
+</body>
 </html>

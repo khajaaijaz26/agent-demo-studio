@@ -28,7 +28,7 @@ Agent Demo Studio is an open-source MCP server, CLI, browser recorder, plan-firs
 | Plan | Optional one-call local Qwen intelligence plus an instant fallback, requirements, audience, creative direction, timed storyboard, resource/provenance list, fixed production rules, workflow, and QA gates before media creation |
 | Transition | 28 cut, fade, dissolve, wipe, slide, smooth, shape, zoom, squeeze, diagonal, blur, and reveal options—with matching audio crossfades |
 | Design | Brand palette, logo, text, lower thirds, calls to action, speech bubbles, image/video layers, chroma key, fictional presenters/cartoon characters, safe zones, and thumbnails |
-| Animate/VFX | Ken Burns and pan motion, 9 entrance/exit animations, 7 continuous loops, and 10 composable cinematic, glow, neon, glitch, VHS, dream, vintage, noir, comic, and ASMR looks |
+| Animate/VFX | True 1080p vector scene animation with articulated characters, blinking, gestures, mouth motion, moving props and particles; optional LTX Desktop, ComfyUI/Wan, and loopback generation adapters; 10 composable cinematic/VFX looks |
 | Audio | Clip audio, multiple voices, music, ambience, SFX, pan, looping, trims, delays, fades, gain, automatic ducking, 48 kHz stereo, loudness normalization, and limiting |
 | Captions | SRT and WebVTT import, optional local Whisper transcription, scalable ASS burn-in, editable SRT sidecar, per-format safe zones |
 | Automate | Request-aware local capability discovery, five prompt-video modes, silence/scene detection, suggested highlights, 13 editable templates, manifest validation, resource discovery, and background jobs |
@@ -67,7 +67,10 @@ Or open the all-in-one local Studio:
 agent-demo studio
 ```
 
-The Studio binds to `127.0.0.1` and opens in the default browser.
+The Studio binds to `127.0.0.1` and opens in the default browser. Its primary
+surface is a simple chat: describe the video, attach authorized media, choose a
+format if needed, and receive the saved plan, live progress, preview, download,
+captions, thumbnail, chapters, and rights artifacts in the same conversation.
 
 Prefer to stay in the terminal? The free interactive dashboard exposes the same
 plan, build/render, local media paths, characters, voices, formats, Qwen warmup, and
@@ -93,6 +96,29 @@ to instant deterministic planning instead of blocking. Use
 `--planner deterministic` for no inference. Ollama endpoints are loopback-only
 and cloud-tagged models are rejected. See [local AI, uploads, generation adapters,
 and voice profiles](docs/LOCAL-AI.md).
+
+## Honest video-engine routing
+
+Agent Demo Studio never labels a moving photograph as generated character video.
+`auto` selects a configured true-video backend when the brief or uploaded
+reference requires one; if that required backend is unavailable, the saved plan
+reports the blocker instead of faking the result. Ordinary animation briefs use
+the deterministic moving-vector engine. Every generated clip must pass a
+temporal-motion probe before it enters the timeline.
+
+| Engine | Best for | Readiness rule |
+|---|---|---|
+| Built-in animation | Fast cartoons, education, stories, product motion, ASMR, and VFX on ordinary laptops | Local Playwright Chromium + FFmpeg; no checkpoint or API tokens |
+| LTX Desktop | Text/image/audio-to-video on supported hardware | Official loopback backend must be healthy; paid API-only mode is rejected unless explicitly enabled |
+| ComfyUI | LTX, Wan, AnimateDiff, and custom API workflows | Loopback server plus an exported API workflow containing `{{PROMPT}}` |
+| Wan-Animate-2 | Reference-character motion driven by a video | Model weights plus a loopback adapter on suitable NVIDIA multi-GPU hardware; a metadata-only clone is reported as not runnable |
+| Custom adapter | Any local generator implementing the v2 scene-batch contract | Loopback endpoint; real-video tasks must return one moving video per scene |
+| Legacy still compositor | Slides and intentionally locked artwork | Explicit selection only; never auto-selected as animation |
+
+LTX and Wan are optional. Qwen plans text; it does not generate frames. On a
+machine without a compatible generative-video GPU, the built-in engine still
+creates actual changing frames with independently animated subjects and stable
+backgrounds instead of camera shake or fake photo motion.
 
 ## Give the work to an AI agent
 
@@ -134,10 +160,11 @@ Modes are `product-launch`, `cartoon`, `story`, `asmr`, and `vfx`. Every job wri
 Those bundled characters are optional starters, not a fixed cast. The Studio and
 CLI accept any number of authorized scene images/videos and character images,
 plus a logo, music, and a consented local voice reference. Uploaded stills become
-stable image-to-video shots through transitions, reframing, and VFX; optional
-timeline motion remains available for artwork without locked text or UI. A documented
-loopback adapter supports local text-to-image, image-to-video, and text-to-video
-engines without coupling the renderer to one model.
+true image-to-video inputs when LTX, ComfyUI, or a loopback video adapter is
+selected. If the user explicitly chooses the legacy compositor, artwork stays
+locked and is never shaken or panned to imitate generated motion. The documented
+adapter supports text-to-image, image-to-video, text-to-video, speech-to-video,
+and character-animation engines without coupling the renderer to one model.
 
 Repository-native Codex and Claude Code instructions in [AGENTS.md](AGENTS.md) and
 [CLAUDE.md](CLAUDE.md) enforce the same plan-first contract when an agent works from
@@ -247,7 +274,7 @@ flowchart LR
 
 - **MCP** gives agents structured planning, resource discovery, recording, editing, analysis, rendering, packaging, and publishing tools.
 - **CLI** makes every workflow scriptable in a terminal or CI environment.
-- **Studio** provides prompt planning and resource review, project browsing, live preview, character/voice controls, template/preset selection, a manifest editor, validation, analysis, background render progress, and output playback.
+- **Studio** provides a chat-first create flow, resource uploads, project browsing, engine truth/readiness, character/voice/music controls, background plan/render progress, in-chat preview, and artifact downloads; advanced controls remain in the sidebar.
 
 The architectural boundaries and render stages are documented in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
@@ -356,12 +383,13 @@ CI runs the unit/build matrix on Windows and Linux plus separate real creator-en
 
 Agent Demo Studio is a local-first browser, plan-first prompt-video, animation,
 VFX, and creator-production toolkit. Qwen provides optional local script
-intelligence; uploaded media, built-in motion, FFmpeg, local speech/music, and
-optional loopback media/voice adapters provide the production layers. The package
-does not bundle multi-gigabyte diffusion checkpoints or claim that Qwen itself
-generates images/video. Still characters use 2D/2.5D cutout motion unless a local
-adapter supplies generated animation. The [roadmap](TODO.md) tracks additional
-native backends, lip sync, hardware encoding, batch production, and deployment.
+intelligence; the built-in vector engine, LTX Desktop, ComfyUI, local adapters,
+FFmpeg, local speech, and procedural music provide the production layers. The
+package does not bundle multi-gigabyte diffusion checkpoints or claim that Qwen
+itself generates images/video. Provider readiness, costs, hardware blockers, and
+motion quality are reported explicitly. The [roadmap](TODO.md) tracks additional
+native backends, phoneme lip sync, hardware encoding, batch production, and
+deployment.
 
 Issues and pull requests are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), use the repository templates, and include a small fixture or screenshot for visible behavior changes.
 

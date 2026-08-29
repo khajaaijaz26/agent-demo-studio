@@ -25,6 +25,15 @@ function runtime(commands: string[] = ["ffmpeg", "ffprobe", "powershell.exe"]): 
       models: [{ name: "qwen3.5:0.8b" }],
       message: "Ready with qwen3.5:0.8b; all planning stays on this device.",
     }),
+    wanAnimateStatus: async () => ({
+      modelId: "Wan-AI/Wan2.2-Animate-2-14B",
+      metadataInstalled: false,
+      weightsInstalled: false,
+      adapterConfigured: false,
+      available: false,
+      message: "Wan-Animate-2 is not installed in this isolated test runtime.",
+      requiredDownloadGb: 82.5,
+    }),
   };
 }
 

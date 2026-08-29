@@ -1,7 +1,8 @@
 # Agent Demo Studio roadmap
 
-This backlog records the work that follows the v0.4 local-Qwen, open-assets,
-terminal-dashboard, prompt-video, ASMR, product-launch, and VFX milestone. It
+This backlog records the work that follows the v0.6 chat-first Studio,
+local-Qwen, true-motion animation, open-assets, prompt-video, ASMR,
+product-launch, and VFX milestone. It
 includes a feature audit of [MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo) at commit `0df0ef4ac2d725c79fa53bfe072063ee9cdfba80` (2026-08-26).
 
 The comparison is architectural and product research. No MoneyPrinterTurbo source or bundled media is copied into Agent Demo Studio. MoneyPrinterTurbo is MIT licensed, but any future direct code reuse must retain its copyright and license notice. External media, voice, music, model, and publishing providers keep their own terms and costs.
@@ -19,6 +20,16 @@ The comparison is architectural and product research. No MoneyPrinterTurbo sourc
 - [x] Push, tag, and verify v0.3.0 plus the v0.3.1 dense-timeline compatibility patch; reinstall Codex and Claude Code integrations.
 - [x] Align authored narration and captions to their matching scene starts,
   preserve locked uploaded plates, and rasterize SVG sources portably.
+- [x] Replace the form-heavy Studio home with a responsive chat-first creator,
+  sidebar tools, in-chat plan/progress/preview, project history, and honest engine
+  readiness cards.
+- [x] Add real 1080p vector scene generation, independently moving characters,
+  stable backgrounds, narration-derived teaching copy, caption-safe staging, and
+  a temporal motion gate that rejects frozen or jump-only video.
+- [x] Integrate official LTX Desktop loopback routes, ComfyUI API workflows,
+  true-video scene contracts, and explicit local/API cost gating.
+- [x] Detect Wan-Animate-2 metadata, materialized weights, and loopback adapter
+  state separately so an 82.5 GB pointer-only clone is never reported as ready.
 
 ## Existing strengths to preserve
 
@@ -53,7 +64,13 @@ The comparison is architectural and product research. No MoneyPrinterTurbo sourc
 - [ ] Match footage to script order and individual narration beats; preserve a manual reorder override.
 - [ ] Add material search/download caching, cache statistics, safe cleanup, proxy configuration, retry/backoff, and API-key rotation.
 - [ ] Add optional semantic ranking and video QA adapters, including TwelveLabs-compatible reranking/analysis, behind explicit provider configuration.
-- [ ] Add pluggable image-to-video and text-to-video providers, starting with a generic asynchronous job adapter and an optional WaveSpeed-compatible implementation.
+- [x] Add pluggable image-to-video and text-to-video providers through LTX
+  Desktop, ComfyUI API workflows, and the generic loopback scene-batch adapter.
+- [ ] Add a generic asynchronous hosted-job adapter and optional
+  WaveSpeed-compatible implementation with explicit cost/terms reporting.
+- [ ] Ship and test a dedicated Wan-Animate-2 loopback worker for reference image
+  plus driving-video animation on supported NVIDIA multi-GPU hosts. Keep model
+  downloads opt-in and add distributed runtime health, queue, and cancellation.
 - [x] Let local image/video-generation agents create per-shot art through a documented batch asset handoff instead of limiting prompt videos to bundled scenes.
 
 ## P2 — voice, captions, music, and audio direction

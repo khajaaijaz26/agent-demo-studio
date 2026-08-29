@@ -54,6 +54,18 @@ export const CREATOR_PROMPT_MODES = [
 
 export type CreatorPromptMode = typeof CREATOR_PROMPT_MODES[number];
 
+export const CREATOR_MEDIA_PROVIDERS = [
+  "auto", "ltx-desktop", "animated", "comfyui", "local-adapter", "builtin",
+] as const;
+
+export type CreatorMediaProvider = typeof CREATOR_MEDIA_PROVIDERS[number];
+
+export const CREATOR_MEDIA_TASKS = [
+  "auto", "text-to-image", "image-to-video", "text-to-video", "speech-to-video", "character-animation",
+] as const;
+
+export type CreatorMediaTask = typeof CREATOR_MEDIA_TASKS[number];
+
 export type ReframeMode = "fit" | "fill" | "blur-background";
 
 export interface CreatorSafeZone {
@@ -388,10 +400,23 @@ export interface CreatorPromptVideoInput {
   characters?: CreatorPromptCharacterInput[];
   logoSource?: string;
   musicSource?: string;
-  /** Optional loopback media adapter for local diffusion/image/video engines. */
-  mediaProvider?: "builtin" | "local-adapter";
-  mediaTask?: "auto" | "text-to-image" | "image-to-video" | "text-to-video";
+  /**
+   * Visual engine. `auto` prefers a configured real video backend and otherwise
+   * uses the built-in vector animation engine. `builtin` is the legacy still-
+   * image compositor and is never selected automatically.
+   */
+  mediaProvider?: CreatorMediaProvider;
+  mediaTask?: CreatorMediaTask;
   mediaAdapterUrl?: string;
+  /** Loopback ComfyUI server and an exported API-format workflow template. */
+  comfyuiUrl?: string;
+  comfyuiWorkflow?: string;
+  /** Official LTX Desktop FastAPI backend. Defaults to its loopback port. */
+  ltxDesktopUrl?: string;
+  /** Opt-in only: permit LTX Desktop to use its paid API mode. */
+  allowCloudMedia?: boolean;
+  negativePrompt?: string;
+  seed?: number;
 }
 
 export interface CreatorPromptCharacterInput {
@@ -458,6 +483,8 @@ export interface CreatorProductionPlan {
     targetDurationSeconds: number;
     outputPresets: CreatorPresetId[];
     sourceStrategy: string;
+    /** The visual promise shown to the user before generation starts. */
+    motionStandard?: "still-composite" | "animated-2d" | "generative-video";
     narration: boolean;
     musicOrAmbience: boolean;
   };

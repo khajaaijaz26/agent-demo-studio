@@ -24,7 +24,7 @@ describe("loopback local media generation", () => {
       const plan = createPromptVideoPlan(input);
       const fetchImpl = vi.fn(async (_request, init) => {
         const body = JSON.parse(String(init?.body));
-        expect(body.protocol).toBe("agent-demo-local-media-v1");
+        expect(body.protocol).toBe("agent-demo-local-media-v2");
         expect(body.scenes).toHaveLength(3);
         expect(body.performance).toBe("fast");
         return new Response(JSON.stringify({ outputs: outputs.map((output) => ({ path: output, kind: "image", model: "local-test-model" })) }), { status: 200 });
