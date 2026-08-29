@@ -236,7 +236,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .attachment-chip span { max-width: 145px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .attachment-chip button { border: 0; color: #778194; background: transparent; cursor: pointer; }
 
-.progress-card, .plan-card, .result-card, .error-card {
+.progress-card, .plan-card, .result-card, .error-card, .answer-card {
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -295,6 +295,13 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .error-card { padding: 13px; border-color: rgba(246,120,120,.2); background: rgba(246,120,120,.045); }
 .error-card b { color: #ffc5c5; font-size: 10px; }
 .error-card p { margin-top: 6px; color: #b48b8b; font-size: 8.5px; white-space: pre-wrap; }
+.error-card details { margin-top: 10px; color: #8f7373; font-size: 8px; }
+.error-card summary { cursor: pointer; }
+.answer-card { padding: 13px; border-color: rgba(116,220,183,.18); background: rgba(116,220,183,.035); }
+.answer-card b { color: #baf3df; font-size: 10px; }
+.answer-card p { margin-top: 6px; color: #9fb8af; font-size: 8.5px; white-space: pre-wrap; }
+.recovery-actions { margin-top: 11px; }
+.result-actions button.primary-button { border-color: rgba(244,122,49,.34); color: #fff1e7; background: var(--orange-soft); }
 
 .drawer {
   position: fixed;

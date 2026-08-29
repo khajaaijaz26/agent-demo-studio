@@ -219,6 +219,17 @@ describe("creator manifests", () => {
       "Finish with the result.",
       "No narration; visuals carry this scene.",
     ]);
+
+    const rainbowStory = createPromptVideoPlan({
+      prompt: "Create a kids cartoon for ages five to nine where a rainbow tree blooms.",
+      narration: "Pip finds a seed. Friends help it grow. A rainbow tree blooms, and everyone celebrates together.",
+      mode: "cartoon",
+      mediaProvider: "animated",
+      visualQuality: "motion-graphics",
+    });
+    expect(rainbowStory.scenes[2]?.onScreenText).toBe("A rainbow tree blooms");
+    expect(rainbowStory.scenes[2]?.onScreenText).not.toContain("Precipitation");
+    expect(rainbowStory.requirements.audience).toBe("Children ages five to nine");
   });
 
   it("ships resolvable fictional characters, presenters, scenes, and effect catalogs", () => {

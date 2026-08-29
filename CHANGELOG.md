@@ -2,6 +2,33 @@
 
 All notable changes to Agent Demo Studio are documented here.
 
+## 0.6.2 - 2026-08-29
+
+### Changed
+
+- Made the visual Studio start with its truthful, immediately available local
+  animation engine; Wan/LTX-class generation remains an explicit model-backed
+  quality choice.
+- Made explicit YouTube Shorts, Instagram Reels, TikTok, vertical, and square
+  wording select the matching export rather than leaving the default at 16:9.
+- Added portrait-safe character staging and native 1080×1920 local animation
+  plates for vertical-only Shorts, Reels, and TikTok productions.
+
+### Fixed
+
+- Kept short status and help follow-ups such as `what happened` in the Studio
+  conversation instead of creating a second malformed video project.
+- Replaced the raw missing-LTX blocker with a plain-language explanation,
+  preserved technical details and plan path, and added a one-click local
+  animation retry.
+- Preserved compound animals, planted objects, plural lanterns, and recurring
+  cast in cartoon scene graphs; concrete scenes no longer show redundant
+  placeholder concept cards.
+- Prevented multi-character portrait scenes from covering their focal story
+  props by assigning props and cast to separate mobile-safe visual bands.
+- Corrected the water-cycle keyword matcher so `rainbow` can never be mistaken
+  for `rain` and produce an unrelated precipitation caption.
+
 ## 0.6.1 - 2026-08-29
 
 ### Added

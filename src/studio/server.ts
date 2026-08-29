@@ -16,6 +16,7 @@ import { generateVoiceover } from "../audio/tts.js";
 import { generateAmbientMusic, generateAsmrSoundscape } from "../audio/music.js";
 import type { RenderDemoInput } from "../types.js";
 import { jobs } from "../jobs.js";
+import type { JobRecord } from "../types.js";
 import { listCreatorPresets } from "../creator/presets.js";
 import { createTemplateManifest, listCreatorTemplates } from "../creator/templates.js";
 import { parseCreatorManifest, validateCreatorManifest } from "../creator/schema.js";
@@ -49,6 +50,73 @@ export interface StudioServerOptions {
 export interface StudioServerHandle {
   url: string;
   close(): Promise<void>;
+}
+
+export type StudioChatIntent = "create-video" | "conversation";
+
+/**
+ * Keep short operational follow-ups in the conversation instead of turning
+ * them into accidental story prompts. Creative questions remain video briefs;
+ * only small, self-contained Studio status/help utterances are intercepted.
+ */
+export function classifyStudioChatIntent(prompt: string): StudioChatIntent {
+  const normalized = prompt
+    .split(/\n\s*sound direction\s*:/i, 1)[0]!
+    .trim()
+    .toLowerCase()
+    .replace(/[.!?]+$/g, "")
+    .replace(/\s+/g, " ");
+  if (!normalized || normalized.length > 160) return "create-video";
+  if (/^(?:what (?:happened|happend)|what went wrong|why (?:did it|did the (?:video|job)|was it|is it) (?:fail|failed|stop|stopped|block|blocked)|why no video)$/.test(normalized)) return "conversation";
+  if (/^(?:status|help|explain(?: the)? (?:error|failure|blocker)|where is (?:my|the) video|which (?:engine|video engine) (?:is|can i use)|what (?:engine|video engine) (?:is|can i use))$/.test(normalized)) return "conversation";
+  if (/^(?:ok|okay|thanks|thank you|continue|retry|try again)$/.test(normalized)) return "conversation";
+  return "create-video";
+}
+
+export function resolveStudioPromptPresets(prompt: string, requested: unknown): CreatorPresetId[] {
+  if (/\byoutube\s+shorts?\b/i.test(prompt)) return ["shorts"];
+  if (/\b(?:instagram\s+)?reels?\b/i.test(prompt)) return ["reels"];
+  if (/\btik\s*tok\b/i.test(prompt)) return ["tiktok"];
+  if (/\b(?:square|1\s*:\s*1)\b/i.test(prompt)) return ["square"];
+  if (/\b(?:vertical|portrait|9\s*:\s*16)\b/i.test(prompt)) return ["shorts"];
+  return (Array.isArray(requested) ? requested : ["youtube-1080p"]) as CreatorPresetId[];
+}
+
+function latestFailedChatJob(records: JobRecord[]): JobRecord | undefined {
+  return records.find((job) => job.type.startsWith("chat-video-") && job.state === "failed");
+}
+
+export function studioConversationReply(prompt: string, records: JobRecord[] = jobs.list()): {
+  kind: "message";
+  message: string;
+  suggestedAction?: "use-local-animation";
+} {
+  const failed = latestFailedChatJob(records);
+  const failure = `${failed?.error ?? ""} ${failed?.message ?? ""}`;
+  if (/ltx desktop|visuals\.ltx-desktop/i.test(failure)) {
+    return {
+      kind: "message",
+      message: "The last production stopped before scene generation because Generative AI video was selected, but LTX Desktop is not installed or its local backend is not reachable. No video frames were generated and no paid API was used. This device can create the request now with the built-in local 2D animation engine; model-grade Wan/LTX generation remains available only when a compatible backend is connected.",
+      suggestedAction: "use-local-animation",
+    };
+  }
+  if (failed) {
+    const detail = String(failed.error || failed.message || "An unknown production check failed.").slice(0, 600);
+    return {
+      kind: "message",
+      message: `The most recent video stopped during a production check: ${detail} No publishing action was attempted. Correct the named requirement, then retry the original brief.`,
+    };
+  }
+  if (/^(?:continue|retry|try again)/i.test(prompt.trim())) {
+    return {
+      kind: "message",
+      message: "There is no failed video job to resume in this running Studio session. Re-enter the original brief to start a new plan and production job.",
+    };
+  }
+  return {
+    kind: "message",
+    message: "No failed video job exists in this running Studio session. Describe the video you want, and the Studio will save a production plan before it generates scenes, voice, music, or a render.",
+  };
 }
 
 const publicDirectory = fileURLToPath(new URL("./public/", import.meta.url));
@@ -138,7 +206,7 @@ function creatorPromptInput(body: Record<string, unknown>, render: boolean): Cre
       scope: typeof (body.voiceConsent as Record<string, unknown>).scope === "string" ? String((body.voiceConsent as Record<string, unknown>).scope) : undefined,
     } : undefined,
     voiceCloneUrl: typeof body.voiceCloneUrl === "string" && body.voiceCloneUrl.trim() ? body.voiceCloneUrl : undefined,
-    presets: (Array.isArray(body.presets) ? body.presets : ["youtube-1080p"]) as CreatorPresetId[],
+    presets: resolveStudioPromptPresets(String(body.prompt || ""), body.presets),
     generateVoice: body.generateVoice !== false,
     generateMusic: body.generateMusic !== false,
     plannerProvider: (["auto", "deterministic", "ollama"].includes(String(body.plannerProvider)) ? body.plannerProvider : "auto") as CreatorPlannerProvider,
@@ -398,9 +466,14 @@ export async function startStudioServer(
       }
       if (request.method === "POST" && url.pathname === "/api/chat") {
         const body = await readJson(request);
+        const prompt = String(body.prompt || "");
+        if (classifyStudioChatIntent(prompt) === "conversation") {
+          sendJson(response, 200, studioConversationReply(prompt));
+          return;
+        }
         const input = creatorPromptInput(body, body.render !== false);
         const job = jobs.start(`chat-video-${input.mode}`, (report) => createPromptVideoProject(input, report));
-        sendJson(response, 202, job);
+        sendJson(response, 202, { kind: "job", ...job });
         return;
       }
       if (request.method === "POST" && url.pathname === "/api/creator/plan") {

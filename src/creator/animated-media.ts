@@ -26,6 +26,14 @@ type SceneSubject = CreatorSceneAnimationSpec["subjects"][number];
 type SceneAction = CreatorSceneAnimationSpec["actions"][number];
 type SceneProp = CreatorSceneAnimationSpec["props"][number];
 type SceneSetting = CreatorSceneAnimationSpec["setting"];
+export type AnimatedSceneLayout = "landscape" | "portrait";
+
+const VERTICAL_PRESETS = new Set(["shorts", "reels", "tiktok"]);
+
+export function animatedSceneLayout(input: Pick<CreatorPromptVideoInput, "presets">): AnimatedSceneLayout {
+  const presets = input.presets ?? [];
+  return presets.length > 0 && presets.every((preset) => VERTICAL_PRESETS.has(preset)) ? "portrait" : "landscape";
+}
 
 const SUBJECT_PATTERNS: Array<{ kind: SceneSubject["kind"]; label: string; pattern: RegExp }> = [
   { kind: "teacher", label: "Teacher", pattern: /\b(teacher|educator|instructor)\b/i },
@@ -38,7 +46,7 @@ const SUBJECT_PATTERNS: Array<{ kind: SceneSubject["kind"]; label: string; patte
   { kind: "bear", label: "Bear", pattern: /\bbears?\b/i },
   { kind: "cat", label: "Cat", pattern: /\b(cats?|kitten)\b/i },
   { kind: "dragon", label: "Dragon", pattern: /\bdragons?\b/i },
-  { kind: "bird", label: "Bird", pattern: /\b(birds?|owl|eagle)\b/i },
+  { kind: "bird", label: "Bird", pattern: /\b(?:[a-z]+bird|birds?|owl|eagle)s?\b/i },
   { kind: "butterfly", label: "Butterfly", pattern: /\bbutterfl(?:y|ies)\b/i },
   { kind: "ball", label: "Ball", pattern: /\bballs?\b/i },
   { kind: "character", label: "Character", pattern: /\bcharacters?\b/i },
@@ -48,18 +56,18 @@ const ACTION_PATTERNS: Array<{ action: SceneAction; term: string; pattern: RegEx
   { action: "teach", term: "teach", pattern: /\b(teach|teaching|explain|explains|lesson)\b/i },
   { action: "experiment", term: "experiment", pattern: /\b(experiment|test|testing|science)\b/i },
   { action: "build", term: "build", pattern: /\b(build|building|assemble|model)\b/i },
-  { action: "grow", term: "grow", pattern: /\b(grow|grows|growing|sprout)\b/i },
+  { action: "grow", term: "grow", pattern: /\b(grow|grows|growing|sprout|bloom|blooms|bloomed|blooming)\b/i },
   { action: "run", term: "run", pattern: /\b(run|runs|running|race)\b/i },
   { action: "chase", term: "chase", pattern: /\b(chase|chases|chasing)\b/i },
-  { action: "jump", term: "jump", pattern: /\b(jump|jumps|jumping|hop|hops|hopping|bounce)\b/i },
+  { action: "jump", term: "jump", pattern: /\b(jump|jumps|jumped|jumping|hop|hops|hopped|hopping|bounce|bounces|bounced|bouncing)\b/i },
   { action: "fly", term: "fly", pattern: /\b(fly|flies|flying|soar)\b/i },
   { action: "float", term: "float", pattern: /\b(float|floats|floating|drift)\b/i },
   { action: "roll", term: "roll", pattern: /\b(roll|rolls|rolling)\b/i },
   { action: "climb", term: "climb", pattern: /\b(climb|climbs|climbing)\b/i },
   { action: "sleep", term: "sleep", pattern: /\b(sleep|sleeps|sleeping|rests?)\b/i },
   { action: "hug", term: "hug", pattern: /\b(hug|hugs|hugging|embrace)\b/i },
-  { action: "celebrate", term: "celebrate", pattern: /\b(celebrate|celebrates|celebrating|celebration|cheer|laugh|happy)\b/i },
-  { action: "hold", term: "hold", pattern: /\b(hold|holds|holding|carry|carries)\b/i },
+  { action: "celebrate", term: "celebrate", pattern: /\b(celebrate|celebrates|celebrated|celebrating|celebration|cheer|cheers|cheered|cheering|laugh|laughs|laughed|laughing|happy)\b/i },
+  { action: "hold", term: "hold", pattern: /\b(hold|holds|held|holding|carry|carries|carried|carrying)\b/i },
 ];
 
 const PROP_PATTERNS: Array<{ prop: SceneProp; term: string; pattern: RegExp }> = [
@@ -70,10 +78,10 @@ const PROP_PATTERNS: Array<{ prop: SceneProp; term: string; pattern: RegExp }> =
   { prop: "bubbles", term: "bubbles", pattern: /\bbubbles?\b/i },
   { prop: "box", term: "box", pattern: /\b(box|gift|present)\b/i },
   { prop: "mushroom", term: "mushroom", pattern: /\bmushrooms?\b/i },
-  { prop: "lantern", term: "lantern", pattern: /\b(lantern|lamp|torch)\b/i },
+  { prop: "lantern", term: "lantern", pattern: /\b(lanterns?|lamps?|torches?)\b/i },
   { prop: "treasure", term: "treasure", pattern: /\b(treasure|chest|gold)\b/i },
   { prop: "tree", term: "tree", pattern: /\btrees?\b/i },
-  { prop: "plant", term: "plant", pattern: /\b(plants?|flower|seed|garden)\b/i },
+  { prop: "plant", term: "plant", pattern: /\b(plants?|planted|planting|flowers?|seeds?|garden)\b/i },
   { prop: "blocks", term: "blocks", pattern: /\b(blocks?|bricks?)\b/i },
   { prop: "sun", term: "sun", pattern: /\b(sun|sunny|sunlight)\b/i },
   { prop: "cloud", term: "cloud", pattern: /\bclouds?|sky\b/i },
@@ -86,7 +94,7 @@ function sceneSetting(text: string, mode: CreatorPromptVideoInput["mode"]): { se
     { setting: "classroom", term: "classroom", pattern: /\b(classroom|school|teacher|student|lesson)\b/i },
     { setting: "laboratory", term: "laboratory", pattern: /\b(lab|laboratory|scientist|experiment|beaker)\b/i },
     { setting: "forest", term: "forest", pattern: /\b(forest|woods|moss|mushroom|giant tree)\b/i },
-    { setting: "garden", term: "garden", pattern: /\b(garden|plant|flower|seed)\b/i },
+    { setting: "garden", term: "garden", pattern: /\b(garden|plants?|planted|planting|flowers?|seeds?)\b/i },
     { setting: "sky", term: "sky", pattern: /\b(sky|cloud|flying|sun)\b/i },
     { setting: "space", term: "space", pattern: /\b(space|planet|star|moon|galaxy)\b/i },
     { setting: "ocean", term: "ocean", pattern: /\b(ocean|underwater|sea|beach)\b/i },
@@ -225,9 +233,10 @@ export function animatedSceneHtml(
   sceneIndex: number,
   presenter: NonNullable<CreatorPromptVideoInput["presenter"]> = "none",
   brief = "",
+  layout: AnimatedSceneLayout = "landscape",
 ): string {
   const animation = scene.animation ?? analyzeAnimatedScene(mode, scene, sceneIndex, brief);
-  const payload = scriptJson({ mode, scene, animation, sceneIndex, presenter, brief, width: WIDTH, height: HEIGHT, fps: FPS });
+  const payload = scriptJson({ mode, scene, animation, sceneIndex, presenter, brief, layout, width: WIDTH, height: HEIGHT, fps: FPS });
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Agent Demo animated scene</title><style>
@@ -236,7 +245,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07101f}can
 const project=${payload};
 const canvas=document.getElementById('stage');
 const ctx=canvas.getContext('2d',{alpha:false,desynchronized:false});
-const W=project.width,H=project.height,TAU=Math.PI*2;
+const W=project.width,H=project.height,TAU=Math.PI*2,portrait=project.layout==='portrait';
 const palettes={
   cartoon:{top:'#7dd3fc',bottom:'#fef3c7',ground:'#93c5a8',accent:'#f97316',ink:'#172554'},
   story:{top:'#312e81',bottom:'#c4b5fd',ground:'#264653',accent:'#fbbf24',ink:'#f8fafc'},
@@ -297,9 +306,9 @@ function board(t){
 }
 function sceneProgress(t){return clamp(t/Math.max(1,Number(project.scene.durationSeconds)||8),0,1)}
 function titleRibbon(t){
-  const enter=ease((t-.45)/.65),exit=clamp((1-sceneProgress(t)-.16)/.08,0,1),x=170+(1-enter)*-420,y=48,w=W-340,h=112;
+  const enter=ease((t-.45)/.65),exit=clamp((1-sceneProgress(t)-.16)/.08,0,1),w=portrait?W*.3:W-340,x=(W-w)/2+(1-enter)*(portrait?-180:-420),y=48,h=112;
   ctx.save();ctx.globalAlpha=.94*exit;ctx.fillStyle='rgba(15,23,42,.88)';ctx.strokeStyle='rgba(255,255,255,.24)';ctx.lineWidth=3;rounded(x,y,w,h,34);ctx.fill();ctx.stroke();
-  fittedText(project.scene.onScreenText||project.scene.title,W/2,y+55,w-100,55,'#fff');
+  fittedText(project.scene.onScreenText||project.scene.title,W/2,y+55,w-70,portrait?43:55,'#fff');
   ctx.fillStyle=p.accent;rounded(x+28,y+28,12,56,6);ctx.fill();ctx.restore();
 }
 function setting(t){
@@ -329,9 +338,9 @@ function setting(t){
 }
 function animal(kind,x,y,s,t,action,index){
   const progress=sceneProgress(t),running=action==='run'||action==='chase',flying=action==='fly'||kind==='bird'||kind==='butterfly';
-  let dx=running?-220+progress*440+Math.sin(t*3+index)*18:0,dy=0,rot=0;
+  const travel=portrait?105:220,flight=portrait?90:180;let dx=running?-travel+progress*travel*2+Math.sin(t*3+index)*18:0,dy=0,rot=0;
   if(action==='jump')dy=-Math.abs(Math.sin(progress*Math.PI*3))*150;
-  if(flying){dx=-180+progress*360;dy=-180+Math.sin(t*1.8+index)*75;rot=Math.sin(t*1.5)*.08}
+  if(flying){dx=-flight+progress*flight*2;dy=-180+Math.sin(t*1.8+index)*75;rot=Math.sin(t*1.5)*.08}
   if(action==='climb')dy=130-progress*330;
   if(action==='sleep')dy=30+Math.sin(t*.8)*3;
   if(action==='celebrate'){dy=-Math.abs(Math.sin(t*3.8+index*.7))*105;rot=Math.sin(t*4.4+index)*.075}
@@ -357,7 +366,10 @@ function prop(kind,x,y,s,t,index){
   else if(kind==='mushroom'){glow('#fef08a',24);ctx.fillStyle='#fef3c7';rounded(-24,-5,48,110,18);ctx.fill();ctx.fillStyle='#ef4444';ctx.beginPath();ctx.arc(0,-12,82,Math.PI,TAU);ctx.fill();ctx.fillStyle='#fff';for(const d of [[-38,-42],[2,-58],[38,-30]]){ctx.beginPath();ctx.arc(d[0],d[1],10,0,TAU);ctx.fill()}ctx.shadowBlur=0}
   else if(kind==='lantern'){glow('#fbbf24',45);ctx.fillStyle='#fef08a';rounded(-55,-55,110,125,22);ctx.fill();ctx.strokeStyle='#78350f';ctx.lineWidth=12;ctx.stroke();ctx.beginPath();ctx.arc(0,-60,55,Math.PI,TAU);ctx.stroke();ctx.shadowBlur=0}
   else if(kind==='treasure'){ctx.fillStyle='#92400e';rounded(-135,-55,270,135,22);ctx.fill();ctx.fillStyle='#f59e0b';ctx.fillRect(-135,-5,270,24);ctx.save();ctx.translate(-135,-48);ctx.rotate(-ease(progress*2.4)*.58);ctx.translate(135,48);ctx.fillStyle='#f59e0b';ctx.beginPath();ctx.arc(0,-50,135,Math.PI,TAU);ctx.fill();ctx.restore();ctx.fillStyle='#fef08a';for(let i=0;i<10;i++){const lift=ease(progress*1.8)*Math.sin(progress*Math.PI)*(55+(i%4)*24);ctx.beginPath();ctx.arc(-112+i*25,-22-Math.abs(Math.sin(i))*25-lift,11+(i%3)*2,0,TAU);ctx.fill()}}
-  else if(kind==='tree'){tree(0,160,1,t)}
+  else if(kind==='tree'){
+    const rainbow=/\\brainbow\\b/i.test(String(project.scene.visual||'')+' '+String(project.scene.narration||''));
+    if(!rainbow)tree(0,160,1,t);else{ctx.fillStyle='#7c2d12';ctx.fillRect(-24,-35,48,205);const colors=['#fb7185','#f59e0b','#facc15','#22c55e','#38bdf8','#8b5cf6'];for(let i=0;i<6;i++){const a=i/6*TAU+t*.04;ctx.fillStyle=colors[i];ctx.beginPath();ctx.arc(Math.cos(a)*105,-115+Math.sin(a)*78,76+Math.sin(t+i)*4,0,TAU);ctx.fill()}}
+  }
   else if(kind==='plant'){const grow=.25+.75*progress;ctx.strokeStyle='#15803d';ctx.lineWidth=16;ctx.beginPath();ctx.moveTo(0,90);ctx.lineTo(0,90-220*grow);ctx.stroke();ctx.fillStyle='#22c55e';for(let i=0;i<4;i++){const yy=40-i*48*grow;ctx.beginPath();ctx.ellipse((i%2?1:-1)*44,yy,54*grow,25*grow,(i%2?-.45:.45),0,TAU);ctx.fill()}ctx.fillStyle='#a16207';rounded(-85,90,170,85,18);ctx.fill()}
   else if(kind==='blocks'){for(let i=0;i<6;i++){const visible=progress*7>i;if(!visible)continue;ctx.fillStyle=['#f97316','#3b82f6','#8b5cf6','#22c55e'][i%4];rounded(-120+(i%3)*82,85-Math.floor(i/3)*82,72,72,10);ctx.fill()}}
   else if(kind==='beaker'||kind==='water'){ctx.strokeStyle='#e2e8f0';ctx.lineWidth=12;ctx.fillStyle='rgba(56,189,248,.68)';ctx.beginPath();ctx.moveTo(-65,-120);ctx.lineTo(-65,10);ctx.quadraticCurveTo(-110,120,0,145);ctx.quadraticCurveTo(110,120,65,10);ctx.lineTo(65,-120);ctx.stroke();ctx.beginPath();ctx.moveTo(-76,40);ctx.quadraticCurveTo(0,20,76,40);ctx.lineTo(62,95);ctx.quadraticCurveTo(0,135,-62,95);ctx.closePath();ctx.fill();for(let i=0;i<6;i++){ctx.beginPath();ctx.arc(-45+i*18,20-((t*55+i*31)%120),8,0,TAU);ctx.stroke()}}
@@ -376,10 +388,10 @@ function conceptToken(label,x,y,s,t,index){
 function semanticCartoon(t){
   setting(t);const spec=project.animation,actions=spec.actions.length?spec.actions:['present'];
   const props=spec.props.filter(item=>!['board','table'].includes(item));
-  props.forEach((item,index)=>{const count=Math.max(1,props.length),x=W*(.52+(index-(count-1)/2)*Math.min(.18,.48/count)),y=item==='sun'||item==='cloud'?300:650+(index%2)*80;prop(item,x,y,count>3?.58:.78,t,index)});
-  const conceptLimit=Math.max(0,3-Math.min(2,spec.subjects.length+props.length)),concepts=(spec.concepts||[]).slice(0,conceptLimit);concepts.forEach((item,index)=>{const count=Math.max(1,concepts.length),x=W*(.5+(index-(count-1)/2)*Math.min(.24,.56/count));conceptToken(item.label,x,365,count>2?.52:.64,t,index)});
-  const subjectAction=(kind,index)=>{if(kind==='bird'||kind==='butterfly')return 'fly';if(kind==='rabbit'&&actions.includes('jump'))return 'jump';if(kind==='cat'&&actions.includes('chase'))return 'chase';if(kind==='dragon'&&actions.includes('fly'))return 'fly';if(kind==='teacher'&&actions.includes('teach'))return 'teach';if(kind==='scientist'&&actions.includes('experiment'))return 'experiment';if((kind==='student'||kind==='child'||kind==='friend'||kind==='family'||kind==='character')&&actions.includes('run'))return actions.includes('chase')&&index%2===0?'chase':'run';return actions[Math.min(index,actions.length-1)]||actions[0]};
-  const subjects=spec.subjects;subjects.forEach((item,index)=>{const action=subjectAction(item.kind,index),count=Math.max(1,subjects.length);let x=W*(.2+(index/(Math.max(1,count-1)))*.6),y=720;
+  props.forEach((item,index)=>{const count=Math.max(1,props.length),step=portrait?Math.min(.09,.24/count):Math.min(.18,.48/count),x=W*((portrait?0.5:0.52)+(index-(count-1)/2)*step),y=item==='sun'||item==='cloud'?(portrait?225:300):portrait&&spec.subjects.length>2?450+(index%2)*70:650+(index%2)*80;prop(item,x,y,count>3?.58:.78,t,index)});
+  const conceptLimit=spec.subjects.length||props.length?0:3,concepts=(spec.concepts||[]).slice(0,conceptLimit);concepts.forEach((item,index)=>{const count=Math.max(1,concepts.length),step=portrait?Math.min(.09,.24/count):Math.min(.24,.56/count),x=W*(.5+(index-(count-1)/2)*step);conceptToken(item.label,x,365,count>2?.52:.64,t,index)});
+  const subjectAction=(kind,index)=>{if(kind==='bird'||kind==='butterfly')return 'fly';if(actions.includes('celebrate'))return 'celebrate';if((kind==='rabbit'||kind==='student'||kind==='child'||kind==='friend'||kind==='family'||kind==='character')&&actions.includes('jump'))return 'jump';if(['bear','rabbit','cat','dragon','student','child','friend','family','character'].includes(kind)&&actions.includes('hold'))return 'hold';if(kind==='cat'&&actions.includes('chase'))return 'chase';if(kind==='dragon'&&actions.includes('fly'))return 'fly';if(kind==='teacher'&&actions.includes('teach'))return 'teach';if(kind==='scientist'&&actions.includes('experiment'))return 'experiment';if((kind==='student'||kind==='child'||kind==='friend'||kind==='family'||kind==='character')&&actions.includes('run'))return actions.includes('chase')&&index%2===0?'chase':'run';return actions[Math.min(index,actions.length-1)]||actions[0]};
+  const subjects=spec.subjects;subjects.forEach((item,index)=>{const action=subjectAction(item.kind,index),count=Math.max(1,subjects.length),step=portrait?Math.min(.09,.26/count):count>1?.6/(count-1):0;let x=W*(portrait?0.5+(index-(count-1)/2)*step:0.2+(index/(Math.max(1,count-1)))*0.6),y=720;
     if(action==='hug'&&count>1)x=W*.5+(index-(count-1)/2)*(180*(1-sceneProgress(t)));
     const human=['teacher','scientist','student','child','family','friend','character'].includes(item.kind);
     if(human){const colors=[{skin:'#c98b6b',hair:'#3f2d24',body:'#f97316',ink:'#172554'},{skin:'#8d5524',hair:'#111827',body:'#2563eb',ink:'#172554'},{skin:'#e0ac69',hair:'#713f12',body:'#7c3aed',ink:'#172554'}][index%3];let dx=0,dy=0;if(action==='run'||action==='chase')dx=-300+sceneProgress(t)*600;if(action==='jump')dy=-Math.abs(Math.sin(sceneProgress(t)*Math.PI*3))*130;if(action==='climb')dy=120-sceneProgress(t)*300;if(action==='celebrate')dy=-Math.abs(Math.sin(t*3.8+index*.7))*105;character(x+dx,y+dy,count>2?.5:.66,t+(index*.8),colors,index%2?1:-1,action!=='sleep')}
@@ -436,10 +448,13 @@ window.agentDemoRecord=async function(seconds){
 </script></body></html>`;
 }
 
-async function transcodeScene(webmPath: string, outputPath: string, durationSeconds: number): Promise<void> {
+async function transcodeScene(webmPath: string, outputPath: string, durationSeconds: number, layout: AnimatedSceneLayout): Promise<void> {
+  const frameFilter = layout === "portrait"
+    ? "scale=-2:1920:flags=lanczos,crop=1080:1920"
+    : `scale=${WIDTH}:${HEIGHT}:flags=lanczos`;
   const result = await runCommand(ffmpegCommand(), [
     "-y", "-i", webmPath,
-    "-vf", `fps=${FPS},scale=${WIDTH}:${HEIGHT}:flags=lanczos,tpad=stop_mode=clone:stop_duration=1,trim=duration=${durationSeconds.toFixed(3)},format=yuv420p`,
+    "-vf", `fps=${FPS},${frameFilter},setsar=1,tpad=stop_mode=clone:stop_duration=1,trim=duration=${durationSeconds.toFixed(3)},format=yuv420p`,
     "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "17", "-movflags", "+faststart", outputPath,
   ], { timeoutMs: 20 * 60_000 });
   if (result.code !== 0) {
@@ -459,6 +474,7 @@ export async function generateAnimatedSceneMedia(
   const browser = await chromium.launch({ headless: true });
   const quality: MotionQualityReport[] = [];
   const outputs: SceneMediaGenerationResult["outputs"] = [];
+  const layout = animatedSceneLayout(input);
   const semanticScenes = plan.scenes.map((scene, index) => ({
     sceneId: scene.id,
     title: scene.title,
@@ -478,7 +494,8 @@ export async function generateAnimatedSceneMedia(
   const semanticReportPath = path.join(outputRoot, "semantic-quality.json");
   await writeFile(semanticReportPath, `${JSON.stringify({
     passed: semanticIssues.length === 0,
-    renderer: "agent-demo-open-concept-motion-graphics-v3",
+    renderer: "agent-demo-open-concept-motion-graphics-v4",
+    layout,
     disclosure: "Deterministic vector motion graphics; not diffusion or Wan/LTX model inference.",
     issues: semanticIssues,
     scenes: semanticScenes,
@@ -494,7 +511,7 @@ export async function generateAnimatedSceneMedia(
       const webmPath = path.join(outputRoot, `${stem}.webm`);
       const outputPath = path.join(outputRoot, `${stem}.mp4`);
       const sceneWithAnimation = { ...scene, animation: semanticScenes[index]!.animation };
-      await writeFile(htmlPath, animatedSceneHtml(input.mode, sceneWithAnimation, index, input.presenter ?? "none", input.prompt), "utf8");
+      await writeFile(htmlPath, animatedSceneHtml(input.mode, sceneWithAnimation, index, input.presenter ?? "none", input.prompt, layout), "utf8");
       const context = await browser.newContext({
         acceptDownloads: true,
         viewport: { width: WIDTH, height: HEIGHT },
@@ -513,7 +530,7 @@ export async function generateAnimatedSceneMedia(
       } finally {
         await context.close();
       }
-      await transcodeScene(webmPath, outputPath, scene.durationSeconds);
+      await transcodeScene(webmPath, outputPath, scene.durationSeconds, layout);
       await unlink(webmPath).catch(() => undefined);
       const motion = await requireMovingVideo(outputPath);
       quality.push(motion);
@@ -522,7 +539,7 @@ export async function generateAnimatedSceneMedia(
         path: outputPath,
         kind: "video",
         sceneId: scene.id,
-        model: "agent-demo-open-concept-motion-graphics-v3",
+        model: "agent-demo-open-concept-motion-graphics-v4",
         prompt: `${scene.visual}. Character action and camera remain stable; ${scene.narration}`,
         rights: "Original deterministic vector animation generated locally by Agent Demo Studio under MIT.",
         durationSeconds: media.durationSeconds,
@@ -545,6 +562,6 @@ export async function generateAnimatedSceneMedia(
     outputs,
     qualityReportPath,
     semanticReportPath,
-    backend: { name: "Agent Demo Studio vector animation engine" },
+    backend: { name: "Agent Demo Studio vector animation engine v4" },
   };
 }

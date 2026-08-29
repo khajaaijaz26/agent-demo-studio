@@ -139,11 +139,20 @@ function compactOverlayText(value: string, maxCharacters = 52): string {
 function narrationOverlayText(value: string, index: number): string {
   const normalized = cleanText(value);
   const lower = normalized.toLowerCase();
-  if (/sun|warm/.test(lower) && /water|vapor|evapor/.test(lower)) return "Evaporation - water becomes vapor";
-  if (/cool|gather|condens/.test(lower) && /cloud|droplet|vapor/.test(lower)) return "Condensation - vapor forms clouds";
-  if (/rain|snow|heavy droplet|precip/.test(lower)) return "Precipitation - water returns";
+  if (/\b(?:sun(?:ny)?|warm(?:s|ed|ing)?)\b/.test(lower) && /\b(?:water|vapor|evaporation|evaporates?|evaporating)\b/.test(lower)) return "Evaporation - water becomes vapor";
+  if (/\b(?:cool(?:s|ed|ing)?|gather(?:s|ed|ing)?|condensation|condenses?|condensing)\b/.test(lower) && /\b(?:clouds?|droplets?|vapor)\b/.test(lower)) return "Condensation - vapor forms clouds";
+  if (/\b(?:rains?|raining|rainfall|snow|snowing|heavy droplets?|precipitation|precipitates?)\b/.test(lower)) return "Precipitation - water returns";
   const firstClause = normalized.split(/[,;:]/, 1)[0] || normalized;
   return compactOverlayText(firstClause || `Scene ${index + 1}`, 58);
+}
+
+function intendedAudience(prompt: string): string {
+  const age = prompt.match(/\bages?\s+((?:\d{1,2}|[a-z]+)(?:\s*(?:-|to|through)\s*(?:\d{1,2}|[a-z]+))?)/i)?.[1];
+  if (age) return `Children ages ${cleanText(age)}`;
+  if (/\b(?:children|kids|young learners|primary pupils)\b/i.test(prompt)) return "Children, young learners, and their families";
+  if (/\bteachers?|educators?|instructors?\b/i.test(prompt)) return "Teachers and education professionals";
+  if (/\bstudents?|learners?|pupils?\b/i.test(prompt)) return "Students and learners";
+  return "The intended product or story audience; refine this field when the brief names a specific viewer.";
 }
 
 function launchTimings(duration: number): { beatStart: number; beatEnd: number; ctaStart: number } {
@@ -361,7 +370,7 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
     mode: input.mode,
     requirements: {
       objective: `Produce a complete ${input.mode} video that communicates: ${prompt}`,
-      audience: "The intended product or story audience; refine this field when the brief names a specific viewer.",
+      audience: intendedAudience(prompt),
       targetDurationSeconds: duration,
       outputPresets: presets,
       language: input.language?.trim() || "en",
@@ -579,7 +588,11 @@ function sourceClips(input: CreatorPromptVideoInput, duration: number, plannedSc
     // faces, or UI. Keep them locked by default; transitions still animate the
     // edit without cropping safe-zone content.
     motion: imageSource(source) ? "none" : undefined,
-    reframe: input.mode === "product-launch" ? "fit" : "blur-background",
+    reframe: input.mode === "product-launch"
+      ? "fit"
+      : input.mediaProvider === "animated" && Boolean(input.presets?.length) && input.presets!.every((preset) => ["shorts", "reels", "tiktok"].includes(preset))
+        ? "fill"
+        : "blur-background",
     effects: { vfx },
     transition: { type: index === 0 ? "fade" : input.mode === "cartoon" || input.mode === "asmr" ? "dissolve" : "fade-black", durationSeconds: transitionDuration },
     chapter: index === 0 ? "Opening" : index === supplied.length - 1 ? "Finale" : `Scene ${index + 1}`,

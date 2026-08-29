@@ -100,13 +100,15 @@ and voice profiles](docs/LOCAL-AI.md).
 ## Honest video-engine routing
 
 Agent Demo Studio never labels a moving photograph or a reusable canvas loop as
-generated character video. `auto` interprets the requested quality first:
-ordinary requests for a film, cartoon, advertisement, Reel, or realistic motion
-require a configured model-video backend; if it is unavailable, the saved plan
-reports the blocker instead of faking the result. The deterministic vector engine
-is used only when motion graphics are explicitly requested. Every generated clip
-must pass a temporal-motion probe before it enters the timeline, and loopback
-backends must return a unique, scene-addressed video for every storyboard beat.
+generated character video. CLI/MCP `auto` routing interprets the requested
+quality first: requests for a film, cartoon, advertisement, Reel, or realistic
+motion require a configured model-video backend; if it is unavailable, the saved
+plan reports the blocker instead of faking the result. The visual Studio opens
+with **Local animation** visibly selected so an ordinary laptop can render
+immediately; choose **Generative AI video** explicitly when a model backend is
+connected. Every generated clip must pass a temporal-motion probe before it
+enters the timeline, and loopback backends must return a unique, scene-addressed
+video for every storyboard beat.
 
 | Engine | Best for | Readiness rule |
 |---|---|---|

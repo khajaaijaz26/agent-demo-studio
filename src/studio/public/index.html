@@ -148,8 +148,8 @@
 
       <section class="drawer-panel" data-panel="advanced" hidden>
         <h3>Advanced</h3>
-        <label>Visual quality<select id="prompt-visual-quality"><option value="generative" selected>Generative AI video · Wan/LTX class</option><option value="motion-graphics">Local motion graphics · prompt-conditioned 2D</option><option value="auto">Auto from wording</option></select></label>
-        <div class="warning-box">Generative quality requires a healthy model-backed engine. It will stop with a hardware/setup blocker instead of silently substituting motion graphics.</div>
+        <label>Visual quality<select id="prompt-visual-quality"><option value="motion-graphics" selected>Local animation · ready on this device</option><option value="generative">Generative AI video · Wan/LTX class</option><option value="auto">Auto from wording</option></select></label>
+        <div class="warning-box">The Studio starts with honest local 2D animation so it can render immediately. Choose generative quality only when an LTX, ComfyUI/Wan, or compatible model backend is connected; it will never disguise motion graphics as model-generated video.</div>
         <label>Visual engine<select id="prompt-media-provider"><option value="auto">Auto · honest routing</option><option value="ltx-desktop">LTX Desktop · real AI video</option><option value="animated">Local 2D animation</option><option value="comfyui">ComfyUI workflow</option><option value="local-adapter">Custom local adapter</option><option value="builtin">Legacy locked stills</option></select></label>
         <label>Generation task<select id="prompt-media-task"><option value="auto">Auto</option><option value="text-to-video">Text to video</option><option value="image-to-video">Image to video</option><option value="speech-to-video">Speech to video</option><option value="character-animation">Character animation</option><option value="text-to-image">Text to image</option></select></label>
         <label>LTX Desktop URL<input id="ltx-url" type="text" value="http://127.0.0.1:41954"></label>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { analyzeAnimatedScene, animatedSceneHtml } from "../src/creator/animated-media.js";
+import { analyzeAnimatedScene, animatedSceneHtml, animatedSceneLayout } from "../src/creator/animated-media.js";
 import { inferPromptMode, resolvePromptMediaProvider, resolveRequestedVisualQuality } from "../src/creator/prompt.js";
 import type { CreatorProductionPlanScene } from "../src/creator/types.js";
 
@@ -49,13 +49,13 @@ describe("prompt-conditioned motion graphics", () => {
 
   it("recognizes the requested animals and science demonstration instead of drawing a generic board", () => {
     const forest = analyzeAnimatedScene("cartoon", scene(
-      "A rabbit and blue cat run while a dragon flies over the forest with a lantern.",
-      "Friends race through the forest.",
-      "Friends Run Fast!",
+      "A rabbit and blue cat run while a dragon and bluebird fly over the forest with lanterns.",
+      "They carried a planted seed through the forest.",
+      "Run Fast!",
     ), 1, "A magical forest adventure");
-    expect(forest.subjects.map((item) => item.kind)).toEqual(expect.arrayContaining(["rabbit", "cat", "dragon", "friend"]));
-    expect(forest.actions).toEqual(expect.arrayContaining(["run", "fly"]));
-    expect(forest.props).toContain("lantern");
+    expect(forest.subjects.map((item) => item.kind)).toEqual(expect.arrayContaining(["rabbit", "cat", "dragon", "bird"]));
+    expect(forest.actions).toEqual(expect.arrayContaining(["run", "fly", "hold"]));
+    expect(forest.props).toEqual(expect.arrayContaining(["lantern", "plant"]));
 
     const science = analyzeAnimatedScene("cartoon", scene(
       "Students watch a scientist test water in a glowing beaker, then build a plant model with blocks.",
@@ -80,6 +80,15 @@ describe("prompt-conditioned motion graphics", () => {
     expect(celebration.props).toEqual(expect.arrayContaining(["treasure", "tree", "lights"]));
   });
 
+  it("recognizes completed jump and celebration verbs used by natural narration", () => {
+    const action = analyzeAnimatedScene("cartoon", scene(
+      "A bear and friends jumped beside a rainbow tree.",
+      "They cheered and celebrated when the tree bloomed.",
+      "Kindness Blooms",
+    ), 2);
+    expect(action.actions).toEqual(expect.arrayContaining(["jump", "grow", "celebrate"]));
+  });
+
   it("preserves open concepts that are not in the starter drawing vocabulary", () => {
     const arbitrary = analyzeAnimatedScene("story", scene(
       "A bioluminescent jellyfish drifts through an alien cathedral beside a quantum piano.",
@@ -100,6 +109,18 @@ describe("prompt-conditioned motion graphics", () => {
     expect(html).toContain('"sleep"');
     expect(html).toContain('"mushroom"');
     expect(html).toContain("semanticCartoon");
+  });
+
+  it("stages vertical-only social work for a native portrait master", () => {
+    expect(animatedSceneLayout({ presets: ["shorts"] })).toBe("portrait");
+    expect(animatedSceneLayout({ presets: ["shorts", "reels", "tiktok"] })).toBe("portrait");
+    expect(animatedSceneLayout({ presets: ["youtube-1080p", "shorts"] })).toBe("landscape");
+    const plannedScene = scene("A bear holds a glowing seed while a bird flies through a garden.", "Kindness begins with one little seed.", "Plant Kindness", 0);
+    const html = animatedSceneHtml("cartoon", plannedScene, 0, "none", "Kids Short", "portrait");
+    expect(html).toContain('"layout":"portrait"');
+    expect(html).toContain("portrait=project.layout==='portrait'");
+    expect(html).toContain("/\\brainbow\\b/i");
+    expect(html).not.toContain("/\brainbow\b/i");
   });
 
   it("does not count editorial scene titles as visible concepts or unique content", () => {

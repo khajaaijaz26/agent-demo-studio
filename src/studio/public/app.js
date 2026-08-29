@@ -48,6 +48,7 @@ const state = {
   voiceReference: undefined,
   attachments: [],
   currentJobId: undefined,
+  lastVideoPrompt: undefined,
   busy: false,
   formatIndex: 0,
   formats: [
@@ -264,15 +265,53 @@ function showCompleted(article, job) {
   scrollToBottom();
 }
 
-function showFailed(article, message) {
+function useLocalAnimation(prompt) {
+  const originalPrompt = String(prompt || state.lastVideoPrompt || "").trim();
+  if (!originalPrompt || state.busy) return;
+  elements.visualQuality.value = "motion-graphics";
+  elements.mediaProvider.value = "animated";
+  elements.mediaTask.value = "auto";
+  elements.prompt.value = originalPrompt;
+  syncChips();
+  generateVideo();
+}
+
+function addLocalRetry(container, prompt) {
+  if (!String(prompt || "").trim()) return;
+  container.insertAdjacentHTML("beforeend", '<div class="result-actions recovery-actions"><button class="primary-button" type="button" data-action="use-local-animation">Create with local animation</button><button type="button" data-action="open-engines">View engine status</button></div>');
+  container.querySelector("[data-action='use-local-animation']")?.addEventListener("click", () => useLocalAnimation(prompt));
+  container.querySelector("[data-action='open-engines']")?.addEventListener("click", () => openTool("engines"));
+}
+
+function showConversation(article, response) {
   const body = article.querySelector(".message-body");
   const meta = article.querySelector(".message-meta span");
+  if (meta) {
+    meta.textContent = "answer";
+    meta.style.color = "#74dcb7";
+  }
+  body.querySelector(".progress-card")?.remove();
+  body.insertAdjacentHTML("beforeend", `<section class="answer-card"><b>Studio status</b><p>${escapeHtml(response.message || "No additional status is available.")}</p></section>`);
+  const card = body.querySelector(".answer-card:last-child");
+  if (response.suggestedAction === "use-local-animation" && state.lastVideoPrompt) addLocalRetry(card, state.lastVideoPrompt);
+  scrollToBottom();
+}
+
+function showFailed(article, message, prompt) {
+  const body = article.querySelector(".message-body");
+  const meta = article.querySelector(".message-meta span");
+  const ltxBlocked = /visuals\.ltx-desktop|ltx desktop.*(?:not detected|not installed|not reachable|unavailable)/i.test(message);
   if (meta) {
     meta.textContent = "blocked";
     meta.style.color = "#ffaaaa";
   }
   body.querySelector(".progress-card")?.remove();
-  body.insertAdjacentHTML("beforeend", `<section class="error-card"><b>Production stopped safely</b><p>${escapeHtml(message)}</p></section>`);
+  const explanation = ltxBlocked
+    ? "Generative AI video was selected, but LTX Desktop is not installed or running. Production stopped before scene generation; no paid API or credits were used. The local 2D animation engine is ready on this device."
+    : message;
+  body.insertAdjacentHTML("beforeend", `<section class="error-card"><b>Production stopped safely</b><p>${escapeHtml(explanation)}</p>${ltxBlocked ? `<details><summary>Technical details and saved plan</summary><p>${escapeHtml(message)}</p></details>` : ""}</section>`);
+  const card = body.querySelector(".error-card:last-child");
+  if (ltxBlocked) addLocalRetry(card, prompt);
   scrollToBottom();
 }
 
@@ -280,17 +319,31 @@ function currentFormat() {
   return state.formats[state.formatIndex];
 }
 
+function requestedFormat(prompt) {
+  if (/\byoutube\s+shorts?\b/i.test(prompt)) return { index: 1, presets: ["shorts"] };
+  if (/\b(?:instagram\s+)?reels?\b/i.test(prompt)) return { index: 1, presets: ["reels"] };
+  if (/\btik\s*tok\b/i.test(prompt)) return { index: 1, presets: ["tiktok"] };
+  if (/\b(?:vertical|portrait|9\s*:\s*16)\b/i.test(prompt)) return { index: 1, presets: state.formats[1].presets };
+  if (/\b(?:square|1\s*:\s*1)\b/i.test(prompt)) return { index: 2, presets: ["square"] };
+  return { index: state.formatIndex, presets: currentFormat().presets };
+}
+
 function requestedPayload(prompt) {
   const sound = elements.soundDirection.value.trim();
   const completePrompt = sound ? `${prompt}\n\nSound direction: ${sound}` : prompt;
   const provider = elements.mediaProvider.value;
   const seed = Number(elements.seed.value);
+  const format = requestedFormat(prompt);
+  if (format.index !== state.formatIndex) {
+    state.formatIndex = format.index;
+    syncChips();
+  }
   return {
     prompt: completePrompt,
     mode: elements.mode.value,
     durationSeconds: Number(elements.duration.value) || undefined,
     narration: elements.narration.value.trim() || undefined,
-    presets: currentFormat().presets,
+    presets: format.presets,
     sceneSources: state.sceneSources,
     characters: state.characters,
     logoSource: state.logoSource,
@@ -352,15 +405,22 @@ async function generateVideo() {
   const article = appendAssistantShell();
   elements.prompt.value = "";
   try {
-    const job = await api("/api/chat", {
+    const response = await api("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestedPayload(prompt)),
     });
+    if (response.kind === "message") {
+      showConversation(article, response);
+      return;
+    }
+    const job = response;
+    if (!job.id) throw new Error("The Studio did not return a production job identifier.");
+    state.lastVideoPrompt = prompt;
     state.currentJobId = job.id;
     await pollJob(job.id, article);
   } catch (error) {
-    showFailed(article, error instanceof Error ? error.message : String(error));
+    showFailed(article, error instanceof Error ? error.message : String(error), prompt);
   } finally {
     state.busy = false;
     state.currentJobId = undefined;
