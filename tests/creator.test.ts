@@ -8,7 +8,7 @@ import { parseCaptions, serializeAss, serializeSrt, serializeVtt } from "../src/
 import { listCreatorAssets, resolveBundledCreatorAsset } from "../src/creator/assets.js";
 import { renderOverlayAssets } from "../src/creator/design.js";
 import { listCreatorPresets } from "../src/creator/presets.js";
-import { createPromptVideoManifest, createPromptVideoPlan, isBareCartoonRequest } from "../src/creator/prompt.js";
+import { createPromptVideoManifest, createPromptVideoPlan, isBareAsmrRequest, isBareCartoonRequest } from "../src/creator/prompt.js";
 import { publishToYouTube, tiktokChunkPlan } from "../src/creator/publish.js";
 import { filterComplexFileOptionForVersion } from "../src/creator/renderer.js";
 import { validateCreatorManifest } from "../src/creator/schema.js";
@@ -249,6 +249,20 @@ describe("creator manifests", () => {
       actions: expect.arrayContaining(["fly", "hold"]),
       props: expect.arrayContaining(["bridge", "lantern"]),
     });
+
+    const starterAsmr = createPromptVideoPlan({
+      prompt: "i want full asmr video",
+      mode: "asmr",
+      mediaProvider: "animated",
+      visualQuality: "motion-graphics",
+    });
+    expect(isBareAsmrRequest("can you make an ASMR video")).toBe(true);
+    expect(isBareAsmrRequest("make an ASMR video with soap cutting")).toBe(false);
+    expect(starterAsmr.title).toBe("Glass Garden ASMR");
+    expect(starterAsmr.requirements.objective).toMatch(/droplets to soft bubbles/i);
+    expect(new Set(starterAsmr.scenes.map((item) => item.animation?.semanticSignature)).size).toBe(3);
+    expect(starterAsmr.scenes.map((item) => item.onScreenText)).toEqual(["Glass Droplets", "Ceramic Bubbles", "Quiet Finish"]);
+    expect(starterAsmr.scenes.every((item) => item.narration.startsWith("No narration"))).toBe(true);
   });
 
   it("ships resolvable fictional characters, presenters, scenes, and effect catalogs", () => {

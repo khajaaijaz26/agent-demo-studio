@@ -116,6 +116,11 @@ complete editable family-friendly story with concrete characters, actions, and
 props. Adding any subject or premise keeps planning open-ended and uses that
 brief instead.
 
+Likewise, a format-only ASMR request receives three distinct editable sensory
+beats—rolling glass droplets, floating ceramic-bowl bubbles, and settling water
+beads—instead of repeating one generic loop. A named material or action such as
+soap cutting remains open-ended and is planned directly from that brief.
+
 | Engine | Best for | Readiness rule |
 |---|---|---|
 | Built-in animation | Fast cartoons, education, stories, product motion, ASMR, and VFX on ordinary laptops | Local Playwright Chromium + FFmpeg; no checkpoint or API tokens |

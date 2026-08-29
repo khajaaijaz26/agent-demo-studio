@@ -100,6 +100,27 @@ describe("prompt-conditioned motion graphics", () => {
     expect(fallback.subjects).toEqual([{ kind: "character", label: "Story character" }]);
   });
 
+  it("ignores the no-narration sentinel and keeps sparse ASMR beats distinct", () => {
+    const visuals = [
+      "Clear water droplets roll across a chilled glass plate under soft blue lights.",
+      "Tiny bubbles float in a ceramic bowl while a wooden spoon circles slowly.",
+      "Warm water beads drift down a glass jar and settle beside fading lights.",
+    ];
+    const planned = visuals.map((visual, index) => analyzeAnimatedScene("asmr", scene(
+      visual,
+      "No narration; visuals and sound carry this scene.",
+      ["Glass Droplets", "Ceramic Bubbles", "Quiet Finish"][index]!,
+      index,
+    ), index));
+    expect(new Set(planned.map((item) => item.semanticSignature)).size).toBe(3);
+    expect(planned[0]?.actions).toContain("roll");
+    expect(planned[1]?.actions).toContain("float");
+    expect(planned.flatMap((item) => item.concepts.map((concept) => concept.label))).not.toContain("Visuals");
+    const html = animatedSceneHtml("asmr", scene(visuals[1]!, "No narration; visuals and sound carry this scene.", "Ceramic Bubbles", 1), 1);
+    expect(html).toContain("const variant=Number(project.sceneIndex||0)%3");
+    expect(html).toContain("if(project.scene.onScreenText)textBlock(project.scene.onScreenText");
+  });
+
   it("preserves open concepts that are not in the starter drawing vocabulary", () => {
     const arbitrary = analyzeAnimatedScene("story", scene(
       "A bioluminescent jellyfish drifts through an alien cathedral beside a quantum piano.",

@@ -114,10 +114,10 @@ function unique<T>(values: T[]): T[] {
 }
 
 const CONCEPT_STOP_WORDS = new Set([
-  "about", "above", "after", "again", "against", "along", "also", "animated", "animation", "around", "before", "behind",
+  "about", "above", "after", "again", "against", "along", "also", "animated", "animation", "around", "asmr", "before", "behind",
   "below", "brightly", "camera", "cartoon", "central", "character", "characters", "complete", "create", "develop", "different",
   "filled", "final", "finish", "first", "glowing", "happily", "important", "introduce", "large", "lesson", "lights", "motion",
-  "narration", "next", "original", "prompt", "scene", "show", "sits", "story", "through", "together", "video", "visual", "while",
+  "narration", "next", "original", "prompt", "scene", "show", "sits", "sound", "story", "through", "together", "video", "visual", "visuals", "want", "while",
   "with", "without",
 ]);
 
@@ -155,7 +155,11 @@ export function analyzeAnimatedScene(
   // Scene-local storyboard fields are therefore the sole semantic authority;
   // `brief` remains accepted for API compatibility and future fallback logic.
   void brief;
-  const text = `${scene.visual} ${scene.narration} ${scene.onScreenText ?? ""}`;
+  // The no-narration sentinel is production metadata. Parsing “visuals and
+  // sound carry this scene” as a physical carry/hold action collapsed every
+  // sparse ASMR beat into the same semantic signature.
+  const narration = /^no narration\b/i.test(scene.narration.trim()) ? "" : scene.narration;
+  const text = `${scene.visual} ${narration} ${scene.onScreenText ?? ""}`;
   const matchedTerms: string[] = [];
   const settingMatch = sceneSetting(text, mode);
   if (settingMatch.term) matchedTerms.push(settingMatch.term);
@@ -184,8 +188,11 @@ export function analyzeAnimatedScene(
   // Establish deterministic motion before inferring an implied actor. Previously
   // a sparse scene received its fallback `hold` action only after this actor
   // check, producing a tree-only plate that correctly failed the motion gate.
-  if (!actions.length) actions.push(sceneIndex === 0 ? "present" : sceneIndex === 1 ? "hold" : "celebrate");
+  if (!actions.length) actions.push(mode === "asmr"
+    ? (["roll", "float", "float"] as const)[Math.min(sceneIndex, 2)]!
+    : sceneIndex === 0 ? "present" : sceneIndex === 1 ? "hold" : "celebrate");
   if (!props.length && mode === "cartoon") props.push(sceneIndex === 0 ? "lights" : sceneIndex === 1 ? "tree" : "sun");
+  if (!props.length && mode === "asmr") props.push(sceneIndex === 1 ? "bubbles" : "water");
   const actorActions = new Set<SceneAction>([
     "teach", "experiment", "build", "run", "chase", "jump", "climb", "hug", "celebrate", "hold",
   ]);
@@ -428,10 +435,24 @@ function story(t){
   ctx.fillStyle='rgba(15,23,42,.78)';rounded(850,130,850,340,38);ctx.fill();textBlock(project.scene.onScreenText||project.scene.title,1275,235,700,68,p.ink);textBlock(project.scene.visual,1275,355,700,38,'#ddd6fe','center',580);
 }
 function asmr(t){
-  particleField(t,44);const cx=W/2,cy=H/2+70;for(let i=0;i<7;i++){const r=90+i*65+Math.sin(t*1.1+i)*18;ctx.strokeStyle='rgba(103,232,249,'+(.5-i*.05)+')';ctx.lineWidth=5;ctx.beginPath();ctx.arc(cx,cy,r,0,TAU);ctx.stroke()}
-  const pour=(t*150)%(H+400)-180;ctx.fillStyle='rgba(165,243,252,.7)';rounded(cx-34,-80,68,pour+200,34);ctx.fill();glow('#67e8f9',42);ctx.fillStyle='rgba(207,250,254,.5)';ctx.beginPath();ctx.ellipse(cx,cy,280+Math.sin(t)*24,94+Math.cos(t*1.3)*10,0,0,TAU);ctx.fill();ctx.shadowBlur=0;
-  textBlock(project.scene.onScreenText||project.scene.title,cx,150,1200,62,p.ink);
-  const concepts=(project.animation.concepts||[]).slice(0,2);concepts.forEach((item,index)=>conceptToken(item.label,index?1640:280,700,.36,t,index));
+  const variant=Number(project.sceneIndex||0)%3,cx=W/2,cy=H/2+95;particleField(t,variant===2?24:38);
+  if(variant===0){
+    glow('#67e8f9',38);ctx.fillStyle='rgba(207,250,254,.18)';ctx.strokeStyle='rgba(165,243,252,.72)';ctx.lineWidth=7;ctx.beginPath();ctx.ellipse(cx,cy,600,235,0,0,TAU);ctx.fill();ctx.stroke();ctx.shadowBlur=0;
+    for(let i=0;i<12;i++){const x=cx-510+((t*72+i*133)%1020),y=cy-125+(i%4)*78+Math.sin(t*1.3+i)*18,r=15+(i%3)*7;glow('#a5f3fc',18);ctx.fillStyle='rgba(207,250,254,.82)';ctx.beginPath();ctx.ellipse(x,y,r*.72,r,Math.sin(t+i)*.35,0,TAU);ctx.fill();ctx.shadowBlur=0}
+    for(let i=0;i<4;i++){const r=70+i*78+Math.sin(t*.9+i)*13;ctx.strokeStyle='rgba(103,232,249,'+(.42-i*.07)+')';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(cx,cy,r*1.5,r*.48,0,0,TAU);ctx.stroke()}
+  }else if(variant===1){
+    ctx.fillStyle='rgba(241,245,249,.2)';ctx.strokeStyle='rgba(207,250,254,.72)';ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(cx-470,cy-120);ctx.quadraticCurveTo(cx-410,cy+300,cx,cy+330);ctx.quadraticCurveTo(cx+410,cy+300,cx+470,cy-120);ctx.closePath();ctx.fill();ctx.stroke();
+    ctx.fillStyle='rgba(34,211,238,.2)';ctx.beginPath();ctx.ellipse(cx+Math.sin(t*.7)*18,cy-115+Math.cos(t*.62)*7,470+Math.sin(t*.9)*12,128+Math.cos(t*.8)*8,0,0,TAU);ctx.fill();ctx.stroke();
+    for(let i=0;i<18;i++){const a=i/18*TAU+t*.22,r=80+(i%5)*72,x=cx+Math.cos(a)*r,y=cy-90+Math.sin(a)*r*.25-((t*34+i*29)%165);ctx.strokeStyle='rgba(165,243,252,.78)';ctx.lineWidth=4;ctx.beginPath();ctx.arc(x,y,10+(i%4)*5,0,TAU);ctx.stroke()}
+    ctx.save();ctx.translate(cx+70,cy-40);ctx.rotate(-.38+Math.sin(t*.55)*.18+Math.sin(t*1.37)*.06);ctx.strokeStyle='#d6a96f';ctx.lineWidth=34;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(0,-390);ctx.lineTo(0,180);ctx.stroke();ctx.fillStyle='#c08457';ctx.beginPath();ctx.ellipse(0,220,70,115,0,0,TAU);ctx.fill();ctx.restore();
+  }else{
+    glow('#67e8f9',30);ctx.fillStyle='rgba(207,250,254,.12)';ctx.strokeStyle='rgba(165,243,252,.7)';ctx.lineWidth=8;rounded(cx-330,cy-365,660,690,95);ctx.fill();ctx.stroke();ctx.shadowBlur=0;
+    const settle=.55+.18*Math.sin(t*.35);ctx.fillStyle='rgba(34,211,238,.2)';rounded(cx-318,cy+40,636,270,72);ctx.fill();
+    ctx.save();rounded(cx-320,cy-362,640,684,92);ctx.clip();const sweepX=cx-520+((t*105)%1040),sheen=ctx.createLinearGradient(sweepX-150,0,sweepX+150,0);sheen.addColorStop(0,'rgba(165,243,252,0)');sheen.addColorStop(.5,'rgba(207,250,254,.2)');sheen.addColorStop(1,'rgba(165,243,252,0)');ctx.fillStyle=sheen;ctx.fillRect(cx-320,cy-362,640,684);ctx.restore();
+    for(let i=0;i<16;i++){const x=cx-260+(i%8)*74+Math.sin(i*2.1)*13,y=cy-300+((t*(18+i%3*4)+i*73)%520),r=9+(i%4)*4;ctx.fillStyle='rgba(207,250,254,'+(settle-i*.008)+')';ctx.beginPath();ctx.ellipse(x,y,r*.7,r,0,0,TAU);ctx.fill()}
+    for(let i=0;i<5;i++){const r=55+i*62+Math.sin(t*.55+i)*9;ctx.strokeStyle='rgba(103,232,249,'+(.32-i*.045)+')';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(cx,cy+175,r*1.4,r*.34,0,0,TAU);ctx.stroke()}
+  }
+  if(project.scene.onScreenText)textBlock(project.scene.onScreenText,cx,135,1200,62,p.ink);
 }
 function vfx(t){
   particleField(t,48);ctx.save();ctx.translate(W/2,H/2);for(let i=0;i<13;i++){ctx.rotate(.12+Math.sin(t*.3)*.004);ctx.strokeStyle=i%2?'rgba(34,211,238,.56)':'rgba(217,70,239,.48)';ctx.lineWidth=4+i*.4;ctx.strokeRect(-120-i*38,-120-i*38,240+i*76,240+i*76)}ctx.restore();

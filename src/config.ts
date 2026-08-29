@@ -3,7 +3,7 @@ import path from "node:path";
 import { access } from "node:fs/promises";
 import { constants } from "node:fs";
 
-export const AGENT_DEMO_VERSION = "0.6.3";
+export const AGENT_DEMO_VERSION = "0.6.4";
 
 export function getStudioRoot(override?: string): string {
   if (override) return path.resolve(override);

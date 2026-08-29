@@ -2,6 +2,21 @@
 
 All notable changes to Agent Demo Studio are documented here.
 
+## 0.6.4 - 2026-08-29
+
+### Changed
+
+- Expanded format-only ASMR requests into an editable three-beat glass,
+  ceramic-bubble, and water-bead sequence with separate local motion treatments.
+
+### Fixed
+
+- Excluded the no-narration production sentinel from semantic scene parsing so
+  its wording can no longer make unrelated sensory scenes appear duplicated.
+- Made sparse ASMR actions, props, concepts, and on-screen labels scene-specific,
+  allowing the semantic gate to reject real duplicates without blocking a valid
+  locally generated ASMR storyboard.
+
 ## 0.6.3 - 2026-08-29
 
 ### Changed

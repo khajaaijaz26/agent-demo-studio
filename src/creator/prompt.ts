@@ -124,6 +124,14 @@ interface StarterCartoonStory {
   onScreenText: [string, string, string];
 }
 
+interface StarterAsmrSequence {
+  title: string;
+  audience: string;
+  objective: string;
+  visuals: [string, string, string];
+  onScreenText: [string, string, string];
+}
+
 const STARTER_CARTOON_STORY: StarterCartoonStory = {
   title: "Mira and the Moon Lantern",
   audience: "Children and families who enjoy gentle animated adventures",
@@ -140,13 +148,30 @@ const STARTER_CARTOON_STORY: StarterCartoonStory = {
   onScreenText: ["A Light Appears", "Cross the Bridge", "Together We Shine"],
 };
 
+const STARTER_ASMR_SEQUENCE: StarterAsmrSequence = {
+  title: "Glass Garden ASMR",
+  audience: "Viewers seeking a calm, low-stimulation sensory break",
+  objective: "Produce a quiet tactile ASMR sequence that moves from crisp droplets to soft bubbles and a gentle visual finish.",
+  visuals: [
+    "Clear water droplets roll across a chilled glass plate under soft blue lights.",
+    "Tiny bubbles float in a ceramic bowl while a wooden spoon circles slowly.",
+    "Warm water beads drift down a glass jar and settle beside fading lights.",
+  ],
+  onScreenText: ["Glass Droplets", "Ceramic Bubbles", "Quiet Finish"],
+};
+
 const BARE_CARTOON_REQUEST_WORDS = new Set([
-  "a", "an", "the", "please", "can", "could", "would", "you", "for", "me", "us", "of",
+  "a", "an", "the", "please", "can", "could", "would", "i", "you", "for", "me", "my", "us", "of",
   "create", "make", "generate", "produce", "build", "give", "want", "need",
   "full", "complete", "entire", "proper", "best", "one", "some",
   "cartoon", "animated", "animation", "video", "film", "story",
   "youtube", "short", "shorts", "reel", "reels", "tiktok",
   "kid", "kids", "child", "children", "family", "friendly",
+]);
+
+const BARE_ASMR_REQUEST_WORDS = new Set([
+  ...BARE_CARTOON_REQUEST_WORDS,
+  "asmr", "sensory", "satisfying", "relaxing", "relaxation", "calm", "quiet",
 ]);
 
 /**
@@ -163,6 +188,16 @@ export function isBareCartoonRequest(prompt: string): boolean {
     .split(/\s+/)
     .filter(Boolean)
     .filter((word) => !BARE_CARTOON_REQUEST_WORDS.has(word));
+  return remaining.length === 0;
+}
+
+export function isBareAsmrRequest(prompt: string): boolean {
+  const remaining = cleanText(prompt)
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s-]/gu, " ")
+    .split(/\s+/)
+    .filter(Boolean)
+    .filter((word) => !BARE_ASMR_REQUEST_WORDS.has(word));
   return remaining.length === 0;
 }
 
@@ -246,7 +281,8 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
   if (!prompt) throw new Error("A prompt is required.");
   const mediaProvider = resolvePromptMediaProvider(input);
   const starterCartoon = input.mode === "cartoon" && isBareCartoonRequest(prompt) ? STARTER_CARTOON_STORY : undefined;
-  const title = input.title?.trim() ? projectTitle(input) : starterCartoon?.title ?? projectTitle(input);
+  const starterAsmr = input.mode === "asmr" && isBareAsmrRequest(prompt) ? STARTER_ASMR_SEQUENCE : undefined;
+  const title = input.title?.trim() ? projectTitle(input) : starterCartoon?.title ?? starterAsmr?.title ?? projectTitle(input);
   const duration = Math.max(6, Math.min(600, input.durationSeconds ?? DEFAULT_DURATIONS[input.mode]));
   const presets = input.presets ?? (input.mode === "asmr" ? ["youtube-1080p", "reels"] : ["youtube-1080p", "shorts", "reels", "tiktok"]);
   const beats = promptBeats(prompt);
@@ -283,7 +319,7 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
         : input.mode === "vfx"
           ? ["Establish a clean cinematic source image", "Escalate neon, VHS, glow, and glitch treatments", "Resolve the transformation into a readable final frame"]
           : ["Open with the product promise and brand stage", "Explain the strongest benefit with presenter support", "End on proof and a clear next action"];
-  const sceneBeatValues = starterCartoon?.visuals ?? sceneDirections.map((_, index) => {
+  const sceneBeatValues = starterCartoon?.visuals ?? starterAsmr?.visuals ?? sceneDirections.map((_, index) => {
     const beatIndex = visualBeats.length <= 1 ? 0 : Math.round(index * (visualBeats.length - 1) / Math.max(1, sceneDirections.length - 1));
     return visualBeats[beatIndex] ?? visualBeats.at(-1) ?? prompt;
   });
@@ -422,8 +458,10 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
     requirements: {
       objective: starterCartoon
         ? "Produce a complete family-friendly cartoon adventure about curiosity, courage, and teamwork."
+        : starterAsmr
+          ? starterAsmr.objective
         : `Produce a complete ${input.mode} video that communicates: ${prompt}`,
-      audience: starterCartoon?.audience ?? intendedAudience(prompt),
+      audience: starterCartoon?.audience ?? starterAsmr?.audience ?? intendedAudience(prompt),
       targetDurationSeconds: duration,
       outputPresets: presets,
       language: input.language?.trim() || "en",
@@ -464,7 +502,7 @@ export function createPromptVideoPlan(input: CreatorPromptVideoInput): CreatorPr
       // Using raw prompt beats here can expose production directions such as
       // "move the characters" instead of the topic currently being spoken.
       const onScreenText = input.mode === "asmr"
-        ? (index === 0 ? title : undefined)
+        ? starterAsmr?.onScreenText[index] ?? (index === 0 ? title : undefined)
         : authoredNarration?.[index]
           ? narrationOverlayText(authoredNarration[index]!, index)
           : starterCartoon?.onScreenText[index] ?? narrationOverlayText(sceneBeatValues[index] ?? narration, index);
