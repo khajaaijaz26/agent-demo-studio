@@ -8,7 +8,7 @@ import { parseCaptions, serializeAss, serializeSrt, serializeVtt } from "../src/
 import { listCreatorAssets, resolveBundledCreatorAsset } from "../src/creator/assets.js";
 import { renderOverlayAssets } from "../src/creator/design.js";
 import { listCreatorPresets } from "../src/creator/presets.js";
-import { createPromptVideoManifest, createPromptVideoPlan } from "../src/creator/prompt.js";
+import { createPromptVideoManifest, createPromptVideoPlan, isBareCartoonRequest } from "../src/creator/prompt.js";
 import { publishToYouTube, tiktokChunkPlan } from "../src/creator/publish.js";
 import { filterComplexFileOptionForVersion } from "../src/creator/renderer.js";
 import { validateCreatorManifest } from "../src/creator/schema.js";
@@ -230,6 +230,25 @@ describe("creator manifests", () => {
     expect(rainbowStory.scenes[2]?.onScreenText).toBe("A rainbow tree blooms");
     expect(rainbowStory.scenes[2]?.onScreenText).not.toContain("Precipitation");
     expect(rainbowStory.requirements.audience).toBe("Children ages five to nine");
+
+    const starterStory = createPromptVideoPlan({
+      prompt: "create an full cartoon video",
+      mode: "cartoon",
+      mediaProvider: "animated",
+      visualQuality: "motion-graphics",
+    });
+    expect(isBareCartoonRequest("create an full cartoon video")).toBe(true);
+    expect(isBareCartoonRequest("create a cartoon video about dinosaurs")).toBe(false);
+    expect(starterStory.title).toBe("Mira and the Moon Lantern");
+    expect(starterStory.requirements.objective).toMatch(/curiosity, courage, and teamwork/i);
+    expect(new Set(starterStory.scenes.map((scene) => scene.visual)).size).toBe(3);
+    expect(starterStory.scenes.map((scene) => scene.narration).join(" ")).not.toMatch(/create an full cartoon video/i);
+    expect(starterStory.scenes.every((scene) => (scene.animation?.subjects.length ?? 0) > 0)).toBe(true);
+    expect(starterStory.scenes[1]?.animation).toMatchObject({
+      subjects: expect.arrayContaining([expect.objectContaining({ kind: "child" }), expect.objectContaining({ kind: "bird" })]),
+      actions: expect.arrayContaining(["fly", "hold"]),
+      props: expect.arrayContaining(["bridge", "lantern"]),
+    });
   });
 
   it("ships resolvable fictional characters, presenters, scenes, and effect catalogs", () => {

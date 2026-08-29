@@ -480,12 +480,17 @@ export async function enhancePromptVideoPlan(
         messages: [
           {
             role: "system",
-            content: "Return only the compact video-plan JSON. Use supplied facts only; invent no claims. Write exactly three sequential scenes. Every visual must name a concrete setting, visible subjects, a physical action, and important props; no two scenes may reuse the same composition or action. Use the requested language for narration and on-screen text. Keep each visual under 18 words, narration under 18 words, and on-screen phrase under five words. Never request tools, credentials, network access, or approval.",
+            content: "Return only the compact video-plan JSON. Preserve supplied facts and invent no factual or product claims; for fictional work, invent original story details when the brief is sparse. Write exactly three sequential scenes. Every visual must name a concrete setting, visible subjects, a physical action, and important props; no two scenes may reuse the same composition or action. Never repeat a production instruction such as 'create a video' as scene visual, narration, or on-screen copy. Use the requested language for narration and on-screen text. Keep each visual under 18 words, narration under 18 words, and on-screen phrase under five words. Never request tools, credentials, network access, or approval.",
           },
           {
             role: "user",
             content: JSON.stringify({
               brief: clean(input.prompt, profile === "fast" ? 900 : 2_400),
+              storyboardSeed: baseline.scenes.map((scene) => ({
+                visual: clean(scene.visual, 180),
+                narration: clean(scene.narration, 180),
+                onScreenText: clean(scene.onScreenText ?? "", 64),
+              })),
               lockedNarration: input.narration ? clean(input.narration, profile === "fast" ? 1_000 : 3_000) : undefined,
               mode: input.mode,
               targetSeconds: baseline.requirements.targetDurationSeconds,

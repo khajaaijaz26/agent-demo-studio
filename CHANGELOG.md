@@ -2,6 +2,23 @@
 
 All notable changes to Agent Demo Studio are documented here.
 
+## 0.6.3 - 2026-08-29
+
+### Changed
+
+- Expanded format-only cartoon requests such as `create a full cartoon video`
+  into an editable, character-led starter story instead of placing the production
+  instruction on screen as scene content.
+- Gave the single local Qwen planning pass the deterministic storyboard seed and
+  allowed original fictional details while continuing to prohibit unsupported
+  factual or product claims.
+
+### Fixed
+
+- Added sparse-scene fallback actions before implied-character inference, so a
+  middle cartoon beat can no longer render as a nearly static tree-only plate and
+  fail the real-motion quality gate.
+
 ## 0.6.2 - 2026-08-29
 
 ### Changed

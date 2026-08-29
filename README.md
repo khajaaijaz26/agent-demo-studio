@@ -110,6 +110,12 @@ connected. Every generated clip must pass a temporal-motion probe before it
 enters the timeline, and loopback backends must return a unique, scene-addressed
 video for every storyboard beat.
 
+When a cartoon request names only the format (for example, `create a full
+cartoon video`) and provides no story subject, the local planner starts from a
+complete editable family-friendly story with concrete characters, actions, and
+props. Adding any subject or premise keeps planning open-ended and uses that
+brief instead.
+
 | Engine | Best for | Readiness rule |
 |---|---|---|
 | Built-in animation | Fast cartoons, education, stories, product motion, ASMR, and VFX on ordinary laptops | Local Playwright Chromium + FFmpeg; no checkpoint or API tokens |

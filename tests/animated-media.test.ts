@@ -89,6 +89,17 @@ describe("prompt-conditioned motion graphics", () => {
     expect(action.actions).toEqual(expect.arrayContaining(["jump", "grow", "celebrate"]));
   });
 
+  it("adds an actor before applying a sparse middle-scene fallback action", () => {
+    const fallback = analyzeAnimatedScene("cartoon", scene(
+      "create an full cartoon video",
+      "create an full cartoon video",
+      "create an full cartoon video",
+    ), 1);
+    expect(fallback.actions).toContain("hold");
+    expect(fallback.props).toContain("tree");
+    expect(fallback.subjects).toEqual([{ kind: "character", label: "Story character" }]);
+  });
+
   it("preserves open concepts that are not in the starter drawing vocabulary", () => {
     const arbitrary = analyzeAnimatedScene("story", scene(
       "A bioluminescent jellyfish drifts through an alien cathedral beside a quantum piano.",

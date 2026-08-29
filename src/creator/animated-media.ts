@@ -181,6 +181,11 @@ export function analyzeAnimatedScene(
     return item.prop;
   });
   const concepts = openConcepts(scene, text, matchedTerms);
+  // Establish deterministic motion before inferring an implied actor. Previously
+  // a sparse scene received its fallback `hold` action only after this actor
+  // check, producing a tree-only plate that correctly failed the motion gate.
+  if (!actions.length) actions.push(sceneIndex === 0 ? "present" : sceneIndex === 1 ? "hold" : "celebrate");
+  if (!props.length && mode === "cartoon") props.push(sceneIndex === 0 ? "lights" : sceneIndex === 1 ? "tree" : "sun");
   const actorActions = new Set<SceneAction>([
     "teach", "experiment", "build", "run", "chase", "jump", "climb", "hug", "celebrate", "hold",
   ]);
@@ -194,8 +199,6 @@ export function analyzeAnimatedScene(
   if (!subjects.length && !concepts.length && !props.some((prop) => prop === "box" || prop === "treasure") && (mode === "cartoon" || mode === "story")) {
     subjects.push({ kind: "character", label: "Story character" });
   }
-  if (!actions.length) actions.push(sceneIndex === 0 ? "present" : sceneIndex === 1 ? "hold" : "celebrate");
-  if (!props.length && mode === "cartoon") props.push(sceneIndex === 0 ? "lights" : sceneIndex === 1 ? "tree" : "sun");
   const limitedSubjects = subjects.slice(0, 4);
   const limitedActions = unique(actions).slice(0, 3);
   const limitedProps = unique(props).slice(0, 6);
