@@ -88,7 +88,7 @@
     "commander": "^15.0.0",
     "playwright": "^1.62.1",
     "sharp": "^0.35.4",
-    "zod": "^4.4.3"
+    "zod": "^4.5.2"
   },
   "devDependencies": {
     "@types/node": "^24.10.0",
